@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22685"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clipsSubviews="YES" contentMode="scaleToFill" id="iN0-l3-epB" customClass="TableHeaderView" customModule="Cloth_App" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="469" height="110"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HaO-x2-evB">
+                    <rect key="frame" x="0.0" y="0.0" width="469" height="110"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jmZ-y7-NiX">
+                            <rect key="frame" x="8" y="2" width="453" height="21.666666666666668"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="18"/>
+                            <color key="textColor" name="Black_Theme_Color"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xFf-Pe-3zs">
+                            <rect key="frame" x="8" y="23.666666666666664" width="453" height="84.333333333333343"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="14"/>
+                            <color key="textColor" name="Black_Theme_Color"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                    <color key="backgroundColor" name="App_White_Color"/>
+                    <constraints>
+                        <constraint firstItem="xFf-Pe-3zs" firstAttribute="trailing" secondItem="jmZ-y7-NiX" secondAttribute="trailing" id="TkT-kh-Lff"/>
+                        <constraint firstItem="jmZ-y7-NiX" firstAttribute="leading" secondItem="HaO-x2-evB" secondAttribute="leading" constant="8" id="TuY-rQ-Q3a"/>
+                        <constraint firstItem="xFf-Pe-3zs" firstAttribute="top" secondItem="jmZ-y7-NiX" secondAttribute="bottom" id="e78-pX-dQB"/>
+                        <constraint firstAttribute="bottom" secondItem="xFf-Pe-3zs" secondAttribute="bottom" constant="2" id="eAg-yg-kVc"/>
+                        <constraint firstAttribute="trailing" secondItem="jmZ-y7-NiX" secondAttribute="trailing" constant="8" id="mZF-ec-Go1"/>
+                        <constraint firstItem="jmZ-y7-NiX" firstAttribute="top" secondItem="HaO-x2-evB" secondAttribute="top" constant="2" id="w4e-YY-9ya"/>
+                        <constraint firstItem="xFf-Pe-3zs" firstAttribute="leading" secondItem="jmZ-y7-NiX" secondAttribute="leading" id="xmH-1l-dip"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <constraints>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="HaO-x2-evB" secondAttribute="trailing" id="exL-1z-6uO"/>
+                <constraint firstAttribute="bottom" secondItem="HaO-x2-evB" secondAttribute="bottom" id="iYi-gy-lvP"/>
+                <constraint firstItem="HaO-x2-evB" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="qkE-WZ-NHF"/>
+                <constraint firstItem="HaO-x2-evB" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="rok-Q3-B0R"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="lblDescription" destination="xFf-Pe-3zs" id="ndx-6v-l8w"/>
+                <outlet property="lblHeading" destination="jmZ-y7-NiX" id="bVZ-IB-NPi"/>
+            </connections>
+            <point key="canvasLocation" x="197.70992366412213" y="-241.5492957746479"/>
+        </view>
+    </objects>
+    <resources>
+        <namedColor name="App_White_Color">
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="Black_Theme_Color">
+            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
+</document>
