@@ -69,10 +69,10 @@ extension ItemSoldCongratulationsVC{
                             }
                         }
                         if self.userList.count == 0 {
-                            //                            self.lblNodata.isHidden = false
+                            //self.lblNodata.isHidden = false
                         }
                         else {
-                            //                            self.lblNodata.isHidden = true
+                            //self.lblNodata.isHidden = true
                         }
                         self.tableView.setBackGroundLabel(count: self.userList.count)
                         self.tableView.reloadData()
@@ -113,7 +113,7 @@ extension ItemSoldCongratulationsVC : UITableViewDelegate,UITableViewDataSource 
         return cell
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let viewController = RatingViewController.instantiate(fromStoryboard: .Main)
+        let viewController = NewRatingViewController.instantiate(fromStoryboard: .Setting)
         viewController.isBuyerSeller = true
         viewController.postId = "\(self.postDetal?.id ?? 0)"
         viewController.userId = "\(self.userList[indexPath.row].id ?? 0)"

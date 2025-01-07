@@ -28,7 +28,7 @@ struct SaveSearchListMOdel : Mappable {
 struct Save_searches : Mappable {
     var id : Int?
     var name : String?
-    var count : String?
+    var count : Int?
     init?(map: Map) {
 
     }

@@ -781,7 +781,7 @@ class BaseViewController: UIViewController, UINavigationBarDelegate {
         sceneDelegate.window?.rootViewController = navigationController
     }
     func navigateToRatingView(postId: Int,sendUserId:Int) {
-    let viewController = self.storyBoard.instantiateViewController(identifier: "RatingViewController") as! RatingViewController
+    let viewController = NewRatingViewController.instantiate(fromStoryboard: .Setting)
         viewController.fromPushNotification = true
         viewController.postId = "\(postId)"
         viewController.userId = "\(sendUserId)"

@@ -6,7 +6,10 @@
 //
 
 import UIKit
+import IBAnimatable
 
 class NewRatingCVC: UICollectionViewCell {
     
+    @IBOutlet weak var lblTitle: UILabel!
+    @IBOutlet weak var vwBackground: AnimatableView!
 }

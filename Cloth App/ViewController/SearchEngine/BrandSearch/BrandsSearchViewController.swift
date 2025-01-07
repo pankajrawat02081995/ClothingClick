@@ -184,6 +184,7 @@ extension BrandsSearchViewController : UISearchBarDelegate {
         let currentString: NSString = (self.searchBarBrand.text ?? "") as NSString
         let newString: NSString = currentString.replacingCharacters(in: range, with: text) as NSString
         if newString != "" && newString.length >= 2 {
+            self.view.endEditing(true)
             self.callBrandSearchList(searchtext: (newString) as String)
         }
         else {
@@ -205,6 +206,7 @@ extension BrandsSearchViewController {
                         if let data = response.arrayData {
                             self.brandSearchList = data
                             self.tblBrand.reloadData()
+                            self.view.endEditing(true)
                             self.callViewCount()
                         }
                     }
@@ -257,7 +259,7 @@ extension BrandsSearchViewController {
 //                            self.btnViewItems.setTitle("View \(self.viewCount) Items", for: .normal)
 
                         }
-                        
+                        self.view.endEditing(true)
 //                        self.navigateToHomeScreen()
                     }
                 }

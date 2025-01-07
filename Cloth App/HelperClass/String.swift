@@ -19,7 +19,7 @@ extension String {
         numberFormatter.numberStyle = .decimal
         numberFormatter.groupingSeparator = ","
         
-        if let formattedPrice = numberFormatter.string(from: NSNumber(value: Int(self) ?? 0)) {
+        if let formattedPrice = numberFormatter.string(from: NSNumber(value: Int(self) ?? 0)),  formattedPrice != "0" {
             return formattedPrice
         } else {
             return "\(self)"

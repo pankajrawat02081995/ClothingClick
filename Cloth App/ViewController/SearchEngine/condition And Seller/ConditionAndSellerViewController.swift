@@ -60,6 +60,7 @@ class ConditionAndSellerViewController: BaseViewController {
             }
             else {
                 self.btnViewItems.setTitle("View \(self.viewCount) Items", for: .normal)
+                self.btnViewItems.backgroundColor = self.viewCount == 0 ? .customButton_bg_gray : .customBlack
             }
         }
         
@@ -677,6 +678,7 @@ extension ConditionAndSellerViewController {
                             }
                             else {
                                 self.btnViewItems.setTitle("View \(self.viewCount) Items", for: .normal)
+                                self.btnViewItems.backgroundColor = self.viewCount == 0 ? .customButton_bg_gray : .customBlack
                             }
                             self.tblConditionAndSeller.reloadData()
                             //                            self.btnViewItems.setTitle("View \(self.viewCount) Items", for: .normal)

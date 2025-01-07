@@ -96,7 +96,7 @@ extension ExistingSavedSearchsViewController : UITableViewDelegate,UITableViewDa
         if let name = objet?.name {
             cell.lblTitle.text = name.capitalized
         }
-        cell.lblCount.text = "\(objet?.count ?? "0") Items"
+        cell.lblCount.text = "\(objet?.count ?? 0) Items"
         cell.btnEdit.tag = indexPath.row
         cell.btnDelete.tag = indexPath.row
         cell.btnEdit.addTarget(self, action: #selector(btnEdit_Clicked(sender:)), for: .touchUpInside)

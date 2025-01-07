@@ -73,6 +73,7 @@ class SizeViewController: BaseViewController {
             }
             else {
                 self.btnViewItems.setTitle("View \(self.viewCount) Items", for: .normal)
+                self.btnViewItems.backgroundColor = self.viewCount == 0 ? .customButton_bg_gray : .customBlack
             }
         }
         
@@ -567,6 +568,7 @@ extension SizeViewController {
                             }
                             else {
                                 self.btnViewItems.setTitle("View \(self.viewCount) Items", for: .normal)
+                                self.btnViewItems.backgroundColor = self.viewCount == 0 ? .customButton_bg_gray : .customBlack
                             }
                             //                            self.btnViewItems.setTitle("View \(self.viewCount) Items", for: .normal)
                             
