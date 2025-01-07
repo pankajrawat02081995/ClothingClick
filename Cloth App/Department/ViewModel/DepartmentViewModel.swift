@@ -66,7 +66,7 @@ class DepartmentViewModel{
                 if error == nil {
                     if let response = response {
                         if let data = response.dictData{
-                            if self.view?.isFromSearch == true{
+                            if self.view?.isFromSearch == false {
                                 self.view?.btnResult.setTitle("View \(data.total_posts ?? 0) Items", for: .normal)
                             }else{
                                 self.view?.btnResult.setTitle("Add to saved search", for: .normal)

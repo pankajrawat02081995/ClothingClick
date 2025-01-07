@@ -398,7 +398,7 @@ extension NotificationsViewController : UITableViewDelegate,UITableViewDataSourc
             self.pushViewController(vc: vc)
         }
         else if object.type == NOTIFICATIONSTYPE.RATESELLER.rawValue{
-            let viewController = self.storyboard?.instantiateViewController(identifier: "RatingViewController") as! RatingViewController
+            let viewController = NewRatingViewController.instantiate(fromStoryboard: .Setting)
             viewController.userId = "\(object.seller_id ?? 0)"
             viewController.postId = "\(object.post_id ?? 0)"
             self.navigationController?.pushViewController(viewController, animated: true)

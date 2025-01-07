@@ -49,6 +49,8 @@ class DepartmentVC: UIViewController {
                             self?.btnResult.setTitle("Add to saved Search", for: .normal)
                         }else{
                             self?.btnResult.setTitle("View \(model?.total_posts ?? 0) Items", for: .normal)
+                            self?.btnResult.isUserInteractionEnabled = model?.total_posts == 0 ? false : true
+                            self?.btnResult.alpha = model?.total_posts == 0 ? 0.5 : 1
                         }
                     }
                 }
@@ -78,7 +80,7 @@ class DepartmentVC: UIViewController {
         if self.isSaveSearch ?? false == true || self.isFilterProduct == true{
             self.popViewController()
         }else{
-            if self.isFromSearch == true{
+            if self.isFromSearch == true {
                 let viewController = AllProductViewController.instantiate(fromStoryboard: .Main)
                 viewController.titleStr = "Search Results"
                 self.navigationController?.pushViewController(viewController, animated: true)
@@ -95,7 +97,11 @@ class DepartmentVC: UIViewController {
                     self.navigationController?.pushViewController(viewController, animated: true)
                     self.genderDelegate?.selectGendr(gender: genderModel)
                 } else {
-                    self.popViewController()
+                    let viewController = AllProductViewController.instantiate(fromStoryboard: .Main)
+                    viewController.titleStr = "Search Results"
+                    self.navigationController?.pushViewController(viewController, animated: true)
+                    //self.genderDelegate?.selectGendr(gender: genderModel)
+                    //self.popViewController()
                 }
             }
         }
@@ -113,9 +119,12 @@ class DepartmentVC: UIViewController {
                     self?.btnResult.alpha = 1
                     self?.tableView.reloadData()
                     self?.btnResult.setTitle("View \(model?.total_posts ?? 0) Items", for: .normal)
+                    self?.btnResult.isUserInteractionEnabled = model?.total_posts == 0 ? false : true
+                    self?.btnResult.alpha = model?.total_posts == 0 ? 0.5 : 1
                 }
             }
-        }else if self.isFromSearch == false{
+        }
+        else if self.isFromSearch == false{
             FilterSingleton.share.filter.is_only_count = "1"
             FilterSingleton.share.getFilterData {[weak self] model in
                 DispatchQueue.main.async {
@@ -123,9 +132,12 @@ class DepartmentVC: UIViewController {
                     self?.btnResult.alpha = 1
                     self?.tableView.reloadData()
                     self?.btnResult.setTitle("View \(model?.total_posts ?? 0) Items", for: .normal)
+                    self?.btnResult.isUserInteractionEnabled = model?.total_posts == 0 ? false : true
+                    self?.btnResult.alpha = model?.total_posts == 0 ? 0.5 : 1
                 }
             }
-        } else {
+        }
+        else {
             self.btnResult.isUserInteractionEnabled = false
             self.btnResult.alpha = 0.5
             self.tableView.reloadData()

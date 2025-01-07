@@ -66,7 +66,7 @@ extension ItemsSoldCongratulationsViewController : UITableViewDelegate,UITableVi
         return cell
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let viewController = self.storyboard?.instantiateViewController(identifier: "RatingViewController") as! RatingViewController
+        let viewController = NewRatingViewController.instantiate(fromStoryboard: .Setting)
         viewController.isBuyerSeller = true
         viewController.postId = "\(self.postDetal?.id ?? 0)"
         viewController.userId = "\(self.userList[indexPath.row].id ?? 0)"

@@ -260,7 +260,7 @@ extension AllProductViewController: UICollectionViewDelegate, UICollectionViewDa
         if let producttype = objet?.price_type{
             if producttype == "1"{
                 if let price = objet?.price {
-                    if ((objet?.isLblSaleHidden()) == nil) {
+                    if (objet?.isLblSaleHidden()) == nil {
                         if let salePrice = objet?.sale_price {
                             cell.lblPrice.text = "$ \(salePrice)"
                         }
@@ -464,7 +464,9 @@ extension AllProductViewController {
                     if let response = response {
                         if let data = response.dictData {
                             if self.currentPage == 1 {
-                                self.postList.removeAll()
+                                if !self.hasAppeared {
+                                    self.postList.removeAll()
+                                }
                             }
                             
                             if let hasMorePages = data.hasMorePages{

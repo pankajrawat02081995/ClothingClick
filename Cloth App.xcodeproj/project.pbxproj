@@ -310,6 +310,8 @@
 		32F78ABD2D0EDA35009D2ACC /* ReportXIB.xib in Resources */ = {isa = PBXBuildFile; fileRef = 32F78ABC2D0EDA35009D2ACC /* ReportXIB.xib */; };
 		32F78ABE2D0EDA35009D2ACC /* ReportXIB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32F78ABB2D0EDA35009D2ACC /* ReportXIB.swift */; };
 		32FFC5062C04D9760088EB9E /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32FFC5052C04D9760088EB9E /* String.swift */; };
+		B2EBEB732D2D08FF00DC3046 /* NewRatingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2EBEB722D2D08FF00DC3046 /* NewRatingViewController.swift */; };
+		B2EBEB752D2D102F00DC3046 /* NewRatingCVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2EBEB742D2D102F00DC3046 /* NewRatingCVC.swift */; };
 		D4F08594DA7BE2C0A63C254A /* Pods_Cloth_App.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86ED8545EB6479C3896F7008 /* Pods_Cloth_App.framework */; };
 		FA1BFBE02924AE7100ECECE9 /* ProximaNova-SemiBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = FA1BFBDE2924AD6B00ECECE9 /* ProximaNova-SemiBold.otf */; };
 		FA1BFBE12924AE7100ECECE9 /* ProximaNova-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FA1BFBDD2924AD6B00ECECE9 /* ProximaNova-Medium.ttf */; };
@@ -644,6 +646,8 @@
 		67928CF78E1B746727F6F8FC /* Pods-Cloth App.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Cloth App.release.xcconfig"; path = "Target Support Files/Pods-Cloth App/Pods-Cloth App.release.xcconfig"; sourceTree = "<group>"; };
 		85046BE247D3EE207F9896D8 /* Pods-Cloth App.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Cloth App.debug.xcconfig"; path = "Target Support Files/Pods-Cloth App/Pods-Cloth App.debug.xcconfig"; sourceTree = "<group>"; };
 		86ED8545EB6479C3896F7008 /* Pods_Cloth_App.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Cloth_App.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B2EBEB722D2D08FF00DC3046 /* NewRatingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewRatingViewController.swift; sourceTree = "<group>"; };
+		B2EBEB742D2D102F00DC3046 /* NewRatingCVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewRatingCVC.swift; sourceTree = "<group>"; };
 		FA1BFBDD2924AD6B00ECECE9 /* ProximaNova-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ProximaNova-Medium.ttf"; sourceTree = "<group>"; };
 		FA1BFBDE2924AD6B00ECECE9 /* ProximaNova-SemiBold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ProximaNova-SemiBold.otf"; sourceTree = "<group>"; };
 		FA1BFBDF2924AD6B00ECECE9 /* ProximaNova-ExtraBold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ProximaNova-ExtraBold.otf"; sourceTree = "<group>"; };
@@ -1081,6 +1085,7 @@
 			children = (
 				32E969E22C142B680015948A /* XIB */,
 				18468DB22660BD48007344DA /* RatingViewController.swift */,
+				B2EBEB722D2D08FF00DC3046 /* NewRatingViewController.swift */,
 				1869D38A269DAE4F0060E4FD /* RatingListViewController.swift */,
 			);
 			path = RatingViewControlar;
@@ -2449,6 +2454,7 @@
 			isa = PBXGroup;
 			children = (
 				32E969E32C142BA00015948A /* ReviewXIB.swift */,
+				B2EBEB742D2D102F00DC3046 /* NewRatingCVC.swift */,
 				32E969E42C142BA00015948A /* ReviewXIB.xib */,
 			);
 			path = XIB;
@@ -2807,6 +2813,7 @@
 				18468D862660BD3C007344DA /* CustomLabel.swift in Sources */,
 				325591D72C2C750A00E0378C /* DepartmentVC.swift in Sources */,
 				327BD9552C4591C600E04895 /* StyleXIB.swift in Sources */,
+				B2EBEB732D2D08FF00DC3046 /* NewRatingViewController.swift in Sources */,
 				18468E412660BD4A007344DA /* CategoryDetailsViewController.swift in Sources */,
 				324C9C9F2C0CDFA700A75584 /* TableHeaderView.swift in Sources */,
 				18468D7F2660BD3C007344DA /* RPicker.swift in Sources */,
@@ -2835,6 +2842,7 @@
 				18468E1B2660BD49007344DA /* CongratulationsViewController.swift in Sources */,
 				18468E132660BD49007344DA /* PostItemViewController.swift in Sources */,
 				326688152C26E522007E6374 /* BrandXIB.swift in Sources */,
+				B2EBEB752D2D102F00DC3046 /* NewRatingCVC.swift in Sources */,
 				323181B22BFA720A00DB7E6C /* UITableview + CollectionView.swift in Sources */,
 				32B79A642C1B6ADB0004DB5A /* FaqViewModel.swift in Sources */,
 				321007052CAB108100218CAE /* DeleteProductSingleTon.swift in Sources */,
@@ -3113,7 +3121,7 @@
 				CODE_SIGN_ENTITLEMENTS = "Cloth App/Cloth AppDebug.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 36;
+				CURRENT_PROJECT_VERSION = 37;
 				DEVELOPMENT_TEAM = PRN69F6WNX;
 				"EXCLUDED_ARCHS[sdk=*]" = x86_64;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
@@ -3142,7 +3150,7 @@
 				CODE_SIGN_ENTITLEMENTS = "Cloth App/Cloth AppRelease.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 36;
+				CURRENT_PROJECT_VERSION = 37;
 				DEVELOPMENT_TEAM = PRN69F6WNX;
 				"EXCLUDED_ARCHS[sdk=*]" = x86_64;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
