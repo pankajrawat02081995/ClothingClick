@@ -277,7 +277,7 @@ extension LoginSocialViewController {
 extension Notification.Name {
     
     /// Notification when user successfully sign in using Google
-    static var signInGoogleCompleted: Notification.Name {
+    static var signInGoogleloginCompleted: Notification.Name {
         return .init(rawValue: #function)
     }
 }

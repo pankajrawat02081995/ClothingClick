@@ -83,8 +83,18 @@ class DepartmentVC: UIViewController {
                 viewController.titleStr = "Search Results"
                 self.navigationController?.pushViewController(viewController, animated: true)
             }else{
-                if let genderModel = self.viewModel.mysizeList.filter({$0?.gender_id ?? 0 == self.genderId ?? 0}).first{
+                if let genderModel = self.viewModel.mysizeList
+                    .compactMap({ $0 })  // Removes nil values from the array (if `mysizeList` is an array of optionals)
+                    .filter({ model in
+                        guard let genderId = model.gender_id else { return false }
+                        return FilterSingleton.share.filter.gender_id?.contains("\(genderId)") ?? false
+                    })
+                    .first {
+                    let viewController = AllProductViewController.instantiate(fromStoryboard: .Main)
+                    viewController.titleStr = "Search Results"
+                    self.navigationController?.pushViewController(viewController, animated: true)
                     self.genderDelegate?.selectGendr(gender: genderModel)
+                } else {
                     self.popViewController()
                 }
             }
@@ -96,7 +106,7 @@ class DepartmentVC: UIViewController {
         FilterSingleton.share.filter.gender_id =  ""
         FilterSingleton.share.selectedFilter.gender_id =  ""
         FilterSingleton.share.filter.is_only_count = "1"
-        if self.isSaveSearch == false && self.isFilterProduct == false{
+        if self.isSaveSearch == false && self.isFilterProduct == false {
             FilterSingleton.share.getFilterData {[weak self] model in
                 DispatchQueue.main.async {
                     self?.btnResult.isUserInteractionEnabled = model?.total_posts ?? 0 > 0
@@ -105,7 +115,17 @@ class DepartmentVC: UIViewController {
                     self?.btnResult.setTitle("View \(model?.total_posts ?? 0) Items", for: .normal)
                 }
             }
-        }else{
+        }else if self.isFromSearch == false{
+            FilterSingleton.share.filter.is_only_count = "1"
+            FilterSingleton.share.getFilterData {[weak self] model in
+                DispatchQueue.main.async {
+                    self?.btnResult.isUserInteractionEnabled = true
+                    self?.btnResult.alpha = 1
+                    self?.tableView.reloadData()
+                    self?.btnResult.setTitle("View \(model?.total_posts ?? 0) Items", for: .normal)
+                }
+            }
+        } else {
             self.btnResult.isUserInteractionEnabled = false
             self.btnResult.alpha = 0.5
             self.tableView.reloadData()

@@ -17,6 +17,7 @@ class StoreProfileVC: UIViewController {
     var isSellling : Bool? = true
     var viewModel = StoreProfileViewModel()
     let customTransitioningDelegate = CustomTransitioningDelegate()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setupTableView()
@@ -239,8 +240,8 @@ extension StoreProfileVC:UITableViewDelegate,UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if section == 0{
-            return .leastNonzeroMagnitude
+        if section == 0 {
+            return 0
         }else{
             return 50
         }

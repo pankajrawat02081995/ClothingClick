@@ -24,7 +24,7 @@ class BrandsSearchViewController: BaseViewController {
     
     var selectedIndex = 0
     var headerTitle = ""
-    var  brandSearchList = [BrandeSearchModel?]()
+    var brandSearchList = [BrandeSearchModel?]()
     var BrandSearchDeleget : BrandSearchDelegate!
     var saveSearch = false
     var viewCount = 0

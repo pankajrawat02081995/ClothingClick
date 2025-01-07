@@ -491,8 +491,11 @@ extension EditProfileViewController: UITextViewDelegate {
             let newString: NSString =
             currentString.replacingCharacters(in: range, with: string) as NSString
             return newString.length <= maxLength
-        }
-        else {
+        } else if textField == self.txtBrandName {
+            let currentText = textField.text ?? ""
+            let newLength = currentText.count + string.count - range.length
+            return newLength <= 30
+        } else {
             return true
         }
     }
@@ -865,3 +868,4 @@ extension UIViewController{
         }
     }
 }
+

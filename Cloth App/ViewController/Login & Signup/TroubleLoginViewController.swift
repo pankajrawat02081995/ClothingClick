@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import libPhoneNumber_iOS
 
 class TroubleLoginViewController: BaseViewController {
 
@@ -50,10 +51,15 @@ class TroubleLoginViewController: BaseViewController {
     }
     
     @IBAction func btnSend_clicked(_ sender: Any) {
-        self.callForgotPassword()
-        
+        if self.txtPhoneNo.text?.trim().count == 0 {
+            UIAlertController().alertViewWithTitleAndMessage(self, message: "Please enter mobile number ")
+        } else if !isValidPhoneNumber(phoneNumber: "\(selPhoneCode)\(self.txtPhoneNo.text!)", countryCode: self.selCountryName) {
+            UIAlertController().alertViewWithTitleAndMessage(self, message: "Please enter the correct mobile number")
+        } else {
+            self.callForgotPassword()
+        }
     }
-    
+   
     @IBAction func btnBackToLogin_clicked(_ sender: Any) {
         self.view.endEditing(true)
         self.navigateToWelconeScreen()

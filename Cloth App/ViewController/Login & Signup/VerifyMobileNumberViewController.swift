@@ -58,8 +58,7 @@ class VerifyMobileNumberViewController: BaseViewController {
     @IBAction func btnNext_clicked(_ sender: Any) {
         if self.txtPhoneNo.text?.trim().count == 0 {
             UIAlertController().alertViewWithTitleAndMessage(self, message: "Please enter mobile number ")
-        }
-        else {
+        } else {
             self.userVerifyMobileNumber()
         }
     }

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22685"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -27,7 +27,7 @@
         <!--LoginVC-->
         <scene sceneID="s0d-6b-0kx">
             <objects>
-                <viewController storyboardIdentifier="LoginVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Y6W-OH-hqX" customClass="LoginVC" customModule="Cloth_App" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="LoginVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Y6W-OH-hqX" customClass="LoginVC" customModule="Clothing_Click" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" clipsSubviews="YES" contentMode="scaleToFill" id="5EZ-qb-Rvc">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -298,19 +298,19 @@
         <!--Signup View Controller-->
         <scene sceneID="FYK-O2-flM">
             <objects>
-                <viewController storyboardIdentifier="SignupViewController" id="3LH-8P-z6J" customClass="SignupViewController" customModule="Cloth_App" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="SignupViewController" id="3LH-8P-z6J" customClass="SignupViewController" customModule="Clothing_Click" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="ZLP-W6-lUW">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oen-D4-xLw">
-                                <rect key="frame" x="0.0" y="139" width="393" height="679"/>
+                                <rect key="frame" x="0.0" y="109" width="393" height="709"/>
                                 <subviews>
                                     <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kKJ-sc-0C5">
-                                        <rect key="frame" x="0.0" y="0.0" width="393" height="679"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="393" height="709"/>
                                         <subviews>
-                                            <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cTV-ga-BAc" customClass="CustomButton" customModule="Cloth_App" customModuleProvider="target">
-                                                <rect key="frame" x="20" y="530" width="353" height="44"/>
+                                            <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cTV-ga-BAc" customClass="CustomButton" customModule="Clothing_Click" customModuleProvider="target">
+                                                <rect key="frame" x="20" y="560" width="353" height="44"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="44" id="42M-tD-8F8"/>
@@ -329,13 +329,13 @@
                                                 </connections>
                                             </button>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Please enter your details" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="n6Q-C8-Je9">
-                                                <rect key="frame" x="20" y="20" width="353" height="23.666666666666671"/>
+                                                <rect key="frame" x="20" y="15.000000000000002" width="353" height="23.666666666666671"/>
                                                 <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="20"/>
                                                 <color key="textColor" name="Black_Theme_Color"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="FMq-Zr-C8W">
-                                                <rect key="frame" x="20" y="59.666666666666657" width="353" height="401.33333333333337"/>
+                                                <rect key="frame" x="20" y="54.666666666666657" width="353" height="401.33333333333337"/>
                                                 <subviews>
                                                     <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sws-TY-qTU">
                                                         <rect key="frame" x="0.0" y="0.0" width="353" height="64.666666666666671"/>
@@ -382,7 +382,7 @@
                                                         </constraints>
                                                     </view>
                                                     <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dRU-E0-2n8">
-                                                        <rect key="frame" x="0.0" y="76.666666666666657" width="353" height="64.666666666666657"/>
+                                                        <rect key="frame" x="0.0" y="76.666666666666686" width="353" height="64.666666666666686"/>
                                                         <subviews>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hO8-HM-i57">
                                                                 <rect key="frame" x="0.0" y="0.0" width="37.333333333333336" height="16.666666666666668"/>
@@ -391,7 +391,7 @@
                                                                 <nil key="highlightedColor"/>
                                                             </label>
                                                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter here" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="gkN-8V-RdB" customClass="AnimatableTextField" customModule="IBAnimatable">
-                                                                <rect key="frame" x="0.0" y="20.666666666666686" width="353" height="44"/>
+                                                                <rect key="frame" x="0.0" y="20.666666666666657" width="353" height="44"/>
                                                                 <color key="backgroundColor" name="Light_Bg_Color"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="height" constant="44" id="Qtf-6z-ggs"/>
@@ -514,7 +514,7 @@
                                                                     <action selector="btnPassword_Clicked:" destination="3LH-8P-z6J" eventType="touchUpInside" id="Wnt-Je-fzx"/>
                                                                 </connections>
                                                             </button>
-                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="🟢 8 Characters 🔴 1  Uppercase 🔴 1 Number" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fDP-AR-Jfw">
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="🟢 8 Characters   🔴 1 Uppercase   🔴 1 Number" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fDP-AR-Jfw">
                                                                 <rect key="frame" x="0.0" y="74.666666666666629" width="353" height="16"/>
                                                                 <fontDescription key="fontDescription" name="ProximaNova-Medium" family="ProximaNova-Medium" pointSize="14"/>
                                                                 <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -537,16 +537,16 @@
                                                         </constraints>
                                                     </view>
                                                     <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vfx-ak-JNj">
-                                                        <rect key="frame" x="0.0" y="336.66666666666674" width="353" height="64.666666666666686"/>
+                                                        <rect key="frame" x="0.0" y="336.66666666666663" width="353" height="64.666666666666686"/>
                                                         <subviews>
-                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Password" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dHx-c5-OGV">
-                                                                <rect key="frame" x="0.0" y="0.0" width="62" height="16.666666666666668"/>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Confirm Password" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dHx-c5-OGV">
+                                                                <rect key="frame" x="0.0" y="0.0" width="115.66666666666667" height="16.666666666666668"/>
                                                                 <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="14"/>
                                                                 <color key="textColor" name="Black_Theme_Color"/>
                                                                 <nil key="highlightedColor"/>
                                                             </label>
                                                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter here" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="wt7-IU-zQH" customClass="AnimatableTextField" customModule="IBAnimatable">
-                                                                <rect key="frame" x="0.0" y="20.666666666666629" width="353" height="44"/>
+                                                                <rect key="frame" x="0.0" y="20.666666666666686" width="353" height="44"/>
                                                                 <color key="backgroundColor" name="Light_Bg_Color"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="height" constant="44" id="Spn-AD-bZp"/>
@@ -570,7 +570,7 @@
                                                                 </userDefinedRuntimeAttributes>
                                                             </textField>
                                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DXI-6I-bhB">
-                                                                <rect key="frame" x="309" y="30.666666666666629" width="24" height="24"/>
+                                                                <rect key="frame" x="309" y="30.666666666666686" width="24" height="24"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" constant="24" id="glQ-8U-Rs8"/>
                                                                     <constraint firstAttribute="height" constant="24" id="mlN-aE-HqN"/>
@@ -596,8 +596,8 @@
                                                     </view>
                                                 </subviews>
                                             </stackView>
-                                            <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UWd-TE-9Uv" customClass="CustomButton" customModule="Cloth_App" customModuleProvider="target">
-                                                <rect key="frame" x="20" y="615" width="353" height="44"/>
+                                            <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UWd-TE-9Uv" customClass="CustomButton" customModule="Clothing_Click" customModuleProvider="target">
+                                                <rect key="frame" x="20" y="645" width="353" height="44"/>
                                                 <color key="backgroundColor" name="Black_Theme_Color"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="44" id="5th-w1-KUE"/>
@@ -616,7 +616,7 @@
                                                 </connections>
                                             </button>
                                             <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vZ1-qe-kwQ">
-                                                <rect key="frame" x="20" y="594" width="353" height="1"/>
+                                                <rect key="frame" x="20" y="624" width="353" height="1"/>
                                                 <color key="backgroundColor" name="App_Light_Border_Color"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="1" id="um1-X6-heL"/>
@@ -635,7 +635,7 @@
                                             <constraint firstAttribute="bottom" secondItem="UWd-TE-9Uv" secondAttribute="bottom" constant="20" id="aOu-SV-7tj"/>
                                             <constraint firstItem="vZ1-qe-kwQ" firstAttribute="leading" secondItem="kKJ-sc-0C5" secondAttribute="leading" constant="20" id="arv-17-8jM"/>
                                             <constraint firstItem="cTV-ga-BAc" firstAttribute="top" relation="greaterThanOrEqual" secondItem="FMq-Zr-C8W" secondAttribute="bottom" constant="20" id="b0g-pp-MxV"/>
-                                            <constraint firstItem="n6Q-C8-Je9" firstAttribute="top" secondItem="kKJ-sc-0C5" secondAttribute="top" constant="20" id="d1t-eH-dkj"/>
+                                            <constraint firstItem="n6Q-C8-Je9" firstAttribute="top" secondItem="kKJ-sc-0C5" secondAttribute="top" constant="15" id="d1t-eH-dkj"/>
                                             <constraint firstItem="vZ1-qe-kwQ" firstAttribute="top" secondItem="cTV-ga-BAc" secondAttribute="bottom" constant="20" id="p6W-72-eaX"/>
                                             <constraint firstItem="FMq-Zr-C8W" firstAttribute="top" secondItem="n6Q-C8-Je9" secondAttribute="bottom" constant="16" id="qfd-tV-Vn3"/>
                                             <constraint firstAttribute="trailing" secondItem="vZ1-qe-kwQ" secondAttribute="trailing" constant="20" id="rcR-vd-Iri"/>
@@ -693,7 +693,7 @@
                             <constraint firstItem="WJV-5a-w5i" firstAttribute="leading" secondItem="ZLP-W6-lUW" secondAttribute="leading" id="4Ue-Up-whf"/>
                             <constraint firstItem="oen-D4-xLw" firstAttribute="leading" secondItem="c5G-QT-WOX" secondAttribute="leading" id="FoQ-5r-zZQ"/>
                             <constraint firstItem="WJV-5a-w5i" firstAttribute="top" secondItem="c5G-QT-WOX" secondAttribute="top" id="Kuu-SQ-yIh"/>
-                            <constraint firstItem="oen-D4-xLw" firstAttribute="top" secondItem="WJV-5a-w5i" secondAttribute="bottom" constant="30" id="L8p-Wo-NWx"/>
+                            <constraint firstItem="oen-D4-xLw" firstAttribute="top" secondItem="WJV-5a-w5i" secondAttribute="bottom" id="L8p-Wo-NWx"/>
                             <constraint firstItem="c5G-QT-WOX" firstAttribute="bottom" secondItem="oen-D4-xLw" secondAttribute="bottom" id="MEf-fV-0Z7"/>
                             <constraint firstItem="oen-D4-xLw" firstAttribute="trailing" secondItem="c5G-QT-WOX" secondAttribute="trailing" id="bya-KD-HYQ"/>
                             <constraint firstItem="c5G-QT-WOX" firstAttribute="trailing" secondItem="WJV-5a-w5i" secondAttribute="trailing" id="mi3-qX-QdS"/>
@@ -717,7 +717,7 @@
         <!--Login View Controller-->
         <scene sceneID="p9B-Vi-RLl">
             <objects>
-                <viewController storyboardIdentifier="LoginViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Gsf-xl-T2h" customClass="LoginViewController" customModule="Cloth_App" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="LoginViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Gsf-xl-T2h" customClass="LoginViewController" customModule="Clothing_Click" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="3aE-QI-gdJ">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -829,7 +829,7 @@
                                     </view>
                                 </subviews>
                             </stackView>
-                            <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="axY-Ug-f09" customClass="CustomButton" customModule="Cloth_App" customModuleProvider="target">
+                            <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="axY-Ug-f09" customClass="CustomButton" customModule="Clothing_Click" customModuleProvider="target">
                                 <rect key="frame" x="20" y="754" width="353" height="44"/>
                                 <color key="backgroundColor" name="Black_Theme_Color"/>
                                 <constraints>
@@ -930,7 +930,7 @@
         <!--Mobile NumberVC-->
         <scene sceneID="u1P-Qh-tyl">
             <objects>
-                <viewController storyboardIdentifier="MobileNumberVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="kg6-iI-OUe" customClass="MobileNumberVC" customModule="Cloth_App" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="MobileNumberVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="kg6-iI-OUe" customClass="MobileNumberVC" customModule="Clothing_Click" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" clipsSubviews="YES" contentMode="scaleToFill" id="pOy-F2-AcC">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1023,7 +1023,7 @@
                                 <color key="textColor" name="Chat_Read_Msg"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mEp-id-Zdw" customClass="CustomButton" customModule="Cloth_App" customModuleProvider="target">
+                            <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mEp-id-Zdw" customClass="CustomButton" customModule="Clothing_Click" customModuleProvider="target">
                                 <rect key="frame" x="20" y="754" width="353" height="44"/>
                                 <color key="backgroundColor" name="Black_Theme_Color"/>
                                 <constraints>
@@ -1085,7 +1085,7 @@
         <!--Otp ViewVC-->
         <scene sceneID="0j7-ad-2OV">
             <objects>
-                <viewController storyboardIdentifier="OtpViewVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Bkl-IB-2Oa" customClass="OtpViewVC" customModule="Cloth_App" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="OtpViewVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Bkl-IB-2Oa" customClass="OtpViewVC" customModule="Clothing_Click" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" clipsSubviews="YES" contentMode="scaleToFill" id="rUX-kG-MQA">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1155,7 +1155,7 @@
                                     <constraint firstAttribute="bottom" secondItem="ilB-8c-waG" secondAttribute="bottom" id="yfN-6t-zGq"/>
                                 </constraints>
                             </view>
-                            <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6Nc-lY-3Kz" customClass="CustomButton" customModule="Cloth_App" customModuleProvider="target">
+                            <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6Nc-lY-3Kz" customClass="CustomButton" customModule="Clothing_Click" customModuleProvider="target">
                                 <rect key="frame" x="20" y="754" width="353" height="44"/>
                                 <color key="backgroundColor" name="Black_Theme_Color"/>
                                 <constraints>
@@ -1231,7 +1231,7 @@
         <!--New Change PasswordVC-->
         <scene sceneID="duN-8c-53L">
             <objects>
-                <viewController storyboardIdentifier="NewChangePasswordVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="I9O-wW-wIV" customClass="NewChangePasswordVC" customModule="Cloth_App" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="NewChangePasswordVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="I9O-wW-wIV" customClass="NewChangePasswordVC" customModule="Clothing_Click" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" clipsSubviews="YES" contentMode="scaleToFill" id="DSF-6a-BBW">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1305,7 +1305,7 @@
                                     <constraint firstItem="5yZ-QJ-zin" firstAttribute="top" secondItem="mfO-Nq-rVz" secondAttribute="top" id="zR5-DD-aqM"/>
                                 </constraints>
                             </view>
-                            <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6Et-lD-1ke" customClass="CustomButton" customModule="Cloth_App" customModuleProvider="target">
+                            <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6Et-lD-1ke" customClass="CustomButton" customModule="Clothing_Click" customModuleProvider="target">
                                 <rect key="frame" x="20" y="754" width="353" height="44"/>
                                 <color key="backgroundColor" name="Black_Theme_Color"/>
                                 <constraints>
@@ -1382,7 +1382,7 @@
         <!--New PasswordVC-->
         <scene sceneID="6EC-mw-zb5">
             <objects>
-                <viewController storyboardIdentifier="NewPasswordVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="rbQ-8g-ei7" customClass="NewPasswordVC" customModule="Cloth_App" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="NewPasswordVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="rbQ-8g-ei7" customClass="NewPasswordVC" customModule="Clothing_Click" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" clipsSubviews="YES" contentMode="scaleToFill" id="fBE-jh-Jwe">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1428,7 +1428,7 @@
                                 <color key="textColor" name="Black_Theme_Color"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8aQ-wp-EKn" customClass="CustomButton" customModule="Cloth_App" customModuleProvider="target">
+                            <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8aQ-wp-EKn" customClass="CustomButton" customModule="Clothing_Click" customModuleProvider="target">
                                 <rect key="frame" x="20" y="754" width="353" height="44"/>
                                 <color key="backgroundColor" name="Black_Theme_Color"/>
                                 <constraints>
@@ -1616,59 +1616,6 @@
             <point key="canvasLocation" x="4288" y="-18"/>
         </scene>
     </scenes>
-    <designables>
-        <designable name="54N-s6-G1v">
-            <size key="intrinsicContentSize" width="91.333333333333329" height="17"/>
-        </designable>
-        <designable name="5dN-Ap-MKl">
-            <size key="intrinsicContentSize" width="91.333333333333329" height="18.333333333333332"/>
-        </designable>
-        <designable name="6Et-lD-1ke">
-            <size key="intrinsicContentSize" width="65" height="31"/>
-        </designable>
-        <designable name="6Nc-lY-3Kz">
-            <size key="intrinsicContentSize" width="34" height="31"/>
-        </designable>
-        <designable name="8aQ-wp-EKn">
-            <size key="intrinsicContentSize" width="35" height="31"/>
-        </designable>
-        <designable name="99m-oA-NOf">
-            <size key="intrinsicContentSize" width="91.333333333333329" height="18.333333333333332"/>
-        </designable>
-        <designable name="Ehc-0M-nwm">
-            <size key="intrinsicContentSize" width="91.333333333333329" height="18.333333333333332"/>
-        </designable>
-        <designable name="UWd-TE-9Uv">
-            <size key="intrinsicContentSize" width="34" height="28"/>
-        </designable>
-        <designable name="axY-Ug-f09">
-            <size key="intrinsicContentSize" width="45" height="31"/>
-        </designable>
-        <designable name="cTV-ga-BAc">
-            <size key="intrinsicContentSize" width="44" height="28"/>
-        </designable>
-        <designable name="gkN-8V-RdB">
-            <size key="intrinsicContentSize" width="91.333333333333329" height="18.333333333333332"/>
-        </designable>
-        <designable name="k1K-oM-cni">
-            <size key="intrinsicContentSize" width="91.333333333333329" height="17"/>
-        </designable>
-        <designable name="mEp-id-Zdw">
-            <size key="intrinsicContentSize" width="34" height="31"/>
-        </designable>
-        <designable name="mjL-qI-xHT">
-            <size key="intrinsicContentSize" width="91.333333333333329" height="17"/>
-        </designable>
-        <designable name="ob9-h3-HT1">
-            <size key="intrinsicContentSize" width="91.333333333333329" height="17"/>
-        </designable>
-        <designable name="rSq-oQ-sM6">
-            <size key="intrinsicContentSize" width="91.333333333333329" height="18.333333333333332"/>
-        </designable>
-        <designable name="wt7-IU-zQH">
-            <size key="intrinsicContentSize" width="91.333333333333329" height="17"/>
-        </designable>
-    </designables>
     <resources>
         <image name="facebook_ic" width="16.666666030883789" height="17"/>
         <image name="google_ic" width="16" height="16"/>

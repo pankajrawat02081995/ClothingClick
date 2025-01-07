@@ -59,7 +59,7 @@ class DepartmentViewModel{
 //                         "page" : "0"
 //            ]
             
-            FilterSingleton.share.filter.gender_id = "\(genderId)"
+          //  FilterSingleton.share.filter.gender_id = "\(genderId)"
             var dict = FilterSingleton.share.filter.toDictionary() ?? [:]
             dict.removeValue(forKey: "slectedCategories")
             APIManager().apiCallWithMultipart(of: ViewCountModel.self, isShowHud: true, URL: BASE_URL, apiName: APINAME.FILTER_POST.rawValue, parameters: dict) { (response, error) in
