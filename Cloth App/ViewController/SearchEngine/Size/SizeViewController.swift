@@ -64,7 +64,7 @@ class SizeViewController: BaseViewController {
         
         self.lblNoData.isHidden = true
         self.tblClothsPref.addObserver(self, forKeyPath: "contentSize", options: .new, context: nil)
-
+        
         if self.isFilterProduct == true{
             self.btnViewItems.setTitle("Add", for: .normal)
         }else{

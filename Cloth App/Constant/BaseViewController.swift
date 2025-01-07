@@ -23,11 +23,13 @@ import LinkPresentation
 import SafariServices
 import GoogleSignIn
 import AuthenticationServices
+import libPhoneNumber_iOS
 
 class BaseViewController: UIViewController, UINavigationBarDelegate {
     
     static let sharedInstance = BaseViewController()
     
+    let phoneNumberUtil = NBPhoneNumberUtil.sharedInstance()
     let storyBoard = UIStoryboard(name: "Main", bundle: nil)
     var metaDataDict = [String: LPLinkMetadata]()
 
@@ -373,6 +375,23 @@ class BaseViewController: UIViewController, UINavigationBarDelegate {
         
         let emailTest = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
         return emailTest.evaluate(with: str)
+    }
+    
+    func isValidPhoneNumber(phoneNumber: String, countryCode: String) -> Bool {
+        do {
+            // Parse the phone number with the country code (defaultRegion)
+            let phoneNumberObject = try phoneNumberUtil?.parse(phoneNumber, defaultRegion: countryCode)
+            
+            // Validate the phone number by checking its validity
+            if let phoneNumberObject = phoneNumberObject {
+                return try phoneNumberUtil?.isValidNumber(phoneNumberObject) ?? false
+            } else {
+                return false
+            }
+        } catch {
+            // In case of error, return false
+            return false
+        }
     }
     
     func isValidPassword(password: String) -> Bool {

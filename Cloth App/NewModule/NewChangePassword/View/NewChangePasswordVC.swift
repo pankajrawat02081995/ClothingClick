@@ -44,10 +44,21 @@ class NewChangePasswordVC: UIViewController {
         self.otpView.shouldAllowIntermediateEditing = false
         self.otpView.delegate = self
         self.otpView.initializeUI()
+        setupTextFields()
+        
+    }
+    private func setupTextFields() {
+        for (index, textField) in otpView.subviews.enumerated() {
+            if let otpTextField = textField as? UITextField {
+                otpTextField.delegate = self
+                otpTextField.tag = index
+                otpTextField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
+            }
+        }
     }
     
     @IBAction func continewOnPress(_ sender: UIButton) {
-        if self.finalOtp.count < 6{
+        if self.finalOtp.count < 6 {
             UIAlertController().alertViewWithTitleAndMessage(self, message: "Please enter one time password ")
         }else{
             self.viewModel.userVerifyOTP()
@@ -63,7 +74,46 @@ class NewChangePasswordVC: UIViewController {
     
 }
 
-extension NewChangePasswordVC: OTPFieldViewDelegate {
+extension NewChangePasswordVC: OTPFieldViewDelegate, UITextFieldDelegate {
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+            // If user pastes the entire OTP
+            if let pastedText = UIPasteboard.general.string, pastedText.count == otpView.fieldsCount, range.length == 0, range.location == 0 {
+                distributeOTP(pastedText)
+                return false
+            }
+            
+            // Restrict to one character per text field
+            if string.count > 1 { return false }
+            
+            return true
+        }
+        
+        @objc private func textFieldDidChange(_ textField: UITextField) {
+            let text = textField.text ?? ""
+            
+            // Automatically move to the next field if filled
+            if text.count == 1 {
+                if let nextField = view.viewWithTag(textField.tag + 1) as? UITextField {
+                    nextField.becomeFirstResponder()
+                } else {
+                    textField.resignFirstResponder() // Close keyboard if it's the last field
+                }
+            }
+        }
+        
+        private func distributeOTP(_ otp: String) {
+            for (index, char) in otp.enumerated() {
+                if index < otpView.fieldsCount {
+                    if let otpTextField = otpView.subviews[index] as? UITextField {
+                        otpTextField.text = String(char)
+                    }
+                }
+            }
+            
+            // Move focus to the last field
+            otpView.subviews.last?.becomeFirstResponder()
+        }
     
     func hasEnteredAllOTP(hasEnteredAll hasEntered: Bool) -> Bool {
         print("Has entered all OTP? \(hasEntered)")

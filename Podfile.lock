@@ -241,6 +241,7 @@ PODS:
   - KRActivityIndicatorView (3.0.8)
   - KRProgressHUD (3.4.8):
     - KRActivityIndicatorView (= 3.0.8)
+  - libPhoneNumber-iOS (1.2.0)
   - MercariQRScanner (1.9.0)
   - moa (12.0.0)
   - nanopb (2.30910.0):
@@ -307,6 +308,7 @@ DEPENDENCIES:
   - IQKeyboardManagerSwift
   - Kingfisher
   - KRProgressHUD
+  - libPhoneNumber-iOS
   - MercariQRScanner
   - moa
   - OTPFieldView
@@ -366,6 +368,7 @@ SPEC REPOS:
     - Kingfisher
     - KRActivityIndicatorView
     - KRProgressHUD
+    - libPhoneNumber-iOS
     - MercariQRScanner
     - moa
     - nanopb
@@ -435,6 +438,7 @@ SPEC CHECKSUMS:
   Kingfisher: f2af9028b16baf9dc6c07c570072bc41cbf009ef
   KRActivityIndicatorView: c5c503bf56e54834382dd926b64ff47287ca0006
   KRProgressHUD: d0fb4e72428d312eb6966e84c543ea58fb1efbc7
+  libPhoneNumber-iOS: 08887de018360f60facbf1a8cb2a8eff4ffb30af
   MercariQRScanner: e5aea873969af59b09b4cc411fc1c5b6293dba44
   moa: e2346f12de6c65bbca4d103950d45db9e46785ef
   nanopb: 438bc412db1928dac798aa6fd75726007be04262
@@ -456,6 +460,6 @@ SPEC CHECKSUMS:
   TTRangeSlider: 8cf72eca457c3b700c92eb0074be908c986e25ec
   YPImagePicker: afc81b3cffab05a6e7261c5daf80dc31b4e917b4
 
-PODFILE CHECKSUM: aa6dc94626dcf349c8eaef56063b161cd8a39e3d
+PODFILE CHECKSUM: de325bc7d3d0b9e76dcaeba3b324a12a1bb333f1
 
 COCOAPODS: 1.16.2

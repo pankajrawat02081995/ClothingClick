@@ -52,7 +52,7 @@ class StyleVC: BaseViewController {
     }
     
     func saveButtonSetup(){
-        if self.selectedID.count > 0{
+        if self.selectedID.count > 0 {
             self.btnSave.backgroundColor = .customBlack
             self.btnSave.isUserInteractionEnabled = true
         }else{

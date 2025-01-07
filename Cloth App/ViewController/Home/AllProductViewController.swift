@@ -18,6 +18,8 @@ class AllProductViewController: BaseViewController {
     @IBOutlet weak var lblTitle: UILabel!
     @IBOutlet weak var CVProducts: UICollectionView!
     @IBOutlet weak var btnBookMark: UIButton!
+    
+    var hasAppeared = false
     var isMySize = ""
     var titleStr = ""
     var typeId = ""
@@ -120,6 +122,10 @@ class AllProductViewController: BaseViewController {
                 self.alertViewForBookMark.isHidden = true
             }
         }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        self.hasAppeared = true
     }
     
     func setupCollectionView(){
@@ -449,8 +455,9 @@ extension AllProductViewController {
 //                     "sort_value" : self.sort_value,
 //                     "page" : "\(self.currentPage)"]
             FilterSingleton.share.filter.is_only_count = "0"
+            FilterSingleton.share.filter.page = page
             var param = FilterSingleton.share.filter.toDictionary() ?? [:]
-            let searchID = ["save_search_id": "\( self.saveSearchId ?? 0)","page" : "\(self.currentPage)"]
+            let searchID = ["save_search_id": "\( self.saveSearchId ?? 0)","page" : "\(page)"]
             param.removeValue(forKey: "slectedCategories")
             APIManager().apiCallWithMultipart(of: HomeListDetailsModel.self, isShowHud: isShowHud, URL: BASE_URL, apiName: self.isSaveList == true ? APINAME.SAVE_SEARCH_POSTS.rawValue : APINAME.FILTER_POST.rawValue, parameters: self.isSaveList == true ? searchID : param) { (response, error) in
                 if error == nil {
@@ -466,7 +473,9 @@ extension AllProductViewController {
                             
                             if let post = data.posts {
                                 for temp in post {
-                                    self.postList.append(temp)
+                                    if !self.hasAppeared {
+                                        self.postList.append(temp)
+                                    }
                                 }
                             }
                         }

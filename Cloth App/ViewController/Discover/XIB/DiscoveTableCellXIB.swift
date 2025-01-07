@@ -69,7 +69,7 @@ class DiscoveTableCellXIB: UITableViewCell {
             break
         }
         
-        collectionView.collectionViewLayout = layout
+      //  collectionView.collectionViewLayout = layout
         collectionView.isScrollEnabled = false
         collectionView.reloadData()
     }

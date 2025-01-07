@@ -329,7 +329,7 @@
 		182BC48D268D893600BC4A05 /* CustomMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomMenuViewController.swift; sourceTree = "<group>"; };
 		182BC490268DC8C700BC4A05 /* EditeStoreLocationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditeStoreLocationViewController.swift; sourceTree = "<group>"; };
 		184556A62694218D00DB4E8D /* MessageDetailsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageDetailsModel.swift; sourceTree = "<group>"; };
-		18468CC42660BA71007344DA /* Cloth App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Cloth App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		18468CC42660BA71007344DA /* Clothing Click.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Clothing Click.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		18468D0C2660BD15007344DA /* GeneralSettingModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeneralSettingModel.swift; sourceTree = "<group>"; };
 		18468D0D2660BD15007344DA /* SizeListModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SizeListModel.swift; sourceTree = "<group>"; };
 		18468D0E2660BD15007344DA /* CategoryModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CategoryModel.swift; sourceTree = "<group>"; };
@@ -707,7 +707,7 @@
 		18468CC52660BA71007344DA /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				18468CC42660BA71007344DA /* Cloth App.app */,
+				18468CC42660BA71007344DA /* Clothing Click.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -2511,7 +2511,7 @@
 			);
 			name = "Cloth App";
 			productName = "Cloth App";
-			productReference = 18468CC42660BA71007344DA /* Cloth App.app */;
+			productReference = 18468CC42660BA71007344DA /* Clothing Click.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -3115,6 +3115,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 36;
 				DEVELOPMENT_TEAM = PRN69F6WNX;
+				"EXCLUDED_ARCHS[sdk=*]" = x86_64;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				INFOPLIST_FILE = "Cloth App/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
@@ -3124,7 +3125,7 @@
 				);
 				MARKETING_VERSION = 3.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.clothingclick.app;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "Clothing Click";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Cloth App/ClothApp-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
@@ -3143,6 +3144,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 36;
 				DEVELOPMENT_TEAM = PRN69F6WNX;
+				"EXCLUDED_ARCHS[sdk=*]" = x86_64;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				INFOPLIST_FILE = "Cloth App/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
@@ -3152,7 +3154,7 @@
 				);
 				MARKETING_VERSION = 3.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.clothingclick.app;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "Clothing Click";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Cloth App/ClothApp-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;

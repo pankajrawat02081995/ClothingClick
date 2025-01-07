@@ -254,18 +254,23 @@ extension FollowFollwingViewController : UITableViewDelegate,UITableViewDataSour
             cell.lblUserName.text = objet.username?.capitalized
             cell.lblFollowerCount.text = objet.total_posts ?? 0 > 1 ? "\(objet.total_posts ?? 0) Listings" : "\(objet.followers ?? 0) Listings"
 
-            if let url = objet.photo {
-                let urlString = url.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
-                if let imgUrl = URL.init(string: urlString!) {
-                    cell.imgUser.kf.setImage(with: imgUrl, placeholder: ProfileHolderImage)
-                }
-                else{
-                    cell.imgUser.setImage(ProfileHolderImage!)
-                }
+        if let url = objet.photo {
+            cell.lblFirstLetter.isHidden = true
+            let urlString = url.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+            if let imgUrl = URL.init(string: urlString!) {
+                cell.imgUser.kf.setImage(with: imgUrl, placeholder: ProfileHolderImage)
+            }else{
+                cell.lblFirstLetter.isHidden = false
+                cell.imgUser.backgroundColor = .black
+                cell.lblFirstLetter.text = objet.name?.first?.description ?? ""
             }
-            else{
-                cell.imgUser.setImage(ProfileHolderImage!)
-            }
+        } else {
+            cell.imgUser.backgroundColor = .black
+            cell.lblFirstLetter.isHidden = false
+            cell.lblFirstLetter.text = objet.name?.first?.description ?? ""
+            cell.imgUser.setImage(ProfileHolderImage!)
+        }
+        
         cell.btnFollowFollowing.isHidden = objet.user_id == appDelegate.userDetails?.id ?? 0
             cell.btnFollowFollowing.tag = indexPath.row
             if objet.is_requested == 1 {
@@ -297,55 +302,58 @@ extension FollowFollwingViewController : UITableViewDelegate,UITableViewDataSour
         return cell
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        if searchActive == true{
-//            let object = self.filtered[indexPath.row]
-//            if appDelegate.userDetails?.id == object.user_id {
-//                self.navigateToHomeScreen(selIndex: 4)
-//            }
-//            else {
-//                if let seller = object.role_id {
-//                    if seller == 1 {
-//                        let viewController = self.storyboard?.instantiateViewController(identifier: "OtherUserProfileViewController") as! OtherUserProfileViewController
-//                        viewController.userId = "\(object.user_id ?? 0)"
-//                        self.navigationController?.pushViewController(viewController, animated: true)
-//                    }
-//                    else if seller == 2 {
-//                        let viewController = self.storyboard?.instantiateViewController(identifier: "StoreProfileViewController") as! StoreProfileViewController
-//                        viewController.userId = "\(object.user_id ?? 0)"
-//                        self.navigationController?.pushViewController(viewController, animated: true)
-//                    }
-//                    else {
-//                        let viewController = self.storyboard?.instantiateViewController(identifier: "BrandProfileViewController") as! BrandProfileViewController
-//                        viewController.userId = "\(object.user_id ?? 0)"
-//                        self.navigationController?.pushViewController(viewController, animated: true)
-//                    }
-//                }
-//            }
-//        }else{
-            let object = self.followingList[indexPath.row]
-            if appDelegate.userDetails?.id == object.user_id {
-                self.navigateToHomeScreen(selIndex: 4)
-            }
-            else {
-                if let seller = object.role_id {
-                    if seller == 1 {
-                        let viewController = OtherUserProfileViewController.instantiate(fromStoryboard: .Main)
-                        viewController.userId = "\(object.user_id ?? 0)"
-                        self.navigationController?.pushViewController(viewController, animated: true)
-                    }
-                    else if seller == 2 {
-                        let viewController = self.storyboard?.instantiateViewController(identifier: "StoreProfileViewController") as! StoreProfileViewController
-                        viewController.userId = "\(object.user_id ?? 0)"
-                        self.navigationController?.pushViewController(viewController, animated: true)
-                    }
-                    else {
-                        let viewController = self.storyboard?.instantiateViewController(identifier: "BrandProfileViewController") as! BrandProfileViewController
-                        viewController.userId = "\(object.user_id ?? 0)"
-                        self.navigationController?.pushViewController(viewController, animated: true)
-                    }
+        //        if searchActive == true{
+        //            let object = self.filtered[indexPath.row]
+        //            if appDelegate.userDetails?.id == object.user_id {
+        //                self.navigateToHomeScreen(selIndex: 4)
+        //            }
+        //            else {
+        //                if let seller = object.role_id {
+        //                    if seller == 1 {
+        //                        let viewController = self.storyboard?.instantiateViewController(identifier: "OtherUserProfileViewController") as! OtherUserProfileViewController
+        //                        viewController.userId = "\(object.user_id ?? 0)"
+        //                        self.navigationController?.pushViewController(viewController, animated: true)
+        //                    }
+        //                    else if seller == 2 {
+        //                        let viewController = self.storyboard?.instantiateViewController(identifier: "StoreProfileViewController") as! StoreProfileViewController
+        //                        viewController.userId = "\(object.user_id ?? 0)"
+        //                        self.navigationController?.pushViewController(viewController, animated: true)
+        //                    }
+        //                    else {
+        //                        let viewController = self.storyboard?.instantiateViewController(identifier: "BrandProfileViewController") as! BrandProfileViewController
+        //                        viewController.userId = "\(object.user_id ?? 0)"
+        //                        self.navigationController?.pushViewController(viewController, animated: true)
+        //                    }
+        //                }
+        //            }
+        //        }else{
+        let object = self.followingList[indexPath.row]
+        if appDelegate.userDetails?.id == object.user_id {
+            self.navigateToHomeScreen(selIndex: 4)
+        }
+        else {
+            if let seller = object.role_id {
+                if seller == 1 {
+                    let viewController = OtherUserProfileViewController.instantiate(fromStoryboard: .Main)
+                    viewController.userId = "\(object.user_id ?? 0)"
+                    self.navigationController?.pushViewController(viewController, animated: true)
+                }
+                else if seller == 2 {
+                    let viewController = self.storyboard?.instantiateViewController(identifier: "StoreProfileViewController") as! StoreProfileViewController
+                    viewController.userId = "\(object.user_id ?? 0)"
+                    self.navigationController?.pushViewController(viewController, animated: true)
+                }
+                else {
+                    let vc = StoreProfileVC.instantiate(fromStoryboard: .Store)
+                    vc.viewModel.userID = "\(object.user_id ?? 0)"
+                    self.pushViewController(vc: vc)
+                    //                        let viewController = self.storyboard?.instantiateViewController(identifier: "BrandProfileViewController") as! BrandProfileViewController
+                    //                        viewController.userId = "\(object.user_id ?? 0)"
+                    //                        self.navigationController?.pushViewController(viewController, animated: true)
                 }
             }
-//        }
+        }
+        //        }
     }
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
 //        if searchActive == true{
@@ -377,7 +385,9 @@ extension FollowFollwingViewController : UITableViewDelegate,UITableViewDataSour
 //        }
     }
 }
+
 class FollowingFollowearCell : UITableViewCell {
+    @IBOutlet weak var lblFirstLetter: UILabel!
     @IBOutlet weak var lblFollowerCount: UILabel!
     @IBOutlet weak var imgUser: CustomImageView!
     @IBOutlet weak var btnFollowFollowing: CustomButton!

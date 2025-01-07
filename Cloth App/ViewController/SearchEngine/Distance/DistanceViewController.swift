@@ -46,16 +46,20 @@ class DistanceViewController: BaseViewController {
         super.viewDidLoad()
 //        sliderDistanceKm.maximumValue = 50
         let objet = appDelegate.userDetails?.locations
-        if let lat  = objet?[0].latitude {
-            self.lat = Double(lat) ?? 0.0
-        }
-        if let lon = objet?[0].longitude {
-            self.log = Double(lon) ?? 0.0
+        if objet?.count ?? 0 > 0 {
+            if let lat  = objet?[0].latitude {
+                self.lat = Double(lat) ?? 0.0
+            }
+            
+            if let lon = objet?[0].longitude {
+                self.log = Double(lon) ?? 0.0
+            }
+            self.lblSarchLocation.text = objet?[0].address
         }
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(labelTapped))
         self.lblSarchLocation.isUserInteractionEnabled = true
         self.lblSarchLocation.addGestureRecognizer(tapGesture)
-        self.lblSarchLocation.text = objet?[0].address
+        
         self.sliderDistanceKm.addTarget(self, action: #selector(sliderDidEndSliding), for: [.touchUpInside, .touchUpOutside])
 
 //        if self.saveSearch{

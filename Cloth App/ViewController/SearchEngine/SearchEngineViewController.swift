@@ -393,7 +393,8 @@ extension SearchEngineViewController : UITableViewDelegate,UITableViewDataSource
             let viewController = self.storyboard?.instantiateViewController(identifier: "SizeViewController") as! SizeViewController
             viewController.selectedIndex = indexPath.row
             viewController.headerTitle = self.categoryList[indexPath.row]
-            viewController.saveSearch = true
+          //  viewController.saveSearch = true
+            viewController.saveSearch = false
             self.navigationController?.pushViewController(viewController, animated: true)
             //            }
         }

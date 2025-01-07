@@ -188,14 +188,14 @@ extension SettingVC:UITableViewDelegate,UITableViewDataSource{
             let alert: UIAlertController = UIAlertController.init(title: AlertViewTitle, message: "Are you sure you want to Delete account?", preferredStyle: .alert)
             alert.setAlertButtonColor()
             let yesAction: UIAlertAction = UIAlertAction.init(title: "Delete", style: .default, handler: { (action) in
-                let vc = NewChangePasswordVC.instantiate(fromStoryboard: .Auth)
-                vc.isDeleteAccountRequest = true
-                vc.deleteResquestOtpVerify = { isDelete in
-                    if isDelete{
-                        self.deleteUser()
-                    }
-                }
-                self.pushViewController(vc: vc)
+//                let vc = NewChangePasswordVC.instantiate(fromStoryboard: .Auth)
+//                vc.isDeleteAccountRequest = true
+//                vc.deleteResquestOtpVerify = { isDelete in
+//                    if isDelete{
+                       self.deleteUser()
+//                    }
+//                }
+//                self.pushViewController(vc: vc)
                 
             })
             let noAction: UIAlertAction = UIAlertAction.init(title: "Cancel", style: .default, handler: { (action) in
