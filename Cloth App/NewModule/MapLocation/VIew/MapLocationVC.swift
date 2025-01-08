@@ -99,13 +99,11 @@ extension MapLocationVC: GMSAutocompleteViewControllerDelegate  {
                print("Place address: ", place.formattedAddress ?? "")
                print("Place attributions: ", place.attributions ?? "")
         
-        self.txtPostal.text = place.formattedAddress
+//        self.txtPostal.text = place.formattedAddress
         self.lat = place.coordinate.latitude
         self.log = place.coordinate.longitude
-        self.address = place.formattedAddress!
-        self.setInitDataUserLise(latitude: self.lat, longitude: self.log, tital: self.address)
+       // self.address = place.formattedAddress!
         self.getAddressFromLatLon(latitude: self.lat, longitude: self.log)
-
     }
     
     func getAddressFromLatLon(latitude: Double, longitude: Double) {
@@ -156,6 +154,9 @@ extension MapLocationVC: GMSAutocompleteViewControllerDelegate  {
                             "postal_code" : self.txtPostal.text!,
                             "area" : pm.subLocality ?? "",
                             "id" : appDelegate.userDetails?.id ?? 0] as [String : Any]
+                self.txtPostal.text = addressString
+                self.address = addressString
+                self.setInitDataUserLise(latitude: self.lat, longitude: self.log, tital: addressString)
                 let objet = Locations.init(JSON: json)
                 self.addresslist.removeAll()
                 self.addresslist.append(objet)

@@ -125,12 +125,12 @@ class PostDetailsVC: BaseViewController {
             }
             
             self.setDeta()
-        }
-        else {
+        } else {
             if let subcategory = self.selectSubcategory?.name {
                 self.txtModelTitle.text =  "\(subcategory)"
             }
             let objectModel = appDelegate.userDetails?.locations
+            self.addresslist = []
             for i in 0..<(objectModel?.count ?? 0) {
                 if objectModel?[i].isPayAddress() ?? false  || objectModel?[i].isSelectedAddress() ?? false {
                     //                    print("is pay \(self.addresslist[i]?.isPayAddress())","id : \(self.addresslist[i]?.id)")
@@ -1132,7 +1132,7 @@ extension PostDetailsVC : UITextFieldDelegate {
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
-        if textField == txtModelTitle{
+        if textField == txtModelTitle {
             if self.txtModelTitle.text?.trim().count == 0 {
                 if let categoty = self.selectCategory?.name {
                     self.txtModelTitle.text = categoty
@@ -1144,6 +1144,11 @@ extension PostDetailsVC : UITextFieldDelegate {
                 }
             }
         }
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder() // This dismisses the keyboard
+        return true
     }
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {

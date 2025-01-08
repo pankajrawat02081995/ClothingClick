@@ -1113,6 +1113,7 @@ extension UISearchBar {
 }
 
 extension UITextField {
+    
     private class ClearButtonImage {
         static private var _image: UIImage?
         static private var semaphore = DispatchSemaphore(value: 1)
@@ -1140,7 +1141,7 @@ extension UITextField {
     func setClearButton(color: UIColor) {
         ClearButtonImage.getImage { [weak self] image in
             guard   let image = image,
-                let button = self?.getClearButton() else { return }
+                    let button = self?.getClearButton() else { return }
             button.imageView?.tintColor = color
             button.setImage(image.withRenderingMode(.alwaysTemplate), for: .normal)
         }
