@@ -21379,7 +21379,7 @@ method of payment</string>
                                         <rect key="frame" x="0.0" y="0.0" width="374" height="44"/>
                                         <color key="textColor" name="Black_Theme_Color"/>
                                         <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits"/>
+                                        <textInputTraits key="textInputTraits" returnKeyType="search"/>
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="color" keyPath="placeholderColor">
                                                 <color key="value" name="Black_Theme_Color"/>

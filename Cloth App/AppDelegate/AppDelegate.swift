@@ -89,7 +89,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         GMSServices.provideAPIKey(googleAPIKey)
         
         IQKeyboardManager.shared.isEnabled = true
-        IQKeyboardManager.shared.toolbarConfiguration.tintColor = UIColor().alertButtonColor
+        IQKeyboardManager.shared.enableAutoToolbar = true
+      //  IQKeyboardManager.shared.toolbarConfiguration.tintColor = UIColor().alertButtonColor
         self.locationManager.requestAlwaysAuthorization()
         // For use in foreground
         self.locationManager.requestWhenInUseAuthorization()
