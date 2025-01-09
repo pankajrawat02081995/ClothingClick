@@ -17,6 +17,8 @@ class StoreProfileVC: UIViewController {
     var isSellling : Bool? = true
     var viewModel = StoreProfileViewModel()
     let customTransitioningDelegate = CustomTransitioningDelegate()
+    var arrTime = [String]()
+    var arrDays = [String]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -80,6 +82,22 @@ class StoreProfileVC: UIViewController {
     
     @objc func storeOpenOnPress(sender:UIButton){
         let vc = StoreOpenVC.instantiate(fromStoryboard: .Store)
+        let daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+        
+        let timings = self.viewModel.otherUserDetailsData?.storeDetail?.timings ?? [:]
+        for day in daysOfWeek {
+            if let timeDetails = timings[day],
+               let openTime = timeDetails["open"], let closeTime = timeDetails["close"],
+               let open12Hour = GetData.shared.convertTo12HourFormat(openTime),
+               let close12Hour = GetData.shared.convertTo12HourFormat(closeTime) {
+                arrTime.append("\(open12Hour) - \(close12Hour)")
+                arrDays.append("\(day)")
+            }
+        }
+
+        vc.todaysTime = " Until \(GetData.shared.getTodayCloseTime(for: timings) ?? "")"
+        vc.arrDays = arrDays
+        vc.arrTime = arrTime
         vc.modalPresentationStyle = .custom
         vc.transitioningDelegate = customTransitioningDelegate
         self.present(vc, animated: true)
@@ -173,9 +191,10 @@ extension StoreProfileVC:UITableViewDelegate,UITableViewDataSource{
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == 0{
             let cell = tableView.dequeueReusableCell(withIdentifier: "ProfilePageTbCell", for: indexPath) as! ProfilePageTbCell
-            if let data = self.viewModel.otherUserDetailsData{
+            if let data = self.viewModel.otherUserDetailsData {
                 cell.setData(otherUserDetailsData: data)
             }
+            
             cell.btnOpenTime.addTarget(self, action: #selector(self.storeOpenOnPress(sender:)), for: .touchUpInside)
 
             cell.btnShare.addTarget(self, action: #selector(self.shareOnPress(sender:)), for: .touchUpInside)

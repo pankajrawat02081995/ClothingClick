@@ -2,6 +2,7 @@ import UIKit
 
 class ItemTbCell: UITableViewCell {
     
+    @IBOutlet weak var lblNoDataAvailable: UILabel!
     @IBOutlet weak var btnFilter: UIButton!
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var heightCon: NSLayoutConstraint!
@@ -24,12 +25,17 @@ class ItemTbCell: UITableViewCell {
     
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
         if keyPath == "contentSize" {
-            if let newValue = change?[.newKey] as? CGSize {
-                heightCon.constant = newValue.height + 50
-                // Notify table view to update its layout
-                UIView.setAnimationsEnabled(false) // Disable animations for smoother updates
-                self.superview?.layoutIfNeeded()
-                UIView.setAnimationsEnabled(true)
+            
+            if self.posts.count > 0 {
+                if let newValue = change?[.newKey] as? CGSize {
+                    heightCon.constant = newValue.height + 50
+                    // Notify table view to update its layout
+                    UIView.setAnimationsEnabled(false) // Disable animations for smoother updates
+                    self.superview?.layoutIfNeeded()
+                    UIView.setAnimationsEnabled(true)
+                }
+            }else {
+                heightCon.constant = 80
             }
         } else {
             super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
@@ -38,6 +44,7 @@ class ItemTbCell: UITableViewCell {
     
     func setPostData(post:[Posts]){
         self.posts = post
+        self.lblNoDataAvailable.isHidden =  self.posts.count != 0
         self.collectionView.reloadData()
     }
     

@@ -17,20 +17,12 @@ class ProfilePageTbCell: UITableViewCell {
     @IBOutlet weak var lblPostsCount: UILabel!
     @IBOutlet weak var imgStore: UIImageView!
     @IBOutlet weak var collectionView: UICollectionView!
-    
     @IBOutlet weak var pageControl: UIPageControl!
-    
     @IBOutlet weak var btnFollow: AnimatableButton!
-    
-    
     @IBOutlet weak var viewContact: AnimatableView!
-    
     @IBOutlet weak var viewDirections: AnimatableView!
-    
     @IBOutlet weak var lblWebsite: UIButton!
     @IBOutlet weak var btnShare: UIButton!
-    
-    
     @IBOutlet weak var btnContact: UIButton!
     @IBOutlet weak var lblOpenTime: UILabel!
     @IBOutlet weak var lblDese: UILabel!
@@ -59,6 +51,11 @@ class ProfilePageTbCell: UITableViewCell {
     func setData(otherUserDetailsData:UserDetailsModel) {
         self.otherUserDetailsData = otherUserDetailsData
         self.collectionView.reloadData()
+        
+        //Show Store timings
+        let timings = otherUserDetailsData.storeDetail?.timings ?? [:]
+        lblOpenTime.text = "Open Until \(GetData.shared.getTodayCloseTime(for: timings) ?? "")"
+        
         if let url = self.otherUserDetailsData?.photo {
             self.lblNameLater.isHidden = true
             if let image = URL.init(string: url){
@@ -135,13 +132,6 @@ class ProfilePageTbCell: UITableViewCell {
             }
         }
     }
-    
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-        
-        // Configure the view for the selected state
-    }
-    
 }
 
 extension ProfilePageTbCell: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {

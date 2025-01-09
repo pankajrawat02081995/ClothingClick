@@ -310,6 +310,8 @@
 		32F78ABD2D0EDA35009D2ACC /* ReportXIB.xib in Resources */ = {isa = PBXBuildFile; fileRef = 32F78ABC2D0EDA35009D2ACC /* ReportXIB.xib */; };
 		32F78ABE2D0EDA35009D2ACC /* ReportXIB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32F78ABB2D0EDA35009D2ACC /* ReportXIB.swift */; };
 		32FFC5062C04D9760088EB9E /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32FFC5052C04D9760088EB9E /* String.swift */; };
+		B225D0732D2FF131007DC1F8 /* GetData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B225D0722D2FF131007DC1F8 /* GetData.swift */; };
+		B225D0762D2FF3E0007DC1F8 /* TimingsTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B225D0752D2FF3E0007DC1F8 /* TimingsTVC.swift */; };
 		B2EBEB732D2D08FF00DC3046 /* NewRatingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2EBEB722D2D08FF00DC3046 /* NewRatingViewController.swift */; };
 		B2EBEB752D2D102F00DC3046 /* NewRatingCVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2EBEB742D2D102F00DC3046 /* NewRatingCVC.swift */; };
 		D4F08594DA7BE2C0A63C254A /* Pods_Cloth_App.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86ED8545EB6479C3896F7008 /* Pods_Cloth_App.framework */; };
@@ -646,6 +648,8 @@
 		67928CF78E1B746727F6F8FC /* Pods-Cloth App.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Cloth App.release.xcconfig"; path = "Target Support Files/Pods-Cloth App/Pods-Cloth App.release.xcconfig"; sourceTree = "<group>"; };
 		85046BE247D3EE207F9896D8 /* Pods-Cloth App.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Cloth App.debug.xcconfig"; path = "Target Support Files/Pods-Cloth App/Pods-Cloth App.debug.xcconfig"; sourceTree = "<group>"; };
 		86ED8545EB6479C3896F7008 /* Pods_Cloth_App.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Cloth_App.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B225D0722D2FF131007DC1F8 /* GetData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetData.swift; sourceTree = "<group>"; };
+		B225D0752D2FF3E0007DC1F8 /* TimingsTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimingsTVC.swift; sourceTree = "<group>"; };
 		B2EBEB722D2D08FF00DC3046 /* NewRatingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewRatingViewController.swift; sourceTree = "<group>"; };
 		B2EBEB742D2D102F00DC3046 /* NewRatingCVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewRatingCVC.swift; sourceTree = "<group>"; };
 		FA1BFBDD2924AD6B00ECECE9 /* ProximaNova-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ProximaNova-Medium.ttf"; sourceTree = "<group>"; };
@@ -1519,6 +1523,7 @@
 		32187BB62C84B0D5001979CA /* StoreProfile */ = {
 			isa = PBXGroup;
 			children = (
+				B225D0742D2FF3C7007DC1F8 /* Xibs */,
 				32187BB72C84B0E0001979CA /* View */,
 			);
 			path = StoreProfile;
@@ -1543,6 +1548,7 @@
 				322545792BF9D7AC005A1793 /* TypealiasClass.swift */,
 				328895AB2C0246DC00F0BB81 /* CustomPresent.swift */,
 				32FFC5052C04D9760088EB9E /* String.swift */,
+				B225D0722D2FF131007DC1F8 /* GetData.swift */,
 				32E8F7E42C04F68B009560FC /* CommonUtility.swift */,
 				32814ABF2C063B0300E4116B /* UIVIewController.swift */,
 				32D49A702C0659FC0094D5E2 /* UIButton.swift */,
@@ -2477,6 +2483,14 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
+		B225D0742D2FF3C7007DC1F8 /* Xibs */ = {
+			isa = PBXGroup;
+			children = (
+				B225D0752D2FF3E0007DC1F8 /* TimingsTVC.swift */,
+			);
+			path = Xibs;
+			sourceTree = "<group>";
+		};
 		FA767B7D296FDD5200423166 /* PopView  */ = {
 			isa = PBXGroup;
 			children = (
@@ -2733,6 +2747,7 @@
 				18468E452660BD4A007344DA /* ClothPreferencesViewController.swift in Sources */,
 				18468E2E2660BD49007344DA /* SaveSearchViewController.swift in Sources */,
 				18468E462660BD4A007344DA /* FavouriteBrandSearchViewController.swift in Sources */,
+				B225D0762D2FF3E0007DC1F8 /* TimingsTVC.swift in Sources */,
 				32CCD5F12BFBB17A003F99C3 /* ChatListXIB.swift in Sources */,
 				18468E402660BD4A007344DA /* SizeViewController.swift in Sources */,
 				18468E272660BD49007344DA /* OtherUserProfileViewController.swift in Sources */,
@@ -2801,6 +2816,7 @@
 				329A19132C8E285E008DAA4D /* UserListXIB.swift in Sources */,
 				18468E262660BD49007344DA /* ChatViewController.swift in Sources */,
 				186B6EB4267B183A00B58B1B /* FollowRequestsModel.swift in Sources */,
+				B225D0732D2FF131007DC1F8 /* GetData.swift in Sources */,
 				323A38D42C974D92003F705E /* OrderProductDetailsVC.swift in Sources */,
 				18468D6F2660BD3C007344DA /* Country.swift in Sources */,
 				18468E212660BD49007344DA /* LoginViewController.swift in Sources */,
