@@ -88,6 +88,7 @@ class DistanceViewController: BaseViewController {
         let viewController = GMSAutocompleteViewController()
         viewController.delegate = self
         self.present(viewController, animated: true, completion: nil)
+        self.callViewCount()
     }
     
     @objc func sliderDidEndSliding(_ sender: UISlider) {

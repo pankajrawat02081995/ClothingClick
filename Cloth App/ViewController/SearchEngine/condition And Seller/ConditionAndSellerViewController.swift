@@ -70,14 +70,15 @@ class ConditionAndSellerViewController: BaseViewController {
             
             self.callConditionColor(categoryId: String(FilterSingleton.share.filter.categories ?? ""), genderId: FilterSingleton.share.filter.gender_id ?? "" )
             self.callSizeList()
+            self.callViewCount()
         }
         else if headerTitle == "Condition"{
             self.tblConditionAndSeller.isHidden = false
             self.CVSize.isHidden = true
             self.callConditionColor(categoryId: String(FilterSingleton.share.filter.categories ?? ""), genderId: FilterSingleton.share.filter.gender_id ?? "" )
-            if self.isFilterProduct == false{
-                self.callViewCount()
-            }
+            // if self.isFilterProduct == false{
+            self.callViewCount()
+            // }
         }
         else if headerTitle == "Size" {
             self.tblConditionAndSeller.isHidden = true
@@ -88,9 +89,9 @@ class ConditionAndSellerViewController: BaseViewController {
         else if headerTitle == "Seller" {
             self.tblConditionAndSeller.isHidden = false
             self.CVSize.isHidden = true
-            if self.isFilterProduct == false{
-                self.callViewCount()
-            }
+            //if self.isFilterProduct == false{
+            self.callViewCount()
+            //}
         }
         else {
             self.tblConditionAndSeller.isHidden = false
@@ -300,7 +301,7 @@ class ConditionAndSellerViewController: BaseViewController {
                     condictionColorLise?.colors?[i].isSelect = false
                 }
             }
-
+            
             self.tblConditionAndSeller.reloadData()
         }
         else if headerTitle == "Condition" {
@@ -420,7 +421,7 @@ extension ConditionAndSellerViewController : UITableViewDelegate,UITableViewData
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if self.headerTitle == "Color" {
             let objet = self.condictionColorLise?.colors
-
+            
             if objet?[indexPath.row].isSelect == true {
                 self.condictionColorLise?.colors?[indexPath.row].isSelect = false
             }else{
@@ -433,9 +434,9 @@ extension ConditionAndSellerViewController : UITableViewDelegate,UITableViewData
             self.selected = indexPath.item
             self.tblConditionAndSeller.reloadData()
             
-            if self.saveSearch == false && self.isFilterProduct == false{
-                self.callViewCount()
-            }
+            //if self.saveSearch == false && self.isFilterProduct == false{
+            self.callViewCount()
+            //}
         }
         else if self.headerTitle == "Condition"{
             let objet = self.condictionColorLise?.conditions?[indexPath.row]
@@ -443,25 +444,25 @@ extension ConditionAndSellerViewController : UITableViewDelegate,UITableViewData
             FilterSingleton.share.filter.condition_id = "\(objet?.id ?? 0)"
             FilterSingleton.share.selectedFilter.condition_id = "\(objet?.name ?? "")"
             self.tblConditionAndSeller.reloadData()
-            if self.saveSearch == false && self.isFilterProduct == false{
-                self.callViewCount()
-            }
+            // if self.saveSearch == false && self.isFilterProduct == false{
+            self.callViewCount()
+            // }
         }
         else if self.headerTitle == "Seller" {
             let objet = self.list[indexPath.row]
-//            for i in 0..<self.list.count {
-//                if self.list[i] != nil {
-//                    self.list[i]?.isSelect = false
-//                }
-//            }
-//            self.list[indexPath.row]?.isSelect = true
-//            appDelegate.selectSellerId = String(objet?.id ?? 0)
+            //            for i in 0..<self.list.count {
+            //                if self.list[i] != nil {
+            //                    self.list[i]?.isSelect = false
+            //                }
+            //            }
+            //            self.list[indexPath.row]?.isSelect = true
+            //            appDelegate.selectSellerId = String(objet?.id ?? 0)
             FilterSingleton.share.filter.seller = String(objet?.id ?? 0)
             FilterSingleton.share.selectedFilter.seller = String(objet?.name ?? "")
             self.tblConditionAndSeller.reloadData()
-            if self.saveSearch == false && self.isFilterProduct == false{
-                self.callViewCount()
-            }
+            // if self.saveSearch == false && self.isFilterProduct == false{
+            self.callViewCount()
+            // }
         }
         else {
             self.selected = indexPath.item
@@ -581,15 +582,15 @@ extension ConditionAndSellerViewController {
                             else {
                                 for i in 0..<(self.condictionColorLise?.colors?.count ?? 0){
                                     let data = self.condictionColorLise?.colors?[i]
-//                                    if self.saveSearch {
-//                                        if self.selectColorId.contains("\(data?.id ?? -1)"){
-//                                            self.condictionColorLise?.colors?[i].isSelect = true
-//                                        }
-//                                    }else{
-                                        if FilterSingleton.share.filter.colors?.components(separatedBy: ",").contains("\(data?.id ?? -1)") == true{
-                                            self.condictionColorLise?.colors?[i].isSelect = true
-                                        }
-//                                    }
+                                    //                                    if self.saveSearch {
+                                    //                                        if self.selectColorId.contains("\(data?.id ?? -1)"){
+                                    //                                            self.condictionColorLise?.colors?[i].isSelect = true
+                                    //                                        }
+                                    //                                    }else{
+                                    if FilterSingleton.share.filter.colors?.components(separatedBy: ",").contains("\(data?.id ?? -1)") == true{
+                                        self.condictionColorLise?.colors?[i].isSelect = true
+                                    }
+                                    //                                    }
                                 }
                                 self.lblNoData.isHidden = true
                             }

@@ -63,13 +63,14 @@ class DiscoveTableCellXIB: UITableViewCell {
                 let additionalSpacing: CGFloat = self.isMensware == true ? 48 : 72
                 let totalHeight = (CGFloat(rows) * (width + 30)) + additionalSpacing
                 self.collectionViewHeight.constant = totalHeight
+                self.collectionView.collectionViewLayout = layout
             }
             
         default:
             break
         }
         
-        collectionView.collectionViewLayout = layout
+        // collectionView.collectionViewLayout = layout
         collectionView.isScrollEnabled = false
         collectionView.reloadData()
     }

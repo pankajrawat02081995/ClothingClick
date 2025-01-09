@@ -22720,6 +22720,12 @@ method of payment</string>
                                             <outlet property="delegate" destination="Lro-MI-Ezc" id="EKH-iq-bH4"/>
                                         </connections>
                                     </collectionView>
+                                    <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No data available" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Rf3-JE-XoM">
+                                        <rect key="frame" x="110" y="377.5" width="194" height="25"/>
+                                        <fontDescription key="fontDescription" name="ProximaNova-Semibold" family="Proxima Nova" pointSize="25"/>
+                                        <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                     <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1p2-jf-IGo">
                                         <rect key="frame" x="0.0" y="293.5" width="414" height="34"/>
                                         <subviews>
@@ -22761,9 +22767,11 @@ method of payment</string>
                                     <constraint firstItem="tex-pd-Axu" firstAttribute="top" secondItem="st9-ZA-OsR" secondAttribute="bottom" id="5cA-Te-LgV"/>
                                     <constraint firstItem="JPv-gk-RdV" firstAttribute="leading" secondItem="Qyw-3F-KCW" secondAttribute="leading" id="EVq-ZO-Jsh"/>
                                     <constraint firstAttribute="trailing" secondItem="JPv-gk-RdV" secondAttribute="trailing" id="JmD-x1-ZWJ"/>
+                                    <constraint firstItem="Rf3-JE-XoM" firstAttribute="centerX" secondItem="JPv-gk-RdV" secondAttribute="centerX" id="Lev-fh-yM8"/>
                                     <constraint firstAttribute="trailing" secondItem="1p2-jf-IGo" secondAttribute="trailing" id="PHp-v5-Qwg"/>
                                     <constraint firstAttribute="trailing" secondItem="st9-ZA-OsR" secondAttribute="trailing" id="TK5-u9-hg4"/>
                                     <constraint firstItem="st9-ZA-OsR" firstAttribute="top" secondItem="Qyw-3F-KCW" secondAttribute="top" id="Ypq-UR-UOP"/>
+                                    <constraint firstItem="Rf3-JE-XoM" firstAttribute="top" secondItem="JPv-gk-RdV" secondAttribute="top" constant="50" id="bKg-PQ-92E"/>
                                     <constraint firstItem="1p2-jf-IGo" firstAttribute="leading" secondItem="Qyw-3F-KCW" secondAttribute="leading" id="c8f-cG-pV6"/>
                                     <constraint firstItem="tex-pd-Axu" firstAttribute="leading" secondItem="Qyw-3F-KCW" secondAttribute="leading" id="nW7-56-CgY"/>
                                     <constraint firstAttribute="trailing" secondItem="tex-pd-Axu" secondAttribute="trailing" id="rav-T7-Ojd"/>
@@ -22829,10 +22837,10 @@ method of payment</string>
                                 </constraints>
                             </view>
                             <view hidden="YES" clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ox8-Xe-g1k" customClass="AnimatableView" customModule="IBAnimatable">
-                                <rect key="frame" x="0.0" y="306.5" width="414" height="589.5"/>
+                                <rect key="frame" x="0.0" y="285.5" width="414" height="610.5"/>
                                 <subviews>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_private_content" translatesAutoresizingMaskIntoConstraints="NO" id="WeZ-GC-e99">
-                                        <rect key="frame" x="54.5" y="216" width="305" height="158"/>
+                                        <rect key="frame" x="54.5" y="226.5" width="305" height="158"/>
                                     </imageView>
                                 </subviews>
                                 <color key="backgroundColor" name="App_White_Color"/>
@@ -22884,6 +22892,7 @@ method of payment</string>
                         <outlet property="lblHeaderTitle" destination="9Rg-fV-rdE" id="50P-ZE-gP6"/>
                         <outlet property="lblName" destination="aqG-pH-oWV" id="YHG-bg-tHD"/>
                         <outlet property="lblNameLater" destination="XJy-53-DEK" id="5iR-67-5Me"/>
+                        <outlet property="lblNoData" destination="Rf3-JE-XoM" id="u69-1s-wno"/>
                         <outlet property="lblPostsCount" destination="g6c-cJ-yEr" id="QQF-zO-IYS"/>
                         <outlet property="lblRequesetUserName" destination="dVJ-9G-OwM" id="nj4-we-qOg"/>
                         <outlet property="lblSellingitle" destination="PSD-4Z-TTi" id="aW4-qa-QIU"/>

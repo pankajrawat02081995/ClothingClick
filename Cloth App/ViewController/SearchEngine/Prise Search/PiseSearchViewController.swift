@@ -98,9 +98,9 @@ class PiseSearchViewController: BaseViewController {
         FilterSingleton.share.selectedFilter.price_to = ""
         FilterSingleton.share.selectedFilter.price_from = ""
         self.tblPriseList.reloadData()
-        if !self.saveSearch && self.isFilterProduct == false{
+       // if !self.saveSearch && self.isFilterProduct == false{
             self.callViewCount()
-        }
+        //}
 //        self.priceId = 0
 //        self.priceString = ""
 //        appDelegate.priceFrom = ""
@@ -206,9 +206,9 @@ extension PiseSearchViewController : UITableViewDelegate,UITableViewDataSource {
         FilterSingleton.share.selectedFilter.price_from = "0"
         FilterSingleton.share.selectedFilter.price_to = self.list[indexPath.row]
         self.tblPriseList.reloadData()
-        if !self.saveSearch && self.isFilterProduct == false {
+      //  if !self.saveSearch && self.isFilterProduct == false {
             self.callViewCount()
-        }
+        //}
         self.tblPriseList.reloadData()
     }
     

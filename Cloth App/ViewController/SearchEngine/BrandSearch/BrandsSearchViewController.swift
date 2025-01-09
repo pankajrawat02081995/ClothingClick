@@ -45,7 +45,7 @@ class BrandsSearchViewController: BaseViewController {
         self.searchBarBrand.returnKeyType = .search
         self.searchBarBrand.addTarget(self, action: #selector(self.textFieldDidChange(_:)), for: .editingDidEnd)
 
-        if self.isFilterProduct == true{
+        if self.isFilterProduct == true {
             self.btnViewItems.setTitle("Add", for: .normal)
         }else{
             if self.saveSearch {
@@ -53,6 +53,8 @@ class BrandsSearchViewController: BaseViewController {
             }
             else {
                 self.btnViewItems.setTitle("View \(self.viewCount) Items", for: .normal)
+                self.btnViewItems.backgroundColor = self.viewCount == 0 ? .customButton_bg_gray : .customBlack
+                self.btnViewItems.isUserInteractionEnabled = self.viewCount != 0
             }
         }
 
@@ -150,10 +152,15 @@ extension BrandsSearchViewController : UITableViewDelegate,UITableViewDataSource
         return cell
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+       
         let bsrnds = self.brandSearchList[indexPath.row]
         FilterSingleton.share.filter.brand_id = "\(bsrnds?.brand_id ?? 0)"
         FilterSingleton.share.selectedFilter.brand_id = "\(bsrnds?.name ?? "")"
-        self.navigationController?.popViewController(animated: true)
+        callViewCount()
+//        self.navigationController?.popViewController(animated: true)
+//
+        
+        
 //        if self.selectedIndex == 0 {
 //            if self.BrandSearchDeleget != nil {
 //            
@@ -242,7 +249,7 @@ extension BrandsSearchViewController {
 //                         "page" : "0"
 //                        ]
             
-            FilterSingleton.share.filter.is_only_count = "0"
+            FilterSingleton.share.filter.is_only_count = "1"
             var dict = FilterSingleton.share.filter.toDictionary() ?? [:]
             dict.removeValue(forKey: "slectedCategories")
             APIManager().apiCallWithMultipart(of: ViewCountModel.self, isShowHud: true, URL: BASE_URL, apiName: APINAME.FILTER_POST.rawValue, parameters: dict) { (response, error) in
@@ -254,13 +261,16 @@ extension BrandsSearchViewController {
                                 self.btnViewItems.setTitle("Add to saved Search", for: .normal)
                             }
                             else {
-                            self.btnViewItems.setTitle("View \(self.viewCount) Items", for: .normal)
+                                self.btnViewItems.setTitle("View \(self.viewCount) Items", for: .normal)
+                                self.btnViewItems.backgroundColor = self.viewCount == 0 ? .customButton_bg_gray : .customBlack
+                                self.btnViewItems.isUserInteractionEnabled = self.viewCount != 0
+                                
                             }
-//                            self.btnViewItems.setTitle("View \(self.viewCount) Items", for: .normal)
-
+                            //                            self.btnViewItems.setTitle("View \(self.viewCount) Items", for: .normal)
+                            
                         }
                         self.view.endEditing(true)
-//                        self.navigateToHomeScreen()
+                        //                        self.navigateToHomeScreen()
                     }
                 }
                 else {

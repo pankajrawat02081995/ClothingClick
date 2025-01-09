@@ -852,7 +852,7 @@ extension UserViewController{
                         self.CVCategory.reloadData()
                         
                         if self.posts.count == 0 {
-                            self.lblNoData.isHidden = true
+                            self.lblNoData.isHidden = false
                             if sort_by != "size"  {
                                 self.btnSort.isHidden = false
                             }

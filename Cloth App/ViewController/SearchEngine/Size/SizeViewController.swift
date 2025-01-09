@@ -61,7 +61,7 @@ class SizeViewController: BaseViewController {
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        self.callViewCount()
         self.lblNoData.isHidden = true
         self.tblClothsPref.addObserver(self, forKeyPath: "contentSize", options: .new, context: nil)
         
@@ -77,7 +77,7 @@ class SizeViewController: BaseViewController {
             }
         }
         
-        if !self.filterSize{
+        if !self.filterSize {
             //            self.callSizeList()
         }
         
@@ -144,7 +144,7 @@ class SizeViewController: BaseViewController {
                 self.callViewCount()
             }
         }else{
-            if self.saveSearch || self.isFilterProduct == true{
+            if self.saveSearch || self.isFilterProduct == true {
                 //                for i in 0..<self.categoryList.count {
                 //                    var outerModel = self.categoryList[i]
                 //                    for j in 0..<(outerModel?.sizes!.count)! {
@@ -171,9 +171,9 @@ class SizeViewController: BaseViewController {
                 DispatchQueue.main.async {
                     FilterSingleton.share.filter.sizes = ""
                     FilterSingleton.share.selectedFilter.sizes = ""
-                    if self.isFilterProduct == false{
+                   // if self.isFilterProduct == false{
                         self.callViewCount()
-                    }
+                   // }
                     self.tblClothsPref.reloadData()
                 }
                 
@@ -421,7 +421,7 @@ extension SizeViewController: UICollectionViewDelegate, UICollectionViewDataSour
             }
             
             collectionView.reloadData()
-            if !self.saveSearch && self.isFilterProduct == false{
+            if self.saveSearch == false || self.isFilterProduct == false {
                 self.callViewCount()
             }
         }
