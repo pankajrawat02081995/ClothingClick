@@ -34,6 +34,7 @@ class StyleVC: BaseViewController {
         self.tableView.tableFooterView = UIView()
         self.viewModel.getStyle()
         if self.isFilterProduct == true{
+            self.callViewCount()
             self.btnSave.setTitle("Add", for: .normal)
         }else{
             if self.isFromFilterSection == true{
@@ -69,6 +70,7 @@ class StyleVC: BaseViewController {
         //        }else{
         FilterSingleton.share.filter.style = ""
         FilterSingleton.share.selectedFilter.style = ""
+        self.callViewCount()
         if self.isFromFilterSection == true && self.isFilterProduct == false{
             self.callViewCount()
         }else{
@@ -163,6 +165,7 @@ extension StyleVC:UITableViewDelegate,UITableViewDataSource{
                 FilterSingleton.share.filter.style = data?.filter { !$0.trimmingCharacters(in: .whitespaces).isEmpty }.joined(separator: ",").trimmingCharacters(in: .whitespacesAndNewlines)
                 FilterSingleton.share.selectedFilter.style = dataName?.filter { !$0.trimmingCharacters(in: .whitespaces).isEmpty }.joined(separator: ",").trimmingCharacters(in: .whitespacesAndNewlines)
             }
+        self.callViewCount()
         if self.isFromFilterSection == true && self.isFilterProduct == false{
             self.callViewCount()
         }else{
@@ -175,7 +178,7 @@ extension StyleVC:UITableViewDelegate,UITableViewDataSource{
                 self.btnSave.backgroundColor = .customButton_bg_gray
             }
         }
-        
+        self.callViewCount()
         self.tableView.reloadData()
     }
 }
@@ -196,6 +199,8 @@ extension StyleVC{
                             }
                             else {
                                 self.btnSave.setTitle("View \(data.total_posts ?? 0) Items", for: .normal)
+                                self.btnSave.isUserInteractionEnabled = data.total_posts == 0 ? false : true
+                                self.btnSave.backgroundColor = data.total_posts == 0 ? .customButton_bg_gray : .customBlack
                             }
                             if data.total_posts ?? 0 > 0{
                                 self.btnSave.isUserInteractionEnabled = true

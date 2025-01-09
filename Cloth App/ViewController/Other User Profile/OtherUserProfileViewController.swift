@@ -35,6 +35,7 @@ class OtherUserProfileViewController: BaseViewController {
     @IBOutlet weak var txtUsrDetails: UITextView!
     @IBOutlet weak var btnMenu: UIButton!
     @IBOutlet weak var lblFloatRatingCount: UILabel!
+    @IBOutlet weak var lblNoData: UILabel!
     @IBOutlet weak var constHeightlbllocation: NSLayoutConstraint!
     //    @IBOutlet weak var btnFollowing: UIButton!
     //    @IBOutlet weak var btnFollowers: UIButton!
@@ -627,6 +628,7 @@ extension OtherUserProfileViewController {
                                 }
                             }
                             if self.posts.count == 0 {
+                                self.lblNoData.isHidden = false
                                 
                                 if sort_by == "size"{
                                     //                                    self.btnSort.isHidden = true
@@ -635,6 +637,7 @@ extension OtherUserProfileViewController {
                                 self.CVCProduct.layoutIfNeeded()
                                 self.constHeightForCVCProduct.constant = self.CVCProduct.contentSize.height
                             }else{
+                                self.lblNoData.isHidden = true
                                 //                                self.btnSort.isHidden = false
                                 self.CVCProduct.reloadData()
                                 self.CVCProduct.layoutIfNeeded()

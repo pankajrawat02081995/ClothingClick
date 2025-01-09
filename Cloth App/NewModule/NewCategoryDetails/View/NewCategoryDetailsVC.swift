@@ -54,7 +54,7 @@ class NewCategoryDetailsVC: UIViewController {
         }
         
         self.tableView.reloadData()
-        if !(self.isSaveSearch ?? false) &&  self.isFilterProduct == false{
+        if self.isSaveSearch ?? false == false && self.isFilterProduct ?? false == false{
             self.callViewCount()
         }
     }
@@ -141,7 +141,7 @@ extension NewCategoryDetailsVC:UITableViewDelegate,UITableViewDataSource{
         }
         
         self.tableView.reloadData()
-        if !(self.isSaveSearch ?? false) && self.isFilterProduct == false{
+        if self.isSaveSearch ?? false == false && self.isFilterProduct ?? false == false{
             self.callViewCount()
         }
     }
