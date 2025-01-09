@@ -10,6 +10,7 @@ import UIKit
 class StoreVC: UIViewController {
     
     
+    @IBOutlet weak var lblOpenUntil: UILabel!
     @IBOutlet weak var itemCollectionHeight: NSLayoutConstraint!
     
     @IBOutlet weak var itemClcView: UICollectionView!

@@ -132,8 +132,9 @@ struct OrderDetailsModel : Mappable {
 struct Pickup_address : Mappable {
     
     var id, userID: Int?
-    var shopifyID, storeDescription, timings, address1: String?
+    var shopifyID, storeDescription, address1: String?
     var address2, city, country: String?
+    var timings: [String: [String: String]]?
     var coverImage, profileImage: String?
     var totalProducts, createdAt, updatedAt: String?
     

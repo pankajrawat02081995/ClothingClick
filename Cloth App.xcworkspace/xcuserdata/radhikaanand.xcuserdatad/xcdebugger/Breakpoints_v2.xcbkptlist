@@ -36,34 +36,6 @@
             landmarkType = "3">
             <Locations>
                <Location
-                  uuid = "78F629D1-DB70-42F6-87A6-48E1619B1E8E - f9c7494660571581"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Clothing_Click.OtherUserProfileViewController.init(nibName: Swift.Optional&lt;Swift.String&gt;, bundle: Swift.Optional&lt;__C.NSBundle&gt;) -&gt; Clothing_Click.OtherUserProfileViewController"
-                  moduleName = "Clothing Click.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/radhikaanand/Downloads/ClothingClick/Cloth%20App/ViewController/Other%20User%20Profile/OtherUserProfileViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "54"
-                  endingLineNumber = "54">
-               </Location>
-               <Location
-                  uuid = "78F629D1-DB70-42F6-87A6-48E1619B1E8E - ce7ae36acc9352bd"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Clothing_Click.OtherUserProfileViewController.init(coder: __C.NSCoder) -&gt; Swift.Optional&lt;Clothing_Click.OtherUserProfileViewController&gt;"
-                  moduleName = "Clothing Click.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/radhikaanand/Downloads/ClothingClick/Cloth%20App/ViewController/Other%20User%20Profile/OtherUserProfileViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "54"
-                  endingLineNumber = "54">
-               </Location>
-               <Location
                   uuid = "78F629D1-DB70-42F6-87A6-48E1619B1E8E - 3d636a80eb169f2c"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
@@ -118,6 +90,34 @@
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "0"
                   endingLineNumber = "0">
+               </Location>
+               <Location
+                  uuid = "78F629D1-DB70-42F6-87A6-48E1619B1E8E - f9c7494660571581"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Clothing_Click.OtherUserProfileViewController.init(nibName: Swift.Optional&lt;Swift.String&gt;, bundle: Swift.Optional&lt;__C.NSBundle&gt;) -&gt; Clothing_Click.OtherUserProfileViewController"
+                  moduleName = "Clothing Click.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/radhikaanand/Downloads/ClothingClick/Cloth%20App/ViewController/Other%20User%20Profile/OtherUserProfileViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "54"
+                  endingLineNumber = "54">
+               </Location>
+               <Location
+                  uuid = "78F629D1-DB70-42F6-87A6-48E1619B1E8E - ce7ae36acc9352bd"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Clothing_Click.OtherUserProfileViewController.init(coder: __C.NSCoder) -&gt; Swift.Optional&lt;Clothing_Click.OtherUserProfileViewController&gt;"
+                  moduleName = "Clothing Click.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/radhikaanand/Downloads/ClothingClick/Cloth%20App/ViewController/Other%20User%20Profile/OtherUserProfileViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "54"
+                  endingLineNumber = "54">
                </Location>
             </Locations>
          </BreakpointContent>
@@ -182,6 +182,22 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "59"
             endingLineNumber = "59"
+            landmarkName = "viewDidLoad()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "2CEC97A5-74B4-46BC-B6B4-2A3037D63ADE"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Cloth App/StoreProfile/View/StoreVC.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "44"
+            endingLineNumber = "44"
             landmarkName = "viewDidLoad()"
             landmarkType = "7">
          </BreakpointContent>

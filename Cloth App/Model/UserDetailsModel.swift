@@ -61,7 +61,8 @@ struct UserDetailsModel : Mappable {
     var is_email_show : String?
     var is_requested : Int?
     var is_following : Int?
-   var total_positive_review : Int?
+    var storeDetail : Pickup_address?
+    var total_positive_review : Int?
     var user_sizes_details : [String]?
     init?(map: Map) {
     }
@@ -74,6 +75,7 @@ struct UserDetailsModel : Mappable {
     mutating func mapping(map: Map) {
         
         user_sizes_details <- map["user_sizes_details"]
+        storeDetail <- map["store_details"]
         name <- map["name"]
         email <- map["email"]
         username <- map["username"]
