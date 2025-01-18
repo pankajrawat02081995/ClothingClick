@@ -5,6 +5,7 @@
 //  Created by David Estes on 8/17/20.
 //  Copyright © 2020 Stripe, Inc. All rights reserved.
 //
+#if !canImport(CompositorServices)
 
 import AVFoundation
 import Foundation
@@ -30,7 +31,7 @@ enum STPCardScannerError: Int {
 
 @available(macCatalyst 14.0, *)
 @objc(STPCardScanner)
-class STPCardScanner: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate, STPCardScanningProtocol {
+class STPCardScanner: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate {
     // iOS will kill the app if it tries to request the camera without an NSCameraUsageDescription
     static let cardScanningAvailableCameraHasUsageDescription = {
         return
@@ -197,8 +198,15 @@ class STPCardScanner: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate, ST
             strongSelf?.processVNRequest(request)
         })
 
-        let captureDevice = AVCaptureDevice.default(
-            .builtInWideAngleCamera, for: .video, position: .back)
+        // The triple and dualWide cameras have a 0.5x lens for better macro focus.
+        // If neither are available, use the default wide angle camera.
+        let discoverySession = AVCaptureDevice.DiscoverySession(deviceTypes:
+                                                                    [.builtInTripleCamera, .builtInDualWideCamera, .builtInWideAngleCamera],
+                                                                mediaType: .video, position: .back)
+        guard let captureDevice = discoverySession.devices.first else {
+            stopWithError(STPCardScanner.stp_cardScanningError())
+            return
+        }
         self.captureDevice = captureDevice
 
         captureSession = AVCaptureSession()
@@ -206,9 +214,7 @@ class STPCardScanner: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate, ST
 
         var deviceInput: AVCaptureDeviceInput?
         do {
-            if let captureDevice = captureDevice {
-                deviceInput = try AVCaptureDeviceInput(device: captureDevice)
-            }
+            deviceInput = try AVCaptureDeviceInput(device: captureDevice)
         } catch {
             stopWithError(STPCardScanner.stp_cardScanningError())
             return
@@ -486,3 +492,5 @@ let STPCardScannerErrorDomain = "STPCardScannerErrorDomain"
 extension STPCardScanner: STPAnalyticsProtocol {
     static var stp_analyticsIdentifier = "STPCardScanner"
 }
+
+#endif

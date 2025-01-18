@@ -306,9 +306,9 @@ class BaseViewController: UIViewController, UINavigationBarDelegate {
     func startWithAuth (userData : UserDetailsModel) {
         self.callGeneralSettingAPI()
         
-//        if userData.phone == "" || userData.phone == nil{
-//            self.navigateToVerfyPhoneNo()
-//        }
+        if userData.phone == "" || userData.phone == nil{
+            self.navigateToVerfyPhoneNo()
+        }
 //        else if userData.phone_verified_at == "" || userData.phone_verified_at == nil{
 //            self.navigateToVerfyPhoneNo()
 //        }
@@ -321,9 +321,9 @@ class BaseViewController: UIViewController, UINavigationBarDelegate {
 //        else if userData.user_size?.count == 0 {
 //            self.navigateToClothPreferece()
 //        }
-//        else {
+        else {
             self.navigateToHomeScreen()
-//        }
+        }
     }
     
     //MARK: - API Method -

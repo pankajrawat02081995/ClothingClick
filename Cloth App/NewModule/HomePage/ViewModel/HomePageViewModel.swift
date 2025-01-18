@@ -19,7 +19,7 @@ class HomePageViewModel{
         APIManager().apiCall(of: ResponseData.self, isShowHud: isShowHud, URL: BASE_URL, apiName: APINAME.HOME_PAGE_PRODUCTLIST.rawValue, method: .post, parameters: param) { dict, error in
             
             if error == nil{
-                if self.page == 1{
+                if self.page == 1 {
                     self.posts = dict?.dictData?.posts ?? []
                 }else{
                     self.posts += dict?.dictData?.posts ?? []

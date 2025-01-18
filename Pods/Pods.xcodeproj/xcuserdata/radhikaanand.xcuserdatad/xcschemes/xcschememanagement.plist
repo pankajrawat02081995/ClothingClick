@@ -424,7 +424,7 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>StripeCore-StripeCore.xcscheme</key>
+		<key>StripeCore-StripeCoreBundle.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -434,7 +434,7 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>StripePaymentSheet-StripePaymentSheet.xcscheme</key>
+		<key>StripePaymentSheet-StripePaymentSheetBundle.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -449,7 +449,7 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>StripePayments-StripePayments.xcscheme</key>
+		<key>StripePayments-StripePaymentsBundle.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -459,7 +459,7 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>StripePaymentsUI-StripePaymentsUI.xcscheme</key>
+		<key>StripePaymentsUI-StripePaymentsUIBundle.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -469,7 +469,7 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>StripeUICore-StripeUICore.xcscheme</key>
+		<key>StripeUICore-StripeUICoreBundle.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>

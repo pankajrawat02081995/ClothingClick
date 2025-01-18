@@ -21,7 +21,6 @@ class EditProfileViewController: BaseViewController {
     @IBOutlet weak var txtDisplayUsearName: AnimatableTextField!
     @IBOutlet weak var btnEditPic: UIButton!
     @IBOutlet weak var txtBrandName: AnimatableTextField!
-    
     @IBOutlet weak var txtWebsite: AnimatableTextField!
     @IBOutlet weak var txtLocation: AnimatableTextField!
     
@@ -46,6 +45,8 @@ class EditProfileViewController: BaseViewController {
     var iscityAdd = false
     var isEmailShow = "0"
     var isPhoneShow = "0"
+    var dictGeneral1 = [String:Any]()
+    var isEditScreen = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -99,6 +100,7 @@ class EditProfileViewController: BaseViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.setData()
+        
     }
     
     @IBAction func instaonTap(_ sender: UIButton) {
@@ -240,6 +242,24 @@ class EditProfileViewController: BaseViewController {
     
     @IBAction func btnLocation_Clicked(_ button: UIButton) {
         let viewController = MapLocationVC.instantiate(fromStoryboard: .Dashboard)
+        viewController.title = "Edit Profile"
+        viewController.onDataReceived = { data, address in
+            self.isEditScreen = true
+            self.txtLocation.text = address
+//            for i in 0..<address.count {
+//                var dict = [String:Any]()
+//                dict["id"] = address[i].id
+//                dict["address"] = address[i].address
+//                dict["postal_code"] = address[i].postal_code
+//                dict["latitude"] = address[i].latitude
+//                dict["longitude"] = address[i].longitude
+//                dict["city"] = address[i].city
+//                dict["area"] = address[i].area
+//                let addressobject = Locations.init(JSON: dict)
+//                self.addressList.append(addressobject)
+//            }
+            self.dictGeneral1["locations"] = self.json(from: data)
+        }
         self.pushViewController(vc: viewController)
         //        if appDelegate.userDetails?.role_id == 2 {
         //            let viewController = self.storyboard?.instantiateViewController(identifier: "EditeStoreLocationViewController") as! EditeStoreLocationViewController
@@ -262,7 +282,7 @@ class EditProfileViewController: BaseViewController {
         //        }
     }
     
-    func setData () {
+    func setData() {
         if let url = appDelegate.userDetails?.photo {
             if let imgUrl = URL.init(string: url) {
                 self.lblFirstLatterName.isHidden = true
@@ -286,19 +306,21 @@ class EditProfileViewController: BaseViewController {
             }else{
                 self.txtBio.text = placeholder
             }
-            if let address = appDelegate.userDetails?.locations{
-                self.txtLocation.text = address.first?.address ?? ""
-                for i in 0..<address.count {
-                    var dict = [String:Any]()
-                    dict["id"] = address[i].id
-                    dict["address"] = address[i].address
-                    dict["postal_code"] = address[i].postal_code
-                    dict["latitude"] = address[i].latitude
-                    dict["longitude"] = address[i].longitude
-                    dict["city"] = address[i].city
-                    dict["area"] = address[i].area
-                    let addressobject = Locations.init(JSON: dict)
-                    self.addressList.append(addressobject)
+            if !isEditScreen {
+                if let address = appDelegate.userDetails?.locations{
+                    self.txtLocation.text = address.first?.address ?? ""
+                    for i in 0..<address.count {
+                        var dict = [String:Any]()
+                        dict["id"] = address[i].id
+                        dict["address"] = address[i].address
+                        dict["postal_code"] = address[i].postal_code
+                        dict["latitude"] = address[i].latitude
+                        dict["longitude"] = address[i].longitude
+                        dict["city"] = address[i].city
+                        dict["area"] = address[i].area
+                        let addressobject = Locations.init(JSON: dict)
+                        self.addressList.append(addressobject)
+                    }
                 }
             }
         }
@@ -410,11 +432,13 @@ class EditProfileViewController: BaseViewController {
     
     // Camera action
     func camera() {
-        let myPickerController = UIImagePickerController()
-        myPickerController.delegate = self
-        myPickerController.sourceType = .camera
-        myPickerController.allowsEditing = false
-        present(myPickerController, animated: true)
+        DispatchQueue.main.async {
+            let myPickerController = UIImagePickerController()
+            myPickerController.delegate = self
+            myPickerController.sourceType = .camera
+            myPickerController.allowsEditing = true
+            self.present(myPickerController, animated: true)
+        }
     }
     
     // Photo Library action
@@ -535,6 +559,7 @@ extension EditProfileViewController {
             dictGeneral["name"] = self.txtBrandName.text ?? ""
             dictGeneral["email"] = appDelegate.userDetails?.email ?? ""
             dictGeneral["username"] = appDelegate.userDetails?.username ?? ""
+            
             if appDelegate.userDetails?.role_id == 1 {
                 dictGeneral["phone"] = appDelegate.userDetails?.phone
                 dictGeneral["country_code"] = appDelegate.userDetails?.country_code
@@ -585,7 +610,11 @@ extension EditProfileViewController {
             
             dictGeneral["deleted_location_ids"] = self.deletedLocationIds
             print(address)
-            dictGeneral["locations"] = self.json(from: address)
+            if self.dictGeneral1["locations"] as! String == "" {
+                dictGeneral["locations"] = self.json(from: address)
+            } else {
+                dictGeneral["locations"] = dictGeneral1["locations"]
+            }
             if self.selectedImage == nil {
                 //                APIManager().apiCallWithImage(of: UserDetailsModel.self, isShowHud: true, URL: BASE_URL, apiName: APINAME.UPDATE_PROFILE.rawValue, parameters: dictGeneral, images: [self.selectedImage], imageParameterName: "photo", imageName: "user.png"){  (response, error) in
                 //                    if error == nil {

@@ -35,7 +35,12 @@ class HomePageVC: BaseViewController {
         self.navigationController?.setNavigationBarHidden(false, animated: animated)
         self.checkAndFetchLocation { status in
             if status{
+                self.viewModel.page = 1
                 self.viewModel.getAllProduct(isShowHud: true,cat_id: self.catSelectedIndex != nil ? "\(self.viewModel.categoriesList[self.catSelectedIndex ?? 0].id ?? 0)" : "")
+                self.productCollectionView.reloadData()
+                if self.viewModel.posts.count > 0 {
+                    self.productCollectionView.scrollToItem(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
+                }
             }
         }
         

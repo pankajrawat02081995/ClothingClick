@@ -7,6 +7,7 @@
 //
 
 import Foundation
+@_spi(STP) import StripeCore
 
 /// The type of the PaymentMethod.
 @objc public enum STPPaymentMethodType: Int {
@@ -59,8 +60,6 @@ import Foundation
     case link
     /// A Klarna payment method.
     case klarna
-    /// A Link Instant Debit payment method
-    case linkInstantDebit
     /// An Affirm payment method
     case affirm
     /// A US Bank Account payment method (ACH)
@@ -77,6 +76,14 @@ import Foundation
     case amazonPay
     /// An Alma payment method
     case alma
+    /// A Sunbit payment method
+    case sunbit
+    /// A Billie payment method
+    case billie
+    /// A Satispay payment method
+    case satispay
+    /// A Crypto payment method
+    case crypto
     /// A MobilePay payment method
     case mobilePay
     /// A Konbini payment method
@@ -85,6 +92,10 @@ import Foundation
     case promptPay
     /// A Swish payment method
     case swish
+    /// A TWINT payment method
+    case twint
+    /// A Multibanco payment method
+    case multibanco
     /// An unknown type.
     case unknown
 
@@ -124,8 +135,8 @@ import Foundation
         case .payPal:
             return STPLocalizedString("PayPal", "Payment Method type brand name")
         case .afterpayClearpay:
-            return Locale.current.regionCode == "GB" || Locale.current.regionCode == "FR"
-                || Locale.current.regionCode == "ES" || Locale.current.regionCode == "IT"
+            return Locale.current.stp_regionCode == "GB" || Locale.current.stp_regionCode == "FR"
+                || Locale.current.stp_regionCode == "ES" || Locale.current.stp_regionCode == "IT"
                 ? STPLocalizedString("Clearpay", "Payment Method type brand name")
                 : STPLocalizedString("Afterpay", "Payment Method type brand name")
         case .blik:
@@ -138,14 +149,12 @@ import Foundation
             return STPLocalizedString("Link", "Link Payment Method type brand name")
         case .klarna:
             return STPLocalizedString("Klarna", "Payment Method type brand name")
-        case .linkInstantDebit:
-            return STPLocalizedString("Bank", "Link Instant Debit payment method display name")
         case .affirm:
             return STPLocalizedString("Affirm", "Payment Method type brand name")
         case .USBankAccount:
             return STPLocalizedString(
-                "US Bank Account",
-                "Payment Method type name for US Bank Account payments."
+                "US bank account",
+                "Payment Method type name for US bank account payments."
             )
         case .cashApp:
             return STPLocalizedString("Cash App Pay", "Payment Method type brand name")
@@ -161,6 +170,14 @@ import Foundation
             return "Amazon Pay"
         case .alma:
             return "Alma"
+        case .sunbit:
+            return "Sunbit"
+        case .billie:
+            return "Billie"
+        case .satispay:
+            return "Satispay"
+        case .crypto:
+            return "Crypto"
         case .mobilePay:
             return "MobilePay"
         case .konbini:
@@ -169,6 +186,10 @@ import Foundation
             return "PromptPay"
         case .swish:
             return STPLocalizedString("Swish", "Payment Method type brand name")
+        case .twint:
+            return "TWINT"
+        case .multibanco:
+            return "Multibanco"
         case .cardPresent,
             .unknown:
             return STPLocalizedString("Unknown", "Default missing source type label")
@@ -228,8 +249,6 @@ import Foundation
             return "link"
         case .klarna:
             return "klarna"
-        case .linkInstantDebit:
-            return "link_instant_debits"
         case .affirm:
             return "affirm"
         case .USBankAccount:
@@ -248,6 +267,14 @@ import Foundation
             return "amazon_pay"
         case .alma:
             return "alma"
+        case .sunbit:
+            return "sunbit"
+        case .billie:
+            return "billie"
+        case .satispay:
+            return "satispay"
+        case .crypto:
+            return "crypto"
         case .mobilePay:
             return "mobilepay"
         case .konbini:
@@ -256,8 +283,47 @@ import Foundation
             return "promptpay"
         case .swish:
             return "swish"
+        case .twint:
+            return "twint"
+        case .multibanco:
+            return "multibanco"
         }
     }
 }
 
 extension STPPaymentMethodType: CaseIterable { }
+
+extension STPPaymentMethodType {
+    struct PollingRequirement {
+        /// - Note: This is a bit hacky. STPPaymentHandlet is hardcoded to poll the Intent status 5 times. `timeBetweenPollingAttempts` controls how long it waits between each poll.
+        var timeBetweenPollingAttempts: TimeInterval
+    }
+
+    /// If non-nil, Intents with this PM type do not update immediately after the next action is handled and require us to poll and this property contains the information needed to poll.
+    var pollingRequirement: PollingRequirement? {
+        switch self {
+        // Note: Card only requires polling for 3DS2 web-based transactions
+        case .card, .amazonPay, .revolutPay:
+            return PollingRequirement(timeBetweenPollingAttempts: 3)
+        case .swish, .twint:
+            // We are intentionally polling for Swish and Twint even though they use the redirect trampoline.
+            // The intent is still in `requires_action` status after redirecting following a successful payment (about 50% of the time for Swish).
+            // This allows time for the intent to transition to its terminal state.
+            return PollingRequirement(timeBetweenPollingAttempts: 1)
+        default:
+            return nil
+        }
+    }
+
+    var supportsRefreshing: Bool {
+        switch self {
+        // Payment methods such as CashApp implement app-to-app redirects that bypass the "redirect trampoline" too give a more seamless user experience for app-to-app.
+        // However, when returning to the merchant app in this scenario, the intent often isn't updated instantaneously, requiring us to hit the refresh endpoint.
+        // Only a small subset of LPMs support refreshing
+        case .cashApp:
+            return true
+        default:
+            return false
+        }
+    }
+}

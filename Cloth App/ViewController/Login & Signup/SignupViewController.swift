@@ -24,16 +24,12 @@ class SignupViewController: BaseViewController {
     @IBOutlet weak var btnUser: UIButton!
     @IBOutlet weak var btnStore: UIButton!
     @IBOutlet weak var btnBrand: UIButton!
-    
     @IBOutlet weak var txtEmail: AnimatableTextField!
-    
     @IBOutlet weak var txtPassword: AnimatableTextField!
     @IBOutlet weak var txtName: AnimatableTextField!
     @IBOutlet weak var txtUserName: AnimatableTextField!
-    
     @IBOutlet weak var txtConfirmPassword: AnimatableTextField!
     @IBOutlet weak var btnPassword: UIButton!
-    
     @IBOutlet weak var btnConfirmPassword: UIButton!
     @IBOutlet weak var txtLocation: CustomTextField!
     @IBOutlet weak var btnLocation: UIButton!
