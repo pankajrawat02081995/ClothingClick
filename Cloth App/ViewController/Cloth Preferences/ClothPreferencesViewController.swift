@@ -115,12 +115,16 @@ class ClothPreferencesViewController: BaseViewController {
         }
         print(self.saveSize)
         
-        if let genserId = self.mysizeList[self.selectGengerIndex]?.gender_id{
-            let sizeAreeString = self.saveSize.joined(separator: ",")
-            let brandAreeString = self.saveBrand.joined(separator: ",")
-            self.callSaveSizeList(size: sizeAreeString , brand: brandAreeString, genderId: String(genserId))
-            print(sizeAreeString)
-            print(brandAreeString)
+        if self.selectGengerIndex != -1{
+            if let genserId = self.mysizeList[self.selectGengerIndex]?.gender_id{
+                let sizeAreeString = self.saveSize.joined(separator: ",")
+                let brandAreeString = self.saveBrand.joined(separator: ",")
+                self.callSaveSizeList(size: sizeAreeString , brand: brandAreeString, genderId: String(genserId))
+                print(sizeAreeString)
+                print(brandAreeString)
+            }
+        }else{
+            self.popViewController()
         }
     }
     

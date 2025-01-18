@@ -671,6 +671,18 @@ extension UITableView {
 
 //Add Alerts
 extension UIAlertController {
+    func alertViewWithTitleAndMessage(_ viewController: UIViewController, message: String, okHandler: @escaping () -> Void) {
+        let alert: UIAlertController = UIAlertController(title: AlertViewTitle, message: message, preferredStyle: .alert)
+        alert.setAlertButtonColor()
+        
+        let okAction: UIAlertAction = UIAlertAction(title: kOk, style: .default) { _ in
+            okHandler()
+        }
+        alert.addAction(okAction)
+        
+        viewController.present(alert, animated: true, completion: nil)
+    }
+
     func alertViewWithTitleAndMessage(_ viewController: UIViewController, message: String) -> Void {
         let alert: UIAlertController = UIAlertController.init(title: AlertViewTitle, message: message, preferredStyle: .alert)
         alert.setAlertButtonColor()

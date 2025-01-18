@@ -306,7 +306,6 @@ extension BuyNowVC {
         }
     }
     
-    
     func callSaveOrderApi() {
         var param = [String:Any]()
         
@@ -323,9 +322,14 @@ extension BuyNowVC {
         }
         
         if appDelegate.reachable.connection != .none {
-            APIManager().apiCall(of: OrderHistoryModel.self, isShowHud: true, URL: BASE_URL, apiName: APINAME.SAVE_ORDER.rawValue, method: .post, parameters: param) { (response, error) in
+            APIManager().apiCall(of: OrderDetails.self, isShowHud: true, URL: BASE_URL, apiName: APINAME.SAVE_ORDER.rawValue, method: .post, parameters: param) { (response, error) in
                 if error == nil {
-                    UIAlertController().alertViewWithTitleAndMessage(self , message: response?.message ?? "")
+                    UIAlertController().alertViewWithTitleAndMessage(self , message: response?.message ?? "") {
+                        let vc = OrderProductDetailsVC.instantiate(fromStoryboard: .Sell)
+                        vc.orderID = response?.dictData?.id ?? 0
+                        vc.isShip = self.deliveryType == .Ship ? true : false
+                        vc.isAfterBuy = true
+                        self.pushViewController(vc: vc)                    }
                 }
                 else {
                     UIAlertController().alertViewWithTitleAndMessage(self , message: error?.domain ?? ErrorMessage)

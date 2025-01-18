@@ -95,11 +95,11 @@ class EditProfileViewController: BaseViewController {
             self.btnShowPhone.isHidden = false
         }
         
+        self.setData()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.setData()
         
     }
     
@@ -246,19 +246,7 @@ class EditProfileViewController: BaseViewController {
         viewController.onDataReceived = { data, address in
             self.isEditScreen = true
             self.txtLocation.text = address
-//            for i in 0..<address.count {
-//                var dict = [String:Any]()
-//                dict["id"] = address[i].id
-//                dict["address"] = address[i].address
-//                dict["postal_code"] = address[i].postal_code
-//                dict["latitude"] = address[i].latitude
-//                dict["longitude"] = address[i].longitude
-//                dict["city"] = address[i].city
-//                dict["area"] = address[i].area
-//                let addressobject = Locations.init(JSON: dict)
-//                self.addressList.append(addressobject)
-//            }
-            self.dictGeneral1["locations"] = self.json(from: data)
+            self.dictGeneral1["locations"] = data["locations"]//self.json(from: data)
         }
         self.pushViewController(vc: viewController)
         //        if appDelegate.userDetails?.role_id == 2 {
@@ -601,16 +589,18 @@ extension EditProfileViewController {
                     print(address)
                 }
             }
+            
             if self.txtBio.text != placeholder{
                 dictGeneral["bio"] = self.txtBio.text ?? ""
             }else{
                 dictGeneral["bio"] = ""
             }
+            
             dictGeneral["website"] = self.txtWebsite.text ?? ""
             
             dictGeneral["deleted_location_ids"] = self.deletedLocationIds
             print(address)
-            if self.dictGeneral1["locations"] as! String == "" {
+            if self.dictGeneral1["locations"] as? String ?? "" == "" {
                 dictGeneral["locations"] = self.json(from: address)
             } else {
                 dictGeneral["locations"] = dictGeneral1["locations"]
@@ -869,7 +859,7 @@ extension UIViewController{
         // Present the alert on the provided view controller
         viewController.present(alertController, animated: true, completion: nil)
     }
-        
+    
     func openInstagramProfile(username: String) {
         let appURL = URL(string: "instagram://user?username=\(username)")!
         let webURL = URL(string: "https://www.instagram.com/\(username)")!

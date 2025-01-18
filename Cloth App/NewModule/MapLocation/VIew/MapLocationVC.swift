@@ -41,6 +41,7 @@ class MapLocationVC: BaseViewController {
                 self.lat = Double(data?.latitude ?? "0.0") ?? 0.0
                 self.log = Double(data?.longitude ?? "0.0") ?? 0.0
                 self.txtPostal.text = data?.address
+                self.address2 = data?.address ?? ""
                 self.adddressArea = data?.area ?? ""
                 self.address = data?.address ?? ""
                 self.city = data?.city ?? ""
@@ -191,12 +192,14 @@ extension MapLocationVC{
     func updateLocation(){
         var dictGeneral = [String:Any]()
         var address = [[String:Any]]()
-        dictGeneral["name"] = appDelegate.userDetails?.name ?? ""
-        dictGeneral["email"] = appDelegate.userDetails?.email ?? ""
-        dictGeneral["username"] = appDelegate.userDetails?.username ?? ""
-        dictGeneral["phone"] = appDelegate.userDetails?.phone ?? ""
-        dictGeneral["country_code"] = appDelegate.userDetails?.country_code ?? ""
-        dictGeneral["country_prefix"] = appDelegate.userDetails?.country_prefix ?? ""
+        if title != "Edit Profile" {
+            dictGeneral["name"] = appDelegate.userDetails?.name ?? ""
+            dictGeneral["email"] = appDelegate.userDetails?.email ?? ""
+            dictGeneral["username"] = appDelegate.userDetails?.username ?? ""
+            dictGeneral["phone"] = appDelegate.userDetails?.phone ?? ""
+            dictGeneral["country_code"] = appDelegate.userDetails?.country_code ?? ""
+            dictGeneral["country_prefix"] = appDelegate.userDetails?.country_prefix ?? ""
+        }
         for i in self.addresslist{
             var dict = [String:Any]()
             dict["id"] = "\(i?.id ?? 0)"
@@ -211,7 +214,6 @@ extension MapLocationVC{
             print(address)
         }
         dictGeneral["locations"] = self.json(from: address)
-        
         
         if title != "Edit Profile" {
             APIManager().apiCall(of: UserDetailsModel.self, isShowHud: true, URL: BASE_URL, apiName: APINAME.UPDATE_PROFILE.rawValue, method: .post, parameters: dictGeneral) { (response, error) in
