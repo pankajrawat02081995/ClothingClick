@@ -11,6 +11,7 @@
 #endif
 
 #import "STDSAlreadyInitializedException.h"
+#import "STDSAnalyticsDelegate.h"
 #import "STDSAuthenticationRequestParameters.h"
 #import "STDSAuthenticationResponse.h"
 #import "STDSButtonCustomization.h"
@@ -97,6 +98,7 @@
 #import "STDSTextChallengeView.h"
 #import "STDSThreeDSProtocolVersion+Private.h"
 #import "STDSTransaction+Private.h"
+#import "STDSVisionSupport.h"
 #import "STDSWebView.h"
 #import "STDSWhitelistView.h"
 #import "Stripe3DS2-Bridging-Header.h"

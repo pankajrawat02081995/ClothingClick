@@ -257,25 +257,25 @@ PODS:
   - PryntTrimmerView (4.0.2)
   - ReachabilitySwift (5.2.4)
   - SteviaLayout (5.1.2)
-  - StripeApplePay (23.17.2):
-    - StripeCore (= 23.17.2)
-  - StripeCore (23.17.2)
-  - StripePayments (23.17.2):
-    - StripeCore (= 23.17.2)
-    - StripePayments/Stripe3DS2 (= 23.17.2)
-  - StripePayments/Stripe3DS2 (23.17.2):
-    - StripeCore (= 23.17.2)
-  - StripePaymentSheet (23.17.2):
-    - StripeApplePay (= 23.17.2)
-    - StripeCore (= 23.17.2)
-    - StripePayments (= 23.17.2)
-    - StripePaymentsUI (= 23.17.2)
-  - StripePaymentsUI (23.17.2):
-    - StripeCore (= 23.17.2)
-    - StripePayments (= 23.17.2)
-    - StripeUICore (= 23.17.2)
-  - StripeUICore (23.17.2):
-    - StripeCore (= 23.17.2)
+  - StripeApplePay (24.3.0):
+    - StripeCore (= 24.3.0)
+  - StripeCore (24.3.0)
+  - StripePayments (24.3.0):
+    - StripeCore (= 24.3.0)
+    - StripePayments/Stripe3DS2 (= 24.3.0)
+  - StripePayments/Stripe3DS2 (24.3.0):
+    - StripeCore (= 24.3.0)
+  - StripePaymentSheet (24.3.0):
+    - StripeApplePay (= 24.3.0)
+    - StripeCore (= 24.3.0)
+    - StripePayments (= 24.3.0)
+    - StripePaymentsUI (= 24.3.0)
+  - StripePaymentsUI (24.3.0):
+    - StripeCore (= 24.3.0)
+    - StripePayments (= 24.3.0)
+    - StripeUICore (= 24.3.0)
+  - StripeUICore (24.3.0):
+    - StripeCore (= 24.3.0)
   - SwiftyJSON (5.0.2)
   - TagListView (1.4.1)
   - TTRangeSlider (1.0.7)
@@ -313,7 +313,7 @@ DEPENDENCIES:
   - moa
   - OTPFieldView
   - ReachabilitySwift
-  - StripePaymentSheet (~> 23.17.1)
+  - StripePaymentSheet (~> 24.3.0)
   - SwiftyJSON
   - TagListView (~> 1.0)
   - TTRangeSlider
@@ -449,17 +449,17 @@ SPEC CHECKSUMS:
   PryntTrimmerView: 6a43cc90df5d99addeabd33d4ba09b1365322130
   ReachabilitySwift: 32793e867593cfc1177f5d16491e3a197d2fccda
   SteviaLayout: 05424e528d643657d39ce72c786e4adf13cfc5f2
-  StripeApplePay: f7c6962657ca6e43e16d0c73bc128a5ef014bb51
-  StripeCore: f93a26f947bad20babbabd2b7adac2d1f44a63d2
-  StripePayments: 289a7d46de7d2221ce0b0334408ece35ab3cca31
-  StripePaymentSheet: 2b7b5de738e344ad35c56b358c508e1d1fcf5ed9
-  StripePaymentsUI: 3032f37b5523509d3cf5a0ac8de6efdadcce3048
-  StripeUICore: 700b63cb313429df67e461b82c6151b1dd5e4721
+  StripeApplePay: b017eb310b39e4bdbc616e9185ea64c34d865490
+  StripeCore: 3643379a626715d0f8d5db20c1b6df12ba7c1b74
+  StripePayments: 9652531ac88d50f2b4902b5f708b9fba591406fd
+  StripePaymentSheet: e5323529324224f6687a7b9a1d96cb133a90b8be
+  StripePaymentsUI: 83ea927ee72a652c3238af777353d81e06140e4b
+  StripeUICore: 493639a9b6463cfe2ac729e01a785d77feee1714
   SwiftyJSON: f5b1bf1cd8dd53cd25887ac0eabcfd92301c6a5a
   TagListView: a1c236d17960a0cf64156725a76ce6d73ebce2be
   TTRangeSlider: 8cf72eca457c3b700c92eb0074be908c986e25ec
   YPImagePicker: afc81b3cffab05a6e7261c5daf80dc31b4e917b4
 
-PODFILE CHECKSUM: de325bc7d3d0b9e76dcaeba3b324a12a1bb333f1
+PODFILE CHECKSUM: b6990c37fc4e469fca84eea5089de7e8ff9962b9
 
 COCOAPODS: 1.16.2

@@ -15,6 +15,7 @@ class MapLocationVC: BaseViewController {
     @IBOutlet weak var txtPostal: AnimatableTextField!
     @IBOutlet weak var mapView: GMSMapView!
     
+    var onDataReceived: (([String:Any], String) -> Void)?
     var locationdelegate : UserLocationDelegate!
     var edit = false
     var isPost = false
@@ -25,6 +26,7 @@ class MapLocationVC: BaseViewController {
     var city = ""
     var address = ""
     var isEdit : Bool?
+    var address2 = String()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -204,22 +206,30 @@ extension MapLocationVC{
             dict["longitude"] = "\(i?.longitude ?? "")"
             dict["city"] = "\(i?.city ?? "")"
             dict["area"] = "\(i?.area ?? "")"
+            self.address2 = "\(i?.address ?? "")"
             address.append(dict)
             print(address)
         }
         dictGeneral["locations"] = self.json(from: address)
-        APIManager().apiCall(of: UserDetailsModel.self, isShowHud: true, URL: BASE_URL, apiName: APINAME.UPDATE_PROFILE.rawValue, method: .post, parameters: dictGeneral) { (response, error) in
-            if error == nil {
-                if let response = response {
-                    if let userDetails = response.dictData {
-                        self.saveUserDetails(userDetails: userDetails)
+        
+        
+        if title != "Edit Profile" {
+            APIManager().apiCall(of: UserDetailsModel.self, isShowHud: true, URL: BASE_URL, apiName: APINAME.UPDATE_PROFILE.rawValue, method: .post, parameters: dictGeneral) { (response, error) in
+                if error == nil {
+                    if let response = response {
+                        if let userDetails = response.dictData {
+                            self.saveUserDetails(userDetails: userDetails)
+                        }
+                        self.popViewController()
                     }
-                    self.popViewController()
+                }
+                else {
+                    UIAlertController().alertViewWithTitleAndMessage(self, message: error?.domain ?? ErrorMessage)
                 }
             }
-            else {
-                UIAlertController().alertViewWithTitleAndMessage(self, message: error?.domain ?? ErrorMessage)
-            }
+        } else {
+            onDataReceived?(dictGeneral, self.address2)
+            popViewController()
         }
     }
 }

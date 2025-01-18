@@ -13,7 +13,7 @@ import UIKit
 
 /// An internal type representing both `STPPaymentIntentParams` and `STPSetupIntentParams`
 /// - Note: Assumes you're confirming with a new payment method, unless a payment method ID is provided
-class IntentConfirmParams {
+final class IntentConfirmParams {
     /// An enum for the three possible states of the e.g. "Save this card for future payments" checkbox
     enum SaveForFutureUseCheckboxState {
         /// The checkbox wasn't displayed
@@ -26,6 +26,7 @@ class IntentConfirmParams {
 
     let paymentMethodParams: STPPaymentMethodParams
     let paymentMethodType: PaymentSheet.PaymentMethodType
+    /// ⚠️ Usage of this is *not compatible* with server-side confirmation!
     let confirmPaymentMethodOptions: STPConfirmPaymentMethodOptions
 
     /// True if the customer opts to save their payment method for future payments.
@@ -33,12 +34,11 @@ class IntentConfirmParams {
     /// If `true`, a mandate (e.g. "By continuing you authorize Foo Corp to use your payment details for recurring payments...") was displayed to the customer.
     var didDisplayMandate: Bool = false
 
-    var linkedBank: LinkedBank?
+    var financialConnectionsLinkedBank: FinancialConnectionsLinkedBank?
+    var instantDebitsLinkedBank: InstantDebitsLinkedBank?
 
     var paymentSheetLabel: String {
-        if let linkedBank = linkedBank,
-            let last4 = linkedBank.last4
-        {
+        if let last4 = (financialConnectionsLinkedBank?.last4 ?? instantDebitsLinkedBank?.last4) {
             return "••••\(last4)"
         } else {
             return paymentMethodParams.paymentSheetLabel
@@ -46,9 +46,7 @@ class IntentConfirmParams {
     }
 
     func makeIcon(updateImageHandler: DownloadManager.UpdateImageHandler?) -> UIImage {
-        if let linkedBank = linkedBank,
-            let bankName = linkedBank.bankName
-        {
+        if let bankName = (financialConnectionsLinkedBank?.bankName ?? instantDebitsLinkedBank?.bankName) {
             return PaymentSheetImageLibrary.bankIcon(for: PaymentSheetImageLibrary.bankIconCode(for: bankName))
         } else {
             return paymentMethodParams.makeIcon(updateHandler: updateImageHandler)
@@ -56,12 +54,23 @@ class IntentConfirmParams {
     }
 
     convenience init(type: PaymentSheet.PaymentMethodType) {
-        if let paymentType = type.stpPaymentMethodType {
-            let params = STPPaymentMethodParams(type: paymentType)
+        switch type {
+        case .stripe(let paymentMethodType):
+            let params = STPPaymentMethodParams(type: paymentMethodType)
             self.init(params: params, type: type)
-        } else {
+        case .external(let externalPaymentMethod):
+            // Consider refactoring `type` to be `STPPaymentMethodType`. EPMs don't really belong in IntentConfirmParams - there is no intent to confirm!
+            // Using `IntentConfirmParams` for EPMs is a ~hack to let us:
+            // 1. Get billing details from the form if the merchant configured billing detail collection.
+            // 2. Reuse existing form state restoration code in PaymentSheetFlowController, which depends on the previous state being encoded in an IntentConfirmParams.
             let params = STPPaymentMethodParams(type: .unknown)
-            params.rawTypeString = PaymentSheet.PaymentMethodType.string(from: type)
+            params.rawTypeString = externalPaymentMethod.type
+            self.init(params: params, type: type)
+        case .instantDebits:
+            let params = STPPaymentMethodParams(type: .link)
+            self.init(params: params, type: type)
+        case .linkCardBrand:
+            let params = STPPaymentMethodParams(type: .card)
             self.init(params: params, type: type)
         }
     }
@@ -72,33 +81,9 @@ class IntentConfirmParams {
         self.confirmPaymentMethodOptions = STPConfirmPaymentMethodOptions()
     }
 
-    static func makeDashboardParams(
-        paymentIntentClientSecret: String,
-        paymentMethodID: String,
-        shouldSave: Bool,
-        paymentMethodType: STPPaymentMethodType,
-        customer: PaymentSheet.CustomerConfiguration?
-    ) -> STPPaymentIntentParams {
-        let params = STPPaymentIntentParams(clientSecret: paymentIntentClientSecret)
-        params.paymentMethodId = paymentMethodID
-
-        // Dashboard only supports a specific payment flow today
-        let options = STPConfirmPaymentMethodOptions()
-        options.setSetupFutureUsageIfNecessary(
-            shouldSave,
-            paymentMethodType: paymentMethodType,
-            customer: customer
-        )
-        params.paymentMethodOptions = options
-
-        options.setMoto()
-
-        return params
-    }
-
     /// Applies the values of `Configuration.defaultBillingDetails` to this IntentConfirmParams if `attachDefaultsToPaymentMethod` is true.
     /// - Note: This overwrites `paymentMethodParams.billingDetails`.
-    func setDefaultBillingDetailsIfNecessary(for configuration: PaymentSheet.Configuration) {
+    func setDefaultBillingDetailsIfNecessary(for configuration: PaymentElementConfiguration) {
         setDefaultBillingDetailsIfNecessary(defaultBillingDetails: configuration.defaultBillingDetails, billingDetailsCollectionConfiguration: configuration.billingDetailsCollectionConfiguration)
     }
 
@@ -110,7 +95,7 @@ class IntentConfirmParams {
 
     private func setDefaultBillingDetailsIfNecessary(defaultBillingDetails: PaymentSheet.BillingDetails, billingDetailsCollectionConfiguration: PaymentSheet.BillingDetailsCollectionConfiguration) {
         guard billingDetailsCollectionConfiguration.attachDefaultsToPaymentMethod else {
-           return
+            return
         }
         if let name = defaultBillingDetails.name {
             paymentMethodParams.nonnil_billingDetails.name = name
@@ -123,6 +108,49 @@ class IntentConfirmParams {
         }
         if defaultBillingDetails.address != .init() {
             paymentMethodParams.nonnil_billingDetails.address = STPPaymentMethodAddress(address: defaultBillingDetails.address)
+        }
+    }
+    func setAllowRedisplay(mobilePaymentElementFeatures: MobilePaymentElementComponentFeature?,
+                           isSettingUp: Bool) {
+        guard let mobilePaymentElementFeatures else {
+            // Legacy Ephemeral Key
+            paymentMethodParams.allowRedisplay = .unspecified
+            return
+        }
+        let paymentMethodSave = mobilePaymentElementFeatures.paymentMethodSave
+        let allowRedisplayOverride = mobilePaymentElementFeatures.paymentMethodSaveAllowRedisplayOverride
+
+        // Customer Session is enabled
+        if paymentMethodSave {
+            if isSettingUp {
+                if saveForFutureUseCheckboxState == .selected {
+                    paymentMethodParams.allowRedisplay = .always
+                } else if saveForFutureUseCheckboxState == .deselected {
+                    paymentMethodParams.allowRedisplay = .limited
+                }
+            } else {
+                if saveForFutureUseCheckboxState == .selected {
+                    paymentMethodParams.allowRedisplay = .always
+                } else if saveForFutureUseCheckboxState == .deselected {
+                    paymentMethodParams.allowRedisplay = .unspecified
+                }
+            }
+        } else {
+            stpAssert(saveForFutureUseCheckboxState == .hidden, "Checkbox should be hidden")
+            if isSettingUp {
+                paymentMethodParams.allowRedisplay = allowRedisplayOverride ?? .limited
+            } else {
+                // PaymentMethod won't be attached to customer
+                paymentMethodParams.allowRedisplay = .unspecified
+            }
+        }
+    }
+
+    func setAllowRedisplayForCustomerSheet(_ savePaymentMethodConsentBehavior: PaymentSheetFormFactory.SavePaymentMethodConsentBehavior) {
+        if savePaymentMethodConsentBehavior == .legacy {
+            paymentMethodParams.allowRedisplay = .unspecified
+        } else if savePaymentMethodConsentBehavior == .customerSheetWithCustomerSession {
+            paymentMethodParams.allowRedisplay = .always
         }
     }
 }
@@ -172,19 +200,6 @@ extension STPConfirmPaymentMethodOptions {
             usBankAccountOptions?.additionalAPIParameters["setup_future_usage"] = sfuValue
         default:
             return
-        }
-    }
-    func setSetupFutureUsageIfNecessary(
-        _ shouldSave: Bool,
-        paymentMethodType: PaymentSheet.PaymentMethodType,
-        customer: PaymentSheet.CustomerConfiguration?
-    ) {
-        if let bridgePaymentMethodType = paymentMethodType.stpPaymentMethodType {
-            setSetupFutureUsageIfNecessary(
-                shouldSave,
-                paymentMethodType: bridgePaymentMethodType,
-                customer: customer
-            )
         }
     }
 }

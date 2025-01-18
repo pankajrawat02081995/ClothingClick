@@ -27,33 +27,35 @@ class FindLocation: BaseViewController {
         super.viewDidLoad()
         self.mapView.delegate = self
         var distances = [CLLocationDistance]()
-        if let locations = appDelegate.userDetails?.locations
-        {
-            let Location = locations.filter {
+        if appDelegate.userDetails?.locations!.count ?? 0 > 0 {
+        let locations = appDelegate.userDetails?.locations
+        
+            let Location = locations?.filter {
                 $0.is_default == 1
             }
-            print(Location)
-            if Location.count>0{
-                let data = Location[0]
-                let ulat = Double(data.latitude!)
-                let ulong = Double(data.longitude!)
+            print(Location ?? 0)
+            if Location?.count ?? 0>0{
+                let data = Location?[0]
+                let ulat = Double(data?.latitude ?? "")
+                let ulong = Double(data?.longitude ?? "")
                 userLocation = CLLocation(latitude: ulat!, longitude: ulong!)
                 for location in addresslist{
                     let lat = Double(location?.latitude! ?? "0.0")!
                     let log = Double(location?.longitude! ?? "0.0")!
                     let coord = CLLocation(latitude: lat, longitude: log)
-                   // let coord = CLLocation(latitude: location?.latitude!, longitude: location?.longitude!)
+                    // let coord = CLLocation(latitude: location?.latitude!, longitude: location?.longitude!)
                     
                     distances.append(coord.distance(from: userLocation!))
                     print("distance = \(coord.distance(from: userLocation!))")
-                    }
+                }
             }
-        }
+            // }
             let closest = distances.min()//shortest distance
-        let position = distances.firstIndex(of: closest!)//index of shortest distance
-        print("closest = \(closest!), index = \(position ?? 0)")
-        lat = Double(addresslist[position!]?.latitude! ?? "0.0")!
-        log = Double(addresslist[position!]?.longitude! ?? "0.0")!
+            let position = distances.firstIndex(of: closest!)//index of shortest distance
+            print("closest = \(closest!), index = \(position ?? 0)")
+            lat = Double(addresslist[position!]?.latitude! ?? "0.0")!
+            log = Double(addresslist[position!]?.longitude! ?? "0.0")!
+        }
         if usertype == USER_TYPE.USER.rawValue {
             self.setInitDataUserLise(latitude: lat, longitude: log, tital: adddressArea)
 //            self.btnCopy.isHidden = true

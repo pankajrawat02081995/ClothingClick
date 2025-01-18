@@ -14,9 +14,13 @@
 
 "BSB number" = "BSB číslo";
 
+"Bank account •••• %@" = "Bankový účet •••• %@";
+
 "Billing address is same as shipping" = "Fakturačná adresa je totožná s dodacou";
 
 "Cancel" = "Zrušiť";
+
+"Card brand" = "Značka karty";
 
 "City" = "Mesto";
 
@@ -80,7 +84,7 @@
 
 "Parish" = "Parish";
 
-"Phone" = "Telefón";
+"Phone number" = "Telefónne číslo";
 
 "Postal code" = "PSČ";
 
@@ -90,11 +94,15 @@
 
 "Remove" = "Odstrániť";
 
-"Remove bank account" = "Odstrániť bankový účet";
+"Remove bank account?" = "Odstrániť bankový účet?";
 
-"Remove bank account ending in %@" = "Odstrániť bankový účet končiaci na %@";
+"Remove card" = "Odstrániť kartu";
 
 "Search" = "Vyhľadať";
+
+"Select card brand (optional)" = "Vybrať značku karty (voliteľne)";
+
+"Sort code" = "Triediaci kód";
 
 "State" = "Štát";
 
@@ -107,6 +115,8 @@
 "The ID number you entered is incomplete." = "Zadané identifikačné číslo je neúplné.";
 
 "The account number you entered is incomplete." = "Zadané číslo účtu je neúplné.";
+
+"The sort code you entered is invalid." = "Zadaný triediaci kód je neplatný.";
 
 "Town or city" = "Obec alebo mesto";
 

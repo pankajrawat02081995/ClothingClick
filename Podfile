@@ -59,7 +59,7 @@ target 'Cloth App' do
   
   pod 'GrowingTextView'
   #  pod 'StripePaymentSheet'
-  pod 'StripePaymentSheet', '~> 23.17.1'
+  pod 'StripePaymentSheet', '~> 24.3.0' # 23.17.1
   
   
   pod "AlignedCollectionViewFlowLayout"

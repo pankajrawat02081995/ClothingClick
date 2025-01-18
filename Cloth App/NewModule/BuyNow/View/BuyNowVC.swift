@@ -42,6 +42,7 @@ class BuyNowVC: UIViewController {
     var postDetails : PostDetailsModel?
     var paymentID:String?
     var client_secret : String?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -72,7 +73,6 @@ class BuyNowVC: UIViewController {
         if let title = self.postDetails?.title {
             self.lblPostName.text = title
         }
-        
     }
     
     @IBAction func backOnPress(_ sender: UIButton) {
@@ -122,7 +122,7 @@ class BuyNowVC: UIViewController {
     }
 }
 
-extension BuyNowVC{
+extension BuyNowVC {
     func setupPaymentSheet() {
         KRProgressHUD.show()
         
@@ -183,6 +183,7 @@ extension BuyNowVC{
                         
                         // Enable shipping details collection if applicable
                         if self.deliveryType == .Ship {
+                            
                             // Collect all necessary billing details
                             configuration.billingDetailsCollectionConfiguration.email = .always
                             configuration.billingDetailsCollectionConfiguration.phone = .always
@@ -220,22 +221,26 @@ extension BuyNowVC{
         }.resume()
     }
     
-    
     func payButtonTapped() {
         if let paymentSheet = self.paymentSheet {
-            paymentSheet.present(from: self) { paymentResult in
-                switch paymentResult {
-                case .completed:
-                    print("Payment complete")
-                    self.callSaveOrderApi()
-                    
-                case .failed(let error):
-                    print("Payment failed: \(error.localizedDescription)")
-                    
-                case .canceled:
-                    print("Payment canceled")
+            DispatchQueue.main.async {
+                paymentSheet.present(from: self) { paymentResult in
+                    switch paymentResult {
+                    case .completed:
+                        print("Payment complete")
+                        self.callSaveOrderApi()
+                        
+                    case .failed(let error):
+                        print("Payment failed: \(error.localizedDescription)")
+                        debugPrint(error)
+                        
+                    case .canceled:
+                        print("Payment canceled")
+                    }
                 }
             }
+        } else {
+            print("Error: paymentSheet is nil")
         }
     }
     
@@ -328,5 +333,4 @@ extension BuyNowVC{
             }
         }
     }
-    
 }

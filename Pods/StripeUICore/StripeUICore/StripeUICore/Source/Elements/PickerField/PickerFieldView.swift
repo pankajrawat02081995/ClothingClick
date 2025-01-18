@@ -6,6 +6,7 @@
 //  Copyright © 2021 Stripe, Inc. All rights reserved.
 //
 
+@_spi(STP) import StripeCore
 import UIKit
 
 protocol PickerFieldViewDelegate: AnyObject {
@@ -27,13 +28,15 @@ final class PickerFieldView: UIView {
     private lazy var toolbar = DoneButtonToolbar(delegate: self, showCancelButton: true, theme: theme)
     private lazy var textField: PickerTextField = {
         let textField = PickerTextField()
-        // Input views are not supported on Catalyst
-#if !targetEnvironment(macCatalyst)
+        // Input views are not supported on Catalyst (and are non-optimal on visionOS)
+#if !targetEnvironment(macCatalyst) && !canImport(CompositorServices)
         textField.inputView = pickerView
 #endif
         textField.adjustsFontForContentSizeCategory = true
         textField.font = theme.fonts.subheadline
+#if !canImport(CompositorServices)
         textField.inputAccessoryView = toolbar
+#endif
         textField.delegate = self
         return textField
     }()
@@ -51,7 +54,10 @@ final class PickerFieldView: UIView {
         }
         let imageView = UIImageView(image: Image.icon_chevron_down.makeImage().withRenderingMode(.alwaysTemplate))
         imageView.setContentHuggingPriority(.required, for: .horizontal)
-        imageView.tintColor = theme.colors.textFieldText
+        if isOptional {
+            imageView.image = imageView.image?.resized(to: 0.75)?.withRenderingMode(.alwaysTemplate)
+        }
+        imageView.tintColor = isOptional ? theme.colors.placeholderText : theme.colors.textFieldText
         return imageView
     }()
     private lazy var hStackView: UIStackView = {
@@ -59,7 +65,11 @@ final class PickerFieldView: UIView {
             arrangedSubviews: [floatingPlaceholderTextFieldView ?? textField, chevronImageView].compactMap { $0 }
         )
         hStackView.alignment = .center
-        hStackView.spacing = 6
+        if isOptional {
+            hStackView.spacing = 3
+        } else {
+            hStackView.spacing = 6
+        }
         return hStackView
     }()
     private let pickerView: UIView
@@ -68,7 +78,10 @@ final class PickerFieldView: UIView {
     private let label: String?
     private let shouldShowChevron: Bool
     private weak var delegate: PickerFieldViewDelegate?
-    private let theme: ElementsUITheme
+    private let theme: ElementsAppearance
+    // When a PickerFieldView is optional it's chevron is smaller and takes the color of placeholder text
+    private let isOptional: Bool
+    private var _canBecomeFirstResponder = true
 
     // MARK: - Public properties
     var displayText: NSAttributedString? {
@@ -113,18 +126,20 @@ final class PickerFieldView: UIView {
         shouldShowChevron: Bool,
         pickerView: UIView,
         delegate: PickerFieldViewDelegate,
-        theme: ElementsUITheme,
-        hasPadding: Bool = true
+        theme: ElementsAppearance,
+        hasPadding: Bool = true,
+        isOptional: Bool = false
     ) {
         self.label = label
         self.shouldShowChevron = shouldShowChevron
         self.pickerView = pickerView
         self.delegate = delegate
         self.theme = theme
+        self.isOptional = isOptional
         super.init(frame: .zero)
         addAndPinSubview(hStackView, directionalLayoutMargins: hasPadding ? ElementsUI.contentViewInsets : .zero)
-//      On Catalyst, add the picker view as a subview instead of an input view.
-        #if targetEnvironment(macCatalyst)
+//      On Catalyst/visionOS, add the picker view as a subview instead of an input view.
+        #if targetEnvironment(macCatalyst) || canImport(CompositorServices)
         addAndPinSubview(pickerView, directionalLayoutMargins: ElementsUI.contentViewInsets)
         #endif
         layer.borderColor = theme.colors.border.cgColor
@@ -151,16 +166,20 @@ final class PickerFieldView: UIView {
         }
     }
 
+#if !canImport(CompositorServices)
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         layer.borderColor = theme.colors.border.cgColor
+        // Update the text attachment images for the attributed placeholder
+        textField.attributedPlaceholder = textField.attributedPlaceholder?.switchAttachments(for: .current)
     }
+#endif
 
     override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
         guard isUserInteractionEnabled, !isHidden, self.point(inside: point, with: event) else {
             return nil
         }
-        #if targetEnvironment(macCatalyst)
+        #if targetEnvironment(macCatalyst) || canImport(CompositorServices)
         // Forward all events within our bounds to the button
         return pickerView
         #else
@@ -179,10 +198,21 @@ final class PickerFieldView: UIView {
     }
 
     override func becomeFirstResponder() -> Bool {
+        // Prevents unwanted invocation of the picker's `becomeFirstResponder` method.
+        // Sometimes, when the picker is added as a subview or when its `isUserInteractionEnabled` is toggled,
+        // the operating system mistakenly calls `becomeFirstResponder`, causing the drop-down to display unintentionally.
+        guard _canBecomeFirstResponder, isUserInteractionEnabled else {
+            return false
+        }
+
         if super.becomeFirstResponder() {
             return true
         }
         return textField.becomeFirstResponder()
+    }
+
+    func setCanBecomeFirstResponder(_ value: Bool) {
+        _canBecomeFirstResponder = value
     }
 }
 
@@ -221,6 +251,10 @@ extension PickerFieldView: UITextFieldDelegate {
     func textFieldDidEndEditing(_ textField: UITextField) {
         floatingPlaceholderTextFieldView?.updatePlaceholder()
         delegate?.didFinish(self, shouldAutoAdvance: true)
+    }
+
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        return _canBecomeFirstResponder
     }
 }
 

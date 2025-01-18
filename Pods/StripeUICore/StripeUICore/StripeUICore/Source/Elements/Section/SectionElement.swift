@@ -55,7 +55,11 @@ import UIKit
         elements.compactMap({ $0.subLabelText }).first
     }
 
-    let theme: ElementsUITheme
+    let theme: ElementsAppearance
+
+    public func disableAppearance() {
+        sectionView.containerView.disableAppearance()
+    }
 
     // MARK: - ViewModel
 
@@ -64,12 +68,12 @@ import UIKit
         let title: String?
         let errorText: String?
         var subLabel: String?
-        let theme: ElementsUITheme
+        let theme: ElementsAppearance
     }
 
     // MARK: - Initializers
 
-    public init(title: String? = nil, elements: [Element], theme: ElementsUITheme = .default) {
+    public init(title: String? = nil, elements: [Element], theme: ElementsAppearance = .default) {
         self.title = title
         self.elements = elements
         self.theme = theme
@@ -78,7 +82,7 @@ import UIKit
         }
     }
 
-    public convenience init(_ element: Element, theme: ElementsUITheme = .default) {
+    public convenience init(_ element: Element, theme: ElementsAppearance = .default) {
         self.init(title: nil, elements: [element], theme: theme)
     }
 }
@@ -109,6 +113,7 @@ extension SectionElement {
     /// A simple container element where the element's view is hidden
     /// Useful when an element is a part of a section but it's view is embeded into another element
     /// E.g. card brand drop down embedded into the PAN textfield
+    /// - Note: `HiddenElement`'s are skipped by the `ContainerElement`'s auto advance logic
     @_spi(STP) public final class HiddenElement: ContainerElement {
         final class HiddenView: UIView {}
 
@@ -125,5 +130,12 @@ extension SectionElement {
             self.elements = [element]
             element.delegate = self
         }
+    }
+}
+
+// MARK: - DebugDescription
+extension SectionElement {
+    public var debugDescription: String {
+        return "<\(type(of: self)): \(Unmanaged.passUnretained(self).toOpaque())>; title = \(title ?? "nil")" + subElementDebugDescription
     }
 }
