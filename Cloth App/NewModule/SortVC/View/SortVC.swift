@@ -12,7 +12,7 @@ class SortVC: UIViewController {
     @IBOutlet weak var btnCount: AnimatableButton!
     @IBOutlet weak var tableView: UITableView!
     
-    let indexData = [["title":"Date: New - Old","sort_by":"date","sort_value":"desc"],["title":"Date: Old - New","sort_by":"date","sort_value":"asc"],["title":"Price: Low - High","sort_by":"price","sort_value":"asc"],["title":"Price: High - Low","sort_by":"price","sort_value":"desc"],["title":"Trending","sort_by":"category","sort_value":"asc"]]
+    let indexData = [["title":"Date: New - Old","sort_by":"date","sort_value":"desc"],["title":"Date: Old - New","sort_by":"date","sort_value":"asc"],["title":"Price: Low - High","sort_by":"price","sort_value":"asc"],["title":"Price: High - Low","sort_by":"price","sort_value":"desc"],["title":"Trending","sort_by":"trending","sort_value":"desc"]]
     
     var isSaveSearch : Bool?
     var isFilterProduct : Bool?

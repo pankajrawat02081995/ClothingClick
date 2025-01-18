@@ -13,7 +13,7 @@ class OrderProductDetailsVC: UIViewController {
     var viewModel : OrderHistoryViewModel?
     var orderID : Int?
     var isShip : Bool?
-    
+    var isAfterBuy : Bool?
     @IBOutlet weak var lblPickupOrderNumber: UILabel!
     @IBOutlet weak var pickupView: UIView!
     @IBOutlet weak var lblMainTitle: UILabel!
@@ -60,7 +60,11 @@ class OrderProductDetailsVC: UIViewController {
     }
     
     @IBAction func backOnPress(_ sender: UIButton) {
-        self.popViewController()
+        if self.isAfterBuy == true{
+            self.navigationController?.popToRootViewController(animated: true)
+        }else{
+            self.popViewController()
+        }
     }
     
     @IBAction func directionOnPress(_ sender: UIButton) {
