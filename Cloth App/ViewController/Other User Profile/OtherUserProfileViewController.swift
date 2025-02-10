@@ -48,7 +48,6 @@ class OtherUserProfileViewController: BaseViewController {
     
     @IBOutlet weak var btnSort: UIButton!
     
-    let customTransitioningDelegate = CustomTransitioningDelegate()
     
     var selIndexForCVCategory = 0
     var categoryList = ["Selling","Sold"]
@@ -64,6 +63,7 @@ class OtherUserProfileViewController: BaseViewController {
     var hasMorePages = false
     var isFollow = false
     var requesetUserName = ""
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         FilterSingleton.share.filter = Filters()
@@ -102,10 +102,18 @@ class OtherUserProfileViewController: BaseViewController {
     }
     
     @IBAction func instaOnTap(_ sender: UIButton) {
+        if appDelegate.userDetails == nil {
+            self.showLogIn()
+            return
+        }
         openInstagramProfile(username: self.otherUserDetailsData?.instagram_id ?? "")
     }
     
     @IBAction func fbOnTap(_ sender: UIButton) {
+        if appDelegate.userDetails == nil {
+            self.showLogIn()
+            return
+        }
         openFacebookProfile(facebookID: self.otherUserDetailsData?.facebook_id ?? "")
     }
     
@@ -121,7 +129,10 @@ class OtherUserProfileViewController: BaseViewController {
     }
     
     @IBAction func btnShort_Clicked(_ button: UIButton) {
-        
+        if appDelegate.userDetails == nil {
+            self.showLogIn()
+            return
+        }
         let vc = FilterProductVC.instantiate(fromStoryboard: .Dashboard)
         vc.modalPresentationStyle = .custom
         vc.transitioningDelegate = customTransitioningDelegate
@@ -136,6 +147,10 @@ class OtherUserProfileViewController: BaseViewController {
     
     
     @IBAction func btnMenu_Clicked(_ button: UIButton) {
+        if appDelegate.userDetails == nil {
+            self.showLogIn()
+            return
+        }
         let popVC = CustomMenuViewController.instantiate(fromStoryboard: .Main)
         popVC.delegate = self
         popVC.modalPresentationStyle = .popover
@@ -152,6 +167,10 @@ class OtherUserProfileViewController: BaseViewController {
         
     }
     @IBAction func btnFollowing_Clicked(_ button: UIButton) {
+        if appDelegate.userDetails == nil {
+            self.showLogIn()
+            return
+        }
         let viewController = FollowFollwingViewController.instantiate(fromStoryboard: .Main)
         viewController.selectedTab = "Following"
         viewController.userId = self.userId
@@ -167,10 +186,18 @@ class OtherUserProfileViewController: BaseViewController {
     }
     
     @IBAction func shareOnPress(_ sender: UIButton) {
+//        if appDelegate.userDetails == nil {
+//            self.showLogIn()
+//            return
+//        }
         self.share(userName: self.lblUserName.text ?? "")
     }
     
     @IBAction func btnFollowear_Clicked(_ button: UIButton) {
+        if appDelegate.userDetails == nil {
+            self.showLogIn()
+            return
+        }
         let viewController = FollowFollwingViewController.instantiate(fromStoryboard: .Main)
         viewController.selectedTab = "Followear"
         viewController.userId = self.userId
@@ -183,6 +210,10 @@ class OtherUserProfileViewController: BaseViewController {
         //        self.navigationController?.pushViewController(viewController, animated: true)
     }
     @IBAction func btnFollow_Clicked(_ button: UIButton) {
+        if appDelegate.userDetails == nil {
+            self.showLogIn()
+            return
+        }
         let object = self.otherUserDetailsData
         if object?.is_following == 0 && object?.is_requested == 0  {
             self.callFollow(userId: String(object?.id ?? 0))
@@ -721,6 +752,10 @@ extension OtherUserProfileViewController {
         }
     }
     func callPostFavourite(action_type : String,postId : String,index: Int) {
+        if appDelegate.userDetails == nil {
+            self.showLogIn()
+            return
+        }
         if appDelegate.reachable.connection != .none {
             
             let param = ["post_id" : postId,

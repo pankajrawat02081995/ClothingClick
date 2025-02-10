@@ -3137,7 +3137,7 @@
 				CODE_SIGN_ENTITLEMENTS = "Cloth App/Cloth AppDebug.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 39.4;
+				CURRENT_PROJECT_VERSION = 45;
 				DEVELOPMENT_TEAM = PRN69F6WNX;
 				"EXCLUDED_ARCHS[sdk=*]" = x86_64;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
@@ -3166,7 +3166,7 @@
 				CODE_SIGN_ENTITLEMENTS = "Cloth App/Cloth AppRelease.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 39.4;
+				CURRENT_PROJECT_VERSION = 45;
 				DEVELOPMENT_TEAM = PRN69F6WNX;
 				"EXCLUDED_ARCHS[sdk=*]" = x86_64;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;

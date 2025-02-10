@@ -67,7 +67,6 @@ class UserViewController: BaseViewController {
     var  loading = false
     var headerViewMaxHeight : CGFloat = 293
     let headerViewMinHeight : CGFloat = 50
-    let customTransitioningDelegate = CustomTransitioningDelegate()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -852,7 +851,7 @@ extension UserViewController{
                         self.CVCategory.reloadData()
                         
                         if self.posts.count == 0 {
-                            self.lblNoData.isHidden = false
+                            self.lblNoData.isHidden = true
                             if sort_by != "size"  {
                                 self.btnSort.isHidden = false
                             }

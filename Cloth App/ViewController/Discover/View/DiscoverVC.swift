@@ -46,9 +46,7 @@ class DiscoverVC: BaseViewController {
     @objc func handleRefresh(_ refreshControl: UIRefreshControl) {
         refreshControl.endRefreshing()
         self.checkAndFetchLocation { status in
-            if status{
-                self.callHomeList()
-            }
+            self.callHomeList()
         }
     }
     
@@ -57,9 +55,7 @@ class DiscoverVC: BaseViewController {
         self.navigationController?.navigationBar.isHidden = true
         self.navigationController?.setNavigationBarHidden(false, animated: animated)
         self.checkAndFetchLocation { status in
-            if status{
-                self.callHomeList()
-            }
+            self.callHomeList()
         }
         if let locations = appDelegate.userDetails?.locations{
             let Location = locations
@@ -78,24 +74,40 @@ class DiscoverVC: BaseViewController {
     }
     
     @IBAction func filterOnPress(_ sender: UIButton) {
+        if appDelegate.userDetails == nil {
+            self.showLogIn()
+            return
+        }
         let vc = SearchEngineViewController.instantiate(fromStoryboard: .Main)
         vc.hidesBottomBarWhenPushed = true
         self.pushViewController(vc: vc)
     }
     
     @IBAction func locationOnPress(_ sender: UIButton) {
+        if appDelegate.userDetails == nil {
+            self.showLogIn()
+            return
+        }
         let viewController = MapLocationVC.instantiate(fromStoryboard: .Dashboard)
         viewController.hidesBottomBarWhenPushed = true
         self.pushViewController(vc: viewController)
     }
     
     @IBAction func searchOnPress(_ sender: UIButton) {
+//        if appDelegate.userDetails == nil {
+//            self.showLogIn()
+//            return
+//        }
         let vc = SearchItemAndMembersViewController.instantiate(fromStoryboard: .Main)
         vc.hidesBottomBarWhenPushed = true
         self.pushViewController(vc: vc)
     }
     
     @IBAction func notificationOnTap(_ sender: UIButton) {
+        if appDelegate.userDetails == nil {
+            self.showLogIn()
+            return
+        }
         let vc = NotificationsViewController.instantiate(fromStoryboard: .Main)
         vc.hidesBottomBarWhenPushed = true
         self.pushViewController(vc: vc)
@@ -136,21 +148,28 @@ class DiscoverVC: BaseViewController {
                         complition(true)
                     case .failure(let error):
                         print("Error fetching location: \(error.localizedDescription)")
-                        //                        self.showLocationErrorAlert(error: error)
-                        let vc = DeletePostVC.instantiate(fromStoryboard: .Sell)
-                        vc.modalPresentationStyle = .overFullScreen
-                        vc.modalTransitionStyle = .crossDissolve
-                        vc.isCancelHide = true
-                        vc.deleteTitle = "Allow Access"
-                        vc.deleteBgColor = .black
-                        vc.titleMain = "Turn on Location"
-                        vc.subTitle = " Turn on your device location services to use Clothing Click."
-                        vc.imgMain = UIImage(named: "ic_location_big")
-                        vc.deleteOnTap = {
-                            LocationManager.shared.openSettings()
+                        if LocationManager.shared.isLocationSetNotNow == true{
+                            complition(false)
+                        }else{
+                            let vc = DeletePostVC.instantiate(fromStoryboard: .Sell)
+                            vc.modalPresentationStyle = .overFullScreen
+                            vc.modalTransitionStyle = .crossDissolve
+                            vc.isCancelHide = false
+                            vc.deleteTitle = "Allow Access"
+                            vc.cancelTitle = "Not Now"
+                            vc.deleteBgColor = .black
+                            vc.titleMain = "Turn on Location"
+                            vc.subTitle = " Location services are required to provide the best experience on Clothing Click. Please enable them in your device settings"
+                            vc.imgMain = UIImage(named: "ic_location_big")
+                            vc.deleteOnTap = {
+                                LocationManager.shared.openSettings()
+                            }
+                            vc.cancelOnTap = {
+                                LocationManager.shared.isLocationSetNotNow = true
+                                complition(false)
+                            }
+                            self.present(vc, animated: true)
                         }
-                        self.present(vc, animated: true)
-                        
                     }
                 }
             }
@@ -176,6 +195,10 @@ class DiscoverVC: BaseViewController {
     }
     
     @objc func createNewSaveSearch(sender:UIButton){
+        if appDelegate.userDetails == nil {
+            self.showLogIn()
+            return
+        }
         let vc = SaveSearchViewController.instantiate(fromStoryboard: .Main)
         vc.saveSearch = false
         vc.hidesBottomBarWhenPushed = true
@@ -184,6 +207,10 @@ class DiscoverVC: BaseViewController {
     }
     
     @objc func viewSaveSearch(sender:UIButton){
+        if appDelegate.userDetails == nil {
+            self.showLogIn()
+            return
+        }
         let vc = ExistingSavedSearchsViewController.instantiate(fromStoryboard: .Main)
         self.pushViewController(vc: vc)
     }
@@ -321,71 +348,12 @@ extension DiscoverVC{
     @objc func deepLinkNavigate(_ notification: NSNotification) {
         DeepLinknaviget()
     }
-    func DeepLinknaviget(){
-        if appDelegate.deeplinkurltype != "" && appDelegate.deeplinkid != "" {
-            if appDelegate.deeplinkurltype == "post"{
-                //                let Login = self.storyBoard.instantiateViewController(withIdentifier: "ProductDetailsViewController") as?  ProductDetailsViewController
-                //                Login!.postId = appDelegate.deeplinkid
-                //                self.navigationController?.pushViewController(Login!, animated: true)
-                let vc = OtherPostDetailsVC.instantiate(fromStoryboard: .Sell)
-                vc.postId = appDelegate.deeplinkid
-                vc.hidesBottomBarWhenPushed = true
-                self.pushViewController(vc: vc)
-            }else{ //user side
-                if appDelegate.deeplinkid == String(appDelegate.userDetails?.username ?? "") {
-                    self.navigateToHomeScreen(selIndex: 4)
-                    self.deeplinkClear()
-                }
-                else {
-                    self.callGetOtherUserDetails(userId: appDelegate.deeplinkid)
-                }
-                
-            }
-        }
-    }
-    
-    func callGetOtherUserDetails(userId : String) {
-        if appDelegate.reachable.connection != .none {
-            
-            let param = ["username":  userId
-            ]
-            APIManager().apiCall(of:OtherUserDetailsModel.self, isShowHud: false, URL: BASE_URL, apiName: APINAME.OTHER_USER_DETAILS.rawValue, method: .post, parameters: param) { [self] (response, error) in
-                if error == nil {
-                    if let response = response {
-                        if let data = response.dictData {
-                            let otherUserDetailsData = data
-                            if let seller = otherUserDetailsData.role_id {
-                                if seller == 1 {
-                                    let viewController = self.storyBoard.instantiateViewController(withIdentifier: "OtherUserProfileViewController") as! OtherUserProfileViewController
-                                    viewController.userId = String(otherUserDetailsData.id ?? 0)
-                                    self.navigationController?.pushViewController(viewController, animated: true)
-                                }
-                                else if seller == 2{
-                                    let viewController = self.storyBoard.instantiateViewController(withIdentifier: "StoreProfileViewController") as! StoreProfileViewController
-                                    viewController.userId = String(otherUserDetailsData.id ?? 0)
-                                    self.navigationController?.pushViewController(viewController, animated: true)
-                                }
-                                else {
-                                    let viewController = self.storyBoard.instantiateViewController(withIdentifier: "BrandProfileViewController") as! BrandProfileViewController
-                                    viewController.userId = String(otherUserDetailsData.id ?? 0)
-                                    self.navigationController?.pushViewController(viewController, animated: true)
-                                }
-                            }
-                            self.deeplinkClear()
-                        }
-                    }
-                }
-                else {
-                    BaseViewController.sharedInstance.showAlertWithTitleAndMessage(title: AlertViewTitle, message: ErrorMessage)
-                }
-            }
-        }
-        else {
-            BaseViewController.sharedInstance.showAlertWithTitleAndMessage(title: AlertViewTitle, message: NoInternet)
-        }
-    }
     
     func favPost(postId:String,action_type:String,complete:@escaping (Bool)->Void){
+        if appDelegate.userDetails == nil {
+            self.showLogIn()
+            return
+        }
         if appDelegate.reachable.connection != .none {
             
             let param = ["post_id" : postId,
@@ -488,6 +456,9 @@ extension DiscoverVC{
     }
     
     func getUserDetails() {
+        if appDelegate.userDetails == nil{
+            return
+        }
         if appDelegate.reachable.connection != .none {
             
             APIManager().apiCall(of: UserDetailsModel.self, isShowHud: false, URL: BASE_URL, apiName: APINAME.AUTOLOGIN.rawValue, method: .get, parameters: [:]) { (response, error) in

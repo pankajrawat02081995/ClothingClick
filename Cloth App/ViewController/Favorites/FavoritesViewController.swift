@@ -20,7 +20,6 @@ class FavoritesViewController: BaseViewController {
     var sort_by = "date"
     var sort_value = "desc"
     var selectedIndex = 0
-    let customTransitioningDelegate = CustomTransitioningDelegate()
     
     override func viewDidLoad() {
         super.viewDidLoad()

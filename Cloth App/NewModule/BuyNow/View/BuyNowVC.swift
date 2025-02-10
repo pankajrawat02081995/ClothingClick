@@ -8,7 +8,7 @@
 import UIKit
 import StripePaymentSheet
 import StripeApplePay
-import PassKit
+//import PassKit
 import KRProgressHUD
 
 enum DeliveryType {

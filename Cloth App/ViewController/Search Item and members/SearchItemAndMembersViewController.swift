@@ -33,7 +33,6 @@ class SearchItemAndMembersViewController: BaseViewController {
     var sort_by = "date"
     var sort_value = "desc"
     var searchData = [Datas]()
-    let customTransitioningDelegate = CustomTransitioningDelegate()
     var FromSearchEngine:Bool = false
     override func viewDidLoad(){
         super.viewDidLoad()

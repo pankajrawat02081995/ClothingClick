@@ -72,8 +72,9 @@ class SignupViewController: BaseViewController {
     }
     
     @IBAction func loginOnPress(_ sender: UIButton) {
-        let viewController = self.storyBoard.instantiateViewController(withIdentifier: "LoginSocialViewController") as! LoginSocialViewController
-        self.navigationController?.pushViewController(viewController, animated: true)
+//        let viewController = self.storyBoard.instantiateViewController(withIdentifier: "LoginSocialViewController") as! LoginSocialViewController
+//        self.navigationController?.pushViewController(viewController, animated: true)
+        self.popViewController()
         
     }
     

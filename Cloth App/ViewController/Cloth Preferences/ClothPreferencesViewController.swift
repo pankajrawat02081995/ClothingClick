@@ -12,19 +12,12 @@ import AlignedCollectionViewFlowLayout
 class ClothPreferencesViewController: BaseViewController {
     
     @IBOutlet weak var btnBack: UIButton!
-//    @IBOutlet weak var imgLogo: UIImageView!
-//    @IBOutlet weak var lblTitle: UILabel!
-//    @IBOutlet weak var lblFillInYourClothing: UILabel!
-//    @IBOutlet weak var lblClothingPreferences: UILabel!
+    
     @IBOutlet weak var CVGender: UICollectionView!
     @IBOutlet weak var constHeightForCVGender: NSLayoutConstraint!
     @IBOutlet weak var tblClothsPref: UITableView!
     @IBOutlet weak var constHeightForTblClothsPref: NSLayoutConstraint!
-//    @IBOutlet weak var lblFavouriteClothingBrand: UILabel!
-//    @IBOutlet weak var btnSearchBrand: UIButton!
-//    @IBOutlet weak var txtSearchBrand: UITextField!
-//    @IBOutlet weak var horizontalSepView: UIView!
-//    @IBOutlet weak var CVSelectedBrand: UICollectionView!
+    
     @IBOutlet weak var btnNext: CustomButton!
     var saveSize = [String]()
     var saveBrand = [String]()
@@ -39,6 +32,8 @@ class ClothPreferencesViewController: BaseViewController {
     
     var selectedIndexPath = [IndexPath]()
     
+    var isUserLogin = defaults.value(forKey: kLoginUserList)
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         if isMySizes {
@@ -49,13 +44,32 @@ class ClothPreferencesViewController: BaseViewController {
         }
         else
         {
-            self.btnBack.isHidden = true
-            self.setNavigationBarShadow(navigationBar: self.navBar)
+            self.btnBack.isHidden = false
+            //            self.setNavigationBarShadow(navigationBar: self.navBar)
             self.callSizeList()
             let imageSearch = UIImage(named: "search_ic")?.imageWithColor(color1: UIColor.black)
-//            self.btnSearchBrand.setImage(imageSearch, for: .normal)
-//            let alignedFlowLayout = self.CVSelectedBrand?.collectionViewLayout as? AlignedCollectionViewFlowLayout
-//            alignedFlowLayout?.horizontalAlignment = .left
+            //            self.btnSearchBrand.setImage(imageSearch, for: .normal)
+            //            let alignedFlowLayout = self.CVSelectedBrand?.collectionViewLayout as? AlignedCollectionViewFlowLayout
+            //            alignedFlowLayout?.horizontalAlignment = .left
+        }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        // Check if any 'isSelect' is true in the entire categoryList
+        let isAnySelected = self.categoryList.contains { outerModel in
+            outerModel?.sizes?.contains { $0.isSelect == true } == true
+        }
+
+        // Use the result of isAnySelected
+        if isAnySelected {
+            print("At least one item is selected.")
+            self.btnNext.backgroundColor = UIColor.customBlack
+            self.btnNext.isUserInteractionEnabled = true
+        } else {
+            print("No items are selected.")
+            self.btnNext.backgroundColor = UIColor.customButton_bg_gray
+            self.btnNext.isUserInteractionEnabled = false
         }
     }
     
@@ -94,37 +108,67 @@ class ClothPreferencesViewController: BaseViewController {
     }
     
     @IBAction func btnNext_clicked(_ sender: Any) {
-        
-        for i in 0..<self.categoryList.count {
-            let outerModel = self.categoryList[i]
-            for j in 0..<(outerModel?.sizes!.count)! {
-                let innerModel = outerModel?.sizes![j]
-                if innerModel?.isSelect == true{
-                    self.saveSize.append(String(innerModel?.id ?? 0))
+        if self.isUserLogin == nil{
+            self.checkAndFetchLocation { status in
+                
+                for i in 0..<self.categoryList.count {
+                    let outerModel = self.categoryList[i]
+                    for j in 0..<(outerModel?.sizes!.count)! {
+                        let innerModel = outerModel?.sizes![j]
+                        if innerModel?.isSelect == true{
+                            self.saveSize.append(String(innerModel?.id ?? 0))
+                        }
+                    }
+                }
+                
+                for i in 0..<self.brandSearchList.count {
+                    let outerModel = self.brandSearchList[i]
+                    let Id = outerModel?.brand_id
+                    self.saveBrand.append(String(Id ?? 0))
+                }
+                
+                print(self.saveSize)
+                
+                if let genserId = self.mysizeList[self.selectGengerIndex]?.gender_id{
+                    let sizeAreeString = self.saveSize.joined(separator: ",")
+                    let brandAreeString = self.saveBrand.joined(separator: ",")
+                    FilterSingleton.share.filter.sizes = self.saveSize.joined(separator: ",")
+                    self.navigateToHomeScreen()
+                    print(sizeAreeString)
+                    print(brandAreeString)
+                }
+                
+            }
+        }else{
+            
+            for i in 0..<self.categoryList.count {
+                let outerModel = self.categoryList[i]
+                for j in 0..<(outerModel?.sizes!.count)! {
+                    let innerModel = outerModel?.sizes![j]
+                    if innerModel?.isSelect == true{
+                        self.saveSize.append(String(innerModel?.id ?? 0))
+                    }
                 }
             }
-        }
-        
-        for i in 0..<self.brandSearchList.count {
-            let outerModel = self.brandSearchList[i]
             
+            for i in 0..<self.brandSearchList.count {
+                let outerModel = self.brandSearchList[i]
+                
                 let Id = outerModel?.brand_id
                 
-                    self.saveBrand.append(String(Id ?? 0))
+                self.saveBrand.append(String(Id ?? 0))
                 
-        }
-        print(self.saveSize)
-        
-        if self.selectGengerIndex != -1{
+            }
+            print(self.saveSize)
+            
             if let genserId = self.mysizeList[self.selectGengerIndex]?.gender_id{
                 let sizeAreeString = self.saveSize.joined(separator: ",")
                 let brandAreeString = self.saveBrand.joined(separator: ",")
+                FilterSingleton.share.filter.sizes = self.saveSize.joined(separator: ",")
                 self.callSaveSizeList(size: sizeAreeString , brand: brandAreeString, genderId: String(genserId))
                 print(sizeAreeString)
                 print(brandAreeString)
             }
-        }else{
-            self.popViewController()
         }
     }
     
@@ -185,10 +229,10 @@ extension ClothPreferencesViewController : UITableViewDataSource, UITableViewDel
 extension ClothPreferencesViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-//        if collectionView == self.CVSelectedBrand {
-//            return self.brandSearchList.count
-//        }
-//        else 
+        //        if collectionView == self.CVSelectedBrand {
+        //            return self.brandSearchList.count
+        //        }
+        //        else
         if collectionView == self.CVGender {
             return self.mysizeList.count
         }
@@ -198,13 +242,13 @@ extension ClothPreferencesViewController: UICollectionViewDelegate, UICollection
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-//        if collectionView == self.CVSelectedBrand {
-//            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SelectedBrandCVCell", for: indexPath) as! SelectedBrandCVCell
-//            cell.lblTitle.text = self.brandSearchList[indexPath.item]?.name
-//            cell.btnRemove.addTarget(self, action: #selector(btnRemoveBrand_clicked(_:)), for: .touchUpInside)
-//            return cell
-//        }
-//        else 
+        //        if collectionView == self.CVSelectedBrand {
+        //            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SelectedBrandCVCell", for: indexPath) as! SelectedBrandCVCell
+        //            cell.lblTitle.text = self.brandSearchList[indexPath.item]?.name
+        //            cell.btnRemove.addTarget(self, action: #selector(btnRemoveBrand_clicked(_:)), for: .touchUpInside)
+        //            return cell
+        //        }
+        //        else
         if collectionView == self.CVGender {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ClothPrefCVCell", for: indexPath) as! ClothPrefCVCell
             
@@ -212,13 +256,13 @@ extension ClothPreferencesViewController: UICollectionViewDelegate, UICollection
                 cell.lblTitle.text = gender
             }
             
-            if self.selectGengerIndex == indexPath.item {
+            if self.selectGengerIndex == indexPath.item  && self.mysizeList.count > 1{
                 cell.bottomView.backgroundColor = UIColor.customBlack
-//                cell.lblTitle.textColor = UIColor.white
+                //                cell.lblTitle.textColor = UIColor.white
             }
             else{
                 cell.bottomView.backgroundColor = UIColor.customBorderColor
-//                cell.lblTitle.textColor = UIColor.black
+                //                cell.lblTitle.textColor = UIColor.black
             }
             return cell
         }
@@ -242,24 +286,26 @@ extension ClothPreferencesViewController: UICollectionViewDelegate, UICollection
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if collectionView == self.CVGender {
-            self.selectGengerIndex = indexPath.item
-            self.categoryList.removeAll()
-            for j in 0..<(self.mysizeList[indexPath.item]?.categories?.count ?? 0) {
-                if self.mysizeList[indexPath.item]?.categories?[j].sizes?.count != 0 {
-                    self.categoryList.append(self.mysizeList[indexPath.item]?.categories?[j])
+            if self.mysizeList.count > 1{
+                self.selectGengerIndex = indexPath.item
+                self.categoryList.removeAll()
+                for j in 0..<(self.mysizeList[indexPath.item]?.categories?.count ?? 0) {
+                    if self.mysizeList[indexPath.item]?.categories?[j].sizes?.count != 0 {
+                        self.categoryList.append(self.mysizeList[indexPath.item]?.categories?[j])
+                    }
                 }
+                self.setSelectedSizeDate()
+                self.CVGender.reloadData()
+                self.CVGender.layoutIfNeeded()
+                self.constHeightForCVGender.constant = self.CVGender.contentSize.height
+                self.tblClothsPref.reloadData()
+                self.tblClothsPref.layoutIfNeeded()
+                self.constHeightForTblClothsPref.constant = self.tblClothsPref.contentSize.height
             }
-            self.setSelectedSizeDate()
-            self.CVGender.reloadData()
-            self.CVGender.layoutIfNeeded()
-            self.constHeightForCVGender.constant = self.CVGender.contentSize.height
-            self.tblClothsPref.reloadData()
-            self.tblClothsPref.layoutIfNeeded()
-            self.constHeightForTblClothsPref.constant = self.tblClothsPref.contentSize.height
         }
-//        else if collectionView == self.CVSelectedBrand {
-//            
-//        }
+        //        else if collectionView == self.CVSelectedBrand {
+        //
+        //        }
         else {
             for i in 0..<self.categoryList.count {
                 var outerModel = self.categoryList[i]
@@ -281,19 +327,34 @@ extension ClothPreferencesViewController: UICollectionViewDelegate, UICollection
                 }
                 self.categoryList[i] = outerModel
             }
-                        self.tblClothsPref.reloadData()
-                        self.tblClothsPref.layoutIfNeeded()
-                        self.constHeightForTblClothsPref.constant = self.tblClothsPref.contentSize.height
+            // Check if any 'isSelect' is true in the entire categoryList
+            let isAnySelected = self.categoryList.contains { outerModel in
+                outerModel?.sizes?.contains { $0.isSelect == true } == true
+            }
+
+            // Use the result of isAnySelected
+            if isAnySelected {
+                print("At least one item is selected.")
+                self.btnNext.backgroundColor = UIColor.customBlack
+                self.btnNext.isUserInteractionEnabled = true
+            } else {
+                print("No items are selected.")
+                self.btnNext.backgroundColor = UIColor.customButton_bg_gray
+                self.btnNext.isUserInteractionEnabled = false
+            }
+            self.tblClothsPref.reloadData()
+            self.tblClothsPref.layoutIfNeeded()
+            self.constHeightForTblClothsPref.constant = self.tblClothsPref.contentSize.height
         }
         
     }
     
     @objc func btnRemoveBrand_clicked(_ sender: AnyObject) {
-//        let poston = sender.convert(CGPoint.zero, to: self.CVSelectedBrand)
-//        if let indexPath = self.CVSelectedBrand.indexPathForItem(at: poston) {
-//            self.brandSearchList.remove(at: indexPath.item)
-//            self.CVSelectedBrand.reloadData()
-//        }
+        //        let poston = sender.convert(CGPoint.zero, to: self.CVSelectedBrand)
+        //        if let indexPath = self.CVSelectedBrand.indexPathForItem(at: poston) {
+        //            self.brandSearchList.remove(at: indexPath.item)
+        //            self.CVSelectedBrand.reloadData()
+        //        }
     }
 }
 
@@ -311,15 +372,20 @@ extension ClothPreferencesViewController: UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-//        if collectionView == self.CVSelectedBrand {
-//            let height = 40
-//            let brandename = self.brandSearchList[indexPath.item]?.name ?? ""
-//            let width = brandename.width(withConstrainedHeight: CGFloat(height), font: UIFont(name: "ProximaNova-Medium", size: 15)!)
-//            return CGSize(width: width + 70, height: CGFloat(height))
-//        }
-//        else {
+        //        if collectionView == self.CVSelectedBrand {
+        //            let height = 40
+        //            let brandename = self.brandSearchList[indexPath.item]?.name ?? ""
+        //            let width = brandename.width(withConstrainedHeight: CGFloat(height), font: UIFont(name: "ProximaNova-Medium", size: 15)!)
+        //            return CGSize(width: width + 70, height: CGFloat(height))
+        //        }
+        //        else {
         if collectionView == self.CVGender{
-            return CGSize(width: self.CVGender.frame.size.width / 2, height: 55)
+            if self.mysizeList.count < 2{
+                return CGSize(width: self.CVGender.frame.size.width, height: 55)
+            }else{
+                return CGSize(width: self.CVGender.frame.size.width / 2, height: 55)
+            }
+            
         }else{
             if indexPath.section == 0 {
                 let sectionPadding = sectionInsets.left * (5 + 1)
@@ -379,49 +445,49 @@ class ClothPrefCVCell : UICollectionViewCell {
     @IBOutlet weak var bgView: CustomView!
     @IBOutlet weak var lblTitle: UILabel!
     private var currentImageUrl: URL?
-
+    
     override func prepareForReuse() {
-          super.prepareForReuse()
-          // Clear the image and tint color before reuse
-//          imgCat.image = nil
-//          imgCat.tintColor = nil
-      }
+        super.prepareForReuse()
+        // Clear the image and tint color before reuse
+        //          imgCat.image = nil
+        //          imgCat.tintColor = nil
+    }
     
     func configure(with imageUrl: URL, tintColor: UIColor) {
-            // Cancel any previous image loading
-            currentImageUrl = imageUrl
-            imgCat.image = UIImage(named: "placeholder") // Placeholder image
-
-            // Check if the image is already cached
-            if let cachedImage = ImageCache.shared.image(forKey: imageUrl.absoluteString) {
-                self.imgCat.image = cachedImage.withRenderingMode(.alwaysTemplate)
-                self.imgCat.tintColor = tintColor
+        // Cancel any previous image loading
+        currentImageUrl = imageUrl
+        imgCat.image = UIImage(named: "placeholder") // Placeholder image
+        
+        // Check if the image is already cached
+        if let cachedImage = ImageCache.shared.image(forKey: imageUrl.absoluteString) {
+            self.imgCat.image = cachedImage.withRenderingMode(.alwaysTemplate)
+            self.imgCat.tintColor = tintColor
+            return
+        }
+        
+        // Asynchronously load the image
+        DispatchQueue.global().async { [weak self] in
+            guard let self = self else { return }
+            
+            guard let imageData = try? Data(contentsOf: imageUrl),
+                  let image = UIImage(data: imageData) else {
                 return
             }
-
-            // Asynchronously load the image
-            DispatchQueue.global().async { [weak self] in
-                guard let self = self else { return }
-
-                guard let imageData = try? Data(contentsOf: imageUrl),
-                      let image = UIImage(data: imageData) else {
-                    return
-                }
-
-                let templateImage = image.withRenderingMode(.alwaysTemplate)
-                
-                // Cache the image
-                ImageCache.shared.save(image: templateImage, forKey: imageUrl.absoluteString)
-                
-                DispatchQueue.main.async {
-                    // Ensure the cell is still displaying the correct image
-                    if self.currentImageUrl == imageUrl {
-                        self.imgCat.image = templateImage
-                        self.imgCat.tintColor = tintColor
-                    }
+            
+            let templateImage = image.withRenderingMode(.alwaysTemplate)
+            
+            // Cache the image
+            ImageCache.shared.save(image: templateImage, forKey: imageUrl.absoluteString)
+            
+            DispatchQueue.main.async {
+                // Ensure the cell is still displaying the correct image
+                if self.currentImageUrl == imageUrl {
+                    self.imgCat.image = templateImage
+                    self.imgCat.tintColor = tintColor
                 }
             }
         }
+    }
 }
 
 class SelectedBrandCVCell : UICollectionViewCell {
@@ -432,12 +498,12 @@ class SelectedBrandCVCell : UICollectionViewCell {
 
 extension ClothPreferencesViewController : UITextFieldDelegate {
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
-//        if textField == txtSearchBrand {
-//            let viewController = self.storyBoard.instantiateViewController(withIdentifier: "FavouriteBrandSearchViewController") as! FavouriteBrandSearchViewController
-//            viewController.favouriteBrandDeleget = self
-//            self.present(viewController, animated: true, completion: nil)
-//            return false
-//        }
+        //        if textField == txtSearchBrand {
+        //            let viewController = self.storyBoard.instantiateViewController(withIdentifier: "FavouriteBrandSearchViewController") as! FavouriteBrandSearchViewController
+        //            viewController.favouriteBrandDeleget = self
+        //            self.present(viewController, animated: true, completion: nil)
+        //            return false
+        //        }
         return true
     }
 }
@@ -470,18 +536,35 @@ extension ClothPreferencesViewController {
                                 self.setSelectedSizeDate()
                             }
                             else {
-                                if self.mysizeList.count > 0{
+                                
+                                
+                                if self.isUserLogin == nil{
+                                    debugPrint( self.mysizeList.count)
+                                    self.categoryList.removeAll()
+                                    if self.selectGengerIndex != -1{
+                                        self.mysizeList = self.mysizeList.filter { self.selectGengerIndex == 0 ? $0?.gender_name?.capitalized == "Menswear" : $0?.gender_name?.capitalized == "Womenswear" }
+                                    }
+                                    
+                                    for index in self.mysizeList.first??.categories ?? []{
+                                        if index.sizes?.isEmpty == false{
+                                            self.categoryList.append(index)
+                                        }
+                                    }
                                     self.selectGengerIndex = 0
-                                    for j in 0..<(self.mysizeList[self.selectGengerIndex == -1 ? 1 : self.selectGengerIndex]?.categories?.count ?? 0) {
-                                        if self.mysizeList[self.selectGengerIndex == -1 ? 1 : self.selectGengerIndex]?.categories?[j].sizes?.count != 0 {
-                                            self.categoryList.append(self.mysizeList[self.selectGengerIndex == -1 ? 1 : self.selectGengerIndex]?.categories?[j])
-                                            
+                                    //
+                                }else{
+                                    if self.mysizeList.count > 0{
+                                        self.selectGengerIndex = 0
+                                        for j in 0..<(self.mysizeList[self.selectGengerIndex == -1 ? 1 : self.selectGengerIndex]?.categories?.count ?? 0) {
+                                            if self.mysizeList[self.selectGengerIndex == -1 ? 1 : self.selectGengerIndex]?.categories?[j].sizes?.count != 0 {
+                                                self.categoryList.append(self.mysizeList[self.selectGengerIndex == -1 ? 1 : self.selectGengerIndex]?.categories?[j])
+                                                
+                                            }
                                         }
                                     }
                                 }
                             }
-                            //                            self.CVSelectedBrand.reloadData()
-                            //                            self.CVSelectedBrand.layoutIfNeeded()
+                            
                             self.CVGender.reloadData()
                             self.CVGender.layoutIfNeeded()
                             self.constHeightForCVGender.constant = self.CVGender.contentSize.height
@@ -553,7 +636,7 @@ extension ClothPreferencesViewController {
 extension ClothPreferencesViewController : FavouriteBrandSearchDelegate {
     func FavouriteBrandSearchAddd(brand: BrandeSearchModel) {
         self.brandSearchList.append(brand)
-//        self.CVSelectedBrand.reloadData()
+        //        self.CVSelectedBrand.reloadData()
     }
 }
 
@@ -571,5 +654,66 @@ class ImageCache {
     
     func save(image: UIImage, forKey key: String) {
         cache.setObject(image, forKey: key as NSString)
+    }
+}
+
+extension ClothPreferencesViewController{
+    private func checkAndFetchLocation(complition:@escaping((Bool) -> Void?)) {
+        let locationManager = LocationManager.shared
+        
+        if locationManager.isLocationServicesEnabled() {
+            locationManager.getCurrentLocation { result in
+                DispatchQueue.main.async {
+                    switch result {
+                    case .success(let location):
+                        print("Location fetched: \(location.coordinate.latitude), \(location.coordinate.longitude)")
+                        complition(true)
+                    case .failure(let error):
+                        print("Error fetching location: \(error.localizedDescription)")
+                        if LocationManager.shared.isLocationSetNotNow == true{
+                            complition(false)
+                        }else{
+                            let vc = DeletePostVC.instantiate(fromStoryboard: .Sell)
+                            vc.modalPresentationStyle = .overFullScreen
+                            vc.modalTransitionStyle = .crossDissolve
+                            vc.isCancelHide = false
+                            vc.deleteTitle = "Allow Access"
+                            vc.cancelTitle = "Not Now"
+                            vc.deleteBgColor = .black
+                            vc.titleMain = "Turn on Location"
+                            vc.subTitle = " Location services are required to provide the best experience on Clothing Click. Please enable them in your device settings"
+                            vc.imgMain = UIImage(named: "ic_location_big")
+                            vc.deleteOnTap = {
+                                LocationManager.shared.openSettings()
+                            }
+                            vc.cancelOnTap = {
+                                LocationManager.shared.isLocationSetNotNow = true
+                                complition(false)
+                            }
+                            self.present(vc, animated: true)
+                        }
+                        
+                    }
+                }
+            }
+        } else {
+            print("Location services are disabled")
+            showLocationErrorAlert(error: LocationManager.LocationError.servicesDisabled)
+        }
+    }
+    
+    private func showLocationErrorAlert(error: Error) {
+        let alert = UIAlertController(
+            title: "Location Error",
+            message: error.localizedDescription,
+            preferredStyle: .alert
+        )
+        
+        alert.addAction(UIAlertAction(title: "Open Settings", style: .default, handler: { _ in
+            LocationManager.shared.openSettings()
+        }))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        
+        present(alert, animated: true, completion: nil)
     }
 }

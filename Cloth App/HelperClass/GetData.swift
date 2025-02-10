@@ -23,14 +23,6 @@ class GetData{
         return nil
     }
     
-    func convertDateFormat(date: String, getFormat:String, dateFormat: String) -> String{
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = dateFormat
-        let date = dateFormatter.date(from: date) ?? Date()
-        dateFormatter.dateFormat = getFormat
-        return dateFormatter.string(from: date)
-    }
-    
     func getTodayCloseTime(for timings: [String: [String: String]]) -> String? {
         let calendar = Calendar.current
         let weekday = calendar.component(.weekday, from: Date())  // Sunday = 1, Monday = 2, ..., Saturday = 7

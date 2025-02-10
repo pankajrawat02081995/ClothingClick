@@ -12,7 +12,7 @@ class CommonUtility{
     
     func callSettingApi(appDelegate:AppDelegate) {
         if appDelegate.reachable.connection != .unavailable {
-            APIManager().apiCall(of: GeneralSettingModel.self, isShowHud: true, URL: BASE_URL, apiName: APINAME.GET_GENERAL_DATA.rawValue, method: .get, parameters: [:]) { (response, error) in
+            APIManager().apiCall(of: GeneralSettingModel.self, isShowHud: false, URL: BASE_URL, apiName: APINAME.GET_GENERAL_DATA.rawValue, method: .get, parameters: [:]) { (response, error) in
                 if error == nil {
                     if let response = response {
                         if let generalSettingDetails = response.dictData {

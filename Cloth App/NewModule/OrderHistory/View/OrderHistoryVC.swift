@@ -76,7 +76,7 @@ extension OrderHistoryVC:UITableViewDelegate,UITableViewDataSource{
         let vc = OrderProductDetailsVC.instantiate(fromStoryboard: .Sell)
         vc.orderID = self.viewModel?.modelData[indexPath.row].oderDetails?.id ?? 0
         debugPrint(self.viewModel?.modelData[indexPath.row].oderDetails?.type_of_order)
-        vc.isShip = self.viewModel?.modelData[indexPath.row].oderDetails?.type_of_order ?? 0 == 1 ? true : false
+        vc.isShip = self.viewModel?.modelData[indexPath.row].oderDetails?.type_of_order ?? "" == "1" ? true : false
         self.pushViewController(vc: vc)
     }
 }

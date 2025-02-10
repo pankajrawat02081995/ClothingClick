@@ -19,21 +19,23 @@ class LandingVC: BaseViewController {
     }
 
     @IBAction func menswearOnPress(_ sender: UIButton) {
-//        let vc = ClothPreferencesViewController.instantiate(fromStoryboard: .Main)
-//        self.pushViewController(vc: vc)
-        self.navigateToLoginScreen()
+        let vc = ClothPreferencesViewController.instantiate(fromStoryboard: .Main)
+        vc.selectGengerIndex = 0
+        self.pushViewController(vc: vc)
+//        self.navigateToLoginScreen()
     }
     
     @IBAction func womenswearOnPress(_ sender: UIButton) {
-//        let vc = ClothPreferencesViewController.instantiate(fromStoryboard: .Main)
-//        self.pushViewController(vc: vc)
-        self.navigateToLoginScreen()
+        let vc = ClothPreferencesViewController.instantiate(fromStoryboard: .Main)
+        vc.selectGengerIndex = 1
+        self.pushViewController(vc: vc)
+//        self.navigateToLoginScreen()
     }
     
     @IBAction func bothOnPress(_ sender: UIButton) {
         let vc = ClothPreferencesViewController.instantiate(fromStoryboard: .Main)
         self.pushViewController(vc: vc)
-        self.navigateToLoginScreen()
+//        self.navigateToLoginScreen()
 //        let vc = LoginVC.instantiate(fromStoryboard: .Auth)
 //        self.present(vc, animated: true)
     }
@@ -42,7 +44,7 @@ class LandingVC: BaseViewController {
 extension LandingVC{
     func callGeneralSettingWithAccessCodeScreenAPI() {
         if appDelegate.reachable.connection != .none {
-            APIManager().apiCall(of: GeneralSettingModel.self, isShowHud: true, URL: BASE_URL, apiName: APINAME.GET_GENERAL_DATA.rawValue, method: .get, parameters: [:]) { (response, error) in
+            APIManager().apiCall(of: GeneralSettingModel.self, isShowHud: false, URL: BASE_URL, apiName: APINAME.GET_GENERAL_DATA.rawValue, method: .get, parameters: [:]) { (response, error) in
                 if error == nil {
                     if let response = response {
                         if let generalSettingDetails = response.dictData {

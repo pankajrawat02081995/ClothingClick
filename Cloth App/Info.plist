@@ -24,6 +24,14 @@
 	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleURLTypes</key>
 	<array>
+        <dict>
+               <key>CFBundleURLName</key>
+               <string>com.clothingclick.app</string>
+               <key>CFBundleURLSchemes</key>
+               <array>
+                   <string>clothingclick</string>
+               </array>
+           </dict>
 		<dict>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
@@ -106,6 +114,7 @@
 		<string>fbauth2</string>
 		<string>mailto</string>
 		<string>fbapi</string>
+        <string>clothingclick</string>
 		<string>fb-messenger-share-api</string>
 	</array>
 	<key>LSRequiresIPhoneOS</key>

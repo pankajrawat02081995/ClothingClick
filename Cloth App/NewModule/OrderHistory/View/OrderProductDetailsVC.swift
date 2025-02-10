@@ -14,7 +14,6 @@ class OrderProductDetailsVC: UIViewController {
     var orderID : Int?
     var isShip : Bool?
     var isAfterBuy : Bool?
-    
     @IBOutlet weak var lblPickupOrderNumber: UILabel!
     @IBOutlet weak var pickupView: UIView!
     @IBOutlet weak var lblMainTitle: UILabel!
@@ -87,28 +86,28 @@ class OrderProductDetailsVC: UIViewController {
             self.lblDelivedTitle.text = "Pickup"
         }
         
-        self.lbltaxes.text = "$\(model.oderDetails?.tax ?? 0.0)"
+        self.lbltaxes.text = "$\(model.oderDetails?.tax ?? "")"
         self.lblItemPrice.text = "$\(model.product?.price ?? "")"
-        self.lblTotalPrice.text = "$\(model.oderDetails?.total ?? 0)"
+        self.lbltaxes.text = "$\(model.oderDetails?.total ?? "")"
         self.lblShippingCharge.text = self.isShip == true ? "$0.0" : "Free (Pickup)"
         self.lblOrderNumber.text = "\(model.oderDetails?.id ?? 0)"
         self.lblPickupOrderNumber.text = "\(model.oderDetails?.id ?? 0)"
         self.lblSallerUserName.text = model.sellerDetails?.name ?? ""
         self.lblStoreName.text = model.sellerDetails?.name ?? ""
-        self.lblProductPriceWithMethod.text = "$\(model.oderDetails?.total ?? 0) with \(model.oderDetails?.payment_mode ?? "")"
+        self.lblProductPriceWithMethod.text = "$\(model.oderDetails?.total ?? "") with \(model.oderDetails?.payment_mode ?? "")"
         self.lblShipAddress.text = model.shipping_address?.address1 ?? ""
         self.lblShippingAddress.text = model.shipping_address?.address1 ?? ""
         
         //Shipped 2-21-2024
-        self.lblShipDate.text = "\(model.oderDetails?.status ?? "") \(GetData.shared.convertDateFormat(date: model.shipping_address?.createdAt ?? "", getFormat: "MMM dd", dateFormat: "yyyy-MM-dd'T'HH:mm:ss.000000Z"))"
+        self.lblShipDate.text = model.shipping_address?.createdAt ?? ""
         //Shipped On 2-21-2024
-        self.lblShippingDate.text = "\(model.oderDetails?.status ?? "") on \(GetData.shared.convertDateFormat(date: model.shipping_address?.createdAt ?? "", getFormat: "MMM dd", dateFormat: "yyyy-MM-dd'T'HH:mm:ss.000000Z"))"
+        self.lblShippingDate.text = model.shipping_address?.createdAt ?? ""
         
         //Shipped: December 21
-        self.lblShipDateWithMonth.text = "\(model.oderDetails?.status ?? ""): \(GetData.shared.convertDateFormat(date: model.shipping_address?.createdAt ?? "", getFormat: "MMM dd", dateFormat: "yyyy-MM-dd'T'HH:mm:ss.000000Z"))"
-       
+        self.lblShipDateWithMonth.text = model.shipping_address?.createdAt ?? ""
+        
         //Purchased on 2-24-2024
-        self.lblPurchsedDate.text = "\(model.oderDetails?.status ?? "") on \(GetData.shared.convertDateFormat(date: model.shipping_address?.createdAt ?? "", getFormat: "MMM dd", dateFormat: "yyyy-MM-dd'T'HH:mm:ss.000000Z"))"
+        self.lblPurchsedDate.text = "Purchased on \(model.shipping_address?.createdAt ?? "")"
         
         if let imge = URL.init(string: model.product?.images?.first?.image ?? ""){
             self.imgProduct.kf.setImage(with: imge,placeholder: PlaceHolderImage)

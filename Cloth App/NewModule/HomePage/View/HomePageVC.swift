@@ -7,6 +7,7 @@
 
 import UIKit
 import IBAnimatable
+import CoreLocation
 
 class HomePageVC: BaseViewController {
     
@@ -18,29 +19,40 @@ class HomePageVC: BaseViewController {
     var viewModel = HomePageViewModel()
     var sort_by = "date"
     var sort_value = "desc"
-    let customTransitioningDelegate = CustomTransitioningDelegate()
     
     var catSelectedIndex : Int?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(self.deepLinkNavigate(_:)), name: NSNotification.Name(rawValue: "deeplinknavigate"), object: nil)
+
+        
         self.viewModel.view = self
         self.setupCollectionView()
         self.viewModel.callCategoryList()
     }
+    
+    @objc func deepLinkNavigate(_ notification: NSNotification) {
+        DeepLinknaviget()
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         self.navigationController?.navigationBar.isHidden = true
         self.navigationController?.setNavigationBarHidden(false, animated: animated)
-        self.checkAndFetchLocation { status in
+        self.checkAndFetchLocation { city,status in
             if status{
-                self.viewModel.page = 1
-                self.viewModel.getAllProduct(isShowHud: true,cat_id: self.catSelectedIndex != nil ? "\(self.viewModel.categoriesList[self.catSelectedIndex ?? 0].id ?? 0)" : "")
-                self.productCollectionView.reloadData()
-                if self.viewModel.posts.count > 0 {
-                    self.productCollectionView.scrollToItem(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
+                if appDelegate.userDetails?.locations?.isEmpty == true{
+                    self.btnUserLocations.setTitle(city, for: .normal)
                 }
+            }
+            self.viewModel.page = 1
+            self.viewModel.getAllProduct(isShowHud: true,cat_id: self.catSelectedIndex != nil ? "\(self.viewModel.categoriesList[self.catSelectedIndex ?? 0].id ?? 0)" : "")
+            self.productCollectionView.reloadData()
+            if self.viewModel.posts.count > 0 {
+                self.productCollectionView.scrollToItem(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
             }
         }
         
@@ -50,7 +62,31 @@ class HomePageVC: BaseViewController {
         }
     }
     
-    private func checkAndFetchLocation(complition:@escaping((Bool) -> Void?)) {
+    private func getCityOrState(from latitude: Double, longitude: Double, completion: @escaping (Result<String, Error>) -> Void) {
+            let geocoder = CLGeocoder()
+            let location = CLLocation(latitude: latitude, longitude: longitude)
+            
+            geocoder.reverseGeocodeLocation(location) { placemarks, error in
+                if let error = error {
+                    completion(.failure(error))
+                    return
+                }
+                
+                guard let placemark = placemarks?.first else {
+                    completion(.failure(NSError(domain: "LocationError", code: 404, userInfo: [NSLocalizedDescriptionKey: "No location data found."])))
+                    return
+                }
+                
+                if let city = placemark.locality {
+                    completion(.success(city))
+                } else if let state = placemark.administrativeArea {
+                    completion(.success(state))
+                } else {
+                    completion(.failure(NSError(domain: "LocationError", code: 404, userInfo: [NSLocalizedDescriptionKey: "City and state not found."])))
+                }
+            }
+        }
+    private func checkAndFetchLocation(complition:@escaping((String,Bool) -> Void?)) {
         let locationManager = LocationManager.shared
         
         if locationManager.isLocationServicesEnabled() {
@@ -59,23 +95,40 @@ class HomePageVC: BaseViewController {
                     switch result {
                     case .success(let location):
                         print("Location fetched: \(location.coordinate.latitude), \(location.coordinate.longitude)")
-                        complition(true)
+//                        complition(true)
+                        self.getCityOrState(from: location.coordinate.latitude, longitude: location.coordinate.longitude) { result in
+                            switch result {
+                               case .success(let location):
+                                   print("Location: \(location)")
+                                complition(location,true)
+                               case .failure(let error):
+                                   print("Error: \(error.localizedDescription)")
+                               }
+                        }
                     case .failure(let error):
                         print("Error fetching location: \(error.localizedDescription)")
-                        //                        self.showLocationErrorAlert(error: error)
-                        let vc = DeletePostVC.instantiate(fromStoryboard: .Sell)
-                        vc.modalPresentationStyle = .overFullScreen
-                        vc.modalTransitionStyle = .crossDissolve
-                        vc.isCancelHide = true
-                        vc.deleteTitle = "Allow Access"
-                        vc.deleteBgColor = .black
-                        vc.titleMain = "Turn on Location"
-                        vc.subTitle = " Turn on your device location services to use Clothing Click."
-                        vc.imgMain = UIImage(named: "ic_location_big")
-                        vc.deleteOnTap = {
-                            LocationManager.shared.openSettings()
+                        if LocationManager.shared.isLocationSetNotNow == true{
+                            complition("",false)
+                        }else{
+                            let vc = DeletePostVC.instantiate(fromStoryboard: .Sell)
+                            vc.modalPresentationStyle = .overFullScreen
+                            vc.modalTransitionStyle = .crossDissolve
+                            vc.isCancelHide = false
+                            vc.deleteTitle = "Allow Access"
+                            vc.cancelTitle = "Not Now"
+                            vc.deleteBgColor = .black
+                            vc.titleMain = "Turn on Location"
+                            vc.subTitle = " Location services are required to provide the best experience on Clothing Click. Please enable them in your device settings"
+                            vc.imgMain = UIImage(named: "ic_location_big")
+                            vc.deleteOnTap = {
+                                LocationManager.shared.openSettings()
+                            }
+                            vc.cancelOnTap = {
+                                LocationManager.shared.isLocationSetNotNow = true
+                                complition("",false)
+                            }
+                            self.present(vc, animated: true)
                         }
-                        self.present(vc, animated: true)
                         
                     }
                 }
@@ -132,12 +185,20 @@ class HomePageVC: BaseViewController {
     }
     
     @IBAction func locationOnPress(_ sender: UIButton) {
+        if appDelegate.userDetails == nil {
+            self.showLogIn()
+            return
+        }
         let vc = MapLocationVC.instantiate(fromStoryboard: .Dashboard)
         vc.hidesBottomBarWhenPushed = true
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
     @IBAction func notificationOnPress(_ sender: UIButton) {
+        if appDelegate.userDetails == nil {
+            self.showLogIn()
+            return
+        }
         let vc = NotificationsViewController.instantiate(fromStoryboard: .Main)
         vc.hidesBottomBarWhenPushed = true
         self.navigationController?.pushViewController(vc, animated: true)
@@ -145,6 +206,10 @@ class HomePageVC: BaseViewController {
     }
     
     @objc func btnWatch_Clicked(_ sender: AnyObject) {
+        if appDelegate.userDetails == nil {
+            self.showLogIn()
+            return
+        }
         let poston = sender.convert(CGPoint.zero, to: self.productCollectionView)
         if let indexPath = self.productCollectionView.indexPathForItem(at: poston) {
             let cell = self.productCollectionView.cellForItem(at: indexPath) as! HomePageBrowserXIB
@@ -249,19 +314,21 @@ extension HomePageVC:CollectionViewDelegateAndDataSource{
             vc.hidesBottomBarWhenPushed =  self.viewModel.posts[indexPath.item].user_id ?? 0 == appDelegate.userDetails?.id
             self.pushViewController(vc: vc)
         }else{
-            self.checkAndFetchLocation { status in
+            self.checkAndFetchLocation { city,status in
                 if status{
-                    self.viewModel.page = 1
-                    if indexPath.item == self.catSelectedIndex{
-                        self.catSelectedIndex = nil
-                        self.viewModel.getAllProduct(isShowHud: true,cat_id: "")
-                    }else{
-                        self.viewModel.getAllProduct(isShowHud: true,cat_id: "\(self.viewModel.categoriesList[indexPath.item].id ?? 0)")
-                        
-                        self.catSelectedIndex = indexPath.item
+                    if appDelegate.userDetails?.locations?.isEmpty == true{
+                        self.btnUserLocations.setTitle(city, for: .normal)
                     }
-                    self.catCollectionView.reloadData()
                 }
+                self.viewModel.page = 1
+                if indexPath.item == self.catSelectedIndex{
+                    self.catSelectedIndex = nil
+                    self.viewModel.getAllProduct(isShowHud: true,cat_id: "")
+                }else{
+                    self.viewModel.getAllProduct(isShowHud: true,cat_id: "\(self.viewModel.categoriesList[indexPath.item].id ?? 0)")
+                    self.catSelectedIndex = indexPath.item
+                }
+                self.catCollectionView.reloadData()
             }
         }
     }

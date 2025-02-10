@@ -73,7 +73,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
         DispatchQueue.global(qos: .background).async {
-            sleep(1)
+            sleep(UInt32(0.1))
         }
         
         
@@ -89,17 +89,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         GMSServices.provideAPIKey(googleAPIKey)
         
         IQKeyboardManager.shared.isEnabled = true
-        IQKeyboardManager.shared.enableAutoToolbar = true
-      //  IQKeyboardManager.shared.toolbarConfiguration.tintColor = UIColor().alertButtonColor
-        self.locationManager.requestAlwaysAuthorization()
-        // For use in foreground
-        self.locationManager.requestWhenInUseAuthorization()
+        IQKeyboardManager.shared.toolbarConfiguration.tintColor = UIColor().alertButtonColor
         
-        if CLLocationManager.locationServicesEnabled() {
-            locationManager.delegate = self
-            locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
-            locationManager.startUpdatingLocation()
-        }
+        
         UITextField.appearance().tintColor = UIColor().alertButtonColor
         UITextView.appearance().tintColor = UIColor().alertButtonColor
         UITextView.appearance().linkTextAttributes = [.foregroundColor: UIColor().alertButtonColor]
@@ -141,6 +133,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                 }
             }
             if defaults.value(forKey: kLoginUserList) != nil{
+                self.locationManager.requestAlwaysAuthorization()
+                // For use in foreground
+                self.locationManager.requestWhenInUseAuthorization()
+                
+                if CLLocationManager.locationServicesEnabled() {
+                    locationManager.delegate = self
+                    locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
+                    locationManager.startUpdatingLocation()
+                }
                 DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.2) {
                     BaseViewController.sharedInstance.autoLogin()
                     //BaseViewController.sharedInstance.navigateToHomeScreen()

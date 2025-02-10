@@ -8,7 +8,7 @@
 import UIKit
 import IBAnimatable
 
-class NewPasswordVC: UIViewController {
+class NewPasswordVC: BaseViewController {
 
     @IBOutlet weak var btnNext: CustomButton!
     @IBOutlet weak var txtNewPassowrd: AnimatableTextField!

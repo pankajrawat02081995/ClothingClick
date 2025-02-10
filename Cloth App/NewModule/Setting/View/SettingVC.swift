@@ -8,13 +8,14 @@
 import UIKit
 import ObjectMapper
 import MessageUI
+import FBSDKLoginKit
 
 class SettingVC: BaseViewController {
     
     @IBOutlet weak var tableView: UITableView!
     
-    
-    var setting = [["Header":" Link To Social Accounts","rows":[["img":"ic_insta","title":"Link your Instagram account","subtitle":""],["img":"ic_fb","title":"Link your Facebook account","subtitle":""]]],
+//    ["img":"ic_insta","title":"Link your Instagram account","subtitle":""],
+    var setting = [["Header":" Link To Social Accounts","rows":[["img":"ic_fb","title":"Link your Facebook account","subtitle":""]]],
                    ["Header":" More","rows":[
                     ["img":"ic_invite","title":"Invite Friends","subtitle":""],
                     ["img":"ic_black_heart","title":"Liked Products","subtitle":""],
@@ -138,8 +139,14 @@ extension SettingVC:UITableViewDelegate,UITableViewDataSource{
         let indexData = rowCount[indexPath.row]
         
         if indexData["title"] as? String ?? "" == "Change Password" {
-            let vc = NewChangePasswordVC.instantiate(fromStoryboard: .Auth)
+            let vc = NewPasswordVC.instantiate(fromStoryboard: .Auth)
             self.pushViewController(vc: vc)
+        }else if indexData["title"] as? String ?? "" == "Link your Facebook account" {
+            if appDelegate.userDetails?.facebook_id ?? "" == "" || appDelegate.userDetails?.facebook_id == nil {
+                self.loginWithFacebook(isLink: true)
+            }else{
+                self.showRevokeAccessAlert(type: "facebook")
+            }
         }else if indexData["title"] as? String ?? "" == "Logout" {
             let alert: UIAlertController = UIAlertController.init(title: AlertViewTitle, message: "Are you sure you want to Logout?", preferredStyle: .alert)
             alert.setAlertButtonColor()
@@ -188,14 +195,14 @@ extension SettingVC:UITableViewDelegate,UITableViewDataSource{
             let alert: UIAlertController = UIAlertController.init(title: AlertViewTitle, message: "Are you sure you want to Delete account?", preferredStyle: .alert)
             alert.setAlertButtonColor()
             let yesAction: UIAlertAction = UIAlertAction.init(title: "Delete", style: .default, handler: { (action) in
-//                let vc = NewChangePasswordVC.instantiate(fromStoryboard: .Auth)
-//                vc.isDeleteAccountRequest = true
-//                vc.deleteResquestOtpVerify = { isDelete in
-//                    if isDelete{
-                       self.deleteUser()
-//                    }
-//                }
-//                self.pushViewController(vc: vc)
+                //                let vc = NewChangePasswordVC.instantiate(fromStoryboard: .Auth)
+                //                vc.isDeleteAccountRequest = true
+                //                vc.deleteResquestOtpVerify = { isDelete in
+                //                    if isDelete{
+                self.deleteUser()
+                //                    }
+                //                }
+                //                self.pushViewController(vc: vc)
                 
             })
             let noAction: UIAlertAction = UIAlertAction.init(title: "Cancel", style: .default, handler: { (action) in
@@ -205,6 +212,38 @@ extension SettingVC:UITableViewDelegate,UITableViewDataSource{
             self.present(alert, animated: true, completion: nil)
         }
         
+    }
+    
+    func showRevokeAccessAlert(type:String) {
+        // Create the alert controller
+        let alertController = UIAlertController(title: "Revoke Access",
+                                                message: "Do you want to revoke access for \(type)?",
+                                                preferredStyle: .alert)
+        
+        // Create the "Revoke Access" action
+        let revokeAction = UIAlertAction(title: "Revoke Access", style: .destructive) { _ in
+            // Call the function to revoke access from both Facebook and Instagram
+            if type.lowercased() == "facebook"{
+                LoginManager().logOut()
+                appDelegate.userDetails?.facebook_id = ""
+            }else{
+                appDelegate.userDetails?.instagram_id = ""
+            }
+            
+            //            self.callUpdetUserProfile(isRevoke: true)
+        }
+        
+        // Create the "Cancel" action
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        
+        // Add the actions to the alert controller
+        alertController.addAction(revokeAction)
+        alertController.addAction(cancelAction)
+        
+        // Present the alert controller (you need to present this from a view controller)
+        if let topController = UIApplication.shared.keyWindow?.rootViewController {
+            topController.present(alertController, animated: true, completion: nil)
+        }
     }
 }
 
@@ -281,44 +320,42 @@ extension SettingVC{
         if appDelegate.reachable.connection != .none {
             APIManager().apiCallWithMultipart(of: UserDetailsModel.self, isShowHud: true, URL: BASE_URL, apiName: APINAME.DELETE_ACCOUNT.rawValue, parameters: [:]) { (response, error) in
                 if error == nil {
-//                    if isAll == "0" {
-                         var arrTemp = [[String:Any]]()
-                        if defaults.value(forKey: kLoginUserList) != nil {
-                            if var arr = defaults.value(forKey: kLoginUserList) as? [[String:Any]], arr.count > 0 {
-                                var isRemove = false
-                                var index = -1
-                                for i in 0..<arr.count {
-                                    let dict = arr[i]
-                                    
-                                    if let id = dict["id"] as? Int, id == appDelegate.userDetails?.id {
-                                        isRemove = true
-                                        index = i
-                                    }
-                                }
-                                arr.remove(at: index)
-                                arrTemp = arr
-                                defaults.set(arrTemp, forKey: kLoginUserList)
-                                defaults.synchronize()
-                                if arrTemp.count > 0 {
-                                    self.saveUserDetails(userDetails: Mapper<UserDetailsModel>().map(JSON: arrTemp[0])!)
-                                    self.navigateToHomeScreen()
-                                }
-                                else{
-//                                    GIDSignIn.sharedInstance.signOut()
-                                    self.clearAllUserDataFromPreference()
-                                    self.navigateToWelconeScreen()
-                                }
-                            }
-                        }
-                        else{
-                            self.clearAllUserDataFromPreference()
-                            self.navigateToLoginScreen()
-                        }
+                    self.clearAllUserDataFromPreference()
+                    self.navigateToWelconeScreen()
+                    //                    if isAll == "0" {
+                    var arrTemp = [[String:Any]]()
+//                    if defaults.value(forKey: kLoginUserList) != nil {
+//                        if var arr = defaults.value(forKey: kLoginUserList) as? [[String:Any]], arr.count > 0 {
+//                            var isRemove = false
+//                            var index = -1
+//                            for i in 0..<arr.count {
+//                                let dict = arr[i]
+//                                
+//                                if let id = dict["id"] as? Int, id == appDelegate.userDetails?.id {
+//                                    isRemove = true
+//                                    index = i
+//                                }
+//                            }
+//                            arr.remove(at: index)
+//                            arrTemp = arr
+//                            defaults.set(arrTemp, forKey: kLoginUserList)
+//                            defaults.synchronize()
+//                            if arrTemp.count > 0 {
+//                                self.saveUserDetails(userDetails: Mapper<UserDetailsModel>().map(JSON: arrTemp[0])!)
+//                                self.navigateToHomeScreen()
+//                            }
+//                            else{
+//                                //                                    GIDSignIn.sharedInstance.signOut()
+//                                self.clearAllUserDataFromPreference()
+//                                self.navigateToWelconeScreen()
+//                            }
+//                        }
 //                    }
 //                    else{
 //                        self.clearAllUserDataFromPreference()
-//                        self.navigateToWelconeScreen()
+//                        self.navigateToLoginScreen()
 //                    }
+                    
                 }
                 else {
                     UIAlertController().alertViewWithTitleAndMessage(self, message: error!.domain)
@@ -335,46 +372,46 @@ extension SettingVC{
                          "is_all" : isAll]
             APIManager().apiCallWithMultipart(of: UserDetailsModel.self, isShowHud: true, URL: BASE_URL, apiName: APINAME.LOGOUT.rawValue, parameters: param) { (response, error) in
                 if error == nil {
-//                    if isAll == "0" {
-//                        var arrTemp = [[String:Any]]()
-//                        if defaults.value(forKey: kLoginUserList) != nil {
-//                            if var arr = defaults.value(forKey: kLoginUserList) as? [[String:Any]], arr.count > 0 {
-//                                var isRemove = false
-//                                var index = -1
-//                                for i in 0..<arr.count {
-//                                    let dict = arr[i]
-//                                    if let id = dict["id"] as? Int, id == appDelegate.userDetails?.id {
-//                                        isRemove = true
-//                                        index = i
-//                                    }
-//                                }
-//                                arr.remove(at: index)
-//                                arrTemp = arr
-//                                defaults.set(arrTemp, forKey: kLoginUserList)
-//                                defaults.synchronize()
-//                                if arrTemp.count > 0 {
-//                                    self.saveUserDetails(userDetails: Mapper<UserDetailsModel>().map(JSON: arrTemp[0])!)
-//                                    self.navigateToHomeScreen()
-//                                }
-//                                else{
-//                                    //                                    GIDSignIn.sharedInstance.signOut()
-//                                    self.clearAllUserDataFromPreference()
-//                                    self.navigateToWelconeScreen()
-//                                }
-//                            }
-//                        }
-//                        else{
-//                            self.clearAllUserDataFromPreference()
-//                            self.navigateToLoginScreen()
-//                        }
-//                    }
-//                    else{
-                        self.clearAllUserDataFromPreference()
-//                        self.navigateToWelconeScreen()
-                    let vc =  WelcomeViewController.instantiate(fromStoryboard: .Main)
+                    //                    if isAll == "0" {
+                    //                        var arrTemp = [[String:Any]]()
+                    //                        if defaults.value(forKey: kLoginUserList) != nil {
+                    //                            if var arr = defaults.value(forKey: kLoginUserList) as? [[String:Any]], arr.count > 0 {
+                    //                                var isRemove = false
+                    //                                var index = -1
+                    //                                for i in 0..<arr.count {
+                    //                                    let dict = arr[i]
+                    //                                    if let id = dict["id"] as? Int, id == appDelegate.userDetails?.id {
+                    //                                        isRemove = true
+                    //                                        index = i
+                    //                                    }
+                    //                                }
+                    //                                arr.remove(at: index)
+                    //                                arrTemp = arr
+                    //                                defaults.set(arrTemp, forKey: kLoginUserList)
+                    //                                defaults.synchronize()
+                    //                                if arrTemp.count > 0 {
+                    //                                    self.saveUserDetails(userDetails: Mapper<UserDetailsModel>().map(JSON: arrTemp[0])!)
+                    //                                    self.navigateToHomeScreen()
+                    //                                }
+                    //                                else{
+                    //                                    //                                    GIDSignIn.sharedInstance.signOut()
+                    //                                    self.clearAllUserDataFromPreference()
+                    //                                    self.navigateToWelconeScreen()
+                    //                                }
+                    //                            }
+                    //                        }
+                    //                        else{
+                    //                            self.clearAllUserDataFromPreference()
+                    //                            self.navigateToLoginScreen()
+                    //                        }
+                    //                    }
+                    //                    else{
+                    self.clearAllUserDataFromPreference()
+                    //                        self.navigateToWelconeScreen()
+                    let vc =  LandingVC.instantiate(fromStoryboard: .Landing)
                     vc.hidesBottomBarWhenPushed = true
                     self.navigationController?.setViewControllers([vc], animated: true)
-//                    }
+                    //                    }
                 }
                 else {
                     UIAlertController().alertViewWithTitleAndMessage(self, message: error!.domain)

@@ -30,11 +30,11 @@ struct OrderDetails:Mappable{
     var seller_id : String?
     var buyer_id : String?
     var product_id : String?
-    var tax : Float?
-    var total : Int?
+    var tax : String?
+    var total : String?
     var payment_mode : String?
     var transaction_id : String?
-    var type_of_order : Int?
+    var type_of_order : String?
     var status : String?
     var shipping_address_id : String?
     var created_at : String?

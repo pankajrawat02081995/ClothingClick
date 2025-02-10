@@ -24,15 +24,16 @@ import SafariServices
 import GoogleSignIn
 import AuthenticationServices
 import libPhoneNumber_iOS
+import IQKeyboardManagerSwift
 
 class BaseViewController: UIViewController, UINavigationBarDelegate {
     
     static let sharedInstance = BaseViewController()
-    
+    let customTransitioningDelegate = CustomTransitioningDelegate()
     let phoneNumberUtil = NBPhoneNumberUtil.sharedInstance()
     let storyBoard = UIStoryboard(name: "Main", bundle: nil)
     var metaDataDict = [String: LPLinkMetadata]()
-
+    
     @IBOutlet weak var navBar: UINavigationBar!
     
     let googleSignin    = GoogleLoginIntegration.shared
@@ -45,6 +46,8 @@ class BaseViewController: UIViewController, UINavigationBarDelegate {
     var accesscodeNew = ""
     override func viewDidLoad() {
         super.viewDidLoad()
+        IQKeyboardManager.shared.isEnabled = true
+        IQKeyboardManager.shared.enableAutoToolbar = true
         
         if #available(iOS 13.0, *) {
             overrideUserInterfaceStyle = .light
@@ -53,12 +56,92 @@ class BaseViewController: UIViewController, UINavigationBarDelegate {
         }
     }
     
+    func callGetOtherUserDetailsForDeeplink(userId : String) {
+        if appDelegate.userDetails == nil{
+            return
+        }
+        if appDelegate.reachable.connection != .none {
+            
+            let param = ["username":  userId
+            ]
+            APIManager().apiCall(of:OtherUserDetailsModel.self, isShowHud: false, URL: BASE_URL, apiName: APINAME.OTHER_USER_DETAILS.rawValue, method: .post, parameters: param) { [self] (response, error) in
+                if error == nil {
+                    if let response = response {
+                        if let data = response.dictData {
+                            let otherUserDetailsData = data
+                            if let seller = otherUserDetailsData.role_id {
+                                if seller == 1 {
+                                    let viewController = self.storyBoard.instantiateViewController(withIdentifier: "OtherUserProfileViewController") as! OtherUserProfileViewController
+                                    viewController.userId = String(otherUserDetailsData.id ?? 0)
+                                    self.navigationController?.pushViewController(viewController, animated: true)
+                                }
+                                else if seller == 2{
+                                    let viewController = self.storyBoard.instantiateViewController(withIdentifier: "StoreProfileViewController") as! StoreProfileViewController
+                                    viewController.userId = String(otherUserDetailsData.id ?? 0)
+                                    self.navigationController?.pushViewController(viewController, animated: true)
+                                }
+                                else {
+                                    let viewController = self.storyBoard.instantiateViewController(withIdentifier: "BrandProfileViewController") as! BrandProfileViewController
+                                    viewController.userId = String(otherUserDetailsData.id ?? 0)
+                                    self.navigationController?.pushViewController(viewController, animated: true)
+                                }
+                            }
+                            self.deeplinkClear()
+                        }
+                    }
+                }
+                else {
+                    BaseViewController.sharedInstance.showAlertWithTitleAndMessage(title: AlertViewTitle, message: ErrorMessage)
+                }
+            }
+        }
+        else {
+            BaseViewController.sharedInstance.showAlertWithTitleAndMessage(title: AlertViewTitle, message: NoInternet)
+        }
+    }
+    
+    func DeepLinknaviget(){
+        if appDelegate.deeplinkurltype != "" && appDelegate.deeplinkid != "" {
+            if appDelegate.deeplinkurltype == "post"{
+                let vc = OtherPostDetailsVC.instantiate(fromStoryboard: .Sell)
+                vc.postId = appDelegate.deeplinkid
+                vc.hidesBottomBarWhenPushed = true
+                self.pushViewController(vc: vc)
+            }else{ //user side
+                if appDelegate.deeplinkid == String(appDelegate.userDetails?.username ?? "") {
+                    self.navigateToHomeScreen(selIndex: 4)
+                    self.deeplinkClear()
+                }
+                else {
+                    self.callGetOtherUserDetailsForDeeplink(userId: self.sanitizeDeeplinkID(appDelegate.deeplinkid))
+                }
+                
+            }
+        }
+    }
+    
+    func sanitizeDeeplinkID(_ id: String?) -> String {
+        guard let id = id else { return "" }
+        return id.hasPrefix("@") ? String(id.dropFirst()) : id
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
     
     func position(for bar: UIBarPositioning) -> UIBarPosition {
         return .topAttached
+    }
+    
+    func showLogIn(){
+        let vc = LoginVC.instantiate(fromStoryboard: .Auth)
+        vc.modalPresentationStyle = .custom
+        vc.transitioningDelegate = customTransitioningDelegate
+        vc.pushView = { vc in
+            vc.hidesBottomBarWhenPushed = true
+            self.pushViewController(vc: vc)
+        }
+        self.present(vc, animated: true, completion: nil)
     }
     
     //MARK: - Common Method -
@@ -184,9 +267,9 @@ class BaseViewController: UIViewController, UINavigationBarDelegate {
     
     
     func getOSInfo() -> String {
-            let os = ProcessInfo().operatingSystemVersion
-            return String(os.majorVersion) + "." + String(os.minorVersion) + "." + String(os.patchVersion)
-        }
+        let os = ProcessInfo().operatingSystemVersion
+        return String(os.majorVersion) + "." + String(os.minorVersion) + "." + String(os.patchVersion)
+    }
     
     func saveUserDetails(userDetails: UserDetailsModel) {
         var userDetails = userDetails
@@ -232,7 +315,7 @@ class BaseViewController: UIViewController, UINavigationBarDelegate {
             appDelegate.headerToken = token
             defaults.set(appDelegate.headerToken, forKey: kHeaderToken)
         }
-     
+        
         let data = NSKeyedArchiver.archivedData(withRootObject: userDetails.toJSONString()!)
         defaults.set(data, forKey: kUserDetails)
         defaults.synchronize()
@@ -241,7 +324,7 @@ class BaseViewController: UIViewController, UINavigationBarDelegate {
             appDelegate.headerToken = defaults.value(forKey: kHeaderToken) as! String
         }
     }
-
+    
     func clearAllUserDataFromPreference() {
         appDelegate.headerToken = ""
         appDelegate.generalSettings = nil
@@ -250,7 +333,7 @@ class BaseViewController: UIViewController, UINavigationBarDelegate {
         //Logout From Facebook
         let loginManager = LoginManager()
         loginManager.logOut()
-       
+        
         let cookies = HTTPCookieStorage.shared
         let facebookCookies = cookies.cookies(for: URL(string: "https://facebook.com/")!)
         for cookie in facebookCookies! {
@@ -279,7 +362,7 @@ class BaseViewController: UIViewController, UINavigationBarDelegate {
         defaults.set(data, forKey:kGeneralSettingDetails)
         defaults.synchronize()
     }
-
+    
     
     func removeNullValueFromDict(dict : [String : AnyObject]) -> [String : AnyObject] {
         var dictAfterRemoveNull = dict
@@ -306,29 +389,29 @@ class BaseViewController: UIViewController, UINavigationBarDelegate {
     func startWithAuth (userData : UserDetailsModel) {
         self.callGeneralSettingAPI()
         
-        if userData.phone == "" || userData.phone == nil{
-            self.navigateToVerfyPhoneNo()
-        }
-//        else if userData.phone_verified_at == "" || userData.phone_verified_at == nil{
-//            self.navigateToVerfyPhoneNo()
-//        }
-//        else if userData.locations?.count == 0 || userData.locations == nil{
-//            self.navigateToLocation(rolId: String(userData.role_id!))
-//        }
-//        else if userData.gender_name == nil  {
-//            self.navigateToClothPreferece()
-//        }
-//        else if userData.user_size?.count == 0 {
-//            self.navigateToClothPreferece()
-//        }
-        else {
-            self.navigateToHomeScreen()
-        }
+        //        if userData.phone == "" || userData.phone == nil{
+        //            self.navigateToVerfyPhoneNo()
+        //        }
+        //        else if userData.phone_verified_at == "" || userData.phone_verified_at == nil{
+        //            self.navigateToVerfyPhoneNo()
+        //        }
+        //        else if userData.locations?.count == 0 || userData.locations == nil{
+        //            self.navigateToLocation(rolId: String(userData.role_id!))
+        //        }
+        //        else if userData.gender_name == nil  {
+        //            self.navigateToClothPreferece()
+        //        }
+        //        else if userData.user_size?.count == 0 {
+        //            self.navigateToClothPreferece()
+        //        }
+        //        else {
+        self.navigateToHomeScreen()
+        //        }
     }
     
     //MARK: - API Method -
     
-     func autoLogin() {
+    func autoLogin() {
         if appDelegate.reachable.connection != .none {
             
             APIManager().apiCall(of: UserDetailsModel.self, isShowHud: true, URL: BASE_URL, apiName: APINAME.AUTOLOGIN.rawValue, method: .get, parameters: [:]) { (response, error) in
@@ -349,7 +432,7 @@ class BaseViewController: UIViewController, UINavigationBarDelegate {
             BaseViewController.sharedInstance.showAlertWithTitleAndMessage(title: AlertViewTitle, message: NoInternet)
         }
     }
-   
+    
     func callGeneralSettingAPI() {
         if appDelegate.reachable.connection != .none {
             APIManager().apiCall(of: GeneralSettingModel.self, isShowHud: false, URL: BASE_URL, apiName: APINAME.GET_GENERAL_DATA.rawValue, method: .get, parameters: [:]) { (response, error) in
@@ -406,8 +489,8 @@ class BaseViewController: UIViewController, UINavigationBarDelegate {
         let passwordRegex = "^(?=.*[0-9])(?=.*[A-Z]).{8,}$"//"^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$"
         
         return NSPredicate(format: "SELF MATCHES %@", passwordRegex).evaluate(with: password)
-//        let passwordRegex = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$"
-//        return NSPredicate(format: "SELF MATCHES %@", passwordRegex).evaluate(with: password)
+        //        let passwordRegex = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$"
+        //        return NSPredicate(format: "SELF MATCHES %@", passwordRegex).evaluate(with: password)
     }
     
     func isStringEmpty(str : String) -> Bool {
@@ -420,7 +503,7 @@ class BaseViewController: UIViewController, UINavigationBarDelegate {
         let duration: CMTime = asset.duration
         return CMTimeGetSeconds(duration)
     }
-
+    
     func getDateInStringFromTimeInterval(timeStamp: String) -> String {
         let dateBooking = NSDate(timeIntervalSince1970: Double(timeStamp)! / 1000.0)
         let dateFormatter = DateFormatter()
@@ -514,16 +597,16 @@ class BaseViewController: UIViewController, UINavigationBarDelegate {
             return Date()
         }
     }
-     
+    
     func getDay( formDate: Date, toDate: Date) -> Int {
         let calendar = Calendar.current
-
+        
         let formDate = calendar.startOfDay(for: formDate)
         let toDate = calendar.startOfDay(for: toDate)
         let components = calendar.dateComponents([.day], from: formDate, to: toDate)
         return components.day ?? 0
     }
-
+    
     func pushToViewController(viewControllerIdentifier: String, withAnimation: Bool) {
         if let vc = self.storyBoard.instantiateViewController(withIdentifier: viewControllerIdentifier) as? UIViewController {
             if self.navigationController == nil {
@@ -573,7 +656,7 @@ class BaseViewController: UIViewController, UINavigationBarDelegate {
         navigationBar.shadowImage = UIImage()
         navigationBar.isTranslucent = true
     }
- 
+    
     func setNavigationBarShadow(navigationBar: UINavigationBar) {
         navigationBar.layer.shadowColor = UIColor.lightGray.cgColor
         navigationBar.layer.shadowOpacity = 0.5
@@ -608,15 +691,15 @@ class BaseViewController: UIViewController, UINavigationBarDelegate {
         self.navigationController?.popViewController(animated: true)
     }
     
-//    @IBAction func menuOpenClicked(_ sender: Any) {
-//        self.view.endEditing(true)
-//        self.slideMenuController()?.openLeft()
-//    }
+    //    @IBAction func menuOpenClicked(_ sender: Any) {
+    //        self.view.endEditing(true)
+    //        self.slideMenuController()?.openLeft()
+    //    }
     
-//    @IBAction func menuCloseClicked(_ sender: Any) {
-//        self.view.endEditing(true)
-//        self.slideMenuController()?.closeLeft()
-//    }
+    //    @IBAction func menuCloseClicked(_ sender: Any) {
+    //        self.view.endEditing(true)
+    //        self.slideMenuController()?.closeLeft()
+    //    }
     
     @IBAction func onHomeClicked(_ sender: Any) {
         self.view.endEditing(true)
@@ -633,7 +716,7 @@ class BaseViewController: UIViewController, UINavigationBarDelegate {
         navigationController.navigationBar.isHidden = true
         sceneDelegate.window?.rootViewController = navigationController
     }
-
+    
     
     func navigateToHomeScreen() {
         guard let sceneDelegate = UIApplication.shared.connectedScenes
@@ -650,7 +733,7 @@ class BaseViewController: UIViewController, UINavigationBarDelegate {
         sceneDelegate.window?.rootViewController = navigationController
         sceneDelegate.window?.makeKeyAndVisible()
     }
-
+    
     func navigateToClothPreferece() {
         let loginViewController = ClothPreferencesViewController.instantiate(fromStoryboard: .Main)
         let navigationController: UINavigationController = UINavigationController.init(rootViewController: loginViewController)
@@ -660,7 +743,7 @@ class BaseViewController: UIViewController, UINavigationBarDelegate {
     }
     func navigateToWelconeScreen() {
         // Instantiate the LandingVC from the Landing storyboard
-        let loginViewController = WelcomeViewController.instantiate(fromStoryboard: .Main)//LandingVC.instantiate(fromStoryboard: .Landing)
+        let loginViewController = LandingVC.instantiate(fromStoryboard: .Landing)
         
         // Initialize a UINavigationController with the loginViewController as the root
         let navigationController = UINavigationController(rootViewController: loginViewController)
@@ -675,7 +758,7 @@ class BaseViewController: UIViewController, UINavigationBarDelegate {
             window.makeKeyAndVisible()
         }
     }
-
+    
     func navigateToVerfyPhoneNo() {
         let loginViewController = MobileNumberVC.instantiate(fromStoryboard: .Auth)
         let navigationController: UINavigationController = UINavigationController.init(rootViewController: loginViewController)
@@ -760,7 +843,7 @@ class BaseViewController: UIViewController, UINavigationBarDelegate {
         }
     }
     
-   
+    
     func navigateToChatview(postId: Int,sendUserId:Int) {
         let viewController = MessagesViewController.instantiate(fromStoryboard: .Main)
         viewController.postId = "\(postId)"
@@ -773,7 +856,7 @@ class BaseViewController: UIViewController, UINavigationBarDelegate {
     }
     
     func navigateToClickCoinsView() {
-    let viewController = self.storyBoard.instantiateViewController(identifier: "ClickCoinsViewController") as! ClickCoinsViewController
+        let viewController = self.storyBoard.instantiateViewController(identifier: "ClickCoinsViewController") as! ClickCoinsViewController
         viewController.fromPushNotification = true
         let navigationController: UINavigationController = UINavigationController.init(rootViewController: viewController)
         navigationController.navigationBar.isTranslucent = false
@@ -781,7 +864,7 @@ class BaseViewController: UIViewController, UINavigationBarDelegate {
         sceneDelegate.window?.rootViewController = navigationController
     }
     func navigateToRatingView(postId: Int,sendUserId:Int) {
-    let viewController = NewRatingViewController.instantiate(fromStoryboard: .Setting)
+        let viewController = NewRatingViewController.instantiate(fromStoryboard: .Setting)
         viewController.fromPushNotification = true
         viewController.postId = "\(postId)"
         viewController.userId = "\(sendUserId)"
@@ -791,7 +874,7 @@ class BaseViewController: UIViewController, UINavigationBarDelegate {
         sceneDelegate.window?.rootViewController = navigationController
     }
     func navigateToNotificationlistView() {
-    let viewController = self.storyBoard.instantiateViewController(identifier: "NotificationsViewController") as! NotificationsViewController
+        let viewController = self.storyBoard.instantiateViewController(identifier: "NotificationsViewController") as! NotificationsViewController
         viewController.fromPushNotification = true
         let navigationController: UINavigationController = UINavigationController.init(rootViewController: viewController)
         navigationController.navigationBar.isTranslucent = false
@@ -912,42 +995,42 @@ class BaseViewController: UIViewController, UINavigationBarDelegate {
         return String(data: data, encoding: String.Encoding.utf8)
     }
     
-//    //Add Firebase Custome Event
-//    func addFirebaseCustomeEvent(eventName: String, param: [String: NSObject]) {
-//        //self.addFirebaseCustomeEvent(eventName: "HomeScreen", param: [:])
-//        Analytics.logEvent(eventName, parameters: param)
-//    }
+    //    //Add Firebase Custome Event
+    //    func addFirebaseCustomeEvent(eventName: String, param: [String: NSObject]) {
+    //        //self.addFirebaseCustomeEvent(eventName: "HomeScreen", param: [:])
+    //        Analytics.logEvent(eventName, parameters: param)
+    //    }
     
     func addFacebookEvent(eventName: AppEvents.Name, parameters: [String: Any]) {
         //let parameters = ["pageName": "pixo3"]
         //appDelegate.addFacebookEvent(eventName: AppEvents.Name(rawValue: "logPixoAppSubscriptionPageEvent"), parameters: parameters)
-        #if RELEASE
+#if RELEASE
         // Log Facebook Events
         Analytics.logEvent(eventName, parameters: parameters)
         // Log Firebase Events
         Analytics.logEvent(eventName.rawValue, parameters: parameters)
-        #endif
+#endif
     }
     
     //Open Safari ViewController
-        func openSafariViewController(strUrl: String) {
-            if strUrl.trim().isEmpty {
-                return
-            }
-            
-            var tmpStrUrl = strUrl
-            if !tmpStrUrl.lowercased().hasPrefix("http") {
-                tmpStrUrl = "http://" + tmpStrUrl
-            }
-            if let url = URL.init(string: tmpStrUrl) {
-                let svc = SFSafariViewController(url: url)
-                self.present(svc, animated: true, completion: nil)
-            }
-            else {
-                UIAlertController().alertViewWithTitleAndMessage(self, message: "Not a valid url")
-                print("Not a valid url")
-            }
+    func openSafariViewController(strUrl: String) {
+        if strUrl.trim().isEmpty {
+            return
         }
+        
+        var tmpStrUrl = strUrl
+        if !tmpStrUrl.lowercased().hasPrefix("http") {
+            tmpStrUrl = "http://" + tmpStrUrl
+        }
+        if let url = URL.init(string: tmpStrUrl) {
+            let svc = SFSafariViewController(url: url)
+            self.present(svc, animated: true, completion: nil)
+        }
+        else {
+            UIAlertController().alertViewWithTitleAndMessage(self, message: "Not a valid url")
+            print("Not a valid url")
+        }
+    }
 }
 
 extension BaseViewController{
@@ -992,11 +1075,11 @@ extension BaseViewController{
                 return
             }
             
-//             Handle vars
+            //             Handle vars
             if let result = result as? [String: Any] {
                 if let socialId = result["id"] as? String {
                     self.socialIdNew = socialId
-                    appDelegate.userDetails?.facebook_id = "100008293572085"
+                    appDelegate.userDetails?.facebook_id = socialId
                 }
                 
                 if let firstName = result["first_name"] as? String {
@@ -1022,7 +1105,7 @@ extension BaseViewController{
         googleSignin.closureDidGetUserDetails = { [weak self] user in
             guard let self else{return}
             print(user)
-//            complition(googleUser)
+            //            complition(googleUser)
             if let userId = user.userID {
                 self.socialIdNew = userId
             }
@@ -1040,7 +1123,7 @@ extension BaseViewController{
     }
     
     func loginWithApple(){
-
+        
         let appleIDProvider = ASAuthorizationAppleIDProvider()
         let request = appleIDProvider.createRequest()
         request.requestedScopes = [.fullName, .email]
@@ -1076,7 +1159,7 @@ extension BaseViewController{
                         }
                         else {
                             UIAlertController().alertViewWithTitleAndMessage(self, message: response.message ?? "")
-                           
+                            
                         }
                     }
                 }
