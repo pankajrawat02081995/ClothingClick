@@ -10,6 +10,9 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
+        <array key="HelveticaNeue.ttc">
+            <string>HelveticaNeue</string>
+        </array>
         <array key="ProximaNova-Medium.ttf">
             <string>ProximaNova-Medium</string>
         </array>
@@ -248,8 +251,8 @@
                                             <action selector="dismissOnPress:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="CiC-ET-yKe"/>
                                         </connections>
                                     </button>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Style Sustainably" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Zel-47-PTk">
-                                        <rect key="frame" x="131.33333333333331" y="79" width="130.33333333333331" height="20.333333333333329"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Local Fashion Resale" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Zel-47-PTk">
+                                        <rect key="frame" x="117.66666666666669" y="79" width="158" height="20.333333333333329"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" name="Black_Theme_Color"/>
                                         <nil key="highlightedColor"/>
@@ -893,6 +896,25 @@
                                     <constraint firstAttribute="height" constant="1" id="xkh-XC-TVy"/>
                                 </constraints>
                             </view>
+                            <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MxP-Ko-hDg" customClass="CustomButton" customModule="Clothing_Click" customModuleProvider="target">
+                                <rect key="frame" x="20" y="669" width="353" height="44"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="OGq-8k-yxz"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="ProximaNova-Semibold" family="Proxima Nova" pointSize="16"/>
+                                <state key="normal" title="Sign Up">
+                                    <color key="titleColor" name="Black_Theme_Color"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                        <real key="value" value="10"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="signupOnPress:" destination="Gsf-xl-T2h" eventType="touchUpInside" id="OHo-vy-oeT"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="GB0-qm-dfa"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -900,6 +922,7 @@
                             <constraint firstItem="GB0-qm-dfa" firstAttribute="trailing" secondItem="bNg-LX-6p9" secondAttribute="trailing" constant="20" id="1Ll-pN-W5s"/>
                             <constraint firstItem="bNg-LX-6p9" firstAttribute="top" secondItem="QTZ-Jm-lO5" secondAttribute="bottom" constant="16" id="1Zh-DH-59e"/>
                             <constraint firstItem="axY-Ug-f09" firstAttribute="top" secondItem="dPH-Tu-HFb" secondAttribute="bottom" constant="20" id="1nA-Eh-ON9"/>
+                            <constraint firstItem="dPH-Tu-HFb" firstAttribute="top" secondItem="MxP-Ko-hDg" secondAttribute="bottom" constant="20" id="BQX-zJ-jll"/>
                             <constraint firstItem="GB0-qm-dfa" firstAttribute="trailing" secondItem="dPH-Tu-HFb" secondAttribute="trailing" id="Dl7-la-mjB"/>
                             <constraint firstItem="b9f-5s-rep" firstAttribute="leading" secondItem="3aE-QI-gdJ" secondAttribute="leading" id="EZs-RZ-zTo"/>
                             <constraint firstItem="bNg-LX-6p9" firstAttribute="leading" secondItem="GB0-qm-dfa" secondAttribute="leading" constant="20" id="GAO-vH-DyK"/>
@@ -910,6 +933,8 @@
                             <constraint firstItem="GB0-qm-dfa" firstAttribute="bottom" secondItem="axY-Ug-f09" secondAttribute="bottom" constant="20" id="YzS-XO-AQ0"/>
                             <constraint firstItem="b9f-5s-rep" firstAttribute="top" secondItem="GB0-qm-dfa" secondAttribute="top" id="gPl-2E-GIW"/>
                             <constraint firstItem="QTZ-Jm-lO5" firstAttribute="leading" secondItem="GB0-qm-dfa" secondAttribute="leading" constant="15" id="hAD-A2-kgZ"/>
+                            <constraint firstItem="GB0-qm-dfa" firstAttribute="trailing" secondItem="MxP-Ko-hDg" secondAttribute="trailing" constant="20" id="i0n-9g-yK7"/>
+                            <constraint firstItem="MxP-Ko-hDg" firstAttribute="leading" secondItem="GB0-qm-dfa" secondAttribute="leading" constant="20" id="kKG-ln-QRw"/>
                             <constraint firstItem="GB0-qm-dfa" firstAttribute="trailing" secondItem="axY-Ug-f09" secondAttribute="trailing" constant="20" id="nJh-v3-Hra"/>
                             <constraint firstItem="axY-Ug-f09" firstAttribute="leading" secondItem="GB0-qm-dfa" secondAttribute="leading" constant="20" id="pLi-0e-lmn"/>
                         </constraints>

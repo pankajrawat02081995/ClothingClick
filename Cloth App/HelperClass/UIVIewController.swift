@@ -25,14 +25,61 @@ extension UIViewController{
     }
 
     
-    func share(userName:String){
-        let text = "I'm on Clothing Click as \(userName). Install the app to follow my posts and discover great deals on clothing in your area. Download App Now: itms-apps://itunes.apple.com/app/id1605715607"
-        let url = URL.init(string: APP_SHARE_ITUNES_URL)!
-        //let img = UIImage(named: "wel_logo")
-        let activityViewController:UIActivityViewController = UIActivityViewController(activityItems:  [text, url], applicationActivities: nil)
-        activityViewController.excludedActivityTypes = [UIActivity.ActivityType.print, UIActivity.ActivityType.postToWeibo, UIActivity.ActivityType.copyToPasteboard, UIActivity.ActivityType.addToReadingList, UIActivity.ActivityType.postToVimeo]
+//    func share(userName: String) {
+//        let text = "I'm on Clothing Click as \(userName). Install the app to follow my posts and discover great deals on clothing in your area. Download App Now: itms-apps://itunes.apple.com/app/id1605715607"
+//        
+//        guard let url = URL(string: APP_SHARE_ITUNES_URL) else {
+//            print("Invalid share URL")
+//            return
+//        }
+//
+//        let activityViewController = UIActivityViewController(activityItems: [text, url], applicationActivities: nil)
+//
+//        // Excluding unnecessary activity types while allowing copy to pasteboard
+//        activityViewController.excludedActivityTypes = [
+//            .print,
+//            .postToWeibo,
+//            .addToReadingList,
+//            .postToVimeo
+//        ]
+//
+//        // Completion handler to log actions
+//        activityViewController.completionWithItemsHandler = { activity, success, items, error in
+//            if let error = error {
+//                print("Error during sharing: \(error.localizedDescription)")
+//            } else if success {
+//                print("Sharing successful via \(activity?.rawValue ?? "Unknown")")
+//            }
+//        }
+//
+//        self.present(activityViewController, animated: true, completion: nil)
+//    }
+    
+    func share(userName: String) {
+        let appSchemeURL = URL(string: "clothingclick://profile/\(userName)")!
+        let appStoreURL = URL(string: "https://apps.apple.com/us/app/clothing-click-second-hand/id1605715607")!
+        let universalLink = "https://apps.clothingclick.online/public/profile/\(userName)"
+
+        let text = "I'm on Clothing Click as \(userName). Install the app to follow my posts and discover great deals on clothing in your area. Join me here: \(universalLink)"
+
+        let activityViewController = UIActivityViewController(activityItems: [text, URL(string: universalLink)!], applicationActivities: nil)
+
+        activityViewController.excludedActivityTypes = [
+            .print, .postToWeibo, .addToReadingList, .postToVimeo
+        ]
+
+        // Try opening the app, otherwise go to the App Store
+        if UIApplication.shared.canOpenURL(appSchemeURL) {
+            UIApplication.shared.open(appSchemeURL, options: [:], completionHandler: nil)
+        } else {
+            UIApplication.shared.open(appStoreURL, options: [:], completionHandler: nil)
+        }
+
         self.present(activityViewController, animated: true, completion: nil)
     }
+
+
+
     
     func playVideo(url: URL) {
           // Create an AVPlayer

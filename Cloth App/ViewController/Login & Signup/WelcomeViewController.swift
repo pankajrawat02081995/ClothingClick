@@ -21,6 +21,7 @@ class WelcomeViewController: BaseViewController, TTTAttributedLabelDelegate {
         self.callGeneralSettingWithAccessCodeScreenAPI()
         self.setup()
     }
+    
     func setup(){
         let strTC = "terms"
         let strPP = "privacy policy"
@@ -98,7 +99,7 @@ class WelcomeViewController: BaseViewController, TTTAttributedLabelDelegate {
 extension WelcomeViewController {
     func callGeneralSettingWithAccessCodeScreenAPI() {
         if appDelegate.reachable.connection != .none {
-            APIManager().apiCall(of: GeneralSettingModel.self, isShowHud: true, URL: BASE_URL, apiName: APINAME.GET_GENERAL_DATA.rawValue, method: .get, parameters: [:]) { (response, error) in
+            APIManager().apiCall(of: GeneralSettingModel.self, isShowHud: false, URL: BASE_URL, apiName: APINAME.GET_GENERAL_DATA.rawValue, method: .get, parameters: [:]) { (response, error) in
                 if error == nil {
                     if let response = response {
                         if let generalSettingDetails = response.dictData {

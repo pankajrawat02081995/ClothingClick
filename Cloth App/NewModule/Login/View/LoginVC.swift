@@ -10,48 +10,47 @@ import UIKit
 
 class LoginVC: BaseViewController {
 
+    var pushView : ((UIViewController)->Void)?
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        
     }
     
     @IBAction func dismissOnPress(_ sender: UIButton) {
-        self.navigationController?.dismiss(animated: true)
+        self.dismiss(animated: true)
     }
     
     @IBAction func fbOnTap(_ sender: UIButton) {
-        self.loginWithFacebook()
-        
+            self.loginWithFacebook()
     }
     
     @IBAction func googleOnTap(_ sender: UIButton) {
-//        self.loginWithGoogle { user in
-//            if let userId = user?.userID {
-//                self.socialId = userId
-//            }
-//            if let firstName = user?.profile?.givenName {
-//                self.firstName = firstName
-//            }
-//            if let lastName = user?.profile?.familyName {
-//                self.lastName = lastName
-//            }
-//            if let email = user?.profile?.email {
-//                self.emailId = email
-//            }
-//            self.socialLogin()
-//            
-//        }
+        loginWithGoogle { user in
+            if let user = user {
+                debugPrint(user)
+                // Perform any post-login actions here
+                self.dismiss(animated: true, completion: nil) // Dismiss after successful login
+            } else {
+                debugPrint("Google login failed or was canceled.")
+            }
+        }
     }
     
     @IBAction func appleOnTap(_ sender: UIButton) {
+        self.loginWithApple()
     }
     
     @IBAction func emailOnTap(_ sender: UIButton) {
-        let vc = LoginViewController.instantiate(fromStoryboard: .Main)
-        self.navigationController?.pushViewController(vc, animated: true)
+        let vc = LoginViewController.instantiate(fromStoryboard: .Auth)
+        self.dismiss(animated: true){
+            self.pushView?(vc)
+        }
     }
     
     @IBAction func troubleOnTap(_ sender: UIButton) {
+        let viewController = TroubleLoginViewController.instantiate(fromStoryboard: .Main)
+        self.dismiss(animated: true){
+            self.pushView?(viewController)
+        }
     }
 }

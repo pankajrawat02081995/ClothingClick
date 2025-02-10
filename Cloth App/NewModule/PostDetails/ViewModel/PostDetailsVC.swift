@@ -96,10 +96,6 @@ class PostDetailsVC: BaseViewController {
         self.styleCollection.dataSource = self
         //        self.styleCollection.registerCell(nib: UINib(nibName: "ClothPrefCVCell", bundle: nil), identifier: "ClothPrefCVCell")
         
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
         if self.edit {
             self.btnCancel.setImage(UIImage.init(named: "ic_delete_red"), for: .normal)
             self.selectedStyleID = self.postDetails?.style_id ?? 0
@@ -127,7 +123,7 @@ class PostDetailsVC: BaseViewController {
             self.setDeta()
         } else {
             if let subcategory = self.selectSubcategory?.name {
-                self.txtModelTitle.text =  "\(subcategory)"
+                self.txtModelTitle.text = "\(brandSearchList?.name ?? "") \(subcategory)"
             }
             let objectModel = appDelegate.userDetails?.locations
             self.addresslist = []
@@ -147,6 +143,12 @@ class PostDetailsVC: BaseViewController {
             }
             //            self.txtFixedpricee.text = self.priceList.first??.name
         }
+        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
     }
     
     override func viewDidLayoutSubviews() {
@@ -168,6 +170,8 @@ class PostDetailsVC: BaseViewController {
         self.brandSearchList = brandObjCat
         self.txtBrandDesignerName.text = brandSearchList?.name
         self.txtModelTitle.text = self.postDetails?.title ?? ""
+        //        self.txtModelTitle.text = "\(brandSearchList?.name ?? "") \(self.postDetails?.title ?? "")"
+        
         self.txtDescription.text = self.postDetails?.description ?? ""
         for i in 0..<(self.postDetails?.images!.count ?? 0)! {
             var dict = [String:Any]()
@@ -279,13 +283,13 @@ class PostDetailsVC: BaseViewController {
             var config = YPImagePickerConfiguration()
             config.library.maxNumberOfItems = 9 - (self.productImage.count + self.productVideo.count)
             
-//            if self.productVideo.count < 2 && self.productImage.count < 7 {
-//                config.library.mediaType = .photoAndVideo
-//            } else if self.productVideo.count < 2 && self.productImage.count >= 7 {
-//                config.library.mediaType = .video
-//            } else {
-//                config.library.mediaType = .photo
-//            }
+            //            if self.productVideo.count < 2 && self.productImage.count < 7 {
+            //                config.library.mediaType = .photoAndVideo
+            //            } else if self.productVideo.count < 2 && self.productImage.count >= 7 {
+            //                config.library.mediaType = .video
+            //            } else {
+            //                config.library.mediaType = .photo
+            //            }
             
             config.library.mediaType = .photo
             
@@ -511,7 +515,7 @@ class PostDetailsVC: BaseViewController {
             UIAlertController().alertViewWithTitleAndMessage(self, message: "Please take a product photo")
             return
         }
-       
+        
         if self.txtCADPrice.text?.trim().count == 0 {
             UIAlertController().alertViewWithTitleAndMessage(self, message: "Please enter CADprice")
             return
@@ -634,12 +638,12 @@ extension PostDetailsVC{
     
     func callAddProduct() {
         self.sendproductImage.removeAll()
-//        for i in 0..<self.productImage.count {
-//            if let image = self.productImage[i]["image_url"] as? UIImage {
-//                self.sendproductImage.append(image)
-//            }
-//            //            self.sendproductImage.append(self.productImage[i]["image_url"] as! UIImage)
-//        }
+        //        for i in 0..<self.productImage.count {
+        //            if let image = self.productImage[i]["image_url"] as? UIImage {
+        //                self.sendproductImage.append(image)
+        //            }
+        //            //            self.sendproductImage.append(self.productImage[i]["image_url"] as! UIImage)
+        //        }
         var arrVideoList = [URL]()
         for i in self.mediaItems {
             
@@ -653,11 +657,11 @@ extension PostDetailsVC{
             }
         }
         
-//        for i in 0..<self.productVideo.count {
-//            if let url = productVideo[i]["video_url"] as? URL {
-//                arrVideoList.append(url)
-//            }
-//        }
+        //        for i in 0..<self.productVideo.count {
+        //            if let url = productVideo[i]["video_url"] as? URL {
+        //                arrVideoList.append(url)
+        //            }
+        //        }
         var colorArre = [String]()
         for i in 0..<self.selectColor.count {
             if let colorId = self.selectColor[i]?.id {
@@ -724,7 +728,7 @@ extension PostDetailsVC{
                          "sizes" : String(self.selectSize?.id ?? 0),
                          "condition_id" : "\(self.selectCondiction?.id ?? 0)" ,
                          "colors" : colorIdString ,
-                         "title" : self.txtModelTitle.text ?? "",
+                         "title" : self.removeBrandName(from: self.txtModelTitle.text ?? "", brand: self.brandSearchList?.name ?? ""),
                          "description" : self.txtDescription.text ?? "",
                          "locations" : location ,
                          "price_type" : "1" ,
@@ -773,7 +777,7 @@ extension PostDetailsVC{
                                 alert.setAlertButtonColor()
                                 
                                 let hideAction: UIAlertAction = UIAlertAction.init(title: kOk, style: .default, handler: { (action) in
-//                                    self.navigationController?.setViewControllers([], animated: false)
+                                    //                                    self.navigationController?.setViewControllers([], animated: false)
                                     
                                     // Navigate to a specific tab index (e.g., index 4)
                                     if let tabBarController = self.tabBarController {
@@ -874,7 +878,7 @@ extension PostDetailsVC{
                          "sizes" : String(self.selectSize?.id ?? 0),
                          "condition_id" : "\(self.selectCondiction?.id ?? 0)" ,
                          "colors" : colorIdString ,
-                         "title" : self.txtModelTitle.text ?? "",
+                         "title" : self.removeBrandName(from: self.txtModelTitle.text ?? "", brand: self.brandSearchList?.name ?? "") ,
                          "description" : self.txtDescription.text ?? "",
                          "locations" : location ,
                          "price_type" : "1" ,
@@ -901,8 +905,8 @@ extension PostDetailsVC{
                                 alert.setAlertButtonColor()
                                 
                                 let hideAction: UIAlertAction = UIAlertAction.init(title: kOk, style: .default, handler: { (action) in
-//                                    self.navigationController?.setViewControllers([], animated: false)
-
+                                    //                                    self.navigationController?.setViewControllers([], animated: false)
+                                    
                                     // Navigate to a specific tab index (e.g., index 4)
                                     self.navigationController?.popToRootViewController(animated: true)
                                 })
@@ -926,12 +930,12 @@ extension PostDetailsVC{
                                 alert.setAlertButtonColor()
                                 
                                 let hideAction: UIAlertAction = UIAlertAction.init(title: kOk, style: .default, handler: { (action) in
-//                                    self.navigationController?.setViewControllers([], animated: false)
-
+                                    //                                    self.navigationController?.setViewControllers([], animated: false)
+                                    
                                     // Navigate to a specific tab index (e.g., index 4)
-//                                    if let tabBarController = self.tabBarController {
-//                                        tabBarController.selectedIndex = 4
-//                                    }
+                                    //                                    if let tabBarController = self.tabBarController {
+                                    //                                        tabBarController.selectedIndex = 4
+                                    //                                    }
                                     self.navigationController?.popToRootViewController(animated: true)
                                 })
                                 alert.addAction(hideAction)
@@ -1090,15 +1094,15 @@ extension PostDetailsVC: UICollectionViewDelegate,UICollectionViewDataSource {
             
         case .video(let image, let thumbnail):
             msg = "Are you sure you want to remove video?"
-
+            
         }
         if let indexPath = self.CVAddProductImage.indexPathForItem(at: buttonPosition) {
             let alert: UIAlertController = UIAlertController.init(title: AlertViewTitle, message: msg, preferredStyle: .alert)
             alert.setAlertButtonColor()
             let yesAction: UIAlertAction = UIAlertAction.init(title: "Remove", style: .default, handler: { (action) in
-//                self.productImage.remove(at: indexPath.item)
-//                let object = self.postDetails?.images
-//                self.deleteImageId.append(String(object?[indexPath.item].id ?? 0))
+                //                self.productImage.remove(at: indexPath.item)
+                //                let object = self.postDetails?.images
+                //                self.deleteImageId.append(String(object?[indexPath.item].id ?? 0))
                 self.mediaItems.remove(at: sender.tag)
                 if self.mediaItems.isEmpty{
                     self.btnAddImage.isHidden = false
@@ -1169,6 +1173,7 @@ extension PostDetailsVC : FavouriteBrandSearchDelegate {
     func FavouriteBrandSearchAddd( brand: BrandeSearchModel) {
         self.brandSearchList = brand
         self.txtBrandDesignerName.text = self.brandSearchList?.name
+        self.txtModelTitle.text = "\(self.txtBrandDesignerName.text ?? "") \(self.selectSubcategory?.name ?? "")"
     }
 }
 
@@ -1201,22 +1206,22 @@ extension PostDetailsVC : BrandLocationDelegate ,StorePostLocationDelegate,UserL
         
         
         if appDelegate.userDetails?.role_id == 1 {
-//            let viewController = UserLocationViewController.instantiate(fromStoryboard: .Main)
-//            if edit {
-//                viewController.edit = edit
-//                if appDelegate.userDetails?.role_id == 1 {
-//                    viewController.addresslist = self.selectAddress
-//                }else{
-//                    viewController.addresslist = self.addresslist
-//                }
-//            }
-//            else {
-//                viewController.addresslist = payaddress
-//            }
-//            
-//            viewController.locationdelegate = self
-//            viewController.isPost = true
-//            self.navigationController?.pushViewController(viewController, animated: true)
+            //            let viewController = UserLocationViewController.instantiate(fromStoryboard: .Main)
+            //            if edit {
+            //                viewController.edit = edit
+            //                if appDelegate.userDetails?.role_id == 1 {
+            //                    viewController.addresslist = self.selectAddress
+            //                }else{
+            //                    viewController.addresslist = self.addresslist
+            //                }
+            //            }
+            //            else {
+            //                viewController.addresslist = payaddress
+            //            }
+            //
+            //            viewController.locationdelegate = self
+            //            viewController.isPost = true
+            //            self.navigationController?.pushViewController(viewController, animated: true)
             let viewController = MapLocationVC.instantiate(fromStoryboard: .Dashboard)
             self.pushViewController(vc: viewController)
         }
@@ -1308,7 +1313,7 @@ extension PostDetailsVC : BrandLocationDelegate ,StorePostLocationDelegate,UserL
 
 extension PostDetailsVC: UICollectionViewDropDelegate, UICollectionViewDragDelegate {
     // MARK: UICollectionViewDragDelegate
-
+    
     func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
         if indexPath.item != self.mediaItems.count{
             let item = self.mediaItems[indexPath.item]
@@ -1332,9 +1337,9 @@ extension PostDetailsVC: UICollectionViewDropDelegate, UICollectionViewDragDeleg
             return []
         }
     }
-
+    
     // MARK: UICollectionViewDropDelegate
-
+    
     func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {
         guard let destinationIndexPath = coordinator.destinationIndexPath else { return }
         
@@ -1368,11 +1373,11 @@ extension PostDetailsVC: UICollectionViewDropDelegate, UICollectionViewDragDeleg
             collectionView.reloadItems(at: [IndexPath(item: correctedDestinationIndex, section: destinationIndexPath.section), destinationIndexPath])
         }
     }
-
+    
     func collectionView(_ collectionView: UICollectionView, canHandle session: UIDropSession) -> Bool {
         return session.localDragSession != nil
     }
-
+    
     func collectionView(_ collectionView: UICollectionView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
         return UICollectionViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
     }
@@ -1445,4 +1450,11 @@ extension PostDetailsVC: UICollectionViewDelegateFlowLayout {
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return interitemSpace
     }
+}
+
+extension PostDetailsVC{
+    func removeBrandName(from text: String, brand: String) -> String {
+        return text //.replacingOccurrences(of: brand, with: "", options: .caseInsensitive)
+    }
+    
 }

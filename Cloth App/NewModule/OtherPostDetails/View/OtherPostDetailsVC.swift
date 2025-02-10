@@ -123,6 +123,7 @@ class OtherPostDetailsVC: BaseViewController {
     }
     
     @IBAction func sellerProfileOnTap(_ sender: UIButton) {
+        
         if self.postDetails?.type?.lowercased() == "store"{
             let vc = StoreProfileVC.instantiate(fromStoryboard: .Store)
             vc.viewModel.userID = "\(self.postDetails?.user_id ?? 0)"
@@ -163,13 +164,40 @@ class OtherPostDetailsVC: BaseViewController {
     }
     
     @IBAction func shareOnPress(_ sender: UIButton) {
+        //        guard let userDetails = appDelegate.userDetails else {
+        //            self.showLogIn()
+        //            return
+        //        }
+        
         let text = "I found this on Clothing Click"
-        let url = URL.init(string: "\(SERVER_URL)share/post/\(self.postId)")!
-        //let img = UIImage(named: "wel_logo")
-        let activityViewController:UIActivityViewController = UIActivityViewController(activityItems:  [text, url], applicationActivities: nil)
-        activityViewController.excludedActivityTypes = [UIActivity.ActivityType.print, UIActivity.ActivityType.postToWeibo, UIActivity.ActivityType.copyToPasteboard, UIActivity.ActivityType.addToReadingList, UIActivity.ActivityType.postToVimeo]
+        
+        guard let url = URL(string: "\(SERVER_URL)share/post/\(self.postId)") else {
+            print("Invalid URL")
+            return
+        }
+        
+        let activityViewController = UIActivityViewController(activityItems: [text, url], applicationActivities: nil)
+        
+        // Excluding unwanted activity types but allowing copy to pasteboard
+        activityViewController.excludedActivityTypes = [
+            .print,
+            .postToWeibo,
+            .addToReadingList,
+            .postToVimeo
+        ]
+        
+        // Handling completion to confirm copy action
+        activityViewController.completionWithItemsHandler = { activity, success, items, error in
+            if let error = error {
+                print("Error during sharing: \(error.localizedDescription)")
+            } else if success, activity == .copyToPasteboard {
+                print("Content copied to clipboard")
+            }
+        }
+        
         self.present(activityViewController, animated: true, completion: nil)
     }
+    
     
     @IBAction func soldOnPress(_ sender: UIButton) {
         self.soldAlertContainerView.isHidden = false
@@ -178,6 +206,10 @@ class OtherPostDetailsVC: BaseViewController {
     }
     
     @IBAction func chatOnPress(_ sender: UIButton) {
+        if appDelegate.userDetails == nil {
+            self.showLogIn()
+            return
+        }
         if self.postDetails?.type?.lowercased() == "store"{
             let viewController = BuyNowVC.instantiate(fromStoryboard: .Store)
             viewController.postDetails = self.postDetails
@@ -193,6 +225,10 @@ class OtherPostDetailsVC: BaseViewController {
     }
     
     @IBAction func mapOnPress(_ sender: UIButton) {
+        if appDelegate.userDetails == nil {
+            self.showLogIn()
+            return
+        }
         let lat = self.postDetails?.locations?.first?.latitude ?? ""
         
         let log = self.postDetails?.locations?.first?.longitude ?? ""
@@ -518,6 +554,10 @@ extension OtherPostDetailsVC {
     }
     
     func callPostFavourite(action_type : String,postId : String) {
+        if appDelegate.userDetails == nil {
+            self.showLogIn()
+            return
+        }
         if appDelegate.reachable.connection != .none {
             
             let param = ["post_id" : postId,

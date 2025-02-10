@@ -52,24 +52,24 @@ class HomeViewController: BaseViewController {
     @objc func deepLinkNavigate(_ notification: NSNotification) {
         DeepLinknaviget()
     }
-    func DeepLinknaviget(){
-        if appDelegate.deeplinkurltype != "" && appDelegate.deeplinkid != "" {
-            if appDelegate.deeplinkurltype == "post"{
-                let Login = self.storyBoard.instantiateViewController(withIdentifier: "ProductDetailsViewController") as?  ProductDetailsViewController
-                Login!.postId = appDelegate.deeplinkid
-                self.navigationController?.pushViewController(Login!, animated: true)
-            }else{ //user side
-                if appDelegate.deeplinkid == String(appDelegate.userDetails?.username ?? "") {
-                    self.navigateToHomeScreen(selIndex: 4)
-                    self.deeplinkClear()
-                }
-                else {
-                    self.callGetOtherUserDetails(userId: appDelegate.deeplinkid)
-                }
-                
-            }
-        }
-    }
+//    func DeepLinknaviget(){
+//        if appDelegate.deeplinkurltype != "" && appDelegate.deeplinkid != "" {
+//            if appDelegate.deeplinkurltype == "post"{
+//                let Login = self.storyBoard.instantiateViewController(withIdentifier: "ProductDetailsViewController") as?  ProductDetailsViewController
+//                Login!.postId = appDelegate.deeplinkid
+//                self.navigationController?.pushViewController(Login!, animated: true)
+//            }else{ //user side
+//                if appDelegate.deeplinkid == String(appDelegate.userDetails?.username ?? "") {
+//                    self.navigateToHomeScreen(selIndex: 4)
+//                    self.deeplinkClear()
+//                }
+//                else {
+//                    self.callGetOtherUserDetails(userId: appDelegate.deeplinkid)
+//                }
+//                
+//            }
+//        }
+//    }
     
     override func viewWillAppear(_ animated: Bool) {
         

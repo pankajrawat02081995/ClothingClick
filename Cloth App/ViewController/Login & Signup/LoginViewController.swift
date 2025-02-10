@@ -20,6 +20,13 @@ class LoginViewController: BaseViewController {
         super.viewDidLoad()
     }
     
+    
+    @IBAction func signupOnPress(_ sender: UIButton) {
+        let viewController =  SignupViewController.instantiate(fromStoryboard: .Auth)
+        self.navigationController?.pushViewController(viewController, animated: true)
+    }
+    
+    
     @IBAction func btnNext_clicked(_ sender: Any) {
         if self.txtEmail.text?.trim().count == 0 {
             UIAlertController().alertViewWithTitleAndMessage(self, message: "Please enter email address")

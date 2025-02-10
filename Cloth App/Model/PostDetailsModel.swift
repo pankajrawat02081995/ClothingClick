@@ -64,10 +64,10 @@ struct PostDetailsModel : Mappable {
     var profile_promote_expire_at : String?
     
     init?(map: Map) {
-
+        
     }
     func isFavourite() ->Bool {
-//        let isselect =  == 1
+        //        let isselect =  == 1
         return is_favourite ?? false
     }
     
@@ -246,11 +246,11 @@ struct Related_posts : Mappable {
     var is_profile_promote : Int?
     var sale_price : Float?
     init?(map: Map) {
-
+        
     }
-
+    
     mutating func mapping(map: Map) {
-
+        
         id <- map["id"]
         title <- map["title"]
         price <- map["price"]
@@ -270,7 +270,7 @@ struct Related_posts : Mappable {
         is_profile_promote <- map["is_profile_promote"]
         sale_price <- map["sale_price"]
     }
-
+    
 }
 
 
@@ -298,7 +298,7 @@ struct User_posts : Mappable {
     
     init?(map: Map) {
     }
-
+    
     mutating func mapping(map: Map) {
         price_type_name <- map["price_type_name"]
         id <- map["id"]
@@ -360,10 +360,10 @@ struct ImagesVideoModel: Mappable {
     var video: String?
     var type: String?
     var videoId : String?
-
+    
     init?(map: Map) {
     }
-
+    
     mutating func mapping(map: Map) {
         image1 <- map["image1"]
         id <- map["id"]
@@ -371,7 +371,7 @@ struct ImagesVideoModel: Mappable {
         video <- map["video"]
         videoId <- map["id"]
     }
-
+    
 }
 
 

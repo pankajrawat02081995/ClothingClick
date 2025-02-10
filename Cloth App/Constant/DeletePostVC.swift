@@ -15,7 +15,9 @@ class DeletePostVC:UIViewController{
     @IBOutlet weak var btnDelete: CustomButton!
     @IBOutlet weak var btnCancel: CustomButton!
     var deleteOnTap : (()->Void)?
+    var cancelOnTap : (()->Void)?
     var titleMain : String?
+    var cancelTitle : String?
     var subTitle : String?
     var deleteTitle : String?
     var isCancelHide : Bool?
@@ -25,6 +27,7 @@ class DeletePostVC:UIViewController{
     override func viewDidLoad() {
         super.viewDidLoad()
         self.btnCancel.isHidden = self.isCancelHide ?? false
+        self.btnCancel.setTitle(self.cancelTitle ?? "Cancel", for: .normal)
         self.btnDelete.backgroundColor = self.deleteBgColor ??  UIColor()
         self.lblTitle.text = self.titleMain ?? ""
         self.lblSubTitle.text = self.subTitle ?? ""
@@ -33,7 +36,9 @@ class DeletePostVC:UIViewController{
     }
     
     @IBAction func cancelOnPress(_ sender: UIButton) {
-        self.dismiss(animated: true)
+        self.dismiss(animated: true){
+            self.cancelOnTap?()
+        }
     }
     @IBAction func deleteOnPress(_ sender: UIButton) {
         self.dismiss(animated: true){

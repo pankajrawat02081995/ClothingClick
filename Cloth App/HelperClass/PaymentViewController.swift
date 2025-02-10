@@ -2,7 +2,7 @@
 import UIKit
 import StripePaymentSheet
 import StripeApplePay
-import PassKit
+//import PassKit
 
 class PaymentViewController: UIViewController {
     var paymentSheet: PaymentSheet?

@@ -1,7 +1,7 @@
 import UIKit
 
 class TabbarViewController: UITabBarController, UITabBarControllerDelegate {
-
+    let customTransitioningDelegate = CustomTransitioningDelegate()
     override func viewDidLoad() {
         super.viewDidLoad()
         self.delegate = self
@@ -69,15 +69,31 @@ class TabbarViewController: UITabBarController, UITabBarControllerDelegate {
     // UITabBarControllerDelegate method to handle tab selection behavior
     func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
         // Handle special case for the second tab (index 1)
-        if let index = tabBarController.viewControllers?.firstIndex(of: viewController), index == 2 {
-            if let navController = viewController as? UINavigationController {
-                // Always pop to the root view controller
-                navController.popToRootViewController(animated: false)
-
+        if let index = tabBarController.viewControllers?.firstIndex(of: viewController) {
+            // Check if user details are nil and the tab index is greater than 1
+            if appDelegate.userDetails == nil && index > 1 {
+                let vc = LoginVC.instantiate(fromStoryboard: .Auth)
+                vc.modalPresentationStyle = .custom
+                vc.transitioningDelegate = customTransitioningDelegate
+                vc.pushView = { vc in
+                    vc.hidesBottomBarWhenPushed = true
+                    self.pushViewController(vc: vc)
+                }
+                self.present(vc, animated: true, completion: nil)
+                return false // Prevent tab selection
+            } else {
+                // Additional logic for specific tabs
+                if index == 2 {
+                    if let navController = viewController as? UINavigationController {
+                        // Always pop to the root view controller
+                        navController.popToRootViewController(animated: false)
+                    }
+                }
             }
         }
-        return true
+        return true // Allow tab selection
     }
+
 
     // Add a top border to the tab bar
     private func addTopBorderToTabBar() {

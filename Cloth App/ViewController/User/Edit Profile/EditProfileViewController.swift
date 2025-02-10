@@ -9,6 +9,7 @@ import UIKit
 import AVKit
 import IBAnimatable
 import FBSDKLoginKit
+import IQKeyboardManagerSwift
 
 class EditProfileViewController: BaseViewController {
     
@@ -50,6 +51,9 @@ class EditProfileViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        IQKeyboardManager.shared.isEnabled = true
+        IQKeyboardManager.shared.enableAutoToolbar = true
+
         self.txtBio.textContainerInset = UIEdgeInsets(top: 10, left: 20, bottom: 10, right: 10 )
         
         self.setEmailPhoneButtonTitel()

@@ -44,7 +44,6 @@ class AllProductViewController: BaseViewController {
     var isDistance = false
     var sort = false
     var cat_id = ""
-    let customTransitioningDelegate = CustomTransitioningDelegate()
     var selectedPostID : Int?
     var isFirstTimeScroll : Bool?
     var isSaveList : Bool?
@@ -166,6 +165,10 @@ class AllProductViewController: BaseViewController {
         }
     }
     @IBAction func btnShort_Clicked(_ button: UIButton) {
+        if appDelegate.userDetails == nil {
+            self.showLogIn()
+            return
+        }
 //        let viewController = self.storyboard?.instantiateViewController(identifier: "ShortByViewController") as! ShortByViewController
 //        viewController.sort_by = self.sort_by
 //        viewController.sort_value = self.sort_value
@@ -559,6 +562,10 @@ extension AllProductViewController {
     }
     
     func callPostFavourite(action_type : String,postId : String,index: Int) {
+        if appDelegate.userDetails == nil {
+            self.showLogIn()
+            return
+        }
         if appDelegate.reachable.connection != .none {
             
             let param = ["post_id" : postId,

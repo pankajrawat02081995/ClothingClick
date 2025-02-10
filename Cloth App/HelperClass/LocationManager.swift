@@ -8,7 +8,7 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
     
     private let locationManager = CLLocationManager()
     private var completion: ((Result<CLLocation, Error>) -> Void)?
-    
+    var isLocationSetNotNow : Bool?
     // Custom Error Enum
     enum LocationError: Error, LocalizedError {
         case servicesDisabled
