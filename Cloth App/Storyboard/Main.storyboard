@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="ycQ-x9-FNY">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="eCd-0X-9YP">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
@@ -11,6 +11,9 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
+        <array key="HelveticaNeue.ttc">
+            <string>HelveticaNeue</string>
+        </array>
         <array key="ProximaNova-ExtraBold.otf">
             <string>ProximaNova-Extrabld</string>
         </array>
@@ -2584,7 +2587,7 @@
                                 <rect key="frame" x="0.0" y="48" width="414" height="50"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Price" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3By-xh-aOL">
-                                        <rect key="frame" x="188.5" y="15.5" width="37" height="19"/>
+                                        <rect key="frame" x="189" y="15.5" width="36.5" height="19"/>
                                         <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="16"/>
                                         <color key="textColor" name="Black_Theme_Color"/>
                                         <nil key="highlightedColor"/>
@@ -4636,7 +4639,7 @@ Location</string>
                                                             <rect key="frame" x="85" y="51" width="274" height="14"/>
                                                             <subviews>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="+5" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sUq-LS-HTg">
-                                                                    <rect key="frame" x="0.0" y="0.5" width="15.5" height="13"/>
+                                                                    <rect key="frame" x="0.0" y="-0.5" width="15.5" height="15.5"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="width" constant="15.5" id="LUu-aJ-ZYv"/>
                                                                     </constraints>
@@ -4652,7 +4655,7 @@ Location</string>
                                                                     </constraints>
                                                                 </imageView>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Follow 3 Accounts" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c7V-tY-G8V">
-                                                                    <rect key="frame" x="40.5" y="0.5" width="228.5" height="13"/>
+                                                                    <rect key="frame" x="40.5" y="-0.5" width="228.5" height="15.5"/>
                                                                     <fontDescription key="fontDescription" name="ProximaNova-Semibold" family="Proxima Nova" pointSize="13"/>
                                                                     <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                     <nil key="highlightedColor"/>
@@ -4869,7 +4872,7 @@ Location</string>
                                 </connections>
                             </tableView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No data available" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cTJ-lO-UZG">
-                                <rect key="frame" x="110" y="484.5" width="194" height="25"/>
+                                <rect key="frame" x="110" y="482.5" width="194" height="29.5"/>
                                 <fontDescription key="fontDescription" name="ProximaNova-Semibold" family="Proxima Nova" pointSize="25"/>
                                 <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
@@ -4890,7 +4893,7 @@ Location</string>
                                         </connections>
                                     </button>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Notifications" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UkL-bg-InI">
-                                        <rect key="frame" x="167" y="17" width="80.5" height="16.5"/>
+                                        <rect key="frame" x="168" y="17" width="78.5" height="16.5"/>
                                         <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="14"/>
                                         <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
@@ -9065,13 +9068,13 @@ with Click Coins</string>
                                         </constraints>
                                     </view>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Rate" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EnA-ts-mWG">
-                                        <rect key="frame" x="20" y="155" width="374" height="28"/>
+                                        <rect key="frame" x="20" y="155" width="374" height="33"/>
                                         <fontDescription key="fontDescription" name="ProximaNova-Semibold" family="Proxima Nova" pointSize="28"/>
                                         <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4xl-AP-CHx">
-                                        <rect key="frame" x="20" y="188" width="374" height="56"/>
+                                        <rect key="frame" x="20" y="193" width="374" height="65.5"/>
                                         <string key="text" base64-UTF8="YES">
 Cg
 </string>
@@ -9080,20 +9083,20 @@ Cg
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Rate your experience with this buyer" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZLx-cb-dLe">
-                                        <rect key="frame" x="20" y="254" width="374" height="18"/>
+                                        <rect key="frame" x="20" y="268.5" width="374" height="21"/>
                                         <fontDescription key="fontDescription" name="ProximaNova-Semibold" family="Proxima Nova" pointSize="18"/>
                                         <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="thumbs-Down-Unsel" translatesAutoresizingMaskIntoConstraints="NO" id="821-e0-lGa">
-                                        <rect key="frame" x="102" y="307" width="50" height="50"/>
+                                        <rect key="frame" x="102" y="324.5" width="50" height="50"/>
                                         <constraints>
                                             <constraint firstAttribute="width" secondItem="821-e0-lGa" secondAttribute="height" multiplier="1:1" id="3rK-GC-sgJ"/>
                                             <constraint firstAttribute="height" constant="50" id="dEO-rk-FCT"/>
                                         </constraints>
                                     </imageView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2nD-Qq-5sr">
-                                        <rect key="frame" x="87" y="292" width="80" height="80"/>
+                                        <rect key="frame" x="87" y="309.5" width="80" height="80"/>
                                         <constraints>
                                             <constraint firstAttribute="width" secondItem="2nD-Qq-5sr" secondAttribute="height" multiplier="1:1" id="Fj8-rG-7pm"/>
                                             <constraint firstAttribute="height" constant="80" id="nV4-zc-djU"/>
@@ -9103,7 +9106,7 @@ Cg
                                         </connections>
                                     </button>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="thumbs-Up-Unsel" translatesAutoresizingMaskIntoConstraints="NO" id="QZG-7j-mGP">
-                                        <rect key="frame" x="262" y="307" width="50" height="50"/>
+                                        <rect key="frame" x="262" y="324.5" width="50" height="50"/>
                                         <constraints>
                                             <constraint firstAttribute="width" secondItem="QZG-7j-mGP" secondAttribute="height" multiplier="1:1" id="0DL-MA-GgZ"/>
                                             <constraint firstAttribute="width" secondItem="QZG-7j-mGP" secondAttribute="height" multiplier="1:1" id="Lfy-VI-CbN"/>
@@ -9111,7 +9114,7 @@ Cg
                                         </constraints>
                                     </imageView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ENh-3t-L4m">
-                                        <rect key="frame" x="247" y="292" width="80" height="80"/>
+                                        <rect key="frame" x="247" y="309.5" width="80" height="80"/>
                                         <constraints>
                                             <constraint firstAttribute="width" secondItem="ENh-3t-L4m" secondAttribute="height" multiplier="1:1" id="HIu-IJ-TIG"/>
                                             <constraint firstAttribute="height" constant="80" id="Zyq-nV-kLC"/>
@@ -9122,7 +9125,7 @@ Cg
                                         </connections>
                                     </button>
                                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PC8-CQ-uiR" customClass="CustomTextView" customModule="Clothing_Click" customModuleProvider="target">
-                                        <rect key="frame" x="15" y="392" width="384" height="150"/>
+                                        <rect key="frame" x="15" y="409.5" width="384" height="150"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="150" id="Sqa-sh-iV6"/>
@@ -9145,7 +9148,7 @@ Cg
                                         </connections>
                                     </textView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="p1m-pC-uP0" customClass="CustomButton" customModule="Clothing_Click" customModuleProvider="target">
-                                        <rect key="frame" x="207" y="562" width="192" height="50"/>
+                                        <rect key="frame" x="207" y="579.5" width="192" height="50"/>
                                         <color key="backgroundColor" name="BlueColor"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="50" id="Qav-uF-KCD"/>
@@ -21945,13 +21948,13 @@ method of payment</string>
                                                 </userDefinedRuntimeAttributes>
                                             </imageView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="asdad" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aqG-pH-oWV">
-                                                <rect key="frame" x="20" y="115" width="44" height="19"/>
+                                                <rect key="frame" x="20" y="115" width="44.5" height="19"/>
                                                 <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="16"/>
                                                 <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="@asdasd" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ihd-eg-sfq">
-                                                <rect key="frame" x="20" y="138" width="58" height="16.5"/>
+                                                <rect key="frame" x="20" y="138" width="57" height="16.5"/>
                                                 <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="14"/>
                                                 <color key="textColor" name="Chat_Read_Msg"/>
                                                 <nil key="highlightedColor"/>
@@ -21969,7 +21972,7 @@ method of payment</string>
                                                                 <nil key="highlightedColor"/>
                                                             </label>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Posts" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6MU-kq-lyb">
-                                                                <rect key="frame" x="0.0" y="25.5" width="68.5" height="14.5"/>
+                                                                <rect key="frame" x="0.0" y="26" width="68.5" height="14"/>
                                                                 <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="12"/>
                                                                 <color key="textColor" name="Chat_Read_Msg"/>
                                                                 <nil key="highlightedColor"/>
@@ -21996,7 +21999,7 @@ method of payment</string>
                                                                 <nil key="highlightedColor"/>
                                                             </label>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Followers" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mfo-dX-7jC">
-                                                                <rect key="frame" x="0.0" y="25.5" width="69" height="14.5"/>
+                                                                <rect key="frame" x="0.0" y="26" width="69" height="14"/>
                                                                 <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="12"/>
                                                                 <color key="textColor" name="Chat_Read_Msg"/>
                                                                 <nil key="highlightedColor"/>
@@ -22034,7 +22037,7 @@ method of payment</string>
                                                                 <nil key="highlightedColor"/>
                                                             </label>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Following" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oKO-8G-RTI">
-                                                                <rect key="frame" x="0.0" y="25.5" width="68.5" height="14.5"/>
+                                                                <rect key="frame" x="0.0" y="26" width="68.5" height="14"/>
                                                                 <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="12"/>
                                                                 <color key="textColor" name="DarkGrayColor"/>
                                                                 <nil key="highlightedColor"/>
@@ -22334,13 +22337,13 @@ method of payment</string>
                                                 <rect key="frame" x="20" y="164.5" width="17.5" height="34"/>
                                             </imageView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="4.9 (9 Reviews)" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6Ee-id-Cxo">
-                                                <rect key="frame" x="41.5" y="173.5" width="95.5" height="16.5"/>
+                                                <rect key="frame" x="41.5" y="173.5" width="95" height="16.5"/>
                                                 <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="14"/>
                                                 <color key="textColor" name="Black_Theme_Color"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YFG-vl-bQZ">
-                                                <rect key="frame" x="20" y="164.5" width="117" height="34"/>
+                                                <rect key="frame" x="20" y="164.5" width="116.5" height="34"/>
                                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                 <connections>
                                                     <action selector="btnFloatReting_Clicked:" destination="Lro-MI-Ezc" eventType="touchUpInside" id="2hH-GD-7qi"/>
@@ -22490,13 +22493,13 @@ method of payment</string>
                                         <rect key="frame" x="0.0" y="0.0" width="414" height="0.0"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="wants to follow tou" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dVJ-9G-OwM">
-                                                <rect key="frame" x="77.5" y="-9" width="159" height="18"/>
+                                                <rect key="frame" x="80.5" y="-10.5" width="153" height="21"/>
                                                 <fontDescription key="fontDescription" name="ProximaNova-Extrabld" family="Proxima Nova" pointSize="18"/>
                                                 <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4BL-Ls-4zC">
-                                                <rect key="frame" x="306.5" y="-15" width="30" height="30"/>
+                                                <rect key="frame" x="303.5" y="-15" width="30" height="30"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" secondItem="4BL-Ls-4zC" secondAttribute="height" multiplier="1:1" id="Gz1-KZ-kyq"/>
                                                     <constraint firstAttribute="width" secondItem="4BL-Ls-4zC" secondAttribute="height" multiplier="1:1" id="fAL-sN-X3r"/>
@@ -22508,7 +22511,7 @@ method of payment</string>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eQe-rl-Uut">
-                                                <rect key="frame" x="246.5" y="-15" width="30" height="30"/>
+                                                <rect key="frame" x="243.5" y="-15" width="30" height="30"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="30" id="4YL-y1-v7v"/>
                                                     <constraint firstAttribute="width" secondItem="eQe-rl-Uut" secondAttribute="height" multiplier="1:1" id="Pu5-9P-jB7"/>
@@ -22729,7 +22732,7 @@ method of payment</string>
                                         </connections>
                                     </collectionView>
                                     <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No data available" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Rf3-JE-XoM">
-                                        <rect key="frame" x="110" y="377.5" width="194" height="25"/>
+                                        <rect key="frame" x="110" y="377.5" width="194" height="29.5"/>
                                         <fontDescription key="fontDescription" name="ProximaNova-Semibold" family="Proxima Nova" pointSize="25"/>
                                         <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
@@ -25918,6 +25921,35 @@ method of payment</string>
             </objects>
             <point key="canvasLocation" x="3829" y="3671"/>
         </scene>
+        <!--View Controller-->
+        <scene sceneID="fjz-pY-p4d">
+            <objects>
+                <viewController id="eCd-0X-9YP" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="m0I-XH-tiP">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_logo_new" translatesAutoresizingMaskIntoConstraints="NO" id="MJU-bY-Pqb">
+                                <rect key="frame" x="40" y="281" width="334" height="334"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="MJU-bY-Pqb" secondAttribute="height" multiplier="1:1" id="9qe-KM-g3X"/>
+                                </constraints>
+                            </imageView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="ASY-gg-Q6y"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="MJU-bY-Pqb" firstAttribute="centerX" secondItem="m0I-XH-tiP" secondAttribute="centerX" id="YPn-6O-Bdb"/>
+                            <constraint firstItem="MJU-bY-Pqb" firstAttribute="centerY" secondItem="m0I-XH-tiP" secondAttribute="centerY" id="YYO-Er-Lzg"/>
+                            <constraint firstAttribute="trailing" secondItem="MJU-bY-Pqb" secondAttribute="trailing" constant="40" id="o6j-Ul-oy2"/>
+                            <constraint firstItem="MJU-bY-Pqb" firstAttribute="leading" secondItem="m0I-XH-tiP" secondAttribute="leading" constant="40" id="ozQ-1U-Jc3"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="05M-Gf-2Au" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-2059" y="159"/>
+        </scene>
         <!--Signup Accesscode View Controller-->
         <scene sceneID="oXW-6I-buQ">
             <objects>
@@ -27337,23 +27369,6 @@ method of payment</string>
             </objects>
             <point key="canvasLocation" x="-2059" y="2318"/>
         </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="L44-Kv-xhp">
-            <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" navigationBarHidden="YES" id="ycQ-x9-FNY" sceneMemberID="viewController">
-                    <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="ESc-Gg-fJ9">
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                    <connections>
-                        <segue destination="tuG-uD-tbF" kind="relationship" relationship="rootViewController" id="nHk-Dk-zAR"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="am4-q8-mom" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-1284.0579710144928" y="107.8125"/>
-        </scene>
     </scenes>
     <resources>
         <image name="AQ.png" width="256" height="171"/>
@@ -27405,6 +27420,7 @@ method of payment</string>
         <image name="ic_gallery" width="25" height="25"/>
         <image name="ic_home_localtion" width="15" height="18"/>
         <image name="ic_insta" width="22" height="22"/>
+        <image name="ic_logo_new" width="1024" height="1024"/>
         <image name="ic_max" width="24.5" height="10"/>
         <image name="ic_min" width="21" height="10"/>
         <image name="ic_more" width="19" height="5"/>
@@ -27499,7 +27515,7 @@ method of payment</string>
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemGroupedBackgroundColor">
-            <color red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

@@ -319,14 +319,14 @@ public class APIManager {
                 for index in 0...images.count - 1{
                     if let imageData = images[index].jpegData(compressionQuality: 0.4) {
                         let imagedata = images[index].resize(images[index])
-                        multipartFormData.append(imagedata, withName: "\(imageParameterName)\(index + 1)", fileName: "\(imageName)\(index + 1)", mimeType: "image/png")
+                        multipartFormData.append(imagedata ?? Data(), withName: "\(imageParameterName)\(index + 1)", fileName: "\(imageName)\(index + 1)", mimeType: "image/png")
                     }
                 }
             }
             else {
                 if let imageData = images[0].jpegData(compressionQuality: 0.4) {
                     let imagedata = images[0].resize(images[0])
-                    multipartFormData.append(imagedata, withName: imageParameterName, fileName: imageName, mimeType: "image/png")
+                    multipartFormData.append(imagedata ?? Data(), withName: imageParameterName, fileName: imageName, mimeType: "image/png")
                 }
             }
             

@@ -719,20 +719,41 @@ class BaseViewController: UIViewController, UINavigationBarDelegate {
     
     
     func navigateToHomeScreen() {
-        guard let sceneDelegate = UIApplication.shared.connectedScenes
-            .first(where: { $0.activationState == .foregroundActive })?.delegate as? SceneDelegate else {
-            print("SceneDelegate not found!")
+        // Try to get the scene delegate and window from the connected scenes
+        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene else {
+            print("Error: Unable to retrieve window scene.")
             return
         }
         
-        let viewController = TabbarViewController.instantiate(fromStoryboard: .Main)
-        let navigationController = UINavigationController(rootViewController: viewController)
+        // Try retrieving the SceneDelegate if available
+        if let sceneDelegate = windowScene.delegate as? SceneDelegate,
+           let window = sceneDelegate.window {
+            // If SceneDelegate is available, use it
+            navigateToHomeScreen(with: window)
+        } else if let appDelegate = UIApplication.shared.delegate as? AppDelegate,
+                  let window = appDelegate.window {
+            // If no SceneDelegate is found, fallback to AppDelegate's window
+            navigateToHomeScreen(with: window)
+        } else {
+            print("Error: Unable to retrieve window from SceneDelegate or AppDelegate.")
+        }
+    }
+
+    private func navigateToHomeScreen(with window: UIWindow) {
+        // Instantiate the home screen (TabbarViewController)
+        let homeViewController = TabbarViewController.instantiate(fromStoryboard: .Main)
+        
+        // Wrap it inside a navigation controller
+        let navigationController = UINavigationController(rootViewController: homeViewController)
         navigationController.navigationBar.isTranslucent = false
         navigationController.navigationBar.isHidden = true
         
-        sceneDelegate.window?.rootViewController = navigationController
-        sceneDelegate.window?.makeKeyAndVisible()
+        // Set the new root view controller
+        window.rootViewController = navigationController
+        window.makeKeyAndVisible()
     }
+
+
     
     func navigateToClothPreferece() {
         let loginViewController = ClothPreferencesViewController.instantiate(fromStoryboard: .Main)
@@ -750,14 +771,19 @@ class BaseViewController: UIViewController, UINavigationBarDelegate {
         navigationController.navigationBar.isTranslucent = false
         navigationController.navigationBar.isHidden = true
         
-        // Assuming this is within the SceneDelegate
-        if let windowScene = (UIApplication.shared.connectedScenes.first as? UIWindowScene) {
-            let window = UIWindow(windowScene: windowScene)
-            window.rootViewController = navigationController
-            sceneDelegate.window = window
-            window.makeKeyAndVisible()
+        // Ensure we have a valid window scene
+        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+              let sceneDelegate = windowScene.delegate as? SceneDelegate else {
+            return
         }
+        
+        // Update the window with the new root view controller
+        let window = UIWindow(windowScene: windowScene)
+        window.rootViewController = navigationController
+        sceneDelegate.window = window
+        window.makeKeyAndVisible()
     }
+
     
     func navigateToVerfyPhoneNo() {
         let loginViewController = MobileNumberVC.instantiate(fromStoryboard: .Auth)

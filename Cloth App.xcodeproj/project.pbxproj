@@ -248,6 +248,7 @@
 		327C10A12CDD391C00664E65 /* FilterProductXIB.xib in Resources */ = {isa = PBXBuildFile; fileRef = 327C109F2CDD391C00664E65 /* FilterProductXIB.xib */; };
 		327F2CD92C065CFF00D515E2 /* MobileNumberVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 327F2CD82C065CFF00D515E2 /* MobileNumberVC.swift */; };
 		327F2CDB2C065D9900D515E2 /* MobileNumberViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 327F2CDA2C065D9800D515E2 /* MobileNumberViewModel.swift */; };
+		327F3CE42D5E647E0040CE24 /* UserNameVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 327F3CE32D5E647E0040CE24 /* UserNameVC.swift */; };
 		32814ABD2C0638E800E4116B /* OtpViewVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32814ABC2C0638E800E4116B /* OtpViewVC.swift */; };
 		32814AC02C063B0300E4116B /* UIVIewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32814ABF2C063B0300E4116B /* UIVIewController.swift */; };
 		328895AC2C0246DC00F0BB81 /* CustomPresent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 328895AB2C0246DC00F0BB81 /* CustomPresent.swift */; };
@@ -583,6 +584,7 @@
 		327C109F2CDD391C00664E65 /* FilterProductXIB.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FilterProductXIB.xib; sourceTree = "<group>"; };
 		327F2CD82C065CFF00D515E2 /* MobileNumberVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileNumberVC.swift; sourceTree = "<group>"; };
 		327F2CDA2C065D9800D515E2 /* MobileNumberViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileNumberViewModel.swift; sourceTree = "<group>"; };
+		327F3CE32D5E647E0040CE24 /* UserNameVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserNameVC.swift; sourceTree = "<group>"; };
 		32814ABC2C0638E800E4116B /* OtpViewVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtpViewVC.swift; sourceTree = "<group>"; };
 		32814ABF2C063B0300E4116B /* UIVIewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIVIewController.swift; sourceTree = "<group>"; };
 		328895AB2C0246DC00F0BB81 /* CustomPresent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomPresent.swift; sourceTree = "<group>"; };
@@ -1663,6 +1665,7 @@
 			isa = PBXGroup;
 			children = (
 				323AF9392C0392D6005B617C /* LoginVC.swift */,
+				327F3CE32D5E647E0040CE24 /* UserNameVC.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -2785,6 +2788,7 @@
 				18468E432660BD4A007344DA /* CheckoutViewController.swift in Sources */,
 				18468D902660BD3C007344DA /* QRScannerError.swift in Sources */,
 				18468D8B2660BD3C007344DA /* KNCirclePercentView.m in Sources */,
+				327F3CE42D5E647E0040CE24 /* UserNameVC.swift in Sources */,
 				324D204F2C88C2EE0025218B /* HeaderTbCell.swift in Sources */,
 				18468D6A2660BD3C007344DA /* BubbleTabBar.swift in Sources */,
 				18F3C97C2689D8A400126573 /* StorePostAddLocationViewController.swift in Sources */,

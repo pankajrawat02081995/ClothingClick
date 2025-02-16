@@ -120,7 +120,7 @@ class PostDetailsVC: BaseViewController {
                 }
             }
             
-            self.setDeta()
+            self.setData()
         } else {
             if let subcategory = self.selectSubcategory?.name {
                 self.txtModelTitle.text = "\(brandSearchList?.name ?? "") \(subcategory)"
@@ -162,66 +162,58 @@ class PostDetailsVC: BaseViewController {
         self.styleCollectionHeight.constant = self.styleCollection.contentSize.height
     }
     
-    func setDeta () {
-        let id = Int(self.postDetails?.brand_id ?? "0")
-        let dict = ["brand_id": id ?? 0,
-                    "name": self.postDetails?.brand_name ?? ""] as [String : Any]
-        let brandObjCat = BrandeSearchModel.init(JSON: dict)
-        self.brandSearchList = brandObjCat
-        self.txtBrandDesignerName.text = brandSearchList?.name
-        self.txtModelTitle.text = self.postDetails?.title ?? ""
-        //        self.txtModelTitle.text = "\(brandSearchList?.name ?? "") \(self.postDetails?.title ?? "")"
+    func setData() {
+        guard let postDetails = self.postDetails else { return }
         
-        self.txtDescription.text = self.postDetails?.description ?? ""
-        for i in 0..<(self.postDetails?.images!.count ?? 0)! {
-            var dict = [String:Any]()
-            dict["image_url"] = self.postDetails?.images![i].image
-            self.productImage.append(dict)
-        }
-        for i in 0..<(self.postDetails?.videos!.count ?? 0)!  {
-            var dict = [String:Any]()
-            dict["video_url"] = self.postDetails?.videos?[i].video ?? ""
-            self.productVideo.append(dict)
-            
-        }
+        // Set brand details
+        let brandID = Int(postDetails.brand_id ?? "0") ?? 0
+        let brandDict: [String: Any] = [
+            "brand_id": brandID,
+            "name": postDetails.brand_name ?? ""
+        ]
+        self.brandSearchList = BrandeSearchModel(JSON: brandDict)
+        self.txtBrandDesignerName.text = self.brandSearchList?.name ?? ""
+        
+        // Set text fields
+        self.txtModelTitle.text = postDetails.title ?? ""
+        self.txtDescription.text = postDetails.description ?? ""
+        
+        // Process images
+        self.productImage = postDetails.images?.compactMap { ["image_url": $0.image ?? ""] } ?? []
+        
+        // Process videos
+        self.productVideo = postDetails.videos?.compactMap { ["video_url": $0.video ?? ""] } ?? []
+        
+        // Combine images & videos
         self.combineMediaArrays()
-        if self.productImage.count > 1{
-            self.CVAddProductImage.dragInteractionEnabled = true
-        }else{
-            self.CVAddProductImage.dragInteractionEnabled = false
-        }
-        self.priceId = String(self.postDetails?.price_type ?? "0")
-        //        self.txtFixedpricee.text = self.postDetails?.price_type_name
         
-        //        if self.txtFixedpricee.text == "Price"{
-        if let price = self.postDetails?.price{
+        // Enable drag interaction for images
+        self.CVAddProductImage.dragInteractionEnabled = self.productImage.count > 1
+        
+        // Set price details
+        self.priceId = String(postDetails.price_type ?? "0")
+        if let price = postDetails.price {
             self.txtCADPrice.text = "\(price)"
         }
-        //        }else{
-        //            self.txtCADPrice.text = self.postDetails?.price_type_name
-        //        }
         
-        if let brnsdName = self.brandSearchList?.name{
-            self.txtBrandDesignerName.text = brnsdName
+        // Set brand designer name
+        if let brandName = self.brandSearchList?.name {
+            self.txtBrandDesignerName.text = brandName
         }
-        // selectAddress
+        
+        // Set address
         if appDelegate.userDetails?.role_id == 1 {
-            if self.selectAddress.count != 0 {
-                self.txtLocation.text = "\(self.selectAddress[0]?.address ?? "")"
-            }
-        }else{
+            self.txtLocation.text = self.selectAddress.first??.address ?? ""
+        } else {
             self.txtLocation.text = "\(self.selectAddress.count) select location"
         }
         
-        if self.productVideo.isEmpty == false || self.productImage.isEmpty == false{
-            self.CVAddProductImage.isHidden = false
-            self.btnAddImage.isHidden = true
-        }else{
-            self.CVAddProductImage.isHidden = true
-            self.btnAddImage.isHidden = false
-        }
-        
+        // Toggle visibility of product image section
+        let hasMedia = !self.productImage.isEmpty || !self.productVideo.isEmpty
+        self.CVAddProductImage.isHidden = !hasMedia
+        self.btnAddImage.isHidden = hasMedia
     }
+
     
     @IBAction func photoGuiedOnPress(_ sender: UIButton) {
         let vc = PhotoGuide.instantiate(fromStoryboard: .Sell)
@@ -363,23 +355,25 @@ class PostDetailsVC: BaseViewController {
     }
     
     func combineMediaArrays() {
-        mediaItems = []
+        mediaItems.removeAll()
         
         // Add images to mediaItems
-        for imageDict in productImage {
-            let image = imageDict["image_url"] as? UIImage ?? UIImage()
-            let imageString = imageDict["image_url"] as? String ?? ""
-            mediaItems.append(.photo(image: image, imageString: imageString))
-        }
+        mediaItems.append(contentsOf: productImage.compactMap { dict in
+            let image = dict["image_url"] as? UIImage ?? UIImage()
+            let imageString = dict["image_url"] as? String ?? ""
+            return .photo(image: image, imageString: imageString)
+        })
         
         // Add videos to mediaItems
-        for videoDict in productVideo {
-            if let url = videoDict["video_url"] as? String, let thumbnail = videoDict["thumbnail"] as? UIImage {
-                mediaItems.append(.video(url: url, thumbnail: thumbnail))
-            }
-        }
+        mediaItems.append(contentsOf: productVideo.compactMap { dict in
+            guard let url = dict["video_url"] as? String,
+                  let thumbnail = dict["thumbnail"] as? UIImage else { return nil }
+            return .video(url: url, thumbnail: thumbnail)
+        })
+        
         self.CVAddProductImage.reloadData()
     }
+
     
     func videoConvert(videoURL: URL)  {
         let avAsset = AVURLAsset(url: videoURL as URL, options: nil)
@@ -555,13 +549,25 @@ class PostDetailsVC: BaseViewController {
 
 extension PostDetailsVC{
     
-    func apiCallWithImageVideoList<T:Mappable>(of type: T.Type = T.self,isShowHud: Bool, URL : String, apiName : String, parameters : [String : Any], images: [UIImage], imageParameterName: String, imageName: String, video: [URL?], videoParameterName: String, videoName: String, completion:@escaping (_ dict: BaseResponseModel<T>?,_ error: NSError?) -> ()){
-        
+    func apiCallWithImageVideoList<T: Mappable>(
+        of type: T.Type = T.self,
+        isShowHud: Bool,
+        URL: String,
+        apiName: String,
+        parameters: [String: Any],
+        images: [UIImage],
+        imageParameterName: String,
+        imageName: String,
+        video: [URL?],
+        videoParameterName: String,
+        videoName: String,
+        completion: @escaping (_ dict: BaseResponseModel<T>?, _ error: NSError?) -> Void
+    ) {
         let api_url = URL + apiName
         print("API URL = \(api_url) parameters = \(parameters)")
         
         var headers: HTTPHeaders? = nil
-        if appDelegate.headerToken != "" {
+        if !appDelegate.headerToken.isEmpty {
             headers = ["Authorization": "Bearer \(appDelegate.headerToken)"]
         }
         
@@ -569,389 +575,304 @@ extension PostDetailsVC{
             KRProgressHUD.show()
         }
         
-        Alamofire.upload(multipartFormData: {
-            multipartFormData in
-            if images.count > 0{
-                for index in 0...images.count - 1 {
-                    
-                    let imagedata = images[index].resize(images[index])
-                    print("image size: \(imagedata.count)")
-                    multipartFormData.append(imagedata, withName: "\(imageParameterName)[\(index)]", fileName: "\(imageName)\(index).png", mimeType: "image/png")
-                    
-                    
+        Alamofire.upload(multipartFormData: { multipartFormData in
+            for (index, image) in images.enumerated() {
+                if let imageData = image.jpegData(compressionQuality: 1.0) {
+                    multipartFormData.append(imageData, withName: "\(imageParameterName)[\(index)]", fileName: "\(imageName)\(index).png", mimeType: "image/png")
                 }
             }
-            if video.count > 0 {
-                for index in 0...video.count - 1 {
-                    multipartFormData.append(video[index]!, withName: "\(videoParameterName)[\(index)]", fileName: "\(videoName)\(index).mp4", mimeType: "video/mp4")
-                }
+            
+            for (index, url) in video.compactMap({ $0 }).enumerated() {
+                multipartFormData.append(url, withName: "\(videoParameterName)[\(index)]", fileName: "\(videoName)\(index).mp4", mimeType: "video/mp4")
             }
+            
             for (key, value) in parameters {
-                //                multipartFormData.append((value as AnyObject).data(using: String.Encoding.utf8.rawValue)!, withName: key)
-                multipartFormData.append("\(value)".data(using: .utf8) ?? Data(), withName: key)
+                if let valueData = "\(value)".data(using: .utf8) {
+                    multipartFormData.append(valueData, withName: key)
+                }
             }
-        }, usingThreshold: 1, to: api_url, method: .post, headers: headers, encodingCompletion: {
-            encodingResult in
+        }, usingThreshold: 1, to: api_url, method: .post, headers: headers) { encodingResult in
+            if isShowHud {
+                KRProgressHUD.dismiss()
+            }
+            
             switch encodingResult {
             case .success(let upload, _, _):
-                upload.responseJSON(completionHandler: {
-                    response in
-                    if isShowHud {
-                        KRProgressHUD.dismiss()
-                    }
+                upload.responseJSON { response in
                     switch response.result {
                     case .success:
-                        let json = try! JSONSerialization.jsonObject(with: response.data!)
-                        print(response)
-                        let dataResponse = Mapper<BaseResponseModel<T>>().map(JSON: json as! [String : Any])
-                        
-                        if dataResponse?.status == kIsSuccess {
-                            completion(dataResponse!, nil)
-                        }
-                        else if dataResponse?.status == kUserNotFound {
-                            let alert: UIAlertController = UIAlertController.init(title: AlertViewTitle, message: dataResponse?.message, preferredStyle: .alert)
-                            alert.setAlertButtonColor()
+                        do {
+                            guard let responseData = response.data else {
+                                completion(nil, NSError(domain: "Empty response data", code: 0, userInfo: nil))
+                                return
+                            }
+                            let json = try JSONSerialization.jsonObject(with: responseData) as? [String: Any]
+                            let dataResponse = Mapper<BaseResponseModel<T>>().map(JSON: json ?? [:])
                             
-                            let hideAction: UIAlertAction = UIAlertAction.init(title: kOk, style: .default, handler: { (action) in
-                                BaseViewController.sharedInstance.clearAllUserDataFromPreference()
-                            })
-                            alert.addAction(hideAction)
-                            sceneDelegate.window?.rootViewController?.present(alert, animated: true, completion: nil)
+                            if let dataResponse = dataResponse {
+                                if dataResponse.status == kIsSuccess {
+                                    completion(dataResponse, nil)
+                                } else if dataResponse.status == kUserNotFound {
+                                    let alert = UIAlertController(title: AlertViewTitle, message: dataResponse.message, preferredStyle: .alert)
+                                    alert.setAlertButtonColor()
+                                    let hideAction = UIAlertAction(title: kOk, style: .default) { _ in
+                                        BaseViewController.sharedInstance.clearAllUserDataFromPreference()
+                                    }
+                                    alert.addAction(hideAction)
+                                    sceneDelegate.window?.rootViewController?.present(alert, animated: true)
+                                } else {
+                                    completion(nil, NSError(domain: dataResponse.message ?? "Unknown Error", code: dataResponse.status ?? -1, userInfo: nil))
+                                }
+                            } else {
+                                completion(nil, NSError(domain: "Invalid response format", code: 0, userInfo: nil))
+                            }
+                        } catch {
+                            completion(nil, NSError(domain: "JSON Parsing Error", code: 0, userInfo: nil))
                         }
-                        else{
-                            completion(nil, NSError.init(domain: (dataResponse?.message)!, code: (dataResponse?.status)!, userInfo: nil))
-                        }
+                    
                     case .failure(let error):
-                        print (error)
-                        completion(nil, NSError.init(domain: ErrorMessage, code: 0, userInfo: nil))
+                        print(error.localizedDescription)
+                        completion(nil, NSError(domain: error.localizedDescription, code: 0, userInfo: nil))
+                    @unknown default:
+                        completion(nil, NSError(domain: ErrorMessage, code: 0, userInfo: nil))
                     }
-                })
-            case .failure(let encodingError):
-                if isShowHud {
-                    KRProgressHUD.dismiss()
                 }
-                print (encodingError)
-                completion(nil, NSError.init(domain: ErrorMessage, code: 0, userInfo: nil))
+            
+            case .failure(let encodingError):
+                print(encodingError.localizedDescription)
+                completion(nil, NSError(domain: encodingError.localizedDescription, code: 0, userInfo: nil))
             }
-        })
+        }
     }
+
     
     func callAddProduct() {
         self.sendproductImage.removeAll()
-        //        for i in 0..<self.productImage.count {
-        //            if let image = self.productImage[i]["image_url"] as? UIImage {
-        //                self.sendproductImage.append(image)
-        //            }
-        //            //            self.sendproductImage.append(self.productImage[i]["image_url"] as! UIImage)
-        //        }
-        var arrVideoList = [URL]()
-        for i in self.mediaItems {
-            
-            switch i{
-            case .photo(image: let image, imageString: let imgString):
+        var videoURLs = [URL]()
+        
+        // Extract images and video URLs
+        for item in self.mediaItems {
+            switch item {
+            case .photo(let image, _):
                 self.sendproductImage.append(image)
-            case .video(url: let url, thumbnail: let thumbnail):
-                if let url = URL(string: url){
-                    arrVideoList.append(url)
+            case .video(let url, _):
+                if let validURL = URL(string: url) {
+                    videoURLs.append(validURL)
                 }
             }
         }
         
-        //        for i in 0..<self.productVideo.count {
-        //            if let url = productVideo[i]["video_url"] as? URL {
-        //                arrVideoList.append(url)
-        //            }
-        //        }
-        var colorArre = [String]()
-        for i in 0..<self.selectColor.count {
-            if let colorId = self.selectColor[i]?.id {
-                colorArre.append(String(colorId))
-            }
-        }
-        var categorySubCategoryId = [String]()
+        // Collect selected color IDs
+        let colorIDs = self.selectColor.compactMap { $0?.id }.map(String.init).joined(separator: ",")
+        
+        // Collect category and subcategory IDs
+        let categoryIDs: String
         if self.edit {
-            for i in 0..<self.categorysAndSubCategory.count {
-                categorySubCategoryId.append(String(self.categorysAndSubCategory[i].category_id ?? 0))
-            }
+            categoryIDs = self.categorysAndSubCategory.compactMap { $0.category_id }.map(String.init).joined(separator: ",")
+        } else {
+            categoryIDs = [self.selectCategory?.category_id, self.selectSubcategory?.id]
+                .compactMap { $0 }
+                .map(String.init)
+                .joined(separator: ",")
         }
-        else {
-            categorySubCategoryId.append(String(self.selectCategory?.category_id ?? 0))
-            categorySubCategoryId.append(String(self.selectSubcategory?.id ?? 0))
-        }
-        let category = String(categorySubCategoryId.joined(separator: ","))
-        let colorIdString = colorArre.joined(separator: ",")
-        var usersideproductlocation = ""
-        var location  = self.addressIdLIst.joined(separator: ",")
-        var price = ""
         
-        if self.txtCADPrice.text == "Free" || self.txtCADPrice.text == "Best offer" || self.txtCADPrice.text == "Trade/Swap" {
-            price = "0.00"//self.txtCADPrice.text ?? "0"
+        // Determine price
+        let price: String
+        if let text = self.txtCADPrice.text {
+            price = ["Free", "Best offer", "Trade/Swap"].contains(text) || text.isEmpty ? "0.00" : text
+        } else {
+            price = "0.00"
         }
-        else {
-            if txtCADPrice.text == "" {
-                price = "0.00"
-            }
-            else {
-                price = self.txtCADPrice.text ?? "0"
-            }
-        }
-        var address = ""
-        var postalcode = ""
-        var latitude = ""
-        var longitude = ""
-        var city = ""
-        var area = ""
-        if location.contains("\(appDelegate.userDetails?.id ?? 0)"){
-            print(location)
+
+        // Extract location details
+        var address = "", postalCode = "", latitude = "", longitude = "", city = "", area = ""
+        var location = self.addressIdLIst.joined(separator: ",")
+        
+        if location.contains("\(appDelegate.userDetails?.id ?? 0)") {
             location = ""
-            for i in 0..<(self.selectAddress.count)  {
-                
-                address = self.selectAddress[i]?.address ?? ""
-                postalcode = self.selectAddress[i]?.postal_code ?? ""
-                latitude = self.selectAddress[i]?.latitude ?? ""
-                longitude = self.selectAddress[i]?.longitude ?? ""
-                city = self.selectAddress[i]?.city ?? ""
-                area = self.selectAddress[i]?.area ?? ""
-                // address.append(dict)
-                // print(address)
+            if let selectedAddress = self.selectAddress.first {
+                address = selectedAddress?.address ?? ""
+                postalCode = selectedAddress?.postal_code ?? ""
+                latitude = selectedAddress?.latitude ?? ""
+                longitude = selectedAddress?.longitude ?? ""
+                city = selectedAddress?.city ?? ""
+                area = selectedAddress?.area ?? ""
             }
-            // self.selectAddress
-            
-            // usersideproductlocation = self.json(from: address) ?? ""
         }
         
+        // Prepare API parameters
+        let params: [String: Any] = [
+            "brand_id": String(self.brandSearchList?.brand_id ?? 0),
+            "gender_id": String(self.savegenderId?.gender_id ?? 0),
+            "categories": categoryIDs,
+            "sizes": String(self.selectSize?.id ?? 0),
+            "condition_id": String(self.selectCondiction?.id ?? 0),
+            "colors": colorIDs,
+            "title": self.removeBrandName(from: self.txtModelTitle.text ?? "", brand: self.brandSearchList?.name ?? ""),
+            "description": self.txtDescription.text ?? "",
+            "locations": location,
+            "price_type": "1",
+            "product_url": self.Producturl,
+            "style": self.selectedStyleID ?? 0,
+            "price": price,
+            "city": city,
+            "area": area,
+            "longitude": longitude,
+            "latitude": latitude,
+            "postal_code": postalCode,
+            "address": address
+        ]
         
-        if appDelegate.reachable.connection != .none{
-            let param = ["brand_id" : String(self.brandSearchList?.brand_id ?? 0),
-                         "gender_id": "\(self.savegenderId?.gender_id ?? 0)" ,
-                         "categories" : category ,
-                         "sizes" : String(self.selectSize?.id ?? 0),
-                         "condition_id" : "\(self.selectCondiction?.id ?? 0)" ,
-                         "colors" : colorIdString ,
-                         "title" : self.removeBrandName(from: self.txtModelTitle.text ?? "", brand: self.brandSearchList?.name ?? ""),
-                         "description" : self.txtDescription.text ?? "",
-                         "locations" : location ,
-                         "price_type" : "1" ,
-                         "product_url" : self.Producturl ,
-                         "style" : self.selectedStyleID ?? 0 ,
-                         "price" : price,
-                         "city" : city,
-                         "area" : area,
-                         "longitude" : longitude,
-                         "latitude" : latitude,
-                         "postal_code" : postalcode,
-                         "address" : address
-            ] as [String : Any]
-            
-            if self.productVideo.count != 0 {
-                self.apiCallWithImageVideoList(of: PostDetailsModel.self, isShowHud: true, URL: BASE_URL, apiName: APINAME.POST_CREATE.rawValue, parameters: param, images: self.sendproductImage, imageParameterName: "image", imageName: "Productimge", video: arrVideoList, videoParameterName: "video", videoName: "ProductVideo") { (response, error) in
-                    if error == nil {
-                        if let response = response {
-                            if let data = response.dictData {
-                                print(response)
-                                let alert: UIAlertController = UIAlertController.init(title: AlertViewTitle, message: response.message, preferredStyle: .alert)
-                                alert.setAlertButtonColor()
-                                
-                                let hideAction: UIAlertAction = UIAlertAction.init(title: kOk, style: .default, handler: { (action) in
-                                    if let tabBarController = self.tabBarController {
-                                        tabBarController.selectedIndex = 4
-                                    }
-                                })
-                                alert.addAction(hideAction)
-                                self.present(alert, animated: true)                            }
-                        }
-                        else {
-                            UIAlertController().alertViewWithTitleAndMessage(self, message: error?.domain ?? ErrorMessage)
-                        }
-                    }
-                }
-            }
-            else {
-                self.apiCallWithImageVideoList(of: PostDetailsModel.self, isShowHud: true, URL: BASE_URL, apiName: APINAME.POST_CREATE.rawValue, parameters: param, images: self.sendproductImage, imageParameterName: "image", imageName: "Productimge", video: arrVideoList, videoParameterName: "video", videoName: "ProductVideo") { (response, error) in
-                    if error == nil {
-                        if let response = response {
-                            if let data = response.dictData {
-                                print(response)
-                                
-                                let alert: UIAlertController = UIAlertController.init(title: AlertViewTitle, message: response.message, preferredStyle: .alert)
-                                alert.setAlertButtonColor()
-                                
-                                let hideAction: UIAlertAction = UIAlertAction.init(title: kOk, style: .default, handler: { (action) in
-                                    //                                    self.navigationController?.setViewControllers([], animated: false)
-                                    
-                                    // Navigate to a specific tab index (e.g., index 4)
-                                    if let tabBarController = self.tabBarController {
-                                        tabBarController.selectedIndex = 4
-                                    }
-                                })
-                                alert.addAction(hideAction)
-                                self.present(alert, animated: true)
-                            }
-                        }
-                        else {
-                            UIAlertController().alertViewWithTitleAndMessage(self, message: error?.domain ?? ErrorMessage)
-                        }
-                    }
-                }
-            }
-        }else {
+        // Check internet connection
+        guard appDelegate.reachable.connection != .none else {
             UIAlertController().alertViewWithNoInternet(self)
+            return
+        }
+        
+        // Call API
+        self.apiCallWithImageVideoList(
+            of: PostDetailsModel.self,
+            isShowHud: true,
+            URL: BASE_URL,
+            apiName: APINAME.POST_CREATE.rawValue,
+            parameters: params,
+            images: self.sendproductImage,
+            imageParameterName: "image",
+            imageName: "ProductImage",
+            video: videoURLs,
+            videoParameterName: "video",
+            videoName: "ProductVideo"
+        ) { response, error in
+            guard error == nil, let response = response, let _ = response.dictData else {
+                UIAlertController().alertViewWithTitleAndMessage(self, message: error?.domain ?? ErrorMessage)
+                return
+            }
+            
+            let alert = UIAlertController(title: AlertViewTitle, message: response.message, preferredStyle: .alert)
+            alert.setAlertButtonColor()
+            
+            let hideAction = UIAlertAction(title: kOk, style: .default) { _ in
+                self.tabBarController?.selectedIndex = 4
+            }
+            alert.addAction(hideAction)
+            self.present(alert, animated: true)
         }
     }
+
     
     func callEditProduct() {
-        for i in 0..<self.productImage.count {
-            if let image = self.productImage[i]["image_url"] as? UIImage {
-                self.sendproductImage.append(image)
-            }
-            //            self.sendproductImage.append(self.productImage[i]["image_url"] as! UIImage)
-        }
+        self.sendproductImage.removeAll()
         var arrVideoList = [URL]()
-        for i in 0..<self.productVideo.count {
-            if let url = productVideo[i]["video_url"] as? URL {
-                arrVideoList.append(url)
+        
+        for item in self.mediaItems {
+            switch item {
+            case .photo(image: let image, _):
+                self.sendproductImage.append(image)
+            case .video(url: let url, _):
+                if let videoURL = URL(string: url) {
+                    arrVideoList.append(videoURL)
+                }
             }
         }
-        var colorArre = [String]()
-        for i in 0..<self.selectColor.count {
-            if let colorId = self.selectColor[i]?.id {
-                colorArre.append(String(colorId))
-            }
-        }
+        
+        let colorArre = self.selectColor.compactMap { $0?.id.map(String.init) }
+        
         var categorySubCategoryId = [String]()
         if self.edit {
-            for i in 0..<self.categorysAndSubCategory.count {
-                categorySubCategoryId.append(String(self.categorysAndSubCategory[i].category_id ?? 0))
-            }
-        }
-        else {
+            categorySubCategoryId = self.categorysAndSubCategory.compactMap { String($0.category_id ?? 0) }
+        } else {
             categorySubCategoryId.append(String(self.selectCategory?.category_id ?? 0))
             categorySubCategoryId.append(String(self.selectSubcategory?.id ?? 0))
         }
-        let category = String(categorySubCategoryId.joined(separator: ","))
+        
+        let category = categorySubCategoryId.joined(separator: ",")
         let colorIdString = colorArre.joined(separator: ",")
-        var location  = self.addressIdLIst.joined(separator: ",")
+        var location = self.addressIdLIst.joined(separator: ",")
         let deletedImage = self.deleteImageId.joined(separator: ",")
         let deletedVideo = self.deleteVideoId.joined(separator: ",")
         
-        // var usersideproductlocation = ""
-        var address = ""
-        var postalcode = ""
-        var latitude = ""
-        var longitude = ""
-        var city = ""
-        var area = ""
-        if location.contains("\(appDelegate.userDetails?.id ?? 0)"){
-            print(location)
+        var address = "", postalcode = "", latitude = "", longitude = "", city = "", area = ""
+        
+        if location.contains("\(appDelegate.userDetails?.id ?? 0)") {
             location = ""
-            for i in 0..<(self.selectAddress.count)  {
-                address = self.selectAddress[i]?.address ?? ""
-                postalcode = self.selectAddress[i]?.postal_code ?? ""
-                latitude = self.selectAddress[i]?.latitude ?? ""
-                longitude = self.selectAddress[i]?.longitude ?? ""
-                area = self.selectAddress[i]?.city ?? ""
-                city = self.selectAddress[i]?.area ?? ""
-            }
-        }
-        var price = ""
-        //        if self.txtCADPrice.text == self.txtFixedpricee.text {
-        //            price = "0.00"//self.txtCADPrice.text ?? "0"
-        //        }
-        //        else
-        if self.txtCADPrice.text == "Free" || self.txtCADPrice.text == "Best offer" || self.txtCADPrice.text == "Trade/Swap" {
-            price = "0.00"//self.txtCADPrice.text ?? "0"
-        }
-        else {
-            if txtCADPrice.text == "" {
-                price = "0.00"
-            }
-            else {
-                price = self.txtCADPrice.text ?? "0"
+            if let firstAddress = self.selectAddress.first {
+                address = firstAddress?.address ?? ""
+                postalcode = firstAddress?.postal_code ?? ""
+                latitude = firstAddress?.latitude ?? ""
+                longitude = firstAddress?.longitude ?? ""
+                area = firstAddress?.city ?? ""
+                city = firstAddress?.area ?? ""
             }
         }
         
-        if appDelegate.reachable.connection != .none{
-            let param = ["post_id" : "\(self.postDetails?.id ?? 0)",
-                         "brand_id" : "\(self.brandSearchList?.brand_id ?? 0)" ,
-                         "gender_id": "\(self.savegenderId?.gender_id ?? 0)" ,
-                         "categories" : category ,
-                         "sizes" : String(self.selectSize?.id ?? 0),
-                         "condition_id" : "\(self.selectCondiction?.id ?? 0)" ,
-                         "colors" : colorIdString ,
-                         "title" : self.removeBrandName(from: self.txtModelTitle.text ?? "", brand: self.brandSearchList?.name ?? "") ,
-                         "description" : self.txtDescription.text ?? "",
-                         "locations" : location ,
-                         "price_type" : "1" ,
-                         "style" : self.selectedStyleID ?? 0 ,
-                         "price" : price,
-                         "deleted_image_ids" : deletedImage,
-                         "deleted_video_ids" : deletedVideo,
-                         "product_url" : self.Producturl,
-                         "city" : city,
-                         "area" : area,
-                         "longitude" : longitude,
-                         "latitude" : latitude,
-                         "postal_code" : postalcode,
-                         "address" : address
-            ] as [String : Any]
-            print(param)
-            if self.productVideo.count != 0 {
-                self.apiCallWithImageVideoList(of: PostDetailsModel.self, isShowHud: true, URL: BASE_URL, apiName: APINAME.POSE_EDIT.rawValue, parameters: param, images: self.sendproductImage, imageParameterName: "image", imageName: "Productimge", video: arrVideoList, videoParameterName: "video", videoName: "ProductVideo") { (response, error) in
-                    if error == nil {
-                        if let response = response {
-                            if let data = response.dictData {
-                                self.postDetails = data
-                                let alert: UIAlertController = UIAlertController.init(title: AlertViewTitle, message: response.message, preferredStyle: .alert)
-                                alert.setAlertButtonColor()
-                                
-                                let hideAction: UIAlertAction = UIAlertAction.init(title: kOk, style: .default, handler: { (action) in
-                                    //                                    self.navigationController?.setViewControllers([], animated: false)
-                                    
-                                    // Navigate to a specific tab index (e.g., index 4)
-                                    self.navigationController?.popToRootViewController(animated: true)
-                                })
-                                alert.addAction(hideAction)
-                                sceneDelegate.window?.rootViewController?.present(alert, animated: true, completion: nil)
-                            }
-                        }
-                    }
-                    else {
-                        UIAlertController().alertViewWithTitleAndMessage(self, message: error?.domain ?? ErrorMessage)
-                    }
-                }
-            }
-            else {
-                self.apiCallWithImageVideoList(of: PostDetailsModel.self, isShowHud: true, URL: BASE_URL, apiName: APINAME.POSE_EDIT.rawValue, parameters: param, images: self.sendproductImage, imageParameterName: "image", imageName: "Productimge", video: arrVideoList, videoParameterName: "video", videoName: "ProductVideo") { (response, error) in
-                    if error == nil {
-                        if let response = response {
-                            if let data = response.dictData {
-                                self.postDetails = data
-                                let alert: UIAlertController = UIAlertController.init(title: AlertViewTitle, message: response.message, preferredStyle: .alert)
-                                alert.setAlertButtonColor()
-                                
-                                let hideAction: UIAlertAction = UIAlertAction.init(title: kOk, style: .default, handler: { (action) in
-                                    //                                    self.navigationController?.setViewControllers([], animated: false)
-                                    
-                                    // Navigate to a specific tab index (e.g., index 4)
-                                    //                                    if let tabBarController = self.tabBarController {
-                                    //                                        tabBarController.selectedIndex = 4
-                                    //                                    }
-                                    self.navigationController?.popToRootViewController(animated: true)
-                                })
-                                alert.addAction(hideAction)
-                                sceneDelegate.window?.rootViewController?.present(alert, animated: true, completion: nil)
-                            }
-                        }
-                    }
-                    else {
-                        UIAlertController().alertViewWithTitleAndMessage(self, message: error?.domain ?? ErrorMessage)
-                    }
-                }
-            }
-        }else {
+        let price = (self.txtCADPrice.text?.isEmpty == true || ["Free", "Best offer", "Trade/Swap"].contains(self.txtCADPrice.text)) ? "0.00" : (self.txtCADPrice.text ?? "0")
+        
+        guard appDelegate.reachable.connection != .none else {
             UIAlertController().alertViewWithNoInternet(self)
+            return
+        }
+        
+        let param: [String: Any] = [
+            "post_id": "\(self.postDetails?.id ?? 0)",
+            "brand_id": "\(self.brandSearchList?.brand_id ?? 0)",
+            "gender_id": "\(self.savegenderId?.gender_id ?? 0)",
+            "categories": category,
+            "sizes": "\(self.selectSize?.id ?? 0)",
+            "condition_id": "\(self.selectCondiction?.id ?? 0)",
+            "colors": colorIdString,
+            "title": self.removeBrandName(from: self.txtModelTitle.text ?? "", brand: self.brandSearchList?.name ?? ""),
+            "description": self.txtDescription.text ?? "",
+            "locations": location,
+            "price_type": "1",
+            "style": self.selectedStyleID ?? 0,
+            "price": price,
+            "deleted_image_ids": deletedImage,
+            "deleted_video_ids": deletedVideo,
+            "product_url": self.Producturl,
+            "city": city,
+            "area": area,
+            "longitude": longitude,
+            "latitude": latitude,
+            "postal_code": postalcode,
+            "address": address
+        ]
+        
+        print(param)
+        
+        self.apiCallWithImageVideoList(
+            of: PostDetailsModel.self,
+            isShowHud: true,
+            URL: BASE_URL,
+            apiName: APINAME.POSE_EDIT.rawValue,
+            parameters: param,
+            images: self.sendproductImage,
+            imageParameterName: "image",
+            imageName: "Productimge",
+            video: arrVideoList,
+            videoParameterName: "video",
+            videoName: "ProductVideo"
+        ) { (response, error) in
+            if let error = error {
+                UIAlertController().alertViewWithTitleAndMessage(self, message: error.domain ?? ErrorMessage)
+                return
+            }
+            
+            if let response = response, let data = response.dictData {
+                self.postDetails = data
+                
+                let alert = UIAlertController(title: AlertViewTitle, message: response.message, preferredStyle: .alert)
+                alert.setAlertButtonColor()
+                
+                let hideAction = UIAlertAction(title: kOk, style: .default) { _ in
+                    self.navigationController?.popToRootViewController(animated: true)
+                }
+                
+                alert.addAction(hideAction)
+                sceneDelegate.window?.rootViewController?.present(alert, animated: true)
+            }
         }
     }
+
 }
 
 
@@ -1100,9 +1021,6 @@ extension PostDetailsVC: UICollectionViewDelegate,UICollectionViewDataSource {
             let alert: UIAlertController = UIAlertController.init(title: AlertViewTitle, message: msg, preferredStyle: .alert)
             alert.setAlertButtonColor()
             let yesAction: UIAlertAction = UIAlertAction.init(title: "Remove", style: .default, handler: { (action) in
-                //                self.productImage.remove(at: indexPath.item)
-                //                let object = self.postDetails?.images
-                //                self.deleteImageId.append(String(object?[indexPath.item].id ?? 0))
                 self.mediaItems.remove(at: sender.tag)
                 if self.mediaItems.isEmpty{
                     self.btnAddImage.isHidden = false
@@ -1431,8 +1349,6 @@ extension PostDetailsVC: UICollectionViewDelegateFlowLayout {
             let widthPerItem = availableWidth / 3
             return CGSize(width: widthPerItem, height: widthPerItem)
         }
-        
-        
     }
     
     func collectionView(_ collectionView: UICollectionView,

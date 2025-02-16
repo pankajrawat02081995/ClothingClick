@@ -33,13 +33,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             }
             NotificationCenter.default.post(name: NSNotification.Name(rawValue: "deeplinknavigate"), object: nil)
         }
-        
-        //        if let openURLContext = URLContexts.first{
-        //            let url = openURLContext.url
-        //            let options: [AnyHashable : Any] = [ UIApplication.OpenURLOptionsKey.annotation : openURLContext.options.annotation as Any, UIApplication.OpenURLOptionsKey.sourceApplication : openURLContext.options.sourceApplication as Any, UIApplication.OpenURLOptionsKey.openInPlace : openURLContext.options.openInPlace]
-        ////            TWTRTwitter.sharedInstance().application(UIApplication.shared, open: url, options: options)
-        //        }
-        
+       
         guard let url = URLContexts.first?.url else {
             return
         }

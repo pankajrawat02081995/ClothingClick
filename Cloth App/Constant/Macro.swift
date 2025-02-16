@@ -399,40 +399,55 @@ extension UIImage {
 //           return Data()
 //       }
     
-    func resize(_ image: UIImage) -> Data {
-        var actualHeight = Float(image.size.height)
-        var actualWidth = Float(image.size.width)
-        let maxHeight: Float = 500.0
-        let maxWidth: Float = 500.0
-        var imgRatio: Float = actualWidth / actualHeight
-        let maxRatio: Float = maxWidth / maxHeight
-        let compressionQuality: Float = 0.7
-        //50 percent compression
+    func resize(_ image: UIImage) -> Data? {
+        let maxHeight: CGFloat = 500.0
+        let maxWidth: CGFloat = 500.0
+        let compressionQuality: CGFloat = 0.7 // 70% compression
+        
+        var actualHeight = image.size.height
+        var actualWidth = image.size.width
+        var imgRatio = actualWidth / actualHeight
+        let maxRatio = maxWidth / maxHeight
+        
+        // Adjust dimensions if they exceed the maximum
         if actualHeight > maxHeight || actualWidth > maxWidth {
             if imgRatio < maxRatio {
-                //adjust width according to maxHeight
+                // Adjust width according to maxHeight
                 imgRatio = maxHeight / actualHeight
                 actualWidth = imgRatio * actualWidth
                 actualHeight = maxHeight
-            }
-            else if imgRatio > maxRatio {
-                //adjust height according to maxWidth
+            } else if imgRatio > maxRatio {
+                // Adjust height according to maxWidth
                 imgRatio = maxWidth / actualWidth
                 actualHeight = imgRatio * actualHeight
                 actualWidth = maxWidth
-            }
-            else {
+            } else {
+                // If the aspect ratio matches, set to max dimensions
                 actualHeight = maxHeight
                 actualWidth = maxWidth
             }
         }
-        let rect = CGRect(x: 0.0, y: 0.0, width: CGFloat(actualWidth), height: CGFloat(actualHeight))
+        
+        // Create a new rect with the adjusted dimensions
+        let rect = CGRect(x: 0.0, y: 0.0, width: actualWidth, height: actualHeight)
+        
+        // Begin image context
         UIGraphicsBeginImageContext(rect.size)
         image.draw(in: rect)
-        let img = UIGraphicsGetImageFromCurrentImageContext()
-        let imageData = img?.jpegData(compressionQuality: CGFloat(compressionQuality))
+        
+        // Get the resized image
+        guard let resizedImage = UIGraphicsGetImageFromCurrentImageContext() else {
+            UIGraphicsEndImageContext()
+            return nil // Return nil if resizing fails
+        }
         UIGraphicsEndImageContext()
-        return  imageData!
+        
+        // Convert the resized image to JPEG data
+        guard let imageData = resizedImage.jpegData(compressionQuality: compressionQuality) else {
+            return nil // Return nil if JPEG conversion fails
+        }
+        
+        return imageData
     }
 }
 
