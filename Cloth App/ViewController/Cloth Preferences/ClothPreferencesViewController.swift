@@ -40,54 +40,39 @@ class ClothPreferencesViewController: BaseViewController {
             self.btnBack.isHidden = false
             self.btnNext.setTitle("Save", for: .normal)
             self.callSizeList()
-            
-        }
-        else
-        {
+        } else {
             self.btnBack.isHidden = false
-            //            self.setNavigationBarShadow(navigationBar: self.navBar)
             self.callSizeList()
-            let imageSearch = UIImage(named: "search_ic")?.imageWithColor(color1: UIColor.black)
-            //            self.btnSearchBrand.setImage(imageSearch, for: .normal)
-            //            let alignedFlowLayout = self.CVSelectedBrand?.collectionViewLayout as? AlignedCollectionViewFlowLayout
-            //            alignedFlowLayout?.horizontalAlignment = .left
         }
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        // Check if any 'isSelect' is true in the entire categoryList
-        let isAnySelected = self.categoryList.contains { outerModel in
-            outerModel?.sizes?.contains { $0.isSelect == true } == true
-        }
-
-        // Use the result of isAnySelected
-        if isAnySelected {
-            print("At least one item is selected.")
-            self.btnNext.backgroundColor = UIColor.customBlack
-            self.btnNext.isUserInteractionEnabled = true
-        } else {
-            print("No items are selected.")
-            self.btnNext.backgroundColor = UIColor.customButton_bg_gray
-            self.btnNext.isUserInteractionEnabled = false
-        }
     }
     
     func setSelectedSizeDate() {
-        for i in 0..<self.categoryList.count {
-            var outerModel = self.categoryList[i]
-            for j in 0..<(outerModel?.sizes!.count)! {
-                var innerModel = outerModel?.sizes![j]
-                for size in 0..<(appDelegate.userDetails?.user_size!.count ?? 0)!  {
-                    if innerModel?.id == appDelegate.userDetails?.user_size?[size] {
-                        innerModel?.isSelect = true
-                    }
-                    outerModel?.sizes![j] = innerModel!
+        guard let userSizes = appDelegate.userDetails?.user_size, !userSizes.isEmpty else { return }
+        
+        for (i, outerModel) in categoryList.enumerated() {
+            guard var updatedOuterModel = outerModel else { continue }
+            
+            for (j, innerModel) in (updatedOuterModel.sizes ?? []).enumerated() {
+                var updatedInnerModel = innerModel
+                
+                if userSizes.contains(updatedInnerModel.id ?? 0) {
+                    updatedInnerModel.isSelect = true
+                    self.btnNext.backgroundColor = .black
+                    self.btnNext.setTitleColor(.white, for: .normal)
+                    self.btnNext.isUserInteractionEnabled = true
                 }
+                
+                updatedOuterModel.sizes?[j] = updatedInnerModel
             }
-            self.categoryList[i] = outerModel
+            
+            categoryList[i] = updatedOuterModel
         }
     }
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         //        self.tblClothsPref.reloadData()
@@ -242,47 +227,42 @@ extension ClothPreferencesViewController: UICollectionViewDelegate, UICollection
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        //        if collectionView == self.CVSelectedBrand {
-        //            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SelectedBrandCVCell", for: indexPath) as! SelectedBrandCVCell
-        //            cell.lblTitle.text = self.brandSearchList[indexPath.item]?.name
-        //            cell.btnRemove.addTarget(self, action: #selector(btnRemoveBrand_clicked(_:)), for: .touchUpInside)
-        //            return cell
-        //        }
-        //        else
-        if collectionView == self.CVGender {
+        
+        // Gender Collection View
+        if collectionView == CVGender {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ClothPrefCVCell", for: indexPath) as! ClothPrefCVCell
             
-            if let gender = self.mysizeList[indexPath.item]?.gender_name {
-                cell.lblTitle.text = gender
+            guard let gender = mysizeList[indexPath.item]?.gender_name else {
+                cell.lblTitle.text = "N/A" // Fallback text
+                return cell
             }
             
-            if self.selectGengerIndex == indexPath.item  && self.mysizeList.count > 1{
-                cell.bottomView.backgroundColor = UIColor.customBlack
-                //                cell.lblTitle.textColor = UIColor.white
-            }
-            else{
-                cell.bottomView.backgroundColor = UIColor.customBorderColor
-                //                cell.lblTitle.textColor = UIColor.black
-            }
+            cell.lblTitle.text = gender
+            
+            let isSelected = (selectGengerIndex == indexPath.item) && (mysizeList.count > 1)
+            cell.bottomView.backgroundColor = isSelected ? .customBlack : .customBorderColor
+            
             return cell
         }
-        else{
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ClothPrefCVCell", for: indexPath) as! ClothPrefCVCell
-            let object = self.categoryList[collectionView.tag]?.sizes![indexPath.item]
-            if let sizedata = object?.name {
-                cell.lblTitle.text = sizedata
-            }
-            if object?.isSelect == true  {
-                cell.bgView.backgroundColor = UIColor.black
-                cell.lblTitle.textColor = UIColor.white
-            }
-            else{
-                cell.bgView.backgroundColor = UIColor.white
-                cell.lblTitle.textColor = UIColor.black
-            }
+        
+        // Default Collection View (Category List)
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ClothPrefCVCell", for: indexPath) as! ClothPrefCVCell
+        
+        guard let sizes = categoryList[collectionView.tag]?.sizes,
+              indexPath.item < sizes.count,
+              let sizeData = sizes[indexPath.item].name else {
+            cell.lblTitle.text = "N/A" // Fallback text
             return cell
         }
+        
+        let isSelected = sizes[indexPath.item].isSelect
+        cell.lblTitle.text = sizeData
+        cell.bgView.backgroundColor = isSelected ?? false ? .black : .white
+        cell.lblTitle.textColor = isSelected ?? false ? .white : .black
+        
+        return cell
     }
+    
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if collectionView == self.CVGender {
@@ -303,9 +283,6 @@ extension ClothPreferencesViewController: UICollectionViewDelegate, UICollection
                 self.constHeightForTblClothsPref.constant = self.tblClothsPref.contentSize.height
             }
         }
-        //        else if collectionView == self.CVSelectedBrand {
-        //
-        //        }
         else {
             for i in 0..<self.categoryList.count {
                 var outerModel = self.categoryList[i]
@@ -331,7 +308,7 @@ extension ClothPreferencesViewController: UICollectionViewDelegate, UICollection
             let isAnySelected = self.categoryList.contains { outerModel in
                 outerModel?.sizes?.contains { $0.isSelect == true } == true
             }
-
+            
             // Use the result of isAnySelected
             if isAnySelected {
                 print("At least one item is selected.")
@@ -349,12 +326,8 @@ extension ClothPreferencesViewController: UICollectionViewDelegate, UICollection
         
     }
     
+    
     @objc func btnRemoveBrand_clicked(_ sender: AnyObject) {
-        //        let poston = sender.convert(CGPoint.zero, to: self.CVSelectedBrand)
-        //        if let indexPath = self.CVSelectedBrand.indexPathForItem(at: poston) {
-        //            self.brandSearchList.remove(at: indexPath.item)
-        //            self.CVSelectedBrand.reloadData()
-        //        }
     }
 }
 
@@ -372,13 +345,7 @@ extension ClothPreferencesViewController: UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        //        if collectionView == self.CVSelectedBrand {
-        //            let height = 40
-        //            let brandename = self.brandSearchList[indexPath.item]?.name ?? ""
-        //            let width = brandename.width(withConstrainedHeight: CGFloat(height), font: UIFont(name: "ProximaNova-Medium", size: 15)!)
-        //            return CGSize(width: width + 70, height: CGFloat(height))
-        //        }
-        //        else {
+
         if collectionView == self.CVGender{
             if self.mysizeList.count < 2{
                 return CGSize(width: self.CVGender.frame.size.width, height: 55)
@@ -498,113 +465,89 @@ class SelectedBrandCVCell : UICollectionViewCell {
 
 extension ClothPreferencesViewController : UITextFieldDelegate {
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
-        //        if textField == txtSearchBrand {
-        //            let viewController = self.storyBoard.instantiateViewController(withIdentifier: "FavouriteBrandSearchViewController") as! FavouriteBrandSearchViewController
-        //            viewController.favouriteBrandDeleget = self
-        //            self.present(viewController, animated: true, completion: nil)
-        //            return false
-        //        }
         return true
     }
 }
 
 extension ClothPreferencesViewController {
     func callSizeList() {
-        if appDelegate.reachable.connection != .none {
-            APIManager().apiCall(of: MySizeModel.self, isShowHud: true, URL: BASE_URL, apiName: APINAME.MY_SIZE_LIST.rawValue, method: .get, parameters: [:]) { (response, error) in
-                if error == nil {
-                    if let response = response {
-                        if let data = response.arrayData {
-                            self.mysizeList = data
-                            self.categoryList.removeAll()
-                            if self.isMySizes{
-                                
-                                for i in 0..<(appDelegate.userDetails?.user_favourite_brand!.count)!{
-                                    
-                                    let data = appDelegate.userDetails?.user_favourite_brand![i]
-                                    self.brandSearchList.append(data)
-                                }
-                                
-                                
-                                self.selectGengerIndex = (appDelegate.userDetails?.user_selected_gender ?? 0) - 1
-                                for j in 0..<(self.mysizeList[self.selectGengerIndex == -1 ? 1 : self.selectGengerIndex]?.categories?.count ?? 0) {
-                                    if self.mysizeList[self.selectGengerIndex == -1 ? 1 : self.selectGengerIndex]?.categories?[j].sizes?.count != 0 {
-                                        self.categoryList.append(self.mysizeList[self.selectGengerIndex == -1 ? 1 : self.selectGengerIndex]?.categories?[j])
-                                        
-                                    }
-                                }
-                                self.setSelectedSizeDate()
-                            }
-                            else {
-                                
-                                
-                                if self.isUserLogin == nil{
-                                    debugPrint( self.mysizeList.count)
-                                    self.categoryList.removeAll()
-                                    if self.selectGengerIndex != -1{
-                                        self.mysizeList = self.mysizeList.filter { self.selectGengerIndex == 0 ? $0?.gender_name?.capitalized == "Menswear" : $0?.gender_name?.capitalized == "Womenswear" }
-                                    }
-                                    
-                                    for index in self.mysizeList.first??.categories ?? []{
-                                        if index.sizes?.isEmpty == false{
-                                            self.categoryList.append(index)
-                                        }
-                                    }
-                                    self.selectGengerIndex = 0
-                                    //
-                                }else{
-                                    if self.mysizeList.count > 0{
-                                        self.selectGengerIndex = 0
-                                        for j in 0..<(self.mysizeList[self.selectGengerIndex == -1 ? 1 : self.selectGengerIndex]?.categories?.count ?? 0) {
-                                            if self.mysizeList[self.selectGengerIndex == -1 ? 1 : self.selectGengerIndex]?.categories?[j].sizes?.count != 0 {
-                                                self.categoryList.append(self.mysizeList[self.selectGengerIndex == -1 ? 1 : self.selectGengerIndex]?.categories?[j])
-                                                
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                            
-                            self.CVGender.reloadData()
-                            self.CVGender.layoutIfNeeded()
-                            self.constHeightForCVGender.constant = self.CVGender.contentSize.height
-                            self.tblClothsPref.reloadData()
-                            self.tblClothsPref.layoutIfNeeded()
-                            self.constHeightForTblClothsPref.constant = self.tblClothsPref.contentSize.height
-                        }
+        guard appDelegate.reachable.connection != .none else {
+            UIAlertController().alertViewWithNoInternet(self)
+            return
+        }
+        
+        APIManager().apiCall(
+            of: MySizeModel.self,
+            isShowHud: true,
+            URL: BASE_URL,
+            apiName: APINAME.MY_SIZE_LIST.rawValue,
+            method: .get,
+            parameters: [:]
+        ) { [weak self] response, error in
+            guard let self = self else { return }
+            
+            if let error = error {
+                UIAlertController().alertViewWithTitleAndMessage(self, message: error.domain ?? ErrorMessage)
+                return
+            }
+            
+            guard let data = response?.arrayData else { return }
+            self.mysizeList = data
+            self.categoryList.removeAll()
+            
+            if self.isMySizes {
+                if let favouriteBrands = appDelegate.userDetails?.user_favourite_brand {
+                    self.brandSearchList.append(contentsOf: favouriteBrands)
+                }
+                
+                self.selectGengerIndex = (appDelegate.userDetails?.user_selected_gender ?? 0) - 1
+                let selectedIndex = (self.selectGengerIndex == -1 ? 1 : self.selectGengerIndex)
+                
+                if selectedIndex < self.mysizeList.count, let categories = self.mysizeList[selectedIndex]?.categories {
+                    self.categoryList = categories.filter { !($0.sizes?.isEmpty ?? true) }
+                }
+                
+                
+                
+                self.setSelectedSizeDate()
+            } else {
+                if self.isUserLogin == nil {
+                    debugPrint(self.mysizeList.count)
+                    self.categoryList.removeAll()
+                    
+                    if self.selectGengerIndex != -1 {
+                        let genderName = self.selectGengerIndex == 0 ? "Menswear" : "Womenswear"
+                        self.mysizeList = self.mysizeList.filter { $0?.gender_name?.capitalized == genderName }
+                    }
+                    
+                    if let firstCategories = self.mysizeList.first??.categories {
+                        self.categoryList = firstCategories.filter { !($0.sizes?.isEmpty ?? true) }
+                    }
+                    
+                    self.selectGengerIndex = 0
+                } else if !self.mysizeList.isEmpty {
+                    self.selectGengerIndex = 0
+                    let selectedIndex = (self.selectGengerIndex == -1 ? 1 : self.selectGengerIndex)
+                    
+                    if selectedIndex < self.mysizeList.count, let categories = self.mysizeList[selectedIndex]?.categories {
+                        self.categoryList = categories.filter { !($0.sizes?.isEmpty ?? true) }
                     }
                 }
-                else {
-                    UIAlertController().alertViewWithTitleAndMessage(self, message: error?.domain ?? ErrorMessage)
-                }
             }
-        }
-        else {
-            UIAlertController().alertViewWithNoInternet(self)
+            
+            self.updateUI()
         }
     }
     
-    //    func callBrandSearchList(searchtext : String) {
-    //        if appDelegate.reachable.connection != .unavailable {
-    //            let param = ["name": searchtext]
-    //            APIManager().apiCall(of: BrandeSearchModel.self, isShowHud: true, URL: BASE_URL, apiName: APINAME.BRAND_SEARCH.rawValue, method: .post, parameters: param) { (response, error) in
-    //                if error == nil {
-    //                    if let response = response {
-    //                        if let data = response.arrayData {
-    //                            self.brandSearchList = data
-    //                            self.CVSelectedBrand.reloadData()
-    //                        }
-    //                    }
-    //                }
-    //                else {
-    //                    UIAlertController().alertViewWithTitleAndMessage(self, message: error?.domain ?? ErrorMessage)
-    //                }
-    //            }
-    //        }
-    //        else {
-    //            UIAlertController().alertViewWithNoInternet(self)
-    //        }
-    //    }
+    private func updateUI() {
+        CVGender.reloadData()
+        CVGender.layoutIfNeeded()
+        constHeightForCVGender.constant = CVGender.contentSize.height
+        
+        tblClothsPref.reloadData()
+        tblClothsPref.layoutIfNeeded()
+        constHeightForTblClothsPref.constant = tblClothsPref.contentSize.height
+    }
     
     func callSaveSizeList(size : String,brand : String , genderId : String) {
         if appDelegate.reachable.connection != .none {

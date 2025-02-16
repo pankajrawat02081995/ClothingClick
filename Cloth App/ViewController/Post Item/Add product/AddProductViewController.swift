@@ -946,8 +946,8 @@ extension AddProductViewController {
                 for index in 0...images.count - 1 {
 
                     let imagedata = images[index].resize(images[index])
-                    print("image size: \(imagedata.count)")
-                    multipartFormData.append(imagedata, withName: "\(imageParameterName)[\(index)]", fileName: "\(imageName)\(index).png", mimeType: "image/png")
+                    print("image size: \(imagedata?.count)")
+                    multipartFormData.append(imagedata ?? Data(), withName: "\(imageParameterName)[\(index)]", fileName: "\(imageName)\(index).png", mimeType: "image/png")
                           
                     
                 }
