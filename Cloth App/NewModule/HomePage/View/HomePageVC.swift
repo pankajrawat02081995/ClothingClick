@@ -257,6 +257,8 @@ extension HomePageVC:CollectionViewDelegateAndDataSource{
                 if let image = URL.init(string: url){
                     cell.imgProduct.kf.setImage(with: image,placeholder: PlaceHolderImage)
                 }
+            }else{
+                cell.imgProduct.image = PlaceHolderImage
             }
             
             cell.btnLike.tag = indexPath.row

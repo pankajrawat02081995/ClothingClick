@@ -454,7 +454,7 @@ class AddProductViewController: BaseViewController {
     }
     
     func setDeta () {
-        let id = Int(self.postDetails?.brand_id ?? "0") 
+        let id = Int(self.postDetails?.brand_id ?? 0) 
         let dict = ["brand_id": id ?? 0,
                     "name": self.postDetails?.brand_name ?? ""] as [String : Any]
         let brandObjCat = BrandeSearchModel.init(JSON: dict)
