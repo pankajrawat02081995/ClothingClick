@@ -12,7 +12,7 @@ import UIKit
 struct PostDetailsModel : Mappable {
     var id : Int?
     var user_id : Int?
-    var brand_id : String?
+    var brand_id : Int?
     var product_url : String?
     var type : String?
     var style_id : Int?

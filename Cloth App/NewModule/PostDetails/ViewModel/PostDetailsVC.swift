@@ -166,7 +166,7 @@ class PostDetailsVC: BaseViewController {
         guard let postDetails = self.postDetails else { return }
         
         // Set brand details
-        let brandID = Int(postDetails.brand_id ?? "0") ?? 0
+        let brandID = Int(postDetails.brand_id ?? 0)
         let brandDict: [String: Any] = [
             "brand_id": brandID,
             "name": postDetails.brand_name ?? ""
@@ -357,21 +357,56 @@ class PostDetailsVC: BaseViewController {
     func combineMediaArrays() {
         mediaItems.removeAll()
         
-        // Add images to mediaItems
-        mediaItems.append(contentsOf: productImage.compactMap { dict in
-            let image = dict["image_url"] as? UIImage ?? UIImage()
-            let imageString = dict["image_url"] as? String ?? ""
-            return .photo(image: image, imageString: imageString)
-        })
-        
-        // Add videos to mediaItems
-        mediaItems.append(contentsOf: productVideo.compactMap { dict in
-            guard let url = dict["video_url"] as? String,
-                  let thumbnail = dict["thumbnail"] as? UIImage else { return nil }
-            return .video(url: url, thumbnail: thumbnail)
-        })
-        
-        self.CVAddProductImage.reloadData()
+        Task {
+            let imageUrls = productImage.compactMap { $0["image_url"] as? String }
+            let images = await fetchImages(from: imageUrls)
+            print("Fetched \(images.count) images successfully.")
+            
+            var newMediaItems: [MediaItem] = []
+            
+            // Add images
+            newMediaItems.append(contentsOf: zip(images, imageUrls).map { image, url in
+                .photo(image: image, imageString: url)
+            })
+            
+            // Add videos
+            newMediaItems.append(contentsOf: productVideo.compactMap { dict in
+                guard let url = dict["video_url"] as? String,
+                      let thumbnail = dict["thumbnail"] as? UIImage else { return nil }
+                return .video(url: url, thumbnail: thumbnail)
+            })
+            
+            // Update mediaItems and reload collection view on main thread
+            DispatchQueue.main.async {
+                self.mediaItems = newMediaItems
+                self.CVAddProductImage.reloadData()
+            }
+        }
+    }
+
+    
+    func fetchImages(from urls: [String]) async -> [UIImage] {
+        await withTaskGroup(of: UIImage?.self) { group in
+            var images: [UIImage] = []
+            
+            for urlString in urls {
+                group.addTask {
+                    guard let url = URL(string: urlString),
+                          let data = try? Data(contentsOf: url),
+                          let image = UIImage(data: data) else {
+                        return nil
+                    }
+                    return image
+                }
+            }
+            
+            for await image in group {
+                if let image = image {
+                    images.append(image)
+                }
+            }
+            return images
+        }
     }
 
     

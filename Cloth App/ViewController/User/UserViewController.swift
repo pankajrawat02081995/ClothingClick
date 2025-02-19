@@ -300,19 +300,10 @@ class UserViewController: BaseViewController {
         if let following = userData?.totalFollowings {
             self.lblFollowingCount.text = String(following)
         }
-//        if let location = userData?.locations {
-//            if location.count != 1 {
-//                self.lblLocation.text = "Edmonton"
-//            }
-//            else {
-//                self.lblLocation.text = location[0].city
-//            }
-//            
-//        }
-//        self.heightView.constant = self.Headerview.bounds.height
+
         self.callFollowingstDatails()
         self.currentPage = 1
-        self.callGetUserpost(userId: String(userData?.id ?? 0), tabId: String(self.tabs[self.selIndexForCVCategory].type ?? 0),sort_by: self.sort_by,sort_value: self.sort_value, isShowHud: true)
+        self.callGetUserpost(userId: String(userData?.id ?? 0), tabId: String(self.tabs[self.selIndexForCVCategory].type ?? 0),sortBy: self.sort_by,sortValue: self.sort_value, isShowHud: true)
     }
     
     @objc func refresh(_ notification: NSNotification) {
@@ -464,9 +455,6 @@ class UserViewController: BaseViewController {
         }
     
     @IBAction func btnSetting_Clicked(_ button: UIButton) {
-//        let viewController = self.storyboard?.instantiateViewController(identifier: "SettingViewController") as! SettingViewController
-//        viewController.loginType = self.loginType
-//        self.navigationController?.pushViewController(viewController, animated: true)
         let vc = SettingVC.instantiate(fromStoryboard: .Setting)
         vc.hidesBottomBarWhenPushed = true
         self.pushViewController(vc: vc)
@@ -503,7 +491,7 @@ class UserViewController: BaseViewController {
         vc.modalPresentationStyle = .custom
         vc.transitioningDelegate = customTransitioningDelegate
         vc.callBack = {
-            self.callGetUserpost(userId: String(appDelegate.userDetails?.id ?? 0), tabId: String(self.selIndexForCVCategory + 1),sort_by: self.sort_by,sort_value: self.sort_value, isShowHud: true)
+            self.callGetUserpost(userId: String(appDelegate.userDetails?.id ?? 0), tabId: String(self.selIndexForCVCategory + 1),sortBy: self.sort_by,sortValue: self.sort_value, isShowHud: true)
         }
         vc.isJustFilter = true
         let root = UINavigationController(rootViewController: vc)
@@ -533,7 +521,7 @@ extension UserViewController: UIScrollViewDelegate{
             currentPage = self.currentPage + 1
             loading = true
             
-            self.callGetUserpost(userId: String(appDelegate.userDetails?.id ?? 0), tabId: String(self.tabs[self.selIndexForCVCategory].type ?? 0),sort_by: self.sort_by,sort_value: self.sort_value, isShowHud: true)
+            self.callGetUserpost(userId: String(appDelegate.userDetails?.id ?? 0), tabId: String(self.tabs[self.selIndexForCVCategory].type ?? 0),sortBy: self.sort_by,sortValue: self.sort_value, isShowHud: true)
         }
     }
 }
@@ -565,82 +553,14 @@ extension UserViewController : UICollectionViewDelegate,UICollectionViewDataSour
             return cell
         }
         else{
-//            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HomeCVCell", for: indexPath) as! HomeCVCell
-//            let objet = self.posts[indexPath.item]
-//            cell.lblSale.backgroundColor = .red
-//            DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
-//                cell.lblSale.roundCorners([.topLeft,.topRight], radius: 10)
-//            }
-//            cell.lblSelePrice.isHidden = objet.isLblSaleHidden()
-//            cell.lblSale.isHidden = objet.isLblSaleHidden()
-//            cell.viewSale.isHidden = objet.isViewSaleHidden()
-//            cell.imgPromteTopPick.isHidden = objet.isPromotShow()
-//            //            if objet.isLblSaleHidden(){
-//            cell.imgPromteTopPick.image = UIImage.init(named: objet.isPromotImage())
-//            //            }
-//            
-//            if let color = objet.getBackgroundColor() {
-//                self.setBorderAndRadius(radius: 10, view: cell.viewSale, borderWidth: 1, borderColor: color)
-//                cell.viewSale.backgroundColor = color.withAlphaComponent(0.29)
-//            }
-//            if let strDate = objet.created_at{
-//                let date = self.convertWebStringToDate(strDate: strDate).toLocalTime()
-//                cell.lblDayAgo.text = Date().offset(from: date)
-//            }
-//            if let url = objet.image?[0].image {
-//                if let image = URL.init(string: url){
-//                    cell.imgBrand.kf.setImage(with: image,placeholder: PlaceHolderImage)
-//                }
-//            }
-//            if let brsnd = objet.brand_name {
-//                cell.lblBrand.text = brsnd
-//            }
-//            else{
-//                cell.lblBrand.text = ""
-//            }
-//            if let title = objet.title {
-//                cell.lblModelItem.text = title
-//            }
-//            if let size = objet.size_name {
-//                cell.lblSize.text = size
-//            }
-//            if let is_favourite = objet.is_favourite {
-//                cell.btnWatch.isSelected = is_favourite
-//            }
-//            if let producttype = objet.price_type{
-//                if producttype == "1"{
-//                    if let price = objet.price {
-//                        if !(objet.isLblSaleHidden()) {
-//                            if let salePrice = objet.sale_price {
-//                                cell.lblPrice.text = "$ \(salePrice)"
-//                            }
-//                            let attributeString: NSMutableAttributedString =  NSMutableAttributedString(string: "$ \(price)")
-//                            attributeString.addAttribute(NSAttributedString.Key.strikethroughStyle, value: 2, range: NSMakeRange(0, attributeString.length))
-//                            cell.lblSelePrice.attributedText = attributeString
-//                            cell.constLeadingForlblPrice.constant = 2
-//                            //                    cell.lblPrice.text = "$ \(price)"
-//                        }
-//                        else {
-//                            cell.constLeadingForlblPrice.constant = -cell.lblSelePrice.frame.width
-//                            cell.lblPrice.text = "$ \(price)"
-//                        }
-//                    }
-//                }
-//                else{
-//                    if let producttype = objet.price_type_name{
-//                        cell.constLeadingForlblPrice.constant = -cell.lblSelePrice.frame.width
-//                        cell.lblPrice.text = "\(producttype)"
-//                    }
-//                }
-//            }
-//            cell.btnWatch.addTarget(self, action: #selector(btnWatch_Clicked(_:)), for: .touchUpInside)
-            
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HomePageBrowserXIB", for: indexPath) as! HomePageBrowserXIB
             let objet = self.posts[indexPath.item]
             if let url = objet.image?.first?.image {
                 if let image = URL.init(string: url){
                     cell.imgProduct.kf.setImage(with: image,placeholder: PlaceHolderImage)
                 }
+            }else{
+                cell.imgProduct.image = PlaceHolderImage
             }
             
             cell.btnLike.tag = indexPath.row
@@ -683,7 +603,7 @@ extension UserViewController : UICollectionViewDelegate,UICollectionViewDataSour
             }
             self.selIndexForCVCategory = indexPath.item
             self.currentPage = 1
-            self.callGetUserpost(userId: String(appDelegate.userDetails?.id ?? 0), tabId: String(self.tabs[indexPath.item].type ?? 0),sort_by: self.sort_by,sort_value: self.sort_value, isShowHud: true)
+            self.callGetUserpost(userId: String(appDelegate.userDetails?.id ?? 0), tabId: String(self.tabs[indexPath.item].type ?? 0),sortBy: self.sort_by,sortValue: self.sort_value, isShowHud: true)
         }
         else {
             if let postUserId = self.posts[indexPath.item].user_id {
@@ -809,79 +729,60 @@ extension UserViewController{
        }
    }
     
-    func callGetUserpost(userId : String,tabId : String,sort_by:String , sort_value : String ,isShowHud:Bool) {
-       if appDelegate.reachable.connection != .none {
+    func callGetUserpost(userId: String, tabId: String, sortBy: String, sortValue: String, isShowHud: Bool) {
+        guard appDelegate.reachable.connection != .none else {
+            BaseViewController.sharedInstance.showAlertWithTitleAndMessage(title: AlertViewTitle, message: NoInternet)
+            return
+        }
+
+        var param = FilterSingleton.share.filter.toDictionary() ?? [:]
+        let keysToRemove = ["is_only_count", "page", "notification_item_counter", "slectedCategories"]
+        keysToRemove.forEach { param.removeValue(forKey: $0) }
         
-//        let param = ["user_id":  userId,
-//                     "tab" : tabId,
-//                     "sort_by" : sort_by,
-//                     "sort_value" : sort_value,
-//                     "page" : "\(self.currentPage)"
-//                    ]
-           
-           var param = FilterSingleton.share.filter.toDictionary()
-           param?.removeValue(forKey: "is_only_count")
-           param?.removeValue(forKey: "page")
-//           param?.removeValue(forKey: "sort_by")
-//           param?.removeValue(forKey: "sort_value")
-           param?.removeValue(forKey: "notification_item_counter")
-           param?["page"] = "\(self.currentPage)"
-           param?["user_id"] = userId
-           param?["tab"] = tabId
-           param?.removeValue(forKey: "slectedCategories")
-           APIManager().apiCall(of:HomeListDetailsModel.self, isShowHud: isShowHud, URL: BASE_URL, apiName: APINAME.USER_POSTS.rawValue, method: .post, parameters: param) { (response, error) in
-               if error == nil {
-                   if let response = response {
-                    if response.dictData != nil {
-                        if let data = response.dictData {
-                            if self.currentPage == 1 {
-                                self.posts.removeAll()
-                            }
-                            
-                            if let hasMorePages = data.hasMorePages{
-                                self.hasMorePages = hasMorePages
-                            }
-                            
-                            if let post = data.posts {
-                                for temp in post {
-                                    self.posts.append(temp)
-                                }
-                            }
-                        }
-                        self.CVCategory.reloadData()
-                        
-                        if self.posts.count == 0 {
-                            self.lblNoData.isHidden = true
-                            if sort_by != "size"  {
-                                self.btnSort.isHidden = false
-                            }
-                        }
-                        else
-                        {
-                            self.lblNoData.isHidden = true
-                            self.btnSort.isHidden = false
-                            
-                        }
-                        
-                        self.CVCProduct.reloadData()
-                      //  if self.currentPage == 1 {
-                            self.CVCProduct.layoutIfNeeded()
-                            self.constHeightForCVCProduct.constant = self.CVCProduct.contentSize.height
-                       // }
-                        self.scrollView.isScrollEnabled = true
-                        self.loading = false
-                    }
-                   }
-               }
-               else {
-                   BaseViewController.sharedInstance.showAlertWithTitleAndMessage(title: AlertViewTitle, message: ErrorMessage)
-               }
-           }
-       }
-       else {
-           BaseViewController.sharedInstance.showAlertWithTitleAndMessage(title: AlertViewTitle, message: NoInternet)
-       }
-   }
+        param["page"] = "\(self.currentPage)"
+        param["user_id"] = userId
+        param["tab"] = tabId
+
+        APIManager().apiCall(
+            of: HomeListDetailsModel.self,
+            isShowHud: isShowHud,
+            URL: BASE_URL,
+            apiName: APINAME.USER_POSTS.rawValue,
+            method: .post,
+            parameters: param
+        ) { [weak self] (response, error) in
+            guard let self = self else { return }
+
+            if let error = error {
+                BaseViewController.sharedInstance.showAlertWithTitleAndMessage(title: AlertViewTitle, message: error.localizedDescription)
+                return
+            }
+
+            guard let response = response, let data = response.dictData else { return }
+
+            if self.currentPage == 1 {
+                self.posts.removeAll()
+                self.posts = data.posts ?? []
+            }else{
+                self.posts.append(contentsOf: data.posts ?? [])
+            }
+
+            self.hasMorePages = data.hasMorePages ?? false
+            
+
+            self.CVCategory.reloadData()
+            self.lblNoData.isHidden = !self.posts.isEmpty
+            self.btnSort.isHidden = self.posts.isEmpty && sortBy == "size"
+
+            self.CVCProduct.reloadData()
+            self.CVCProduct.layoutIfNeeded()
+            self.constHeightForCVCProduct.constant = self.CVCProduct.contentSize.height
+
+            self.scrollView.isScrollEnabled = true
+            self.loading = false
+        }
+    }
+
     
     func callPostFavourite(action_type : String,postId : String,index: Int) {
         if appDelegate.reachable.connection != .none {
@@ -920,6 +821,6 @@ extension UserViewController : ShortByDelegate{
         self.sort_by = sort_by
         self.sort_value = sort_value
         self.currentPage = 1
-        self.callGetUserpost(userId: String(appDelegate.userDetails?.id ?? 0), tabId: String(self.selIndexForCVCategory + 1),sort_by: self.sort_by,sort_value: self.sort_value, isShowHud: true)
+        self.callGetUserpost(userId: String(appDelegate.userDetails?.id ?? 0), tabId: String(self.selIndexForCVCategory + 1),sortBy: self.sort_by,sortValue: self.sort_value, isShowHud: true)
     }
 }

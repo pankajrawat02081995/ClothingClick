@@ -434,15 +434,11 @@ extension DiscoverVC{
                                     self.tableView.layoutIfNeeded()
                                 }else{
                                     self.tableView.isHidden = true
-                                    let viewController = self.storyboard?.instantiateViewController(identifier: "PopViewViewController") as! PopViewViewController
-                                    viewController.modalPresentationStyle = .overFullScreen
-                                    self.present(viewController, animated: true, completion: nil)
+                                    self.showApoligizeAlert()
                                 }
                             }else{
                                 self.tableView.isHidden = true
-                                let viewController = self.storyboard?.instantiateViewController(identifier: "PopViewViewController") as! PopViewViewController
-                                viewController.modalPresentationStyle = .overFullScreen
-                                self.present(viewController, animated: true, completion: nil)
+                                self.showApoligizeAlert()
                             }
                         }
                         self.getUserDetails()
@@ -453,6 +449,31 @@ extension DiscoverVC{
                 }
             }
         }
+    }
+    
+    func showApoligizeAlert() {
+        let vc = DeletePostVC.instantiate(fromStoryboard: .Sell)
+        vc.modalPresentationStyle = .overFullScreen
+        vc.modalTransitionStyle = .crossDissolve
+        vc.isCancelHide = false
+        vc.deleteTitle = "Share"
+        vc.cancelTitle = "Ok"
+        vc.deleteBgColor = .black
+        vc.titleMain = ""
+        vc.subTitle = " We apologize that there is no clothes available in your location currently. We are working to get more users in your area. Help us bring more clothes to your area by telling your friends and family about the app."
+        vc.imgMain = UIImage(named: "ic_app_name")
+        vc.deleteOnTap = {
+            let text = "I'm on Clothing Click as \(appDelegate.userDetails?.username ?? ""). Install the app to follow my posts and discover great deals on clothing in your area. Download App Now: itms-apps://itunes.apple.com/app/id1605715607"
+            let url = URL.init(string: APP_SHARE_ITUNES_URL)!
+            //let img = UIImage(named: "wel_logo")
+            let activityViewController:UIActivityViewController = UIActivityViewController(activityItems:  [text, url], applicationActivities: nil)
+            activityViewController.excludedActivityTypes = [UIActivity.ActivityType.print, UIActivity.ActivityType.postToWeibo, UIActivity.ActivityType.copyToPasteboard, UIActivity.ActivityType.addToReadingList, UIActivity.ActivityType.postToVimeo]
+            self.present(activityViewController, animated: true, completion: nil)
+        }
+        vc.cancelOnTap = {
+            
+        }
+        self.present(vc, animated: true)
     }
     
     func getUserDetails() {
