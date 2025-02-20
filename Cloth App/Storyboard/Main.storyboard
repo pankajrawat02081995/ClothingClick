@@ -12917,7 +12917,7 @@ Cg
                                     <constraint firstAttribute="height" constant="649" id="wZq-xs-EhY"/>
                                 </constraints>
                                 <view key="tableFooterView" contentMode="scaleToFill" id="Oap-0p-uOs">
-                                    <rect key="frame" x="0.0" y="874.5" width="414" height="160"/>
+                                    <rect key="frame" x="0.0" y="768.5" width="414" height="160"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <subviews>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kfb-fz-8T0" customClass="CustomButton" customModule="Clothing_Click" customModuleProvider="target">
@@ -25930,19 +25930,16 @@ method of payment</string>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_logo_new" translatesAutoresizingMaskIntoConstraints="NO" id="MJU-bY-Pqb">
-                                <rect key="frame" x="40" y="281" width="334" height="334"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" secondItem="MJU-bY-Pqb" secondAttribute="height" multiplier="1:1" id="9qe-KM-g3X"/>
-                                </constraints>
+                                <rect key="frame" x="31" y="313.5" width="352" height="269"/>
                             </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="ASY-gg-Q6y"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="MJU-bY-Pqb" firstAttribute="centerX" secondItem="m0I-XH-tiP" secondAttribute="centerX" id="YPn-6O-Bdb"/>
-                            <constraint firstItem="MJU-bY-Pqb" firstAttribute="centerY" secondItem="m0I-XH-tiP" secondAttribute="centerY" id="YYO-Er-Lzg"/>
-                            <constraint firstAttribute="trailing" secondItem="MJU-bY-Pqb" secondAttribute="trailing" constant="40" id="o6j-Ul-oy2"/>
-                            <constraint firstItem="MJU-bY-Pqb" firstAttribute="leading" secondItem="m0I-XH-tiP" secondAttribute="leading" constant="40" id="ozQ-1U-Jc3"/>
+                            <constraint firstItem="MJU-bY-Pqb" firstAttribute="centerY" secondItem="m0I-XH-tiP" secondAttribute="centerY" id="RMq-Uf-n3K"/>
+                            <constraint firstItem="MJU-bY-Pqb" firstAttribute="height" secondItem="m0I-XH-tiP" secondAttribute="height" multiplier="0.3" id="Yi7-0S-NDe"/>
+                            <constraint firstItem="MJU-bY-Pqb" firstAttribute="centerX" secondItem="m0I-XH-tiP" secondAttribute="centerX" id="iw5-4f-vAN"/>
+                            <constraint firstItem="MJU-bY-Pqb" firstAttribute="width" secondItem="m0I-XH-tiP" secondAttribute="width" multiplier="0.85" id="wNq-yT-9tp"/>
                         </constraints>
                     </view>
                 </viewController>

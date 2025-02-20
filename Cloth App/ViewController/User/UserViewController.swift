@@ -771,7 +771,7 @@ extension UserViewController{
             
 
             self.CVCategory.reloadData()
-            self.lblNoData.isHidden = !self.posts.isEmpty
+            self.lblNoData.isHidden = true//!self.posts.isEmpty
             self.btnSort.isHidden = self.posts.isEmpty && sortBy == "size"
 
             self.CVCProduct.reloadData()

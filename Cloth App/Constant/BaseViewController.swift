@@ -344,15 +344,15 @@ class BaseViewController: UIViewController, UINavigationBarDelegate {
             appDelegate.deviceToken = defaults.value(forKey: kDeviceToken) as! String
         }
         
-        if defaults.value(forKey: kHeaderToken) as? String != nil {
-            appDelegate.headerToken = defaults.value(forKey: kHeaderToken) as! String
-        }
+//        if defaults.value(forKey: kHeaderToken) as? String != nil {
+//            appDelegate.headerToken = defaults.value(forKey: kHeaderToken) as! String
+//        }
         
         UserDefaults.standard.removePersistentDomain(forName: Bundle.main.bundleIdentifier!)
         UserDefaults.standard.synchronize()
         
         defaults.set(appDelegate.deviceToken, forKey: kDeviceToken)
-        defaults.set(appDelegate.headerToken, forKey: kHeaderToken)
+//        defaults.set(appDelegate.headerToken, forKey: kHeaderToken)
         defaults.synchronize()
     }
     
