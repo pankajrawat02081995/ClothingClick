@@ -784,7 +784,7 @@ extension PostDetailsVC{
         
         // Prepare address-related fields
         var address = "", postalcode = "", latitude = "", longitude = "", city = "", area = ""
-        if location.contains("\(appDelegate.userDetails?.id ?? 0)") {
+//        if location.contains("\(appDelegate.userDetails?.id ?? 0)") {
             location = ""
             if let firstAddress = self.selectAddress.first {
                 address = firstAddress?.address ?? ""
@@ -794,7 +794,7 @@ extension PostDetailsVC{
                 area = firstAddress?.city ?? ""
                 city = firstAddress?.area ?? ""
             }
-        }
+//        }
         
         // Validate price input
         let price = (self.txtCADPrice.text?.isEmpty == true || ["Free", "Best offer", "Trade/Swap"].contains(self.txtCADPrice.text)) ? "0.00" : (self.txtCADPrice.text ?? "0")
@@ -1078,6 +1078,13 @@ extension PostDetailsVC: BrandLocationDelegate, StorePostLocationDelegate, UserL
         switch roleID {
         case 1:
             let viewController = MapLocationVC.instantiate(fromStoryboard: .Dashboard)
+            viewController.newLocation = { [weak self] location in
+                self?.selectAddress.removeAll()
+                self?.selectAddress.append(location)
+                self?.txtLocation.text = location?.address ?? ""
+            }
+            viewController.isFromPostDetails = true
+            viewController.addresslist = self.selectAddress
             self.pushViewController(vc: viewController)
             
         case 2:

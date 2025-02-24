@@ -22,6 +22,7 @@ struct UserDetailsModel : Mappable {
     var email_verified_at : String?
     var id : Int?
     var token : String?
+    var is_first_login : Bool?
     var phone : String?
     var phone_verified_at : String?
     var photo : String?

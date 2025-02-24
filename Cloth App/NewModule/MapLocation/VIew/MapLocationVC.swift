@@ -28,23 +28,36 @@ class MapLocationVC: BaseViewController {
     var isEdit : Bool?
     var address2 = String()
     
+    var newLocation : ((Locations?) -> Void)?
+    var isFromPostDetails : Bool = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.txtPostal.delegate = self
-        
-        if let locations = appDelegate.userDetails?.locations{
-            let Location = locations
-            print(Location)
-            if Location.count>0{
-                let data = Location.first
-                self.lat = Double(data?.latitude ?? "0.0") ?? 0.0
-                self.log = Double(data?.longitude ?? "0.0") ?? 0.0
-                self.txtPostal.text = data?.address
-                self.address2 = data?.address ?? ""
-                self.adddressArea = data?.area ?? ""
-                self.address = data?.address ?? ""
-                self.city = data?.city ?? ""
+        if self.isFromPostDetails == true{
+            let data = self.addresslist.first
+            self.lat = Double(data??.latitude ?? "0.0") ?? 0.0
+            self.log = Double(data??.longitude ?? "0.0") ?? 0.0
+            self.txtPostal.text = data??.address
+            self.address2 = data??.address ?? ""
+            self.adddressArea = data??.area ?? ""
+            self.address = data??.address ?? ""
+            self.city = data??.city ?? ""
+        }else{
+            if let locations = appDelegate.userDetails?.locations{
+                let Location = locations
+                print(Location)
+                if Location.count>0{
+                    let data = Location.first
+                    self.lat = Double(data?.latitude ?? "0.0") ?? 0.0
+                    self.log = Double(data?.longitude ?? "0.0") ?? 0.0
+                    self.txtPostal.text = data?.address
+                    self.address2 = data?.address ?? ""
+                    self.adddressArea = data?.area ?? ""
+                    self.address = data?.address ?? ""
+                    self.city = data?.city ?? ""
+                }
             }
         }
        
@@ -57,7 +70,14 @@ class MapLocationVC: BaseViewController {
     }
     
     @IBAction func saveOnPress(_ sender: UIButton) {
-        self.updateLocation()
+        if self.isFromPostDetails == true{
+            if let newLocation = self.addresslist.first{
+                self.newLocation?(newLocation)
+                self.popViewController()
+            }
+        }else{
+            self.updateLocation()
+        }
     }
     
 }

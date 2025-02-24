@@ -405,7 +405,16 @@ class BaseViewController: UIViewController, UINavigationBarDelegate {
         //            self.navigateToClothPreferece()
         //        }
         //        else {
-        self.navigateToHomeScreen()
+        if userData.is_first_login ?? false == true {
+            let vc = UserNameVC.instantiate(fromStoryboard: .Auth)
+            vc.userName = userData.username ?? ""
+            vc.isLoginDone = {
+                self.navigateToHomeScreen()
+            }
+            self.present(vc, animated: true)
+        }else{
+            self.navigateToHomeScreen()
+        }
         //        }
     }
     

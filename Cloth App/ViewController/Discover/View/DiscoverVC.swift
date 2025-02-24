@@ -397,59 +397,64 @@ extension DiscoverVC{
     }
     
     func callHomeList() {
-        if appDelegate.reachable.connection != .none {
-            APIManager().apiCall(of: HomeModel.self, isShowHud: true, URL: BASE_URL, apiName: APINAME.HOME_PAGE.rawValue, method: .post, parameters: [:]) { (response, error) in
-                if error == nil {
-                    if let response = response {
-                        if let data = response.arrayData {
-                            self.homeListData = data
-                            
-                            if data.first?.unread_notification == nil || data.first?.unread_notification ?? 0 == 0{
-                                self.badgeView.isHidden = true
-                            }else{
-                                self.badgeView.isHidden = false
-                            }
-                            
-                            if self.homeListData.count  > 0  {
-                                var popup = true
-                                for i in 0..<self.homeListData.count{
-                                    
-                                    if  self.homeListData[i]?.list?.count ?? 0  > 0{
-                                        if self.homeListData[i]?.name == "Banners"{
-                                        }
-                                        else if self.homeListData[i]?.name == "Saved Searches"{
-                                            
-                                        }
-                                        else{
-                                            popup = false
-                                            break;
-                                        }
-                                    }else{
-                                        
-                                    }
-                                }
-                                if popup ==  false{
-                                    self.tableView.isHidden = false
-                                    self.tableView.reloadData()
-                                    self.tableView.layoutIfNeeded()
-                                }else{
-                                    self.tableView.isHidden = true
-                                    self.showApoligizeAlert()
-                                }
-                            }else{
-                                self.tableView.isHidden = true
-                                self.showApoligizeAlert()
-                            }
-                        }
-                        self.getUserDetails()
-                    }
-                }
-                else {
-                    UIAlertController().alertViewWithTitleAndMessage(self, message: error?.domain ?? ErrorMessage)
-                }
+        guard appDelegate.reachable.connection != .none else { return }
+        
+        APIManager().apiCall(
+            of: HomeModel.self,
+            isShowHud: true,
+            URL: BASE_URL,
+            apiName: APINAME.HOME_PAGE.rawValue,
+            method: .post,
+            parameters: [:]
+        ) { (response, error) in
+            
+            if let error = error {
+                UIAlertController().alertViewWithTitleAndMessage(self, message: error.domain ?? ErrorMessage)
+                return
             }
+            
+            guard let data = response?.arrayData, !data.isEmpty else {
+                self.tableView.isHidden = true
+                self.showApoligizeAlert()
+                return
+            }
+            
+            
+            if self.userData?.id ?? 0 == 0{
+                if let id = FilterSingleton.share.genderSelection{
+                    if id == 0{
+                        self.homeListData = data.filter { ($0.name ?? "" != "Shop Womenswear") }
+                    }else if id == 1{
+                        self.homeListData = data.filter { ($0.name ?? "" != "Shop Menswear") }
+                    }
+                    
+                }else{
+                    self.homeListData = data
+                }
+            }else{
+                self.homeListData = data
+            }
+            
+
+            self.badgeView.isHidden = (data.first?.unread_notification ?? 0) == 0
+            
+            let shouldShowPopup = data.allSatisfy {
+                $0.list?.isEmpty == false && ($0.name == "Banners" || $0.name == "Saved Searches")
+            }
+            
+            if shouldShowPopup {
+                self.tableView.isHidden = true
+                self.showApoligizeAlert()
+            } else {
+                self.tableView.isHidden = false
+                self.tableView.reloadData()
+                self.tableView.layoutIfNeeded()
+            }
+            
+            self.getUserDetails()
         }
     }
+
     
     func showApoligizeAlert() {
         let vc = DeletePostVC.instantiate(fromStoryboard: .Sell)
