@@ -53,7 +53,7 @@ class FilterSingleton {
     static let share = FilterSingleton()
     var filter = Filters()
     var selectedFilter = FiltersSelectedData()
-    
+    var genderSelection : Int?
     private init() {}
     
     func getFilterData(completion: @escaping ((ViewCountModel?) -> Void)) {

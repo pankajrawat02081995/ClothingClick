@@ -290,7 +290,7 @@ extension NotificationsViewController : UITableViewDelegate,UITableViewDataSourc
                     cell.imgUser.kf.setImage(with: image,placeholder: ProfileHolderImage)
                 }
             }
-            cell.imgBookmark.isHidden = false
+            cell.imgBookmark.isHidden = true
             cell.viewCoine.isHidden = true
             cell.imgBookmark.image = UIImage.init(named: "stars-ic")
             if let strDate = object.created_at {
