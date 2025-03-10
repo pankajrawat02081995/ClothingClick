@@ -1170,7 +1170,7 @@ extension BaseViewController{
     }
     
     func socialLogin(loginType:String) {
-        let param = ["name" : "\(self.firstNameNew) \(self.lastNameNew)",
+        var param = ["name" : "\(self.firstNameNew) \(self.lastNameNew)",
                      "email" : self.emailIdNew,
                      "username": "\(self.firstNameNew.lowercased())_\(self.lastNameNew.lowercased())",
                      "password": "",
@@ -1181,6 +1181,9 @@ extension BaseViewController{
                      "devices_type": DEVICE_TYPE,
                      "devices_token": appDelegate.deviceToken,
                      "login_type": loginType]
+        
+        param["gender"] = appDelegate.selectGenderId
+        param["sizes"] = FilterSingleton.share.filter.sizes
         
         if appDelegate.reachable.connection != .none {
             APIManager().apiCall(of: UserDetailsModel.self, isShowHud: true, URL: BASE_URL, apiName: APINAME.LOGIN.rawValue, method: .post, parameters: param) { (response, error) in

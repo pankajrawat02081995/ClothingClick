@@ -69,14 +69,12 @@ extension PopuplerBrandTblXIB: UICollectionViewDelegate, UICollectionViewDataSou
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "BrandXIB", for: indexPath) as! BrandXIB
         
         if self.type == "brands"{
-            if let url = object.user_image, let imgUrl = URL(string: url.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "") {
-                cell.imgBrand.kf.setImage(with: imgUrl, placeholder: PlaceHolderImage)
-            }
+            cell.imgBrand.setImageFast(with: object.user_image?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "")
+            
             cell.lblName.text = ""
         }else{
-            if let url = object.profile_image, let imgUrl = URL(string: url.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "") {
-                cell.imgBrand.kf.setImage(with: imgUrl, placeholder: PlaceHolderImage)
-            }
+            cell.imgBrand.setImageFast(with: object.profile_image?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "")
+
             cell.lblName.text = object.name ?? ""
         }
         cell.imgBrand.contentMode = .scaleAspectFit

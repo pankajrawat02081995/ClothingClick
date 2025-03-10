@@ -332,8 +332,9 @@ extension PostItemViewController: UICollectionViewDelegate, UICollectionViewData
             }
             
             if let image  = URL.init(string: objet?.photo ?? ""){
-                cell.imgCat.kf.setImage(with: image,placeholder: PlaceHolderImage)
-                
+                let urlString = objet?.photo?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+                cell.imgCat.setImageFast(with: urlString)
+
                 if self.saveCategoriseId?.category_id == objet?.category_id {
                     cell.bgView.backgroundColor = .customBlack
                     cell.lblTitle.textColor = .customWhite

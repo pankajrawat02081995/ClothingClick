@@ -9,14 +9,13 @@
 import UIKit
 import MapKit
 
-class StoreProfileVC: UIViewController {
+class StoreProfileVC: BaseViewController {
     
     @IBOutlet weak var lblUserName: UILabel!
     @IBOutlet weak var tableView: UITableView!
     
     var isSellling : Bool? = true
     var viewModel = StoreProfileViewModel()
-    let customTransitioningDelegate = CustomTransitioningDelegate()
     var arrTime = [String]()
     var arrDays = [String]()
     
@@ -73,6 +72,10 @@ class StoreProfileVC: UIViewController {
     }
     
     @objc func contactOnPress(sender:UIButton){
+        if appDelegate.userDetails == nil {
+            self.showLogIn()
+            return
+        }
         let vc = StoreContactVC.instantiate(fromStoryboard: .Store)
         vc.modalPresentationStyle = .custom
         vc.transitioningDelegate = customTransitioningDelegate
@@ -81,6 +84,7 @@ class StoreProfileVC: UIViewController {
     }
     
     @objc func storeOpenOnPress(sender:UIButton){
+        
         let vc = StoreOpenVC.instantiate(fromStoryboard: .Store)
         let daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
         
@@ -108,6 +112,10 @@ class StoreProfileVC: UIViewController {
     }
     
     @objc func btnFollow_Clicked(_ button: UIButton) {
+        if appDelegate.userDetails == nil {
+            self.showLogIn()
+            return
+        }
         let object = self.viewModel.otherUserDetailsData
         if object?.is_following == 0 && object?.is_requested == 0  {
             self.viewModel.callFollow(userId: String(object?.id ?? 0))
@@ -121,6 +129,10 @@ class StoreProfileVC: UIViewController {
     }
     
     @objc func filterOnPress(sender:UIButton){
+        if appDelegate.userDetails == nil {
+            self.showLogIn()
+            return
+        }
         let vc = FilterProductVC.instantiate(fromStoryboard: .Dashboard)
         vc.modalPresentationStyle = .custom
         vc.transitioningDelegate = customTransitioningDelegate

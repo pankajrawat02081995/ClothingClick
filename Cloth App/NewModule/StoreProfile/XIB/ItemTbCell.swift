@@ -68,11 +68,9 @@ extension ItemTbCell: UICollectionViewDelegate, UICollectionViewDataSource, UICo
             return UICollectionViewCell()
         }
         let objet = self.posts[indexPath.item]
-        if let url = objet.image?.first?.image {
-            if let image = URL.init(string: url){
-                cell.imgProduct.kf.setImage(with: image,placeholder: PlaceHolderImage)
-            }
-        }
+        
+        cell.imgProduct.setImageFast(with: objet.image?.first?.image ?? "")
+        
         
         cell.btnLike.tag = indexPath.row
         cell.btnLike.addTarget(self, action: #selector(likeOnPress(sender:)), for: .touchUpInside)

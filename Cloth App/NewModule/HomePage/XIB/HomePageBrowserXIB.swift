@@ -17,5 +17,5 @@ class HomePageBrowserXIB: UICollectionViewCell {
         super.awakeFromNib()
         // Initialization code
     }
-
+    
 }

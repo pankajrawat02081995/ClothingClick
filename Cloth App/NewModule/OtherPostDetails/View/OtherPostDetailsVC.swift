@@ -343,13 +343,7 @@ extension OtherPostDetailsVC {
         //            self.lblUserName.text = username
         //        }
         if let url = self.postDetails?.user_profile_picture {
-            if let imge = URL.init(string: url){
-                self.imgSellerProfile.kf.setImage(with: imge,placeholder: ProfileHolderImage)
-                self.lblFirstLatter.isHidden = true
-            }else{
-                self.lblFirstLatter.text = self.postDetails?.user_name?.first?.description.capitalized ?? ""
-                self.lblFirstLatter.isHidden = false
-            }
+            self.imgSellerProfile.setImageFast(with: url)
         }else{
             self.lblFirstLatter.text = self.postDetails?.user_name?.first?.description.capitalized ?? ""
             self.lblFirstLatter.isHidden = false
@@ -633,11 +627,7 @@ extension OtherPostDetailsVC : UICollectionViewDataSource,UICollectionViewDelega
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PostImageXIB", for: indexPath) as! PostImageXIB
             //            cell.imgPlay.isHidden = true
             if objet.type == "image"{
-                if let url = objet.image {
-                    if let imageurl = URL.init(string: url){
-                        cell.imgPost.kf.setImage(with: imageurl,placeholder: PlaceHolderImage)
-                    }
-                }
+                cell.imgPost.setImageFast(with: objet.image ?? "")
             }
             else {
                 if let url = objet.video {
@@ -654,11 +644,7 @@ extension OtherPostDetailsVC : UICollectionViewDataSource,UICollectionViewDelega
         else if collectionView == self.moreSallerCollection{
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HomePageBrowserXIB", for: indexPath) as! HomePageBrowserXIB
             let objet = userPost[indexPath.item]
-            if let url = objet.image?.first?.image {
-                if let image = URL.init(string: url){
-                    cell.imgProduct.kf.setImage(with: image,placeholder: PlaceHolderImage)
-                }
-            }
+            cell.imgProduct.setImageFast(with: objet.image?.first?.image ?? "")
             
             cell.btnLike.tag = indexPath.row
             //            cell.btnLike.addTarget(self, action: #selector(btnWatch_Clicked(_:)), for: .touchUpInside)
@@ -692,11 +678,7 @@ extension OtherPostDetailsVC : UICollectionViewDataSource,UICollectionViewDelega
         else  {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HomePageBrowserXIB", for: indexPath) as! HomePageBrowserXIB
             let objet  = self.relatedPost[indexPath.item]
-            if let url = objet.image?.first?.image {
-                if let image = URL.init(string: url){
-                    cell.imgProduct.kf.setImage(with: image,placeholder: PlaceHolderImage)
-                }
-            }
+            cell.imgProduct.setImageFast(with: objet.image?.first?.image ?? "")
             
             cell.btnLike.tag = indexPath.row
             //            cell.btnLike.addTarget(self, action: #selector(btnWatch_Clicked(_:)), for: .touchUpInside)

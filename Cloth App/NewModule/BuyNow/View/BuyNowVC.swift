@@ -52,9 +52,8 @@ class BuyNowVC: UIViewController {
     }
     
     func setupData(){
-        if let imge = URL.init(string: self.postDetails?.images?.first?.image ?? ""){
-            self.imgPost.kf.setImage(with: imge,placeholder: PlaceHolderImage)
-        }
+        
+        self.imgPost.setImageFast(with: self.postDetails?.images?.first?.image ?? "")
         if let gender = self.postDetails?.gender_name,let size  = self.postDetails?.sizes?.first?.name {
             self.lblSize.text = "\(gender == "Menswear" ? "Men" : "Women")'s \(size)"
         }

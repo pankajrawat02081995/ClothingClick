@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "641A9973F76D2855D31BC6A768224A13"
-               BuildableName = "StripeUICore.bundle"
-               BlueprintName = "StripeUICore-StripeUICore"
+               BlueprintIdentifier = "F06F5E95E97EC36DC46DF8C9C0F793FC"
+               BuildableName = "StripeUICoreBundle.bundle"
+               BlueprintName = "StripeUICore-StripeUICoreBundle"
                ReferencedContainer = "container:Pods.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>

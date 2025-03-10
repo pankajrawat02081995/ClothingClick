@@ -49,14 +49,9 @@ extension ItemsSoldCongratulationsViewController : UITableViewDelegate,UITableVi
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "UserLisetCell", for: indexPath) as! UserLisetCell
         let object = self.userList[indexPath.row]
-        if let url = object.photo{
-            if let image = URL.init(string: url){
-                cell.imgUser?.kf.setImage(with: image,placeholder: PlaceHolderImage)
-            }
-        }
-        else{
-            cell.imgUser.setImage(ProfileHolderImage!)
-        }
+        let urlString = object.photo?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+        cell.imgUser.setImageFast(with: urlString)
+        
         if let username = object.username {
             cell.lblUserName.text = username
         }

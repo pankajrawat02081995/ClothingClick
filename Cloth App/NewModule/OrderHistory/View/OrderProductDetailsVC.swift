@@ -109,13 +109,9 @@ class OrderProductDetailsVC: UIViewController {
         //Purchased on 2-24-2024
         self.lblPurchsedDate.text = "Purchased on \(model.shipping_address?.createdAt ?? "")"
         
-        if let imge = URL.init(string: model.product?.images?.first?.image ?? ""){
-            self.imgProduct.kf.setImage(with: imge,placeholder: PlaceHolderImage)
-        }
+        self.imgProduct.setImageFast(with: model.product?.images?.first?.image ?? "")
         
-        if let imge = URL.init(string: model.sellerDetails?.image ?? ""){
-            self.imgSaller.kf.setImage(with: imge,placeholder: PlaceHolderImage)
-        }
+        self.imgSaller.setImageFast(with: model.sellerDetails?.image ?? "")
         
         self.lblProductName.text = model.product?.title ?? ""
         self.lblSize.text = "\(model.product?.sizes?.first ?? "") . $\(model.product?.price ?? "")"

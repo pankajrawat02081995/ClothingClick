@@ -73,7 +73,7 @@ extension LoginViewController: UITextFieldDelegate {
 extension LoginViewController {
     func userLogin() {
         if appDelegate.reachable.connection != .none {
-            let param = ["username": txtEmail.text!,
+            var param = ["username": txtEmail.text!,
                          "password": self.txtPassword.text!,
                          "app_version": APP_VERSION,
                          "devices_name": UIDevice().modelName,
@@ -82,6 +82,9 @@ extension LoginViewController {
                          "devices_type": DEVICE_TYPE,
                          "devices_token": appDelegate.deviceToken,
                          "login_type": "1"]
+            
+            param["gender"] = appDelegate.selectGenderId
+            param["sizes"] = FilterSingleton.share.filter.sizes
             
             APIManager().apiCall(of: UserDetailsModel.self, isShowHud: true, URL: BASE_URL, apiName: APINAME.LOGIN.rawValue, method: .post, parameters: param) { (response, error) in
                 if error == nil {

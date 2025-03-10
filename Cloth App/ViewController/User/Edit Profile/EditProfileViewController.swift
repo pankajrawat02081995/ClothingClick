@@ -13,6 +13,8 @@ import IQKeyboardManagerSwift
 
 class EditProfileViewController: BaseViewController {
     
+    @IBOutlet weak var txtEmail: AnimatableTextField!
+    @IBOutlet weak var txtPhoneNumber: AnimatableTextField!
     @IBOutlet weak var fbNextArrow: UIImageView!
     @IBOutlet weak var instaNextArrow: UIImageView!
     @IBOutlet weak var lblFirstLatterName: UILabel!
@@ -30,7 +32,6 @@ class EditProfileViewController: BaseViewController {
     @IBOutlet weak var btnLocation: UIButton!
     @IBOutlet weak var lblContact: UILabel!
     @IBOutlet weak var viewEmail: CustomView!
-    @IBOutlet weak var txtEmail: CustomTextField!
     @IBOutlet weak var viewPhone: CustomView!
     @IBOutlet weak var txtPhone: CustomTextField!
     @IBOutlet weak var btnSave: CustomButton!
@@ -53,7 +54,7 @@ class EditProfileViewController: BaseViewController {
         super.viewDidLoad()
         IQKeyboardManager.shared.isEnabled = true
         IQKeyboardManager.shared.enableAutoToolbar = true
-
+        
         self.txtBio.textContainerInset = UIEdgeInsets(top: 10, left: 20, bottom: 10, right: 10 )
         
         self.setEmailPhoneButtonTitel()
@@ -76,7 +77,7 @@ class EditProfileViewController: BaseViewController {
             //            self.constTopFortxtBio.constant = -50
             //            self.constTopForBtnSave.constant = -160
             self.lblContact.isHidden = true
-            self.txtEmail.isHidden = true
+            self.txtEmail.isHidden = false
             self.txtPhone.isHidden = true
             self.viewEmail.isHidden = true
             self.viewPhone.isHidden = true
@@ -187,10 +188,23 @@ class EditProfileViewController: BaseViewController {
             }
             else if self.txtLocation.text?.trim().count == 0 {
                 UIAlertController().alertViewWithTitleAndMessage(self, message: "Please enter address")
+            }else if self.txtEmail.text?.trim().count == 0 {
+                UIAlertController().alertViewWithTitleAndMessage(self, message: "Please enter email")
+                
+            }
+            else if self.txtPhoneNumber.text?.trim().count == 0 {
+                UIAlertController().alertViewWithTitleAndMessage(self, message: "Please enter phone")
+                
             }
             else {
                 self.selectedImage = self.imgUserProfilPic.image
-                self.callUpdetUserProfile()
+                if self.txtPhoneNumber.text?.trim() != appDelegate.userDetails?.phone ?? ""{
+                    self.userVerifyMobileNumber(phone: self.txtPhoneNumber.text?.trim() ?? "") {
+                        self.callUpdetUserProfile()
+                    }
+                }else{
+                    self.callUpdetUserProfile()
+                }
             }
         }
         else if appDelegate.userDetails?.role_id == 2 {
@@ -208,7 +222,7 @@ class EditProfileViewController: BaseViewController {
                 UIAlertController().alertViewWithTitleAndMessage(self, message: "Please enter email")
                 
             }
-            else if self.txtPhone.text?.trim().count == 0 {
+            else if self.txtPhoneNumber.text?.trim().count == 0 {
                 UIAlertController().alertViewWithTitleAndMessage(self, message: "Please enter phone")
                 
             }
@@ -233,7 +247,7 @@ class EditProfileViewController: BaseViewController {
                 UIAlertController().alertViewWithTitleAndMessage(self, message: "Please enter email")
                 
             }
-            else if self.txtPhone.text?.trim().count == 0 {
+            else if self.txtPhoneNumber.text?.trim().count == 0 {
                 UIAlertController().alertViewWithTitleAndMessage(self, message: "Please enter phone")
                 
             }
@@ -293,6 +307,15 @@ class EditProfileViewController: BaseViewController {
             if let useraName = appDelegate.userDetails?.username{
                 self.txtDisplayUsearName.text = useraName
             }
+            
+            if let email = appDelegate.userDetails?.email{
+                self.txtEmail.text = email
+            }
+            
+            if let phone = appDelegate.userDetails?.phone{
+                self.txtPhoneNumber.text = phone
+            }
+            
             if let bio = appDelegate.userDetails?.bio {
                 self.txtBio.text = bio
             }else{
@@ -340,6 +363,9 @@ class EditProfileViewController: BaseViewController {
             }
             if let email = appDelegate.userDetails?.email {
                 self.txtEmail.text = email
+            }
+            if let email = appDelegate.userDetails?.phone {
+                self.txtPhoneNumber.text = email
             }
             //            if let address = appDelegate.userDetails?.locations{
             //                self.txtLocation.text = "\(address.count) Location"
@@ -501,7 +527,7 @@ extension EditProfileViewController: UITextViewDelegate {
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         
-        if textField == self.txtPhone {
+        if textField == self.txtPhoneNumber {
             let maxLength = 16
             let currentString: NSString = (textField.text ?? "") as NSString
             let newString: NSString =
@@ -542,148 +568,109 @@ extension EditProfileViewController: UITextViewDelegate {
 
 extension EditProfileViewController {
     func callUpdetUserProfile(isRevoke:Bool = false) {
-        if appDelegate.reachable.connection != .none {
-            
-            var dictGeneral = [String:Any]()
-            
-            var address = [[String:Any]]()
-            
-            dictGeneral["name"] = self.txtBrandName.text ?? ""
-            dictGeneral["email"] = appDelegate.userDetails?.email ?? ""
-            dictGeneral["username"] = appDelegate.userDetails?.username ?? ""
-            
-            if appDelegate.userDetails?.role_id == 1 {
-                dictGeneral["phone"] = appDelegate.userDetails?.phone
-                dictGeneral["country_code"] = appDelegate.userDetails?.country_code
-                dictGeneral["country_prefix"] = appDelegate.userDetails?.country_prefix
-                dictGeneral["facebook_id"] = appDelegate.userDetails?.facebook_id
-                dictGeneral["instagram_id"] = appDelegate.userDetails?.instagram_id
-                
-                for i in 0..<(self.addressList.count)  {
-                    var dict = [String:Any]()
-                    dict["id"] = self.addressList[i]?.id
-                    dict["address"] = self.addressList[i]?.address
-                    dict["postal_code"] = self.addressList[i]?.postal_code
-                    dict["latitude"] = self.addressList[i]?.latitude
-                    dict["longitude"] = self.addressList[i]?.longitude
-                    dict["city"] = self.addressList[i]?.city
-                    dict["area"] = self.addressList[i]?.area
-                    address.append(dict)
-                    print(address)
-                }
-            }
-            else {
-                dictGeneral["phone"] = self.txtPhone.text ?? ""
-                dictGeneral["country_code"] = appDelegate.userDetails?.country_code
-                dictGeneral["country_prefix"] = appDelegate.userDetails?.country_prefix
-                if iscityAdd {
-                    
-                }
-                
-                for i in 0..<(self.addressList.count){
-                    var dict = [String:Any]()
-                    dict["id"] = "\(self.addressList[i]?.id ?? 0)"
-                    dict["address"] = "\(self.addressList[i]?.address ?? "")"
-                    dict["postal_code"] = "\(self.addressList[i]?.postal_code ?? "")"
-                    dict["latitude"] = "\(self.addressList[i]?.latitude ?? "")"
-                    dict["longitude"] = "\(self.addressList[i]?.longitude ?? "")"
-                    dict["city"] = "\(self.addressList[i]?.city ?? "")"
-                    dict["area"] = "\(self.addressList[i]?.area ?? "")"
-                    address.append(dict)
-                    print(address)
-                }
-            }
-            
-            if self.txtBio.text != placeholder{
-                dictGeneral["bio"] = self.txtBio.text ?? ""
-            }else{
-                dictGeneral["bio"] = ""
-            }
-            
-            dictGeneral["website"] = self.txtWebsite.text ?? ""
-            
-            dictGeneral["deleted_location_ids"] = self.deletedLocationIds
-            print(address)
-            if self.dictGeneral1["locations"] as? String ?? "" == "" {
-                dictGeneral["locations"] = self.json(from: address)
-            } else {
-                dictGeneral["locations"] = dictGeneral1["locations"]
-            }
-            if self.selectedImage == nil {
-                //                APIManager().apiCallWithImage(of: UserDetailsModel.self, isShowHud: true, URL: BASE_URL, apiName: APINAME.UPDATE_PROFILE.rawValue, parameters: dictGeneral, images: [self.selectedImage], imageParameterName: "photo", imageName: "user.png"){  (response, error) in
-                //                    if error == nil {
-                APIManager().apiCall(of: UserDetailsModel.self, isShowHud: true, URL: BASE_URL, apiName: APINAME.UPDATE_PROFILE.rawValue, method: .post, parameters: dictGeneral) { (response, error) in
-                    if error == nil {
-                        if let response = response {
-                            if let userDetails = response.dictData {
-                                self.saveUserDetails(userDetails: userDetails)
-                                //                                self.startWithAuth(userData: userDetails)
-                            }
-                            self.view.endEditing(true)
-                            //                            if appDelegate.userDetails?.phone_verified_at == "" || appDelegate.userDetails?.phone_verified_at == nil{
-                            //                                self.navigateToVerfyPhoneNo()
-                            //                            }
-                            //                            else {
-                            if let message = response.message {
-                                let alert: UIAlertController = UIAlertController.init(title: AlertViewTitle, message: message, preferredStyle: .alert)
-                                alert.view.tintColor = UIColor().alertButtonColor
-                                
-                                let hideAction: UIAlertAction = UIAlertAction.init(title: kOk, style: .default, handler: { (action) in
-                                    self.navigationController?.popViewController(animated: true)
-                                })
-                                alert.addAction(hideAction)
-                                if isRevoke == false{
-                                    self.navigationController?.popViewController(animated: true)
-                                }
-                            }
+        
+        guard appDelegate.reachable.connection != .none else {
+            UIAlertController().alertViewWithNoInternet(self)
+            return
+        }
+        
+        guard appDelegate.userDetails?.role_id == 1 else {
+            print("Invalid role. Only role_id 1 is supported.")
+            return
+        }
+        
+        var dictGeneral: [String: Any] = [
+            "name": txtBrandName.text ?? "",
+            "email": appDelegate.userDetails?.email ?? "",
+            "username": appDelegate.userDetails?.username ?? "",
+            "phone": appDelegate.userDetails?.phone ?? "",
+            "country_code": appDelegate.userDetails?.country_code ?? "",
+            "country_prefix": appDelegate.userDetails?.country_prefix ?? "",
+            "facebook_id": appDelegate.userDetails?.facebook_id ?? "",
+            "instagram_id": appDelegate.userDetails?.instagram_id ?? "",
+            "website": txtWebsite.text ?? "",
+            "deleted_location_ids": deletedLocationIds
+        ]
+        
+        if txtBio.text != placeholder {
+            dictGeneral["bio"] = txtBio.text ?? ""
+        } else {
+            dictGeneral["bio"] = ""
+        }
+        
+        var addressListArray = addressList.compactMap { address -> [String: Any]? in
+            guard let address = address else { return nil }
+            return [
+                "id": address.id ?? 0,
+                "address": address.address ?? "",
+                "postal_code": address.postal_code ?? "",
+                "latitude": address.latitude ?? "",
+                "longitude": address.longitude ?? "",
+                "city": address.city ?? "",
+                "area": address.area ?? ""
+            ]
+        }
+        
+        dictGeneral["locations"] = dictGeneral1["locations"] as? String ?? json(from: addressListArray)
+        if self.selectedImage == nil {
+            APIManager().apiCall(of: UserDetailsModel.self, isShowHud: true, URL: BASE_URL, apiName: APINAME.UPDATE_PROFILE.rawValue, method: .post, parameters: dictGeneral) { (response, error) in
+                if error == nil {
+                    if let response = response {
+                        if let userDetails = response.dictData {
+                            self.saveUserDetails(userDetails: userDetails)
+                            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "refresh"), object: nil,userInfo: nil)
                         }
-                        //                        }
-                    }
-                    else {
-                        UIAlertController().alertViewWithTitleAndMessage(self, message: error?.domain ?? ErrorMessage)
-                    }
-                }
-            }
-            else {
-                APIManager().apiCallWithImage(of: UserDetailsModel.self, isShowHud: true, URL: BASE_URL, apiName: APINAME.UPDATE_PROFILE.rawValue, parameters: dictGeneral, images: [self.selectedImage], imageParameterName: "photo", imageName: "user.png"){  (response, error) in
-                    if error == nil {
-                        if let response = response {
-                            if let userDetails = response.dictData {
-                                self.saveUserDetails(userDetails: userDetails)
-                                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "refresh"), object: nil,userInfo: nil)
-                                
-                                
-                            }
-                            self.view.endEditing(true)
-                            if appDelegate.userDetails?.phone_verified_at == "" || appDelegate.userDetails?.phone_verified_at == nil{
-                                self.navigateToVerfyPhoneNo()
-                            }
-                            else {
-                                if let message = response.message {
-                                    let alert: UIAlertController = UIAlertController.init(title: AlertViewTitle, message: message, preferredStyle: .alert)
-                                    alert.view.tintColor = UIColor().alertButtonColor
-                                    
-                                    let hideAction: UIAlertAction = UIAlertAction.init(title: kOk, style: .default, handler: { (action) in
-                                        self.navigationController?.popViewController(animated: true)
-                                    })
-                                    alert.addAction(hideAction)
-                                    
-                                    self.navigationController?.popViewController(animated: true)
-                                }
-                            }
+                        self.view.endEditing(true)
+                        if let message = response.message {
+                            let alert: UIAlertController = UIAlertController.init(title: AlertViewTitle, message: message, preferredStyle: .alert)
+                            alert.view.tintColor = UIColor().alertButtonColor
                             
+                            let hideAction: UIAlertAction = UIAlertAction.init(title: kOk, style: .default, handler: { (action) in
+                                self.navigationController?.popViewController(animated: true)
+                            })
+                            alert.addAction(hideAction)
+                            if isRevoke == false{
+                                self.navigationController?.popViewController(animated: true)
+                            }
                         }
                     }
-                    else {
-                        UIAlertController().alertViewWithTitleAndMessage(self, message: error?.domain ?? ErrorMessage)
-                    }
+                    //                        }
+                }
+                else {
+                    UIAlertController().alertViewWithTitleAndMessage(self, message: error?.domain ?? ErrorMessage)
                 }
             }
-            
         }
         else {
-            UIAlertController().alertViewWithNoInternet(self)
+            APIManager().apiCallWithImage(of: UserDetailsModel.self, isShowHud: true, URL: BASE_URL, apiName: APINAME.UPDATE_PROFILE.rawValue, parameters: dictGeneral, images: [self.selectedImage], imageParameterName: "photo", imageName: "user.png"){  (response, error) in
+                if error == nil {
+                    if let response = response {
+                        if let userDetails = response.dictData {
+                            self.saveUserDetails(userDetails: userDetails)
+                            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "refresh"), object: nil,userInfo: nil)
+                        }
+                        self.view.endEditing(true)
+                        if let message = response.message {
+                            let alert: UIAlertController = UIAlertController.init(title: AlertViewTitle, message: message, preferredStyle: .alert)
+                            alert.view.tintColor = UIColor().alertButtonColor
+                            
+                            let hideAction: UIAlertAction = UIAlertAction.init(title: kOk, style: .default, handler: { (action) in
+                                self.navigationController?.popViewController(animated: true)
+                            })
+                            alert.addAction(hideAction)
+                            if isRevoke == false{
+                                self.navigationController?.popViewController(animated: true)
+                            }
+                        }
+                    }
+                    //                        }
+                }
+                else {
+                    UIAlertController().alertViewWithTitleAndMessage(self, message: error?.domain ?? ErrorMessage)
+                }
+            }
         }
+        
     }
     
     func callIsEmailShow() {
@@ -892,3 +879,44 @@ extension UIViewController{
     }
 }
 
+extension EditProfileViewController{
+    func userVerifyMobileNumber(phone:String,compltion:@escaping()->Void) {
+        if appDelegate.reachable.connection != .none {
+            var  param = [String:Any]()
+#if DEBUG
+            param = ["phone": phone,
+                     "country_prefix" : "+91" ,
+                     "country_code" : "IN",
+                     "is_test" : "1"
+            ]
+#else
+            
+            param = ["phone": phone,
+                     "country_prefix" : "+1" ,
+                     "country_code" : "CA",
+                     "is_test" : "1"
+            ]
+#endif
+            APIManager().apiCallWithMultipart(of: UserDetailsModel.self, isShowHud: true, URL: BASE_URL, apiName: APINAME.SIGNUP_STEP2.rawValue, parameters: param) { (response, error) in
+                if error == nil {
+                    if let response = response {
+                        if let userDetails = response.dictData {
+                            let vc = OtpViewVC.instantiate(fromStoryboard: .Auth)
+                            vc.isProfileUpdate = true
+                            vc.mobileNumberUpdated = { [weak self] status in
+                                compltion()
+                            }
+                            self.pushViewController(vc: vc)
+                        }
+                    }
+                }
+                else {
+                    UIAlertController().alertViewWithTitleAndMessage(self, message: error?.domain ?? ErrorMessage)
+                }
+            }
+        }
+        else {
+            UIAlertController().alertViewWithNoInternet(self)
+        }
+    }
+}

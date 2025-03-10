@@ -28,7 +28,7 @@ class SettingVC: BaseViewController {
                     ["img":"ic_logout","title":"Logout","subtitle":""],
                     ["img":"ic_change_password","title":"Change Password","subtitle":""],
                     ["img":"ic_block_user","title":"Blocked Users","subtitle":""],
-                    ["img":"ic_promo_code","title":"Promo Codes","subtitle":""],
+//                    ["img":"ic_promo_code","title":"Promo Codes","subtitle":""],
                     ["img":"ic_terms","title":"Terms & Conditions","subtitle":""],["img":"ic_delete","title":"Delete Account","subtitle":""]]]]
     
     override func viewDidLoad() {

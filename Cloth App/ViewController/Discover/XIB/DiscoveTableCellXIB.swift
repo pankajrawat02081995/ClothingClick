@@ -101,9 +101,8 @@ extension DiscoveTableCellXIB: UICollectionViewDelegate, UICollectionViewDataSou
                 return UICollectionViewCell()
             }
             
-            if let url = object.icon, let imgUrl = URL(string: url.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "") {
-                cell.imgGender.kf.setImage(with: imgUrl, placeholder: PlaceHolderImage)
-            }
+            cell.imgGender.setImageFast(with: object.icon?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "")
+            
             cell.bgView.layer.borderColor = UIColor.customBorderColor?.cgColor
             cell.bgView.layer.borderWidth = 1
             cell.lblName.text = object.name

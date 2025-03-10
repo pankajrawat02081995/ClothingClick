@@ -61,11 +61,9 @@ class PromoteViewController: BaseViewController {
     }
     
     func setUserData () {
-        if let url = postDetail?.images {
-            if let image = URL.init(string: url[0].image ?? ""){
-                self.imgProduct.kf.setImage(with: image,placeholder: PlaceHolderImage)
-            }
-        }
+        let urlString = postDetail?.images?.first?.image?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+        self.imgProduct.setImageFast(with: urlString)
+        
         if let brandeName = self.postDetail?.brand_name {
             self.lblBrandName.text = brandeName
         }
@@ -224,11 +222,9 @@ class PromoteViewController: BaseViewController {
             self.viewSale.isHidden = true
             self.viewPromoteDetail.isHidden = false
             self.imgSembol.image = UIImage.init(named: objet?.sembolIcon ?? "")
-            if let url = objet?.promotImge {
-                if let imgUrl = URL.init(string: url){
-                    self.imgDetailPromote.kf.setImage(with: imgUrl, placeholder: PlaceHolderImage)
-                }
-            }
+            let urlString = objet?.promotImge?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+            self.imgDetailPromote.setImageFast(with: urlString)
+
             self.txtPromoteDetails.text = objet?.description
             self.lblPromotTitle.text = objet?.title
             self.btnPromote.setTitle("Select \(objet?.title ?? "")", for: .normal)
@@ -276,11 +272,9 @@ extension PromoteViewController : UITableViewDelegate,UITableViewDataSource {
             self.viewSale.isHidden = true
             self.viewPromoteDetail.isHidden = false
             self.imgSembol.image = UIImage.init(named: objet?.sembolIcon ?? "")
-            if let url = objet?.promotImge {
-                if let imgUrl = URL.init(string: url){
-                    self.imgDetailPromote.kf.setImage(with: imgUrl, placeholder: PlaceHolderImage)
-                }
-            }
+            let urlString = objet?.promotImge?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+            self.imgDetailPromote.setImageFast(with: urlString)
+            
             self.txtPromoteDetails.text = objet?.description
             self.lblPromotTitle.text = objet?.title
             self.btnPromote.setTitle("Select \(objet?.title ?? "")", for: .normal)

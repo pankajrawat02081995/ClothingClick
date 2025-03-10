@@ -55,13 +55,11 @@ extension OrderHistoryVC:UITableViewDelegate,UITableViewDataSource{
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "OrderHistoryXIB", for: indexPath) as! OrderHistoryXIB
         let indexData = self.viewModel?.modelData[indexPath.row]
-        if let imge = URL.init(string: indexData?.product?.images?.first?.image ?? ""){
-            cell.imgPost.kf.setImage(with: imge,placeholder: PlaceHolderImage)
-        }
+        cell.imgPost.setImageFast(with: indexData?.product?.images?.first?.image ?? "")
+        
         cell.lblSellerName.text = indexData?.sellerDetails?.name ?? ""
-        if let imge = URL.init(string: indexData?.sellerDetails?.image ?? ""){
-            cell.imgSeller.kf.setImage(with: imge,placeholder: PlaceHolderImage)
-        }
+        cell.imgSeller.setImageFast(with: indexData?.sellerDetails?.image ?? "")
+        
         cell.lblSize.text = "\(indexData?.product?.sizes?.first ?? "") . $\(indexData?.product?.price ?? "")"
         cell.lblName.text = indexData?.product?.title ?? ""
         cell.lblStatus.text = indexData?.oderDetails?.status ?? ""

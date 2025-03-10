@@ -84,7 +84,7 @@ class OtherUserProfileViewController: BaseViewController {
             self.btnFollow.borderColor = .customBlack
             self.btnFollow.backgroundColor = .customBlack
         }else {
-            if self.otherUserDetailsData?.is_following == 0 {
+            if self.otherUserDetailsData?.is_following == 0 ||  appDelegate.userDetails == nil {
                 self.btnFollow.setTitleColor(.customBlack, for: .normal)
                 self.btnFollow.setTitle("Follow", for: .normal)
                 self.btnFollow.borderWidth = 1

@@ -30,7 +30,7 @@ class MapLocationVC: BaseViewController {
     
     var newLocation : ((Locations?) -> Void)?
     var isFromPostDetails : Bool = false
-    
+    var isFromDashboard : Bool = false
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -76,6 +76,7 @@ class MapLocationVC: BaseViewController {
                 self.popViewController()
             }
         }else{
+            
             self.updateLocation()
         }
     }
@@ -174,7 +175,7 @@ extension MapLocationVC: GMSAutocompleteViewControllerDelegate  {
                             "longitude" : String(self.log),
                             "location_ids" : "0",
                             "city" : pm.locality ?? "",
-                            "postal_code" : self.txtPostal.text!,
+                            "postal_code" : pm.postalCode ?? "",
                             "area" : pm.subLocality ?? "",
                             "id" : appDelegate.userDetails?.id ?? 0] as [String : Any]
                 self.txtPostal.text = addressString
@@ -242,10 +243,16 @@ extension MapLocationVC{
                         if let userDetails = response.dictData {
                             self.saveUserDetails(userDetails: userDetails)
                         }
-                        self.popViewController()
+                        if self.isFromDashboard == true{
+                            if let newLocation = self.addresslist.first{
+                                self.newLocation?(newLocation)
+                                self.popViewController()
+                            }
+                        }else{
+                            self.popViewController()
+                        }
                     }
-                }
-                else {
+                } else {
                     UIAlertController().alertViewWithTitleAndMessage(self, message: error?.domain ?? ErrorMessage)
                 }
             }

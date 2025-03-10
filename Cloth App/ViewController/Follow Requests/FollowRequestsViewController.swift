@@ -47,11 +47,9 @@ extension FollowRequestsViewController : UITableViewDelegate,UITableViewDataSour
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let objet = self.followRequest[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: "RequestCell", for: indexPath) as! RequestCell
-        if let url = objet?.photo {
-            if let imageUrl = URL.init(string: url){
-                cell.imgUser.kf.setImage(with: imageUrl,placeholder: ProfileHolderImage)
-            }
-        }
+        let urlString = objet?.photo?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+        cell.imgUser.setImageFast(with: urlString)
+
         if let userNmae = objet?.username {
             cell.lblSubTitle.text = userNmae
         }

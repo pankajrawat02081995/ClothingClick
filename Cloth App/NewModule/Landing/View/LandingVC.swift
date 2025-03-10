@@ -21,6 +21,7 @@ class LandingVC: BaseViewController {
     @IBAction func menswearOnPress(_ sender: UIButton) {
         let vc = ClothPreferencesViewController.instantiate(fromStoryboard: .Main)
         vc.selectGengerIndex = 0
+        appDelegate.selectGenderId = "0"
         FilterSingleton.share.genderSelection = 0
         self.pushViewController(vc: vc)
 //        self.navigateToLoginScreen()
@@ -29,6 +30,7 @@ class LandingVC: BaseViewController {
     @IBAction func womenswearOnPress(_ sender: UIButton) {
         let vc = ClothPreferencesViewController.instantiate(fromStoryboard: .Main)
         vc.selectGengerIndex = 1
+        appDelegate.selectGenderId = "1"
         FilterSingleton.share.genderSelection = 1
         self.pushViewController(vc: vc)
 //        self.navigateToLoginScreen()
@@ -37,6 +39,7 @@ class LandingVC: BaseViewController {
     @IBAction func bothOnPress(_ sender: UIButton) {
         let vc = ClothPreferencesViewController.instantiate(fromStoryboard: .Main)
         FilterSingleton.share.genderSelection = nil
+        appDelegate.selectGenderId = ""
         self.pushViewController(vc: vc)
     }
 }

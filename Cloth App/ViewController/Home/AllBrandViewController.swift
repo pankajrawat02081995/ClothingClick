@@ -13,7 +13,7 @@ class AllBrandViewController: BaseViewController {
     @IBOutlet weak var lblNoData: UILabel!
     @IBOutlet weak var lblTitle: UILabel!
     @IBOutlet weak var CVBrand: UICollectionView!
-
+    
     var titleStr = ""
     var typeId = ""
     var currentPage = 1
@@ -39,21 +39,13 @@ extension AllBrandViewController: UICollectionViewDelegate, UICollectionViewData
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "BrandCVCell", for: indexPath) as! BrandCVCell
         let objet = self .postList[indexPath.item]
         if self.titleStr == "Local Stores" {
-            if let url = objet?.user_image {
-                if let imgUrl = URL.init(string: url){
-                    cell.imgBrand.kf.setImage(with: imgUrl, placeholder: PlaceHolderImage)
-                }
-            }
+
+            cell.imgBrand.setImageFast(with: objet?.user_image ?? "")
             cell.imgBrand.borderColor = UIColor().grayColor
             cell.lblTitle.text = objet?.name
         }
         else{
-            if let url = objet?.user_image {
-                let urlString = url.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
-                if let imgUrl = URL.init(string: urlString!){
-                    cell.imgBrand.kf.setImage(with: imgUrl, placeholder: PlaceHolderImage)
-                }
-            }
+            cell.imgBrand.setImageFast(with: objet?.user_image?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "")
             cell.imgBrand.cornerRadius = 0
             cell.imgBrand.borderColor = UIColor().lightGrayColor
             cell.lblTitle.text = objet?.name
@@ -69,9 +61,9 @@ extension AllBrandViewController: UICollectionViewDelegate, UICollectionViewData
             self.navigationController?.pushViewController(viewController, animated: true)
         }
         else {
-//            let viewController = self.storyBoard.instantiateViewController(withIdentifier: "BrandProfileViewController") as! BrandProfileViewController
-//            viewController.userId = "\(postList[indexPath.item]?.id ?? 0)"
-//            self.navigationController?.pushViewController(viewController, animated: true)
+            //            let viewController = self.storyBoard.instantiateViewController(withIdentifier: "BrandProfileViewController") as! BrandProfileViewController
+            //            viewController.userId = "\(postList[indexPath.item]?.id ?? 0)"
+            //            self.navigationController?.pushViewController(viewController, animated: true)
             let viewController = self.storyboard?.instantiateViewController(identifier: "AllProductViewController") as! AllProductViewController
             viewController.isMySize = "1"
             viewController.BarndName = "\(postList[indexPath.item]?.name ?? "")"
@@ -94,7 +86,7 @@ extension AllBrandViewController: UICollectionViewDelegateFlowLayout {
     fileprivate var sectionInsets: UIEdgeInsets {
         return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
     }
-      
+    
     fileprivate var itemsPerRow: CGFloat {
         return 3.0
     }
@@ -102,7 +94,7 @@ extension AllBrandViewController: UICollectionViewDelegateFlowLayout {
     fileprivate var interitemSpace: CGFloat {
         return 10.0
     }
-
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let sectionPadding = sectionInsets.left * (itemsPerRow + 1)
         let interitemPadding = max(0.0, itemsPerRow - 1) * interitemSpace
@@ -148,12 +140,12 @@ extension AllBrandViewController {
                                 self.postList.removeAll()
                             }
                             if let hasMorePages = data.hasMorePages{
-//                                if hasMorePages == 1 {
-                                    self.hasMorePages = hasMorePages
-//                                }
-//                                else {
-//                                    self.hasMorePages = false
-//                                }
+                                //                                if hasMorePages == 1 {
+                                self.hasMorePages = hasMorePages
+                                //                                }
+                                //                                else {
+                                //                                    self.hasMorePages = false
+                                //                                }
                             }
                             if let post = data.posts {
                                 for temp in post {

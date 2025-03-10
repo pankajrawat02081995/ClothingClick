@@ -53,15 +53,8 @@ extension PopulerBrandVC:UITableViewDelegate,UITableViewDataSource{
         
         let objet = self.postList[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: "UserProfileListXIB", for: indexPath) as! UserProfileListXIB
-        if let url = objet?.user_image {
-            if let image = URL.init(string: url){
-                cell.imgUser.contentMode = .scaleAspectFit
-                cell.imgUser.kf.setImage(with: image,placeholder: nil)
-            }
-        }
-        else {
-            cell.imgUser.image = nil
-        }
+        cell.imgUser.contentMode = .scaleAspectFit
+        cell.imgUser.setImageFast(with: objet?.user_image ?? "")
         
         if let name = objet?.name {
             cell.lblName.text = name.capitalized
