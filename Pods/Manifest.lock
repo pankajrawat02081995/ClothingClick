@@ -256,6 +256,9 @@ PODS:
     - PromisesObjC (= 2.4.0)
   - PryntTrimmerView (4.0.2)
   - ReachabilitySwift (5.2.4)
+  - SDWebImage (5.20.0):
+    - SDWebImage/Core (= 5.20.0)
+  - SDWebImage/Core (5.20.0)
   - SteviaLayout (5.1.2)
   - StripeApplePay (24.3.0):
     - StripeCore (= 24.3.0)
@@ -313,6 +316,7 @@ DEPENDENCIES:
   - moa
   - OTPFieldView
   - ReachabilitySwift
+  - SDWebImage
   - StripePaymentSheet (~> 24.3.0)
   - SwiftyJSON
   - TagListView (~> 1.0)
@@ -378,6 +382,7 @@ SPEC REPOS:
     - PromisesSwift
     - PryntTrimmerView
     - ReachabilitySwift
+    - SDWebImage
     - SteviaLayout
     - StripeApplePay
     - StripeCore
@@ -448,6 +453,7 @@ SPEC CHECKSUMS:
   PromisesSwift: 9d77319bbe72ebf6d872900551f7eeba9bce2851
   PryntTrimmerView: 6a43cc90df5d99addeabd33d4ba09b1365322130
   ReachabilitySwift: 32793e867593cfc1177f5d16491e3a197d2fccda
+  SDWebImage: 73c6079366fea25fa4bb9640d5fb58f0893facd8
   SteviaLayout: 05424e528d643657d39ce72c786e4adf13cfc5f2
   StripeApplePay: b017eb310b39e4bdbc616e9185ea64c34d865490
   StripeCore: 3643379a626715d0f8d5db20c1b6df12ba7c1b74
@@ -460,6 +466,6 @@ SPEC CHECKSUMS:
   TTRangeSlider: 8cf72eca457c3b700c92eb0074be908c986e25ec
   YPImagePicker: afc81b3cffab05a6e7261c5daf80dc31b4e917b4
 
-PODFILE CHECKSUM: b6990c37fc4e469fca84eea5089de7e8ff9962b9
+PODFILE CHECKSUM: edbe8074d4f3561a09fffbb394b9ed67c22899b7
 
 COCOAPODS: 1.16.2

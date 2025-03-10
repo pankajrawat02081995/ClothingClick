@@ -52,11 +52,7 @@ extension RecommendedTableXIB:CollectionViewDelegateAndDataSource{
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HomePageBrowserXIB", for: indexPath) as! HomePageBrowserXIB
         let objet = self.posts[indexPath.item]
-        if let url = objet.image?.first?.image {
-            if let image = URL.init(string: url){
-                cell.imgProduct.kf.setImage(with: image,placeholder: PlaceHolderImage)
-            }
-        }
+        cell.imgProduct.setImageFast(with: objet.image?.first?.image ?? "")
         
         cell.btnLike.tag = indexPath.row
         cell.btnLike.addTarget(self, action: #selector(btnWatch_Clicked(_:)), for: .touchUpInside)

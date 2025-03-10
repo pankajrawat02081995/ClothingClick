@@ -15,7 +15,8 @@ class OtpViewVC: BaseViewController ,UITextFieldDelegate{
     
     var viewModel = OtpViewModel()
     var finalOtp = String()
-    
+    var isProfileUpdate : Bool?
+    var mobileNumberUpdated : ((Bool) -> Void)?
     override func viewDidLoad() {
         super.viewDidLoad()
         self.viewModel.view = self

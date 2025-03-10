@@ -155,18 +155,9 @@ extension OtherFollowFollwingViewController : UITableViewDelegate,UITableViewDat
         let objet = self.followingList[indexPath.row]
         cell.lblUserName.text = objet.name
         
-        if let url = objet.photo {
-            let urlString = url.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
-            if let imgUrl = URL.init(string: urlString!) {
-                cell.imgUser.kf.setImage(with: imgUrl, placeholder: ProfileHolderImage)
-            }
-            else{
-                cell.imgUser.setImage(ProfileHolderImage!)
-            }
-        }
-        else{
-            cell.imgUser.setImage(ProfileHolderImage!)
-        }
+        let urlString = objet.photo?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+        cell.imgUser.setImageFast(with: urlString)
+
         if objet.user_id == appDelegate.userDetails?.id {
             cell.btnFollowFollowing.isHidden = true
         }else{

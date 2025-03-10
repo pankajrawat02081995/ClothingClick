@@ -67,11 +67,10 @@ class RatingViewController: BaseViewController {
     
     func setUsetAndPostData() {
         let object = self.reviewData
-        if let url = object?.user?.photo {
-            if let image = URL.init(string: url){
-                self.imgUser.kf.setImage(with: image,placeholder: ProfileHolderImage)
-            }
-        }
+        
+        let urlString = object?.user?.photo?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+        self.imgUser.setImageFast(with: urlString)
+        
         if let usertypename = object?.user?.user_type_name {
             if usertypename.lowercased() == "store" || usertypename.lowercased() == "brand"{
                 self.viewFloatRating.isHidden = true
@@ -96,11 +95,10 @@ class RatingViewController: BaseViewController {
         if let retingCount = object?.user?.avg_review {
             self.viewFloatRating.rating = Double(retingCount)
         }
-        if let url = object?.post?.photo?[0].image {
-            if let image = URL.init(string: url){
-                self.imgProduct.kf.setImage(with: image,placeholder: PlaceHolderImage)
-            }
-        }
+        
+        let urlString1 = object?.post?.photo?[0].image?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+        self.imgProduct.setImageFast(with: urlString1)
+        
         if let brand = object?.post?.brand_name {
             self.lblBrandName.text = brand
         }

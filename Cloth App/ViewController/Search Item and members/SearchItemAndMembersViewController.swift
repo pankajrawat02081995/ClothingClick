@@ -229,15 +229,9 @@ extension SearchItemAndMembersViewController : UITableViewDelegate,UITableViewDa
         if tableView == self.tblViewProfile {
             let objet = self.searchData[indexPath.row]
             let cell = tableView.dequeueReusableCell(withIdentifier: "UserProfileListXIB", for: indexPath) as! UserProfileListXIB
-            if let url = objet.userimage {
-                if let image = URL.init(string: url){
-                    cell.imgUser.kf.setImage(with: image,placeholder: nil)
-                }
-            }
-            else {
-                cell.imgUser.image = nil
-            }
-            
+           
+            cell.imgUser.setImageFast(with: objet.userimage?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "")
+
             cell.lblFollowerCount.text = "\(objet.total_posts ?? 0) Listings"
             
             if objet.userimage == nil || objet.userimage?.isEmpty == true{
@@ -257,11 +251,8 @@ extension SearchItemAndMembersViewController : UITableViewDelegate,UITableViewDa
         else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "ItemListCell", for: indexPath) as! ItemListCell
             let objet = self.searchData[indexPath.row]
-            if let url = objet.image?[0].image {
-                if let image = URL.init(string: url){
-                    cell.imgItem.kf.setImage(with: image,placeholder: PlaceHolderImage)
-                }
-            }
+            
+            cell.imgItem.setImageFast(with: objet.image?[0].image?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "")
 
             if let name = objet.title {
                 cell.lblItemName.text = name
@@ -467,11 +458,8 @@ extension SearchItemAndMembersViewController: UICollectionViewDelegate, UICollec
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HomePageBrowserXIB", for: indexPath) as! HomePageBrowserXIB
         let objet = self.searchData[indexPath.item]
-        if let url = objet.image?.first?.image {
-            if let image = URL.init(string: url){
-                cell.imgProduct.kf.setImage(with: image,placeholder: PlaceHolderImage)
-            }
-        }
+        
+        cell.imgProduct.setImageFast(with: objet.image?.first?.image?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "")
         
         cell.btnLike.tag = indexPath.row
         cell.btnLike.addTarget(self, action: #selector(btnWatch_Clicked(_:)), for: .touchUpInside)

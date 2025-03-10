@@ -54,14 +54,8 @@ extension ItemSoldCongratulationsVC{
                             self.lblName.text = self.postDetal?.name ?? ""
                             self.lblPrice.text = "$\(self.postDetal?.price ?? 0)"
                             
-                            if let url = self.postDetal?.photo?.first?.image{
-                                if let image = URL.init(string: url){
-                                    self.imgProduct?.kf.setImage(with: image,placeholder: PlaceHolderImage)
-                                }
-                            }
-                            else{
-                                self.imgProduct.setImage(PlaceHolderImage ?? UIImage())
-                            }
+                            
+                            self.imgProduct.setImageFast(with: self.postDetal?.photo?.first?.image ?? "")
                             
                             self.userList = data.user_list ?? []
                             if let itemSoldCount = data.total_sold_items {
@@ -98,14 +92,8 @@ extension ItemSoldCongratulationsVC : UITableViewDelegate,UITableViewDataSource 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "UserListXIB", for: indexPath) as! UserListXIB
         let object = self.userList[indexPath.row]
-        if let url = object.photo{
-            if let image = URL.init(string: url){
-                cell.imgUser?.kf.setImage(with: image,placeholder: PlaceHolderImage)
-            }
-        }
-        else{
-            cell.imgUser.setImage(ProfileHolderImage!)
-        }
+        
+        cell.imgUser.setImageFast(with: self.postDetal?.photo?.first?.image ?? "")
         
         if let name = object.name {
             cell.lblName.text = name

@@ -98,6 +98,7 @@ class PostDetailsVC: BaseViewController {
         CVAddProductImage.dataSource = self
         CVAddProductImage.dragDelegate = self
         CVAddProductImage.dropDelegate = self
+        CVAddProductImage.dragInteractionEnabled = true
         
         styleCollection.delegate = self
         styleCollection.dataSource = self
@@ -113,7 +114,7 @@ class PostDetailsVC: BaseViewController {
         selectedStyleID = postDetails?.style_id ?? 0
         styleCollection.reloadData()
         
-        guard let userLocations = appDelegate.userDetails?.locations else { return }
+        guard let userLocations = postDetails?.locations else { return }
         
         if appDelegate.userDetails?.role_id == 1 {
             selectAddress = userLocations
@@ -371,8 +372,8 @@ class PostDetailsVC: BaseViewController {
         images.append(contentsOf: localImages)
         
         // Fetch images for URLs asynchronously
-        let fetchedImages = await fetchImages(from: imageUrls)
-        images.append(contentsOf: fetchedImages)
+//        let fetchedImages = await fetchImages(from: imageUrls)
+//        images.append(contentsOf: fetchedImages)
         
         return images
     }
@@ -413,70 +414,35 @@ class PostDetailsVC: BaseViewController {
     }
     
     
-    
     @IBAction func backOnPress(_ sender: UIButton) {
         self.popViewController()
     }
     
     @IBAction func btnPreview_Clicked(_ button: UIButton) {
-        var productImageUrl = [[String:Any]]()
-        for i in 0..<self.productImage.count {
-            if let stringUrl = self.productImage[i]["image_url"] as? String{
-                //                let url = URL.init(string: stringUrl )!
-                var dict = [String:Any]()
-                dict["image_url"] = stringUrl
-                productImageUrl.append(dict)
-                
-            }
-            else {
-                //                self.sendproductImage.append(self.productImage[i]["image_url"] as! UIImage )
-                var dict = [String:Any]()
-                dict["image_url"] = self.productImage[i]["image_url"]as! UIImage
-                productImageUrl.append(dict)
-            }
-            
+        
+        let viewController = PostPreviewVC.instantiate(fromStoryboard: .Sell)
+        viewController.brandSearchList = brandSearchList
+        if edit{
+            viewController.selectCategorySubCategory = categorysAndSubCategory
+        }else{
+            viewController.selectSubcategory = selectSubcategory
         }
-        let ViewController = PostPreviewVC.instantiate(fromStoryboard: .Sell) //AddProductPreviewViewController.instantiate(fromStoryboard: .Main)
-        ViewController.brandSearchList = self.brandSearchList
-        if self.edit {
-            ViewController.selectCategorySubCategory = self.categorysAndSubCategory //self.selectCategory
-            ViewController.addresslist = self.selectAddress
-        }
-        else {
-            ViewController.selectCategory = self.selectCategory
-            ViewController.addresslist = self.addresslist
-        }
-        // ViewController.addresslist = self.selectAddress
-        ViewController.savegenderId = self.savegenderId
-        ViewController.selectSubcategory = self.selectSubcategory
-        if txtCADPrice.text == ""  || txtCADPrice.text == "0"{
-            ViewController.price = "0.00"
-        }
-        else {
-            ViewController.price = self.txtCADPrice.text ?? "0.00"
-        }
-        //         = self.txtCADPrice.text ?? ""
-        //        ViewController.priceType = self.txtFixedpricee.text ?? ""
-        ViewController.selectColor = self.selectColor
-        ViewController.mediaItems = self.mediaItems
-        ViewController.selectSize = self.selectSize
-        ViewController.discripction = self.txtDescription.text ?? ""
-        ViewController.productModelItem = txtModelTitle.text ?? ""
-        //        ViewController.productImage = self.sendproductImage
-        ViewController.edit = self.edit
-        ViewController.productImageUrl = productImageUrl
-        ViewController.selectCondiction = self.selectCondiction
-        for i in 0..<self.productVideo.count {
-            if let stringUrl = self.productVideo[i]["video_url"] as? String {
-                let url = URL.init(string: stringUrl)
-                ViewController.postImageVideo.append(url!)
-            }
-            else {
-                ViewController.postImageVideo.append((self.productVideo[i]["video_url"] as? URL)!)
-            }
-        }
-        self.navigationController?.pushViewController(ViewController, animated: true)
+        
+        viewController.addresslist = edit ? selectAddress : addresslist
+        viewController.savegenderId = savegenderId
+        
+        viewController.price = (txtCADPrice.text?.isEmpty ?? true) || txtCADPrice.text == "0" ? "0.00" : txtCADPrice.text!
+        viewController.selectColor = selectColor
+        viewController.mediaItems = mediaItems
+        viewController.selectSize = selectSize
+        viewController.discripction = txtDescription.text ?? ""
+        viewController.productModelItem = txtModelTitle.text ?? ""
+        viewController.edit = edit
+        viewController.productImage = self.productImage
+        viewController.selectCondiction = selectCondiction
+        self.navigationController?.pushViewController(viewController, animated: true)
     }
+    
     
     @IBAction func btnPost_Clicked(_ button: UIButton) {
         
@@ -552,7 +518,7 @@ extension PostDetailsVC{
         URL: String,
         apiName: String,
         parameters: [String: Any],
-        images: [UIImage],
+        images: [Data],
         imageParameterName: String,
         imageName: String,
         video: [URL?],
@@ -574,9 +540,7 @@ extension PostDetailsVC{
         
         Alamofire.upload(multipartFormData: { multipartFormData in
             for (index, image) in images.enumerated() {
-                if let imageData = image.jpegData(compressionQuality: 1.0) {
-                    multipartFormData.append(imageData, withName: "\(imageParameterName)[\(index)]", fileName: "\(imageName)\(index).png", mimeType: "image/png")
-                }
+                multipartFormData.append(image, withName: "\(imageParameterName)[\(index)]", fileName: "\(imageName)\(index).png", mimeType: "image/png")
             }
             
             for (index, url) in video.compactMap({ $0 }).enumerated() {
@@ -592,6 +556,8 @@ extension PostDetailsVC{
             if isShowHud {
                 //                KRProgressHUD.dismiss()
             }
+            
+            debugPrint("test : \(encodingResult)")
             
             switch encodingResult {
             case .success(let upload, _, _):
@@ -653,107 +619,147 @@ extension PostDetailsVC{
         }
     }
     
-    
+    /// Resize and compress images efficiently
+    func resizeAndCompressImages(_ images: [UIImage], maxSizeKB: Int = 500, targetSize: CGSize = CGSize(width: 1024, height: 1024), completion: @escaping ([Data]) -> Void) {
+        
+        DispatchQueue.global(qos: .userInitiated).async {
+            var compressedImages: [Data] = []
+            
+            for image in images {
+                if let compressedData = image.compressImage(maxSizeKB: maxSizeKB, targetSize: targetSize) {
+                    compressedImages.append(compressedData)
+                }
+            }
+            
+            DispatchQueue.main.async {
+                completion(compressedImages)
+            }
+        }
+    }
     func callAddProduct() async {
         KRProgressHUD.show()
         self.sendproductImage.removeAll()
         self.sendproductImage = await self.convertToUIImageArray(from: self.productImage)
         
-        
-        // Collect selected color IDs
-        let colorIDs = self.selectColor.compactMap { $0?.id }.map(String.init).joined(separator: ",")
-        
-        // Collect category and subcategory IDs
-        let categoryIDs: String
-        if self.edit {
-            categoryIDs = self.categorysAndSubCategory.compactMap { $0.category_id }.map(String.init).joined(separator: ",")
-        } else {
-            categoryIDs = [self.selectCategory?.category_id, self.selectSubcategory?.id]
-                .compactMap { $0 }
-                .map(String.init)
-                .joined(separator: ",")
-        }
-        
-        // Determine price
-        let price: String
-        if let text = self.txtCADPrice.text {
-            price = ["Free", "Best offer", "Trade/Swap"].contains(text) || text.isEmpty ? "0.00" : text
-        } else {
-            price = "0.00"
-        }
-        
-        // Extract location details
-        var address = "", postalCode = "", latitude = "", longitude = "", city = "", area = ""
-        var location = self.addressIdLIst.joined(separator: ",")
-        
-        if location.contains("\(appDelegate.userDetails?.id ?? 0)") {
-            location = ""
+        resizeAndCompressImages(self.sendproductImage, maxSizeKB: 500) { compressedDataArray in
+            // Now upload compressedDataArray (contains reduced-size images)
+            
+            // Collect selected color IDs
+            let colorIDs = self.selectColor.compactMap { $0?.id }.map(String.init).joined(separator: ",")
+            
+            // Collect category and subcategory IDs
+            let categoryIDs: String
+            if self.edit {
+                categoryIDs = self.categorysAndSubCategory.compactMap { $0.category_id }.map(String.init).joined(separator: ",")
+            } else {
+                categoryIDs = [self.selectCategory?.category_id, self.selectSubcategory?.id]
+                    .compactMap { $0 }
+                    .map(String.init)
+                    .joined(separator: ",")
+            }
+            
+            // Determine price
+            let price: String
+            if let text = self.txtCADPrice.text {
+                price = ["Free", "Best offer", "Trade/Swap"].contains(text) || text.isEmpty ? "0.00" : text
+            } else {
+                price = "0.00"
+            }
+            
+            // Extract location details
+            var address = "", postalCode = "", latitude = "", longitude = "", city = "", area = ""
+            //            var location = [String:Any]() // self.addressIdLIst.joined(separator: ",")
             if let selectedAddress = self.selectAddress.first {
+                //                location["longitude"] = selectedAddress?.longitude ?? ""
+                //                location["city"] = selectedAddress?.city ?? ""
+                //                location["address"] = selectedAddress?.address ?? ""
+                //
+                //                location["postal_code"] = selectedAddress?.postal_code ?? ""
+                //                location["latitude"] = selectedAddress?.latitude ?? ""
+                //                location["area"]  = selectedAddress?.area ?? ""
+                
                 address = selectedAddress?.address ?? ""
                 postalCode = selectedAddress?.postal_code ?? ""
                 latitude = selectedAddress?.latitude ?? ""
                 longitude = selectedAddress?.longitude ?? ""
                 city = selectedAddress?.city ?? ""
                 area = selectedAddress?.area ?? ""
+                //                location[""]
+            }else{
+                if let selectedAddress = self.addresslist.first {
+                    //                    location["longitude"] = selectedAddress?.longitude ?? ""
+                    //                    location["city"] = selectedAddress?.city ?? ""
+                    //                    location["address"] = selectedAddress?.address ?? ""
+                    //
+                    //                    location["postal_code"] = selectedAddress?.postal_code ?? ""
+                    //                    location["latitude"] = selectedAddress?.latitude ?? ""
+                    //                    location["area"]  = selectedAddress?.area ?? ""
+                    address = selectedAddress?.address ?? ""
+                    postalCode = selectedAddress?.postal_code ?? ""
+                    latitude = selectedAddress?.latitude ?? ""
+                    longitude = selectedAddress?.longitude ?? ""
+                    city = selectedAddress?.city ?? ""
+                    area = selectedAddress?.area ?? ""
+                }
             }
-        }
-        
-        // Prepare API parameters
-        let params: [String: Any] = [
-            "brand_id": String(self.brandSearchList?.brand_id ?? 0),
-            "gender_id": String(self.savegenderId?.gender_id ?? 0),
-            "categories": categoryIDs,
-            "sizes": String(self.selectSize?.id ?? 0),
-            "condition_id": String(self.selectCondiction?.id ?? 0),
-            "colors": colorIDs,
-            "title": self.removeBrandName(from: self.txtModelTitle.text ?? "", brand: self.brandSearchList?.name ?? ""),
-            "description": self.txtDescription.text ?? "",
-            "locations": location,
-            "price_type": "1",
-            "product_url": self.Producturl,
-            "style": self.selectedStyleID ?? 0,
-            "price": price,
-            "city": city,
-            "area": area,
-            "longitude": longitude,
-            "latitude": latitude,
-            "postal_code": postalCode,
-            "address": address
-        ]
-        
-        // Check internet connection
-        guard appDelegate.reachable.connection != .none else {
-            UIAlertController().alertViewWithNoInternet(self)
-            return
-        }
-        
-        // Call API
-        self.apiCallWithImageVideoList(
-            of: PostDetailsModel.self,
-            isShowHud: true,
-            URL: BASE_URL,
-            apiName: APINAME.POST_CREATE.rawValue,
-            parameters: params,
-            images: self.sendproductImage,
-            imageParameterName: "image",
-            imageName: "ProductImage",
-            video: [],
-            videoParameterName: "video",
-            videoName: "ProductVideo"
-        ) { response, error in
-            guard error == nil, let response = response, let _ = response.dictData else {
-                UIAlertController().alertViewWithTitleAndMessage(self, message: error?.domain ?? ErrorMessage)
+            
+            // Prepare API parameters
+            let params: [String: Any] = [
+                "brand_id": String(self.brandSearchList?.brand_id ?? 0),
+                "gender_id": String(self.savegenderId?.gender_id ?? 0),
+                "categories": categoryIDs,
+                "sizes": String(self.selectSize?.id ?? 0),
+                "condition_id": String(self.selectCondiction?.id ?? 0),
+                "colors": colorIDs,
+                "title": self.removeBrandName(from: self.txtModelTitle.text ?? "", brand: self.brandSearchList?.name ?? ""),
+                "description": self.txtDescription.text ?? "",
+                //                "locations": [location],//dictionaryToJsonString(location) ?? "",
+                "price_type": "1",
+                "product_url": self.Producturl,
+                "style": self.selectedStyleID ?? 0,
+                "price": price,
+                "city": city,
+                "area": area,
+                "longitude": longitude,
+                "latitude": latitude,
+                "postal_code": postalCode,
+                "address": address
+            ]
+            
+            // Check internet connection
+            guard appDelegate.reachable.connection != .none else {
+                UIAlertController().alertViewWithNoInternet(self)
                 return
             }
             
-            let alert = UIAlertController(title: AlertViewTitle, message: response.message, preferredStyle: .alert)
-            alert.setAlertButtonColor()
-            
-            let hideAction = UIAlertAction(title: kOk, style: .default) { _ in
-                self.tabBarController?.selectedIndex = 4
+            // Call API
+            self.apiCallWithImageVideoList(
+                of: PostDetailsModel.self,
+                isShowHud: true,
+                URL: BASE_URL,
+                apiName: APINAME.POST_CREATE.rawValue,
+                parameters: params,
+                images: compressedDataArray,
+                imageParameterName: "image",
+                imageName: "ProductImage",
+                video: [],
+                videoParameterName: "video",
+                videoName: "ProductVideo"
+            ) { response, error in
+                guard error == nil, let response = response, let _ = response.dictData else {
+                    UIAlertController().alertViewWithTitleAndMessage(self, message: error?.domain ?? ErrorMessage)
+                    return
+                }
+                
+                let alert = UIAlertController(title: AlertViewTitle, message: response.message, preferredStyle: .alert)
+                alert.setAlertButtonColor()
+                
+                let hideAction = UIAlertAction(title: kOk, style: .default) { _ in
+                    self.tabBarController?.selectedIndex = 4
+                }
+                alert.addAction(hideAction)
+                self.present(alert, animated: true)
             }
-            alert.addAction(hideAction)
-            self.present(alert, animated: true)
         }
     }
     
@@ -764,110 +770,139 @@ extension PostDetailsVC{
         self.sendproductImage.removeAll()
         self.sendproductImage = await self.convertToUIImageArray(from: self.productImage)
         
-        // Prepare color array
-        let colorArre = self.selectColor.compactMap { $0?.id.map(String.init) }
-        
-        // Prepare category and subcategory IDs
-        var categorySubCategoryId = [String]()
-        if self.edit {
-            categorySubCategoryId = self.categorysAndSubCategory.compactMap { String($0.category_id ?? 0) }
-        } else {
-            categorySubCategoryId.append(String(self.selectCategory?.category_id ?? 0))
-            categorySubCategoryId.append(String(self.selectSubcategory?.id ?? 0))
-        }
-        
-        let category = categorySubCategoryId.joined(separator: ",")
-        let colorIdString = colorArre.joined(separator: ",")
-        var location = self.addressIdLIst.joined(separator: ",")
-        let deletedImage = self.deleteImageId.joined(separator: ",")
-        let deletedVideo = self.deleteVideoId.joined(separator: ",")
-        
-        // Prepare address-related fields
-        var address = "", postalcode = "", latitude = "", longitude = "", city = "", area = ""
-//        if location.contains("\(appDelegate.userDetails?.id ?? 0)") {
-            location = ""
-            if let firstAddress = self.selectAddress.first {
-                address = firstAddress?.address ?? ""
-                postalcode = firstAddress?.postal_code ?? ""
-                latitude = firstAddress?.latitude ?? ""
-                longitude = firstAddress?.longitude ?? ""
-                area = firstAddress?.city ?? ""
-                city = firstAddress?.area ?? ""
+        resizeAndCompressImages(self.sendproductImage, maxSizeKB: 500) { compressedDataArray in
+            // Prepare color array
+            let colorArre = self.selectColor.compactMap { $0?.id.map(String.init) }
+            
+            // Prepare category and subcategory IDs
+            var categorySubCategoryId = [String]()
+            if self.edit {
+                categorySubCategoryId = self.categorysAndSubCategory.compactMap { String($0.category_id ?? 0) }
+            } else {
+                categorySubCategoryId.append(String(self.selectCategory?.category_id ?? 0))
+                categorySubCategoryId.append(String(self.selectSubcategory?.id ?? 0))
             }
-//        }
-        
-        // Validate price input
-        let price = (self.txtCADPrice.text?.isEmpty == true || ["Free", "Best offer", "Trade/Swap"].contains(self.txtCADPrice.text)) ? "0.00" : (self.txtCADPrice.text ?? "0")
-        
-        // Check internet connection before proceeding
-        guard appDelegate.reachable.connection != .unavailable else {
-            UIAlertController().alertViewWithNoInternet(self)
-            return
-        }
-        
-        // Prepare parameters for the API request
-        let param: [String: Any] = [
-            "post_id": "\(self.postDetails?.id ?? 0)",
-            "brand_id": "\(self.brandSearchList?.brand_id ?? 0)",
-            "gender_id": "\(self.savegenderId?.gender_id ?? 0)",
-            "categories": category,
-            "sizes": "\(self.selectSize?.id ?? 0)",
-            "condition_id": "\(self.selectCondiction?.id ?? 0)",
-            "colors": colorIdString,
-            "title": self.removeBrandName(from: self.txtModelTitle.text ?? "", brand: self.brandSearchList?.name ?? ""),
-            "description": self.txtDescription.text ?? "",
-            "locations": location,
-            "price_type": "1",
-            "style": self.selectedStyleID ?? 0,
-            "price": price,
-            "deleted_image_ids": deletedImage,
-            "deleted_video_ids": deletedVideo,
-            "product_url": self.Producturl,
-            "city": city,
-            "area": area,
-            "longitude": longitude,
-            "latitude": latitude,
-            "postal_code": postalcode,
-            "address": address
-        ]
-        
-        // Debug: print the parameters being sent
-        print(param)
-        
-        // Call API to update product with images and videos
-        self.apiCallWithImageVideoList(
-            of: PostDetailsModel.self,
-            isShowHud: true,
-            URL: BASE_URL,
-            apiName: APINAME.POSE_EDIT.rawValue,
-            parameters: param,
-            images: self.sendproductImage,
-            imageParameterName: "image",
-            imageName: "Productimge",
-            video: [],
-            videoParameterName: "video",
-            videoName: "ProductVideo"
-        ) { (response, error) in
-            // Error handling
-            if let error = error {
-                UIAlertController().alertViewWithTitleAndMessage(self, message: error.domain ?? ErrorMessage)
+            
+            let category = categorySubCategoryId.joined(separator: ",")
+            let colorIdString = colorArre.joined(separator: ",")
+            //            var location = self.addressIdLIst.joined(separator: ",")
+            let deletedImage = self.deleteImageId.joined(separator: ",")
+            let deletedVideo = self.deleteVideoId.joined(separator: ",")
+            
+            // Prepare address-related fields
+            var address = "", postalcode = "", latitude = "", longitude = "", city = "", area = ""
+            //        if location.contains("\(appDelegate.userDetails?.id ?? 0)") {
+            var location = [String:Any]() // self.addressIdLIst.joined(separator: ",")
+            if let selectedAddress = self.selectAddress.first {
+                //                location["longitude"] = selectedAddress?.longitude ?? ""
+                //                location["city"] = selectedAddress?.city ?? ""
+                //                location["address"] = selectedAddress?.address ?? ""
+                //
+                //                location["postal_code"] = selectedAddress?.postal_code ?? ""
+                //                location["latitude"] = selectedAddress?.latitude ?? ""
+                //                location["area"]  = selectedAddress?.area ?? ""
+                
+                address = selectedAddress?.address ?? ""
+                postalcode = selectedAddress?.postal_code ?? ""
+                latitude = selectedAddress?.latitude ?? ""
+                longitude = selectedAddress?.longitude ?? ""
+                city = selectedAddress?.city ?? ""
+                area = selectedAddress?.area ?? ""
+                //                location[""]
+            }else{
+                if let selectedAddress = self.addresslist.first {
+                    //                    location["longitude"] = selectedAddress?.longitude ?? ""
+                    //                    location["city"] = selectedAddress?.city ?? ""
+                    //                    location["address"] = selectedAddress?.address ?? ""
+                    //
+                    //                    location["postal_code"] = selectedAddress?.postal_code ?? ""
+                    //                    location["latitude"] = selectedAddress?.latitude ?? ""
+                    //                    location["area"]  = selectedAddress?.area ?? ""
+                    address = selectedAddress?.address ?? ""
+                    postalcode = selectedAddress?.postal_code ?? ""
+                    latitude = selectedAddress?.latitude ?? ""
+                    longitude = selectedAddress?.longitude ?? ""
+                    city = selectedAddress?.city ?? ""
+                    area = selectedAddress?.area ?? ""
+                }
+            }
+            
+            // Prepare API parameters
+            
+            
+            // Validate price input
+            let price = (self.txtCADPrice.text?.isEmpty == true || ["Free", "Best offer", "Trade/Swap"].contains(self.txtCADPrice.text)) ? "0.00" : (self.txtCADPrice.text ?? "0")
+            
+            // Check internet connection before proceeding
+            guard appDelegate.reachable.connection != .unavailable else {
+                UIAlertController().alertViewWithNoInternet(self)
                 return
             }
             
-            // Handle the response
-            if let response = response, let data = response.dictData {
-                self.postDetails = data
-                
-                // Display success alert
-                let alert = UIAlertController(title: AlertViewTitle, message: response.message, preferredStyle: .alert)
-                alert.setAlertButtonColor()
-                
-                let hideAction = UIAlertAction(title: kOk, style: .default) { _ in
-                    self.navigationController?.popToRootViewController(animated: true)
+            // Prepare parameters for the API request
+            let param: [String: Any] = [
+                "post_id": "\(self.postDetails?.id ?? 0)",
+                "brand_id": "\(self.brandSearchList?.brand_id ?? 0)",
+                "gender_id": "\(self.savegenderId?.gender_id ?? 0)",
+                "categories": category,
+                "sizes": "\(self.selectSize?.id ?? 0)",
+                "condition_id": "\(self.selectCondiction?.id ?? 0)",
+                "colors": colorIdString,
+                "title": self.removeBrandName(from: self.txtModelTitle.text ?? "", brand: self.brandSearchList?.name ?? ""),
+                "description": self.txtDescription.text ?? "",
+                //                "locations": [location],//dictionaryToJsonString(location) ?? "",
+                "price_type": "1",
+                "style": self.selectedStyleID ?? 0,
+                "price": price,
+                "deleted_image_ids": deletedImage,
+                "deleted_video_ids": deletedVideo,
+                "product_url": self.Producturl,
+                "city": city,
+                "area": area,
+                "longitude": longitude,
+                "latitude": latitude,
+                "postal_code": postalcode,
+                "address": address
+            ]
+            
+            // Debug: print the parameters being sent
+            print(param)
+            
+            // Call API to update product with images and videos
+            self.apiCallWithImageVideoList(
+                of: PostDetailsModel.self,
+                isShowHud: true,
+                URL: BASE_URL,
+                apiName: APINAME.POSE_EDIT.rawValue,
+                parameters: param,
+                images: compressedDataArray,
+                imageParameterName: "image",
+                imageName: "Productimge",
+                video: [],
+                videoParameterName: "video",
+                videoName: "ProductVideo"
+            ) { (response, error) in
+                // Error handling
+                if let error = error {
+                    UIAlertController().alertViewWithTitleAndMessage(self, message: error.domain ?? ErrorMessage)
+                    return
                 }
                 
-                alert.addAction(hideAction)
-                sceneDelegate.window?.rootViewController?.present(alert, animated: true)
+                // Handle the response
+                if let response = response, let data = response.dictData {
+                    self.postDetails = data
+                    
+                    // Display success alert
+                    let alert = UIAlertController(title: AlertViewTitle, message: response.message, preferredStyle: .alert)
+                    alert.setAlertButtonColor()
+                    
+                    let hideAction = UIAlertAction(title: kOk, style: .default) { _ in
+                        self.navigationController?.popToRootViewController(animated: true)
+                    }
+                    
+                    alert.addAction(hideAction)
+                    sceneDelegate.window?.rootViewController?.present(alert, animated: true)
+                }
             }
         }
     }
@@ -920,23 +955,11 @@ extension PostDetailsVC: UICollectionViewDelegate,UICollectionViewDataSource {
                 
                 cell.btnDelete.tag = indexPath.item
                 cell.btnDelete.addTarget(self, action: #selector(btnRemoveImage_Clicked(sender:)), for: .touchUpInside)
-                //                switch item {
-                //                case .photo(let image,let imageString ):
-                //                    if imageString.trim().isEmpty == true{
-                //                        cell.imgProduct.image = image
-                //                    }else{
-                //                        cell.imgProduct.kf.setImage(with: URL(string: imageString),placeholder: PlaceHolderImage)
-                //                    }
-                //                    return cell
-                //
-                //                case .video(let image, let thumbnail):
-                //                    cell.imgProduct.image = thumbnail
-                //                    return cell
-                //                }
+                
                 if item["isLocal"] as? Bool == true{
                     cell.imgProduct.image = item["image_url"] as? UIImage
                 }else{
-                    cell.imgProduct.kf.setImage(with: URL(string: item["image_url"] as? String ?? ""),placeholder: PlaceHolderImage)
+                    cell.imgProduct.setImageFast(with: item["image_url"] as? String ?? "")
                 }
                 return cell
                 
@@ -1140,64 +1163,6 @@ extension PostDetailsVC: BrandLocationDelegate, StorePostLocationDelegate, UserL
     }
 }
 
-
-extension PostDetailsVC: UICollectionViewDropDelegate, UICollectionViewDragDelegate {
-    // MARK: UICollectionViewDragDelegate
-    
-    func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
-        let item = self.productImage[indexPath.item]
-        let itemProvider = NSItemProvider(object: item as! NSItemProviderWriting )
-        
-        let dragItem = UIDragItem(itemProvider: itemProvider)
-        dragItem.localObject = item
-        return [dragItem]
-    }
-    
-    // MARK: UICollectionViewDropDelegate
-    
-    func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {
-        guard let destinationIndexPath = coordinator.destinationIndexPath else { return }
-        
-        // Ensure only local drag items are handled
-        if coordinator.proposal.operation == .move {
-            var correctedDestinationIndex = destinationIndexPath.item
-            let itemCount = collectionView.numberOfItems(inSection: destinationIndexPath.section)
-            
-            if correctedDestinationIndex >= itemCount {
-                correctedDestinationIndex = itemCount - 1
-            }
-            
-            for item in coordinator.items {
-                if let sourceIndexPath = item.sourceIndexPath {
-                    collectionView.performBatchUpdates({
-                        let movedItem = self.productImage.remove(at: sourceIndexPath.item)
-                        
-                        if correctedDestinationIndex > sourceIndexPath.item {
-                            correctedDestinationIndex -= 1
-                        }
-                        
-                        self.productImage.insert(movedItem, at: correctedDestinationIndex)
-                        collectionView.moveItem(at: sourceIndexPath, to: IndexPath(item: correctedDestinationIndex, section: destinationIndexPath.section))
-                    })
-                    
-                    coordinator.drop(item.dragItem, toItemAt: IndexPath(item: correctedDestinationIndex, section: destinationIndexPath.section))
-                }
-            }
-            
-            // Refresh the cells at affected indices
-            collectionView.reloadItems(at: [IndexPath(item: correctedDestinationIndex, section: destinationIndexPath.section), destinationIndexPath])
-        }
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, canHandle session: UIDropSession) -> Bool {
-        return session.localDragSession != nil
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
-        return UICollectionViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
-    }
-}
-
 extension PostDetailsVC{
     func deleteFile(filePath:URL) {
         guard FileManager.default.fileExists(atPath: filePath.path) else {
@@ -1268,4 +1233,100 @@ extension PostDetailsVC{
     func removeBrandName(from text: String, brand: String) -> String {
         return text //.replacingOccurrences(of: brand, with: "", options: .caseInsensitive)
     }
+}
+
+extension PostDetailsVC:UICollectionViewDragDelegate, UICollectionViewDropDelegate{
+    // MARK: - UICollectionViewDragDelegate
+    
+    func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
+        let imageDict = productImage[indexPath.item]
+        
+        let itemProvider: NSItemProvider
+        if let image = imageDict["image_url"] as? UIImage {
+            itemProvider = NSItemProvider(object: image)
+        } else if let imageUrl = imageDict["image_url"] as? String {
+            itemProvider = NSItemProvider(object: imageUrl as NSString)
+        } else {
+            return []
+        }
+        
+        let dragItem = UIDragItem(itemProvider: itemProvider)
+        dragItem.localObject = imageDict
+        return [dragItem]
+    }
+    
+    // MARK: - UICollectionViewDropDelegate
+    
+    func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {
+        let destinationIndexPath = coordinator.destinationIndexPath ?? IndexPath(item: productImage.count - 1, section: 0)
+        
+        for item in coordinator.items {
+            if let sourceIndexPath = item.sourceIndexPath {
+                // Move item locally
+                collectionView.performBatchUpdates({
+                    let movedItem = productImage.remove(at: sourceIndexPath.item)
+                    productImage.insert(movedItem, at: destinationIndexPath.item)
+                    collectionView.moveItem(at: sourceIndexPath, to: destinationIndexPath)
+                })
+                coordinator.drop(item.dragItem, toItemAt: destinationIndexPath)
+            }
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, canHandle session: UIDropSession) -> Bool {
+        return session.canLoadObjects(ofClass: NSString.self) || session.canLoadObjects(ofClass: UIImage.self)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
+        return UICollectionViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
+    }
+}
+
+
+extension UIImage {
+    
+    /// Compresses an image to a specific max size while maintaining quality
+    func compressImage(maxSizeKB: Int, targetSize: CGSize) -> Data? {
+        let maxSizeBytes = maxSizeKB * 1024
+        var compressionQuality: CGFloat = 1.0
+        
+        // Resize image to target size (maintains aspect ratio)
+        let resizedImage = self.resizeImage(targetSize: targetSize)
+        
+        // Compress using Image I/O
+        guard let imageData = resizedImage.jpegData(compressionQuality: compressionQuality) else { return nil }
+        
+        var compressedData = imageData
+        
+        while compressedData.count > maxSizeBytes && compressionQuality > 0.1 {
+            compressionQuality -= 0.1
+            if let newData = resizedImage.jpegData(compressionQuality: compressionQuality) {
+                compressedData = newData
+            }
+        }
+        
+        return compressedData
+    }
+    
+    /// Resize an image while maintaining aspect ratio
+    func resizeImage(targetSize: CGSize) -> UIImage {
+        let widthRatio  = targetSize.width  / size.width
+        let heightRatio = targetSize.height / size.height
+        let scaleFactor = min(widthRatio, heightRatio)  // Maintain aspect ratio
+        
+        let newSize = CGSize(width: size.width * scaleFactor, height: size.height * scaleFactor)
+        let format = UIGraphicsImageRendererFormat()
+        format.scale = 1
+        
+        return UIGraphicsImageRenderer(size: newSize, format: format).image { _ in
+            draw(in: CGRect(origin: .zero, size: newSize))
+        }
+    }
+}
+
+func dictionaryToJsonString(_ dict: [String: Any]) -> String? {
+    guard let jsonData = try? JSONSerialization.data(withJSONObject: dict, options: []) else {
+        return nil
+    }
+    return String(data: jsonData, encoding: .utf8)
 }

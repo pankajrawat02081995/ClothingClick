@@ -433,11 +433,8 @@ extension PostItemsizeConditionColorViewController : UITableViewDelegate,UITable
             }
         }else {
             cell.imgColorPhoto.isHidden = false
-            if let url = objet?.photo{
-                if let imag = URL.init(string: url){
-                    cell.imgColorPhoto.kf.setImage(with: imag,placeholder: PlaceHolderImage)
-                }
-            }
+            let urlString = objet?.photo?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+            cell.imgColorPhoto.setImageFast(with: urlString)
         }
                 
         if (objet?.isSelect ?? false) {

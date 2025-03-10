@@ -156,6 +156,7 @@
 		18F3C97C2689D8A400126573 /* StorePostAddLocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F3C97B2689D8A400126573 /* StorePostAddLocationViewController.swift */; };
 		320BDF112BFD04FF00CF5EA7 /* HomePageBrowserXIB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 320BDF0F2BFD04FF00CF5EA7 /* HomePageBrowserXIB.swift */; };
 		320BDF122BFD04FF00CF5EA7 /* HomePageBrowserXIB.xib in Resources */ = {isa = PBXBuildFile; fileRef = 320BDF102BFD04FF00CF5EA7 /* HomePageBrowserXIB.xib */; };
+		320D0F832D7782BE007D830B /* UIImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 320D0F822D7782BE007D830B /* UIImageView.swift */; };
 		321007052CAB108100218CAE /* DeleteProductSingleTon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 321007042CAB108000218CAE /* DeleteProductSingleTon.swift */; };
 		321007082CAB23F400218CAE /* Untitled.swift in Sources */ = {isa = PBXBuildFile; fileRef = 321007072CAB23F000218CAE /* Untitled.swift */; };
 		3210070A2CAB240100218CAE /* DeletePostVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 321007092CAB240100218CAE /* DeletePostVC.swift */; };
@@ -492,6 +493,7 @@
 		18F3C97B2689D8A400126573 /* StorePostAddLocationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorePostAddLocationViewController.swift; sourceTree = "<group>"; };
 		320BDF0F2BFD04FF00CF5EA7 /* HomePageBrowserXIB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageBrowserXIB.swift; sourceTree = "<group>"; };
 		320BDF102BFD04FF00CF5EA7 /* HomePageBrowserXIB.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HomePageBrowserXIB.xib; sourceTree = "<group>"; };
+		320D0F822D7782BE007D830B /* UIImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageView.swift; sourceTree = "<group>"; };
 		321007042CAB108000218CAE /* DeleteProductSingleTon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteProductSingleTon.swift; sourceTree = "<group>"; };
 		321007072CAB23F000218CAE /* Untitled.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Untitled.swift; sourceTree = "<group>"; };
 		321007092CAB240100218CAE /* DeletePostVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeletePostVC.swift; sourceTree = "<group>"; };
@@ -1557,6 +1559,7 @@
 				322D210D2C079CB1005C5333 /* UIColor.swift */,
 				32A222D92C0F79060012BB50 /* UIFont.swift */,
 				32D6D5B52D09FB0D00F010A6 /* LocationManager.swift */,
+				320D0F822D7782BE007D830B /* UIImageView.swift */,
 			);
 			path = HelperClass;
 			sourceTree = "<group>";
@@ -2894,6 +2897,7 @@
 				184C60BB267CC725000AFC57 /* OtherUserDetailsModel.swift in Sources */,
 				18468D7B2660BD3C007344DA /* FloatRatingView.swift in Sources */,
 				18468E1E2660BD49007344DA /* VerifyOTPViewController.swift in Sources */,
+				320D0F832D7782BE007D830B /* UIImageView.swift in Sources */,
 				18468E292660BD49007344DA /* StoreLocationViewController.swift in Sources */,
 				182BC48E268D893600BC4A05 /* CustomMenuViewController.swift in Sources */,
 				328BCFF42C18C0E000C9D362 /* SettingXIB.swift in Sources */,
@@ -3141,7 +3145,7 @@
 				CODE_SIGN_ENTITLEMENTS = "Cloth App/Cloth AppDebug.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 47;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = PRN69F6WNX;
 				"EXCLUDED_ARCHS[sdk=*]" = x86_64;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
@@ -3151,7 +3155,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.0;
+				MARKETING_VERSION = 4.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.clothingclick.app;
 				PRODUCT_NAME = "Clothing Click";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -3170,7 +3174,7 @@
 				CODE_SIGN_ENTITLEMENTS = "Cloth App/Cloth AppRelease.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 47;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = PRN69F6WNX;
 				"EXCLUDED_ARCHS[sdk=*]" = x86_64;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
@@ -3180,7 +3184,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.0;
+				MARKETING_VERSION = 4.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.clothingclick.app;
 				PRODUCT_NAME = "Clothing Click";
 				PROVISIONING_PROFILE_SPECIFIER = "";

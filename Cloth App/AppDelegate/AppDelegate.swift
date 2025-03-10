@@ -72,9 +72,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
-        DispatchQueue.global(qos: .background).async {
-            sleep(UInt32(0.1))
-        }
+//        DispatchQueue.global(qos: .background).async {
+//            sleep(UInt32(0.1))
+//        }
         
         if window == nil {
             window = UIWindow(frame: UIScreen.main.bounds)

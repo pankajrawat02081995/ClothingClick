@@ -38,7 +38,7 @@ class PostPreviewVC: UIViewController {
     var selectSize : Size?
     var selectCondiction : Conditions?
     var selectColor = [Colors?]()
-    var productImage = [UIImage]()
+    //    var productImage = [UIImage]()
     var productImageUrl = [[String:Any]]()
     var postImageVideo = [URL]()
     var productModelItem = ""
@@ -51,13 +51,15 @@ class PostPreviewVC: UIViewController {
     
     var posts = [Posts]()
     var userData : UserDetailsModel?
+    var productImage = [[String:Any]]()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.userData = appDelegate.userDetails
         self.setupPostCollection()
         self.setupData()
         self.callGetUserpost(userId: String(userData?.id ?? 0), tabId: "1",sort_by: "",sort_value: "", isShowHud: true)
-
+        
     }
     
     func setupData(){
@@ -72,28 +74,30 @@ class PostPreviewVC: UIViewController {
         self.lblNameUser.text = appDelegate.userDetails?.name ?? ""
         self.lblUserNameAndPostCOunt.text = "@\(appDelegate.userDetails?.username ?? "") . \(appDelegate.userDetails?.totalPosts ?? 0) posts"
         self.lblReview.text = "\(appDelegate.userDetails?.avg_rating ?? 0) (\(appDelegate.userDetails?.total_reviews ?? 0) Reviews)"
-        self.imgUser.kf.setImage(with: URL(string: appDelegate.userDetails?.photo ?? ""),placeholder: PlaceHolderImage)
+        self.imgUser.setImageFast(with: appDelegate.userDetails?.photo ?? "")
         
-        for index in self.mediaItems{
-            switch index {
-            case .photo(let image,let imageString):
+        for index in self.productImage{
+            
+            if index["isLocal"] as? Bool == true{
                 let dict = ["type": "Image",
-                            "image1": image as Any] as [String : Any]
+                            "image1": index["image_url"] as? UIImage as Any] as [String : Any]
                 if let imageData = ImagesVideoModel(JSON: dict) {
                     imagesList.append(imageData)
                 }
-                
-            case .video(let image, let thumbnail):
-                let dict = ["type": "video",
-                            "image1": thumbnail as Any] as [String : Any]
-                let imageData = ImagesVideoModel(JSON: dict)
-                imagesList.append(imageData!)
+            }else{
+                let dict = ["type": "Image",
+                            "image1": index["image_url"] as? String ?? ""] as [String : Any]
+                if let imageData = ImagesVideoModel(JSON: dict) {
+                    imagesList.append(imageData)
+                }
             }
+
+            
         }
     }
     
     func setupPostCollection(){
-        self.pageControle.numberOfPages = self.mediaItems.count
+        self.pageControle.numberOfPages = self.productImage.count
         self.pageControle.currentPage = 0
         self.productCollection.delegate = self
         self.productCollection.dataSource = self
@@ -109,14 +113,14 @@ class PostPreviewVC: UIViewController {
         let lat = appDelegate.userDetails?.locations?.first?.latitude ?? ""
         
         let log = appDelegate.userDetails?.locations?.first?.longitude ?? ""
-       // let address = self.postDetails?.locations?[0].address
-       // let postal_code = self.postDetails?.locations?[0].postal_code
+        // let address = self.postDetails?.locations?[0].address
+        // let postal_code = self.postDetails?.locations?[0].postal_code
         let viewController = FindLocation.instantiate(fromStoryboard: .Main)
         viewController.addresslist = appDelegate.userDetails?.locations ?? []
         viewController.lat = (lat as NSString).doubleValue
         viewController.log = (log as NSString).doubleValue
         viewController.usertype = appDelegate.userDetails?.role_id ?? 0
-       // viewController.adddressArea =  "\(address ?? "") \(postal_code ?? "")"
+        // viewController.adddressArea =  "\(address ?? "") \(postal_code ?? "")"
         viewController.hidesBottomBarWhenPushed = true
         self.pushViewController(vc: viewController)
     }
@@ -128,71 +132,71 @@ class PostPreviewVC: UIViewController {
     }
     
     func callGetUserpost(userId : String,tabId : String,sort_by:String , sort_value : String ,isShowHud:Bool) {
-       if appDelegate.reachable.connection != .none {
-        
-//        let param = ["user_id":  userId,
-//                     "tab" : tabId,
-//                     "sort_by" : sort_by,
-//                     "sort_value" : sort_value,
-//                     "page" : "\(self.currentPage)"
-//                    ]
-           
-           var param = FilterSingleton.share.filter.toDictionary()
-           param?.removeValue(forKey: "is_only_count")
-           param?.removeValue(forKey: "page")
-//           param?.removeValue(forKey: "sort_by")
-//           param?.removeValue(forKey: "sort_value")
-           param?.removeValue(forKey: "notification_item_counter")
-           param?["page"] = "1"
-           param?["user_id"] = userId
-           param?["tab"] = tabId
-           param?.removeValue(forKey: "slectedCategories")
-           APIManager().apiCall(of:HomeListDetailsModel.self, isShowHud: isShowHud, URL: BASE_URL, apiName: APINAME.USER_POSTS.rawValue, method: .post, parameters: param) { (response, error) in
-               if error == nil {
-                   if let response = response {
-                    if response.dictData != nil {
-                        if let data = response.dictData {
-                            
-                            if let post = data.posts {
-                                for temp in post {
-                                    self.posts.append(temp)
+        if appDelegate.reachable.connection != .none {
+            
+            //        let param = ["user_id":  userId,
+            //                     "tab" : tabId,
+            //                     "sort_by" : sort_by,
+            //                     "sort_value" : sort_value,
+            //                     "page" : "\(self.currentPage)"
+            //                    ]
+            
+            var param = FilterSingleton.share.filter.toDictionary()
+            param?.removeValue(forKey: "is_only_count")
+            param?.removeValue(forKey: "page")
+            //           param?.removeValue(forKey: "sort_by")
+            //           param?.removeValue(forKey: "sort_value")
+            param?.removeValue(forKey: "notification_item_counter")
+            param?["page"] = "1"
+            param?["user_id"] = userId
+            param?["tab"] = tabId
+            param?.removeValue(forKey: "slectedCategories")
+            APIManager().apiCall(of:HomeListDetailsModel.self, isShowHud: isShowHud, URL: BASE_URL, apiName: APINAME.USER_POSTS.rawValue, method: .post, parameters: param) { (response, error) in
+                if error == nil {
+                    if let response = response {
+                        if response.dictData != nil {
+                            if let data = response.dictData {
+                                
+                                if let post = data.posts {
+                                    for temp in post {
+                                        self.posts.append(temp)
+                                    }
                                 }
                             }
-                        }
-                        self.otherProductCollection.reloadData()
-                        
-                        if self.posts.count == 0 {
-//                            self.lblNoData.isHidden = true
-                            if sort_by != "size"  {
-//                                self.btnSort.isHidden = false
-                            }
-                        }
-                        else
-                        {
-//                            self.lblNoData.isHidden = true
-//                            self.btnSort.isHidden = false
+                            self.otherProductCollection.reloadData()
                             
-                        }
-                        
-                        self.otherProductCollection.reloadData()
-                      //  if self.currentPage == 1 {
+                            if self.posts.count == 0 {
+                                //                            self.lblNoData.isHidden = true
+                                if sort_by != "size"  {
+                                    //                                self.btnSort.isHidden = false
+                                }
+                            }
+                            else
+                            {
+                                //                            self.lblNoData.isHidden = true
+                                //                            self.btnSort.isHidden = false
+                                
+                            }
+                            
+                            self.otherProductCollection.reloadData()
+                            //  if self.currentPage == 1 {
                             self.otherProductCollection.layoutIfNeeded()
-//                            self.constHeightForCVCProduct.constant = self.CVCProduct.contentSize.height
-                       // }
-//                        self.scrollView.isScrollEnabled = true
-//                        self.loading = false
+                            //                            self.constHeightForCVCProduct.constant = self.CVCProduct.contentSize.height
+                            // }
+                            //                        self.scrollView.isScrollEnabled = true
+                            //                        self.loading = false
+                        }
                     }
-                   }
-               }
-               else {
-                   BaseViewController.sharedInstance.showAlertWithTitleAndMessage(title: AlertViewTitle, message: ErrorMessage)
-               }
-           }
-       }
-       else {
-           BaseViewController.sharedInstance.showAlertWithTitleAndMessage(title: AlertViewTitle, message: NoInternet)
-       }
-   }
+                }
+                else {
+                    BaseViewController.sharedInstance.showAlertWithTitleAndMessage(title: AlertViewTitle, message: ErrorMessage)
+                }
+            }
+        }
+        else {
+            BaseViewController.sharedInstance.showAlertWithTitleAndMessage(title: AlertViewTitle, message: NoInternet)
+        }
+    }
 }
 
 
@@ -201,7 +205,7 @@ extension PostPreviewVC:UICollectionViewDelegate,UICollectionViewDataSource{
         if collectionView == self.otherProductCollection{
             return self.posts.count
         }else{
-            return self.mediaItems.count
+            return self.productImage.count
         }
     }
     
@@ -209,14 +213,10 @@ extension PostPreviewVC:UICollectionViewDelegate,UICollectionViewDataSource{
         if collectionView == self.otherProductCollection{
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HomePageBrowserXIB", for: indexPath) as! HomePageBrowserXIB
             let objet = self.posts[indexPath.item]
-            if let url = objet.image?.first?.image {
-                if let image = URL.init(string: url){
-                    cell.imgProduct.kf.setImage(with: image,placeholder: PlaceHolderImage)
-                }
-            }
+            cell.imgProduct.setImageFast(with: objet.image?.first?.image ?? "")
             
             cell.btnLike.tag = indexPath.row
-//            cell.btnLike.addTarget(self, action: #selector(btnWatch_Clicked(_:)), for: .touchUpInside)
+            //            cell.btnLike.addTarget(self, action: #selector(btnWatch_Clicked(_:)), for: .touchUpInside)
             if let is_favourite = objet.is_favourite {
                 cell.btnLike.isSelected = is_favourite
             }
@@ -244,68 +244,20 @@ extension PostPreviewVC:UICollectionViewDelegate,UICollectionViewDataSource{
             }
             return cell
         }else{
+            let item = self.productImage[indexPath.item]
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PostImageXIB", for: indexPath) as! PostImageXIB
-            let indexData = self.mediaItems[indexPath.item]
-            switch indexData {
-            case .photo(let image,let imageString ):
-                if imageString.isEmpty == false{
-                    cell.imgPost.kf.setImage(with: URL(string: imageString),placeholder: PlaceHolderImage)
-                }else{
-                    cell.imgPost.image = image
-                }
-                return cell
-                
-            case .video(let image, let thumbnail):
-                cell.imgPost.image = thumbnail
-                return cell
+            
+            if item["isLocal"] as? Bool == true{
+                cell.imgPost.image = item["image_url"] as? UIImage
+            }else{
+                cell.imgPost.setImageFast(with: item["image_url"] as? String ?? "")
             }
             return cell
+            
         }
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        //        if self.productImageUrl.count == indexPath.item {
-        //            let videoURL = postImageVideo[0]
-        //            let player = AVPlayer(url: videoURL)
-        //            let playerViewController = AVPlayerViewController()
-        //            playerViewController.player = player
-        //            self.present(playerViewController, animated: true) {
-        //                playerViewController.player!.play()
-        //            }
-        //        }
-        //        else {
-        //            var postImageVideo = [ImagesVideoModel]()
-        //            for i in 0..<self.productImageUrl.count{
-        //                let image = self.productImageUrl[i]["image_url"] as? UIImage
-        //                if image != nil {
-        //                let dict = ["type": "Image",
-        //                            "image1": image as Any] as [String : Any]
-        //                let imageData = ImagesVideoModel.init(JSON: dict)
-        //                postImageVideo.append(imageData!)
-        //                }
-        //                else{
-        //                    let dict = ["type": "Image",
-        //                                "image": self.productImageUrl[i]["image_url"] as Any] as [String : Any]
-        //                    let imageData = ImagesVideoModel.init(JSON: dict)
-        //                    postImageVideo.append(imageData!)
-        //                }
-        //            }
-        //            for i in 0..<self.postImageVideo.count{
-        //                let dict = ["type": "video",
-        //                            "video":  self.postImageVideo[i].absoluteString] as [String : Any]
-        //                let videoData = ImagesVideoModel.init(JSON: dict)
-        //                postImageVideo.append(videoData!)
-        //            }
-        //
-        //
-        //            let viewController = self.storyboard?.instantiateViewController(identifier: "PhotosViewController") as! PhotosViewController
-        //            //                viewController.imageUrl = imageUrl
-        //            viewController.imagesList = postImageVideo
-        //            viewController.visibleIndex = indexPath.item
-        //            self.navigationController?.present(viewController, animated: true, completion: nil)
-        //
-        //        }
-        
         if collectionView  == self.productCollection{
             let viewController = PhotosViewController.instantiate(fromStoryboard: .Main)
             viewController.imagesList = self.imagesList
@@ -353,7 +305,7 @@ extension PostPreviewVC: UICollectionViewDelegateFlowLayout {
             return CGSize(width: widthPerItem, height: 300)
         }
         else {
-//            return CGSize(width: 160, height: 233)
+            //            return CGSize(width: 160, height: 233)
             return CGSize(width: (self.otherProductCollection.frame.size.width / 2) - 20, height: 230)
         }
     }

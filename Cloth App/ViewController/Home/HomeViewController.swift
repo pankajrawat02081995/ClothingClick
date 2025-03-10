@@ -372,12 +372,9 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
         
         if self.homeListData[collectionView.tag]?.name == "Local Stores" {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "BrandCVCell", for: indexPath) as! BrandCVCell
-            if let url = objet?[indexPath.item].user_image{
-                let urlString = url.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
-                if let imgUrl = URL.init(string: urlString!) {
-                    cell.imgBrand.kf.setImage(with: imgUrl, placeholder: PlaceHolderImage)
-                }
-            }
+            
+            cell.imgBrand.setImageFast(with: objet?[indexPath.item].user_image?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "")
+
             cell.imgBrand.cornerRadius = cell.imgBrand.frame.height / 2
             cell.imgBrand.borderColor = UIColor().grayColor
             cell.lblTitle.text = objet?[indexPath.item].name
@@ -385,12 +382,8 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
         }
         else if self.homeListData[collectionView.tag]?.name == "Popular Brands"{
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "BrandCVCell", for: indexPath) as! BrandCVCell
-            if let url = objet?[indexPath.item].user_image{
-                let urlString = url.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
-                if let imgUrl = URL.init(string: urlString!) {
-                    cell.imgBrand.kf.setImage(with: imgUrl, placeholder: PlaceHolderImage)
-                }
-            }
+            cell.imgBrand.setImageFast(with: objet?[indexPath.item].user_image?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "")
+
             cell.imgBrand.cornerRadius = 0
             cell.imgBrand.borderColor = UIColor().lightGrayColor
             cell.lblTitle.text = objet?[indexPath.item].name
@@ -417,11 +410,9 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
                 let date = self.convertWebStringToDate(strDate: strDate).toLocalTime()
                 cell.lblDayAgo.text = Date().offset(from: date)
             }
-            if let url = objet?[indexPath.item].image?[0].image{
-                if let imge = URL.init(string: url){
-                    cell.imgBrand.kf.setImage(with: imge,placeholder: PlaceHolderImage)
-                }
-            }
+            cell.imgBrand.setImageFast(with: objet?[indexPath.item].image?[0].image?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "")
+
+            
             if let brandName = objet?[indexPath.item].brand_name {
                 cell.lblBrand.text = brandName
             }

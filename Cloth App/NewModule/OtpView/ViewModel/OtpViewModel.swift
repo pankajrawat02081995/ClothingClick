@@ -18,7 +18,14 @@ class OtpViewModel{
                         ]
             APIManager().apiCallWithMultipart(of: UserDetailsModel.self, isShowHud: true, URL: BASE_URL, apiName: APINAME.SIGNUP_VERIFY_USER_PHONE.rawValue, parameters: param as [String : Any]) { (response, error) in
                 if error == nil {
-                    self.view?.navigateToHomeScreen()
+                    if self.view?.isProfileUpdate == true{
+                        if let userDetails = response?.dictData {
+                            self.view?.saveUserDetails(userDetails: userDetails)
+                        }
+                        self.view?.mobileNumberUpdated?(true)
+                    }else{
+                        self.view?.navigateToHomeScreen()
+                    }
                 }
                 else {
                     UIAlertController().alertViewWithTitleAndMessage(self.view ?? UIViewController(), message: error?.domain ?? ErrorMessage)

@@ -293,21 +293,16 @@ class MessagesViewController: BaseViewController {
     func setProductData() {
         let object = self.messageDetails
         
-        if let url = object?.getHeaderDeatils()?.user_profile_picture {
-            if let image = URL.init(string: url){
-                self.imgUser.kf.setImage(with: image,placeholder: ProfileHolderImage)
-            }
-        }
+        let urlString = object?.getHeaderDeatils()?.user_profile_picture?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+        self.imgUser.setImageFast(with: urlString)
+        
         if let userName = object?.getHeaderDeatils()?.username {
             self.lblUserName.text = userName.capitalized
         }
         
         
-        if let url = object?.post_image?[0].image {
-            if let image = URL.init(string: url){
-                self.imgProduct.kf.setImage(with: image,placeholder: PlaceHolderImage)
-            }
-        }
+        let urlString1 = object?.post_image?[0].image?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+        self.imgProduct.setImageFast(with: urlString1)
         
         if let brandName = object?.post_brand {
             self.lblBrandName.text = brandName
@@ -369,18 +364,12 @@ extension MessagesViewController : UITableViewDelegate , UITableViewDataSource {
                 
                 if objcet.type?.lowercased() == "image"{
                     cell.imgPlay.isHidden = true
-                    if let url = objcet.file {
-                        if let image = URL.init(string: url){
-                            cell.imgOwnerImage.kf.setImage(with: image,placeholder: PlaceHolderImage)
-                        }
-                    }
+                    let urlString = objcet.file?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+                    cell.imgOwnerImage.setImageFast(with: urlString)
                 }else{
                     cell.imgPlay.isHidden = false
-                    if let url = objcet.thumbnail {
-                        if let image = URL.init(string: url){
-                            cell.imgOwnerImage.kf.setImage(with: image,placeholder: PlaceHolderImage)
-                        }
-                    }
+                    let urlString = objcet.thumbnail?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+                    cell.imgOwnerImage.setImageFast(with: urlString)
                 }
                 
                 return cell
@@ -409,18 +398,13 @@ extension MessagesViewController : UITableViewDelegate , UITableViewDataSource {
                 }
                 if objcet.type?.lowercased() == "image"{
                     cell.imgPlay.isHidden = true
-                    if let url = objcet.file {
-                        if let image = URL.init(string: url){
-                            cell.imgOwnerImage.kf.setImage(with: image,placeholder: PlaceHolderImage)
-                        }
-                    }
+                    let urlString = objcet.file?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+                    cell.imgOwnerImage.setImageFast(with: urlString)
                 }else{
                     cell.imgPlay.isHidden = false
-                    if let url = objcet.thumbnail {
-                        if let image = URL.init(string: url){
-                            cell.imgOwnerImage.kf.setImage(with: image,placeholder: PlaceHolderImage)
-                        }
-                    }
+                    let urlString = objcet.thumbnail?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+                    cell.imgOwnerImage.setImageFast(with: urlString)
+
                 }
                 return cell
             }

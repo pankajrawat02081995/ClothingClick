@@ -53,11 +53,9 @@ class NewRatingViewController: BaseViewController {
 //            viewFloatRating.heightAnchor.constraint(equalToConstant: 40)
 //        ])
         
-        if let url = reviewData?.user?.photo {
-            if let image = URL.init(string: url){
-                imgVwUser.kf.setImage(with: image, placeholder: ProfileHolderImage)
-            }
-        }
+        let urlString = reviewData?.user?.photo?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+        self.imgVwUser.setImageFast(with: urlString)
+        
         lblUserName.text = reviewData?.user?.name
             if self.isBuyerSeller {
                 self.lblExpTitle.text = "Rate your experience with this buyer"

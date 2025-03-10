@@ -26,7 +26,7 @@ class HomePageVC: BaseViewController {
         super.viewDidLoad()
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.deepLinkNavigate(_:)), name: NSNotification.Name(rawValue: "deeplinknavigate"), object: nil)
-
+        
         
         self.viewModel.view = self
         self.setupCollectionView()
@@ -63,29 +63,29 @@ class HomePageVC: BaseViewController {
     }
     
     private func getCityOrState(from latitude: Double, longitude: Double, completion: @escaping (Result<String, Error>) -> Void) {
-            let geocoder = CLGeocoder()
-            let location = CLLocation(latitude: latitude, longitude: longitude)
+        let geocoder = CLGeocoder()
+        let location = CLLocation(latitude: latitude, longitude: longitude)
+        
+        geocoder.reverseGeocodeLocation(location) { placemarks, error in
+            if let error = error {
+                completion(.failure(error))
+                return
+            }
             
-            geocoder.reverseGeocodeLocation(location) { placemarks, error in
-                if let error = error {
-                    completion(.failure(error))
-                    return
-                }
-                
-                guard let placemark = placemarks?.first else {
-                    completion(.failure(NSError(domain: "LocationError", code: 404, userInfo: [NSLocalizedDescriptionKey: "No location data found."])))
-                    return
-                }
-                
-                if let city = placemark.locality {
-                    completion(.success(city))
-                } else if let state = placemark.administrativeArea {
-                    completion(.success(state))
-                } else {
-                    completion(.failure(NSError(domain: "LocationError", code: 404, userInfo: [NSLocalizedDescriptionKey: "City and state not found."])))
-                }
+            guard let placemark = placemarks?.first else {
+                completion(.failure(NSError(domain: "LocationError", code: 404, userInfo: [NSLocalizedDescriptionKey: "No location data found."])))
+                return
+            }
+            
+            if let city = placemark.locality {
+                completion(.success(city))
+            } else if let state = placemark.administrativeArea {
+                completion(.success(state))
+            } else {
+                completion(.failure(NSError(domain: "LocationError", code: 404, userInfo: [NSLocalizedDescriptionKey: "City and state not found."])))
             }
         }
+    }
     private func checkAndFetchLocation(complition:@escaping((String,Bool) -> Void?)) {
         let locationManager = LocationManager.shared
         
@@ -95,15 +95,15 @@ class HomePageVC: BaseViewController {
                     switch result {
                     case .success(let location):
                         print("Location fetched: \(location.coordinate.latitude), \(location.coordinate.longitude)")
-//                        complition(true)
+                        //                        complition(true)
                         self.getCityOrState(from: location.coordinate.latitude, longitude: location.coordinate.longitude) { result in
                             switch result {
-                               case .success(let location):
-                                   print("Location: \(location)")
+                            case .success(let location):
+                                print("Location: \(location)")
                                 complition(location,true)
-                               case .failure(let error):
-                                   print("Error: \(error.localizedDescription)")
-                               }
+                            case .failure(let error):
+                                print("Error: \(error.localizedDescription)")
+                            }
                         }
                     case .failure(let error):
                         print("Error fetching location: \(error.localizedDescription)")
@@ -153,7 +153,7 @@ class HomePageVC: BaseViewController {
         
         present(alert, animated: true, completion: nil)
     }
-
+    
     
     func setupCollectionView(){
         self.catCollectionView.delegate = self
@@ -170,18 +170,18 @@ class HomePageVC: BaseViewController {
     }
     
     @IBAction func filterOnPress(_ sender: UIButton) {
-//        let viewController = ShortByViewController.instantiate(fromStoryboard: .Main)
-//        viewController.sort_by = self.sort_by
-//        viewController.sort_value = self.sort_value
-//        viewController.shortByDeleget = self
-//        viewController.modalPresentationStyle = .custom
-//        viewController.transitioningDelegate = customTransitioningDelegate
-//        self.present(viewController, animated: true, completion: nil)
-//        let vc = SearchEngineViewController.instantiate(fromStoryboard: .Main)
-//        vc.hidesBottomBarWhenPushed = true
-//        self.pushViewController(vc: vc)
-//        let vc = PaymentViewController.instantiate(fromStoryboard: .Sell)
-//        self.present(vc, animated: true)
+        //        let viewController = ShortByViewController.instantiate(fromStoryboard: .Main)
+        //        viewController.sort_by = self.sort_by
+        //        viewController.sort_value = self.sort_value
+        //        viewController.shortByDeleget = self
+        //        viewController.modalPresentationStyle = .custom
+        //        viewController.transitioningDelegate = customTransitioningDelegate
+        //        self.present(viewController, animated: true, completion: nil)
+        //        let vc = SearchEngineViewController.instantiate(fromStoryboard: .Main)
+        //        vc.hidesBottomBarWhenPushed = true
+        //        self.pushViewController(vc: vc)
+        //        let vc = PaymentViewController.instantiate(fromStoryboard: .Sell)
+        //        self.present(vc, animated: true)
     }
     
     @IBAction func locationOnPress(_ sender: UIButton) {
@@ -189,9 +189,20 @@ class HomePageVC: BaseViewController {
             self.showLogIn()
             return
         }
-        let vc = MapLocationVC.instantiate(fromStoryboard: .Dashboard)
-        vc.hidesBottomBarWhenPushed = true
-        self.navigationController?.pushViewController(vc, animated: true)
+        self.checkAndFetchLocation { city,status in
+            if status{
+                if appDelegate.userDetails?.locations?.isEmpty == true{
+                    self.btnUserLocations.setTitle(city, for: .normal)
+                }
+            }
+            let vc = MapLocationVC.instantiate(fromStoryboard: .Dashboard)
+            vc.hidesBottomBarWhenPushed = true
+            vc.newLocation = { [weak self] location in
+                self?.btnUserLocations.setTitle(location?.city ?? "", for: .normal)
+            }
+            vc.isFromDashboard = true
+            self.navigationController?.pushViewController(vc, animated: true)
+        }
     }
     
     @IBAction func notificationOnPress(_ sender: UIButton) {
@@ -253,13 +264,8 @@ extension HomePageVC:CollectionViewDelegateAndDataSource{
         }else{
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HomePageBrowserXIB", for: indexPath) as! HomePageBrowserXIB
             let objet = self.viewModel.posts[indexPath.item]
-            if let url = objet.image?.first?.image {
-                if let image = URL.init(string: url){
-                    cell.imgProduct.kf.setImage(with: image,placeholder: PlaceHolderImage)
-                }
-            }else{
-                cell.imgProduct.image = PlaceHolderImage
-            }
+            
+            cell.imgProduct.setImageFast(with: objet.image?.first?.image ?? "")
             
             cell.btnLike.tag = indexPath.row
             cell.btnLike.addTarget(self, action: #selector(btnWatch_Clicked(_:)), for: .touchUpInside)
@@ -307,10 +313,6 @@ extension HomePageVC:CollectionViewDelegateAndDataSource{
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if collectionView == self.productCollectionView{
-//            let viewController = ProductDetailsViewController.instantiate(fromStoryboard: .Main)
-//            viewController.postId = "\(self.viewModel.posts[indexPath.item].id ?? 0)"
-////            viewController.hidesBottomBarWhenPushed = false
-//            self.navigationController?.pushViewController(viewController, animated: true)
             let vc = OtherPostDetailsVC.instantiate(fromStoryboard: .Sell)
             vc.postId = "\(self.viewModel.posts[indexPath.item].id ?? 0)"
             vc.hidesBottomBarWhenPushed =  self.viewModel.posts[indexPath.item].user_id ?? 0 == appDelegate.userDetails?.id

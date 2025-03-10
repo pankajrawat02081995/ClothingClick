@@ -366,11 +366,8 @@ extension AdPlacementViewController : UICollectionViewDataSource,UICollectionVie
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ImagesCell", for: indexPath) as! ImagesCell
         cell.imgPlay.isHidden = true
         if objet.type == "image"{
-            if let url = objet.image {
-                if let imageurl = URL.init(string: url){
-                    cell.imgProductImages.kf.setImage(with: imageurl,placeholder: PlaceHolderImage)
-                }
-            }
+            let urlString = objet.image?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+            cell.imgProductImages.setImageFast(with: urlString)
         }
         else {
             if let url = objet.video {

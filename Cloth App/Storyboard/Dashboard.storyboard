@@ -10,6 +10,9 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
+        <array key="HelveticaNeue.ttc">
+            <string>HelveticaNeue</string>
+        </array>
         <array key="Roboto-Medium.ttf">
             <string>Roboto-Medium</string>
         </array>
@@ -34,7 +37,7 @@
                                         <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="14"/>
                                         <inset key="titleEdgeInsets" minX="2" minY="0.0" maxX="0.0" maxY="0.0"/>
                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                        <state key="normal" title="Toronto" image="ic_home_localtion">
+                                        <state key="normal" title="Select Location" image="ic_home_localtion">
                                             <color key="titleColor" name="Black_Theme_Color"/>
                                         </state>
                                         <connections>
@@ -501,7 +504,7 @@
                                         <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="14"/>
                                         <inset key="titleEdgeInsets" minX="2" minY="0.0" maxX="0.0" maxY="0.0"/>
                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                        <state key="normal" title="Toronto" image="ic_home_localtion">
+                                        <state key="normal" title="Select Location" image="ic_home_localtion">
                                             <color key="titleColor" name="Black_Theme_Color"/>
                                         </state>
                                         <connections>
@@ -649,7 +652,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="prj-AY-DRc" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="683" y="-18"/>
+            <point key="canvasLocation" x="789" y="-18"/>
         </scene>
         <!--Populer BrandVC-->
         <scene sceneID="fRW-M3-vlN">

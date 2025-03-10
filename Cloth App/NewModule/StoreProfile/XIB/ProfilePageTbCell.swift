@@ -58,12 +58,7 @@ class ProfilePageTbCell: UITableViewCell {
         
         if let url = self.otherUserDetailsData?.photo {
             self.lblNameLater.isHidden = true
-            if let image = URL.init(string: url){
-                self.imgStore.kf.setImage(with: image,placeholder: ProfileHolderImage)
-            }else{
-                self.imgStore.backgroundColor = .black
-                self.lblNameLater.text = self.otherUserDetailsData?.name?.first?.description ?? ""
-            }
+            self.imgStore.setImageFast(with: url)
         }else{
             self.imgStore.backgroundColor = .black
             self.lblNameLater.isHidden = false
@@ -143,9 +138,9 @@ extension ProfilePageTbCell: UICollectionViewDelegate, UICollectionViewDataSourc
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PostImageXIB", for: indexPath) as? PostImageXIB else {
             return UICollectionViewCell()
         }
-        if let image = URL(string: self.otherUserDetailsData?.cover_image ?? "") {
-            cell.imgPost.kf.setImage(with: image, placeholder: PlaceHolderImage)
-        }
+        
+        cell.imgPost.setImageFast(with: self.otherUserDetailsData?.cover_image ?? "")
+        
         return cell
     }
     

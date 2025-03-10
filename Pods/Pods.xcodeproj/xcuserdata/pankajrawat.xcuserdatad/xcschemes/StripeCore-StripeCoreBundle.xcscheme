@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "1A050828BB67BEF7076399FA446EE87F"
-               BuildableName = "StripePayments.bundle"
-               BlueprintName = "StripePayments-StripePayments"
+               BlueprintIdentifier = "967EFC52CEAE282C82C4DF2D878EC4B9"
+               BuildableName = "StripeCoreBundle.bundle"
+               BlueprintName = "StripeCore-StripeCoreBundle"
                ReferencedContainer = "container:Pods.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>

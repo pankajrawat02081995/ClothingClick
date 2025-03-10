@@ -257,13 +257,7 @@ extension FollowFollwingViewController : UITableViewDelegate,UITableViewDataSour
         if let url = objet.photo {
             cell.lblFirstLetter.isHidden = true
             let urlString = url.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
-            if let imgUrl = URL.init(string: urlString!) {
-                cell.imgUser.kf.setImage(with: imgUrl, placeholder: ProfileHolderImage)
-            }else{
-                cell.lblFirstLetter.isHidden = false
-                cell.imgUser.backgroundColor = .black
-                cell.lblFirstLetter.text = objet.name?.first?.description ?? ""
-            }
+            cell.imgUser.setImageFast(with: urlString)
         } else {
             cell.imgUser.backgroundColor = .black
             cell.lblFirstLetter.isHidden = false
