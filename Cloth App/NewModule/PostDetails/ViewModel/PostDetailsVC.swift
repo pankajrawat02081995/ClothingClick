@@ -142,7 +142,7 @@ class PostDetailsVC: BaseViewController {
             selectAddress = addresslist
             addressIdLIst.append("\(firstAddress?.id ?? 0)")
         } else {
-            txtLocation.text = "\(addresslist.count) select location"
+            txtLocation.text = appDelegate.userLocation?.address == nil ? "\(addresslist.count) select location" : appDelegate.userLocation?.address
         }
     }
     
@@ -372,8 +372,8 @@ class PostDetailsVC: BaseViewController {
         images.append(contentsOf: localImages)
         
         // Fetch images for URLs asynchronously
-//        let fetchedImages = await fetchImages(from: imageUrls)
-//        images.append(contentsOf: fetchedImages)
+        //        let fetchedImages = await fetchImages(from: imageUrls)
+        //        images.append(contentsOf: fetchedImages)
         
         return images
     }
@@ -1107,7 +1107,7 @@ extension PostDetailsVC: BrandLocationDelegate, StorePostLocationDelegate, UserL
                 self?.txtLocation.text = location?.address ?? ""
             }
             viewController.isFromPostDetails = true
-            viewController.addresslist = self.selectAddress
+            viewController.addressList = self.selectAddress
             self.pushViewController(vc: viewController)
             
         case 2:

@@ -408,7 +408,7 @@ extension PostItemViewController: UICollectionViewDelegate, UICollectionViewData
             self.subCategoryList.removeAll()
             let objet = self.categoryList[indexPath.item]
             self.selectCategoryIndex = indexPath.item
-            self.subCategoryList = objet?.childCategories as! [ChildCategories?]
+            self.subCategoryList = objet?.childCategories ?? []
             self.saveCategoriseId = objet
             self.nextButtonHideShow()
             

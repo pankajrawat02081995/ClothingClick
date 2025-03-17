@@ -9,6 +9,15 @@
 import Foundation
 import ObjectMapper
 
+struct UserLocation{
+    var address : String?
+    var city : String?
+    var area : String?
+    var postal_code : String?
+    var latitude : String?
+    var longitude : String?
+}
+
 struct UserDetailsModel : Mappable {
     var name : String?
     var email : String?

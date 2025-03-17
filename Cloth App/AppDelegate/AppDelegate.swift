@@ -41,6 +41,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     var deviceAuthKey = ""
     //        var userDetails = [UserDetailsModel?]()
     var userDetails : UserDetailsModel?
+    var userLocation : UserLocation?
     var generalSettings: GeneralSettingModel?
     var locationManager = CLLocationManager()
     var defaultLatitude: Double = 0.0
