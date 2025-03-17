@@ -12917,7 +12917,7 @@ Cg
                                     <constraint firstAttribute="height" constant="649" id="wZq-xs-EhY"/>
                                 </constraints>
                                 <view key="tableFooterView" contentMode="scaleToFill" id="Oap-0p-uOs">
-                                    <rect key="frame" x="0.0" y="874.5" width="414" height="160"/>
+                                    <rect key="frame" x="0.0" y="768.5" width="414" height="160"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <subviews>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kfb-fz-8T0" customClass="CustomButton" customModule="Clothing_Click" customModuleProvider="target">
@@ -17912,7 +17912,7 @@ Cg
                                         </connections>
                                     </button>
                                     <stackView opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" axis="vertical" spacing="18" translatesAutoresizingMaskIntoConstraints="NO" id="hr1-ct-u5f">
-                                        <rect key="frame" x="20" y="165" width="374" height="911.5"/>
+                                        <rect key="frame" x="20" y="165" width="374" height="819"/>
                                         <subviews>
                                             <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="grF-9w-C8g">
                                                 <rect key="frame" x="0.0" y="0.0" width="374" height="68"/>
@@ -18090,11 +18090,11 @@ Cg
                                                     <constraint firstItem="h7x-zb-Isp" firstAttribute="leading" secondItem="jd7-i4-Y4o" secondAttribute="leading" id="Xr4-mm-hGy"/>
                                                 </constraints>
                                             </view>
-                                            <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0Jc-hr-fKt">
-                                                <rect key="frame" x="0.0" y="417" width="374" height="74.5"/>
+                                            <view hidden="YES" clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0Jc-hr-fKt">
+                                                <rect key="frame" x="0.0" y="408" width="374" height="48"/>
                                                 <subviews>
                                                     <textField opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Select Address" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Hgy-yw-Yzq" customClass="AnimatableTextField" customModule="IBAnimatable">
-                                                        <rect key="frame" x="0.0" y="30.5" width="374" height="44"/>
+                                                        <rect key="frame" x="0.0" y="4" width="374" height="44"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="44" id="lQO-HK-Lio"/>
@@ -18128,13 +18128,13 @@ Cg
                                                         </connections>
                                                     </textField>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Address" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jKb-4p-Sf9">
-                                                        <rect key="frame" x="0.0" y="0.0" width="69" height="26.5"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="69" height="0.0"/>
                                                         <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="18"/>
                                                         <color key="textColor" name="Black_Theme_Color"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dNm-zW-mYO">
-                                                        <rect key="frame" x="0.0" y="30.5" width="374" height="44"/>
+                                                        <rect key="frame" x="0.0" y="4" width="374" height="44"/>
                                                         <connections>
                                                             <action selector="btnLocation_Clicked:" destination="xS5-YQ-bx4" eventType="touchUpInside" id="rwm-pV-1Dk"/>
                                                         </connections>
@@ -18155,7 +18155,7 @@ Cg
                                                 </constraints>
                                             </view>
                                             <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="asK-hH-wtO">
-                                                <rect key="frame" x="0.0" y="509.5" width="374" height="302"/>
+                                                <rect key="frame" x="0.0" y="417" width="374" height="302"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Contact Information" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uI3-CS-HCI">
                                                         <rect key="frame" x="0.0" y="4" width="148" height="14"/>
@@ -18259,7 +18259,7 @@ Cg
                                                 </constraints>
                                             </view>
                                             <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ARk-l2-hFA">
-                                                <rect key="frame" x="0.0" y="829.5" width="374" height="82"/>
+                                                <rect key="frame" x="0.0" y="737" width="374" height="82"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Link Social Accounts" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vBU-wd-LfM">
                                                         <rect key="frame" x="0.0" y="4" width="155.5" height="14"/>

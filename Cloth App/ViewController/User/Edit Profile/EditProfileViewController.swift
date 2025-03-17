@@ -186,9 +186,10 @@ class EditProfileViewController: BaseViewController {
             else if self.txtBrandName.text?.trim().count == 0{
                 UIAlertController().alertViewWithTitleAndMessage(self, message: "Please enter name")
             }
-            else if self.txtLocation.text?.trim().count == 0 {
-                UIAlertController().alertViewWithTitleAndMessage(self, message: "Please enter address")
-            }else if self.txtEmail.text?.trim().count == 0 {
+//            else if self.txtLocation.text?.trim().count == 0 {
+//                UIAlertController().alertViewWithTitleAndMessage(self, message: "Please enter address")
+//            }
+            else if self.txtEmail.text?.trim().count == 0 {
                 UIAlertController().alertViewWithTitleAndMessage(self, message: "Please enter email")
                 
             }
@@ -214,10 +215,10 @@ class EditProfileViewController: BaseViewController {
             else if self.txtBrandName.text?.trim().count == 0{
                 UIAlertController().alertViewWithTitleAndMessage(self, message: "Please enter Store name")
             }
-            else if self.txtLocation.text?.trim().count == 0 {
-                UIAlertController().alertViewWithTitleAndMessage(self, message: "Please enter address")
-                
-            }
+//            else if self.txtLocation.text?.trim().count == 0 {
+//                UIAlertController().alertViewWithTitleAndMessage(self, message: "Please enter address")
+//                
+//            }
             else if self.txtEmail.text?.trim().count == 0 {
                 UIAlertController().alertViewWithTitleAndMessage(self, message: "Please enter email")
                 
@@ -239,10 +240,10 @@ class EditProfileViewController: BaseViewController {
             else if self.txtBrandName.text?.trim().count == 0{
                 UIAlertController().alertViewWithTitleAndMessage(self, message: "Please enter brand name")
             }
-            else if self.txtLocation.text?.trim().count == 0 {
-                UIAlertController().alertViewWithTitleAndMessage(self, message: "Please enter address")
-                
-            }
+//            else if self.txtLocation.text?.trim().count == 0 {
+//                UIAlertController().alertViewWithTitleAndMessage(self, message: "Please enter address")
+//                
+//            }
             else if self.txtEmail.text?.trim().count == 0 {
                 UIAlertController().alertViewWithTitleAndMessage(self, message: "Please enter email")
                 
@@ -582,7 +583,7 @@ extension EditProfileViewController {
         var dictGeneral: [String: Any] = [
             "name": txtBrandName.text ?? "",
             "email": appDelegate.userDetails?.email ?? "",
-            "username": appDelegate.userDetails?.username ?? "",
+            "username": self.txtDisplayUsearName.text ?? "",
             "phone": appDelegate.userDetails?.phone ?? "",
             "country_code": appDelegate.userDetails?.country_code ?? "",
             "country_prefix": appDelegate.userDetails?.country_prefix ?? "",

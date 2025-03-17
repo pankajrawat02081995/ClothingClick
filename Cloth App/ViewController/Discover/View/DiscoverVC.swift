@@ -46,7 +46,7 @@ class DiscoverVC: BaseViewController {
     }
     @objc func handleRefresh(_ refreshControl: UIRefreshControl) {
         refreshControl.endRefreshing()
-        self.checkAndFetchLocation { city,status  in
+        self.checkAndFetchLocation { status  in
             self.callHomeList()
         }
     }
@@ -55,18 +55,10 @@ class DiscoverVC: BaseViewController {
         super.viewWillAppear(animated)
         self.navigationController?.navigationBar.isHidden = true
         self.navigationController?.setNavigationBarHidden(false, animated: animated)
-        self.checkAndFetchLocation { city,status in
+        self.checkAndFetchLocation { status in
+            self.btnLocation.setTitle(appDelegate.userLocation?.city ?? "", for: .normal)
             self.callHomeList()
         }
-        if let locations = appDelegate.userDetails?.locations{
-            let Location = locations
-            print(Location)
-            if Location.count>0{
-                let data = Location.first
-                self.btnLocation.setTitle(data?.city, for: .normal)
-            }
-        }
-        
     }
     
     override func viewDidLayoutSubviews() {
@@ -85,22 +77,12 @@ class DiscoverVC: BaseViewController {
     }
     
     @IBAction func locationOnPress(_ sender: UIButton) {
-        if appDelegate.userDetails == nil {
-            self.showLogIn()
-            return
-        }
-        self.checkAndFetchLocation { city,status in
+        self.checkAndFetchLocation { status in
             if status{
-                if appDelegate.userDetails?.locations?.isEmpty == true{
-                    self.btnLocation.setTitle(city, for: .normal)
-                }
+                self.btnLocation.setTitle(appDelegate.userLocation?.city ?? "", for: .normal)
             }
             let vc = MapLocationVC.instantiate(fromStoryboard: .Dashboard)
             vc.hidesBottomBarWhenPushed = true
-            vc.newLocation = { [weak self] location in
-                self?.btnLocation.setTitle(location?.city ?? "", for: .normal)
-            }
-            vc.isFromDashboard = true
             self.navigationController?.pushViewController(vc, animated: true)
         }
     }
@@ -145,8 +127,7 @@ class DiscoverVC: BaseViewController {
         super.viewWillLayoutSubviews()
     }
     
-    
-    private func getCityOrState(from latitude: Double, longitude: Double, completion: @escaping (Result<String, Error>) -> Void) {
+    private func getCityOrState(from latitude: Double, longitude: Double, completion: @escaping (Result<Bool, Error>) -> Void) {
         let geocoder = CLGeocoder()
         let location = CLLocation(latitude: latitude, longitude: longitude)
         
@@ -161,68 +142,93 @@ class DiscoverVC: BaseViewController {
                 return
             }
             
+            var result  = UserLocation()
+            
+            if let address = placemark.name {
+                result.address = appDelegate.userLocation?.address == nil ? address : appDelegate.userLocation?.address
+            }
+        
+            
             if let city = placemark.locality {
-                completion(.success(city))
-            } else if let state = placemark.administrativeArea {
-                completion(.success(state))
-            } else {
+                result.city = city
+            }
+            
+            if let area = placemark.administrativeArea {
+                result.area = area
+            }
+            
+            if let postalCode = placemark.postalCode {
+                result.postal_code = postalCode
+            }
+            
+            result.latitude = String(latitude)
+            result.longitude = String(longitude)
+            
+            if result.city?.isEmpty == true && result.area?.isEmpty ==  true{
                 completion(.failure(NSError(domain: "LocationError", code: 404, userInfo: [NSLocalizedDescriptionKey: "City and state not found."])))
+            } else {
+                appDelegate.userLocation = result
+                completion(.success(true))
             }
         }
     }
     
-    private func checkAndFetchLocation(complition:@escaping((String,Bool) -> Void?)) {
+    private func checkAndFetchLocation(complition:@escaping((Bool) -> Void?)) {
         let locationManager = LocationManager.shared
         
         if locationManager.isLocationServicesEnabled() {
             locationManager.getCurrentLocation { result in
-                //                DispatchQueue.main.async {
-                switch result {
-                case .success(let location):
-                    print("Location fetched: \(location.coordinate.latitude), \(location.coordinate.longitude)")
-                    //                        complition(true)
-                    self.getCityOrState(from: location.coordinate.latitude, longitude: location.coordinate.longitude) { result in
-                        switch result {
-                        case .success(let location):
-                            print("Location: \(location)")
-                            complition(location,true)
-                        case .failure(let error):
-                            print("Error: \(error.localizedDescription)")
+                DispatchQueue.main.async {
+                    switch result {
+                    case .success(let location):
+                        print("Location fetched: \(location.coordinate.latitude), \(location.coordinate.longitude)")
+                        //                        complition(true)
+                        let lat = Double(appDelegate.userLocation?.latitude ?? "") ?? 0.0
+                        let long = Double(appDelegate.userLocation?.longitude ?? "") ?? 0.0
+                        
+                        self.getCityOrState(from: lat == 0.0 ? location.coordinate.latitude : lat, longitude: long == 0.0 ? location.coordinate.longitude : long) { result in
+                            switch result {
+                            case .success(let location):
+                                print("Location: \(location)")
+                                complition(true)
+                            case .failure(let error):
+                                print("Error: \(error.localizedDescription)")
+                            }
                         }
+                    case .failure(let error):
+                        print("Error fetching location: \(error.localizedDescription)")
+                        if LocationManager.shared.isLocationSetNotNow == true{
+                            complition(false)
+                        }else{
+                            let vc = DeletePostVC.instantiate(fromStoryboard: .Sell)
+                            vc.modalPresentationStyle = .overFullScreen
+                            vc.modalTransitionStyle = .crossDissolve
+                            vc.isCancelHide = false
+                            vc.deleteTitle = "Allow Access"
+                            vc.cancelTitle = "Not Now"
+                            vc.deleteBgColor = .black
+                            vc.titleMain = "Turn on Location"
+                            vc.subTitle = " Location services are required to provide the best experience on Clothing Click. Please enable them in your device settings"
+                            vc.imgMain = UIImage(named: "ic_location_big")
+                            vc.deleteOnTap = {
+                                LocationManager.shared.openSettings()
+                            }
+                            vc.cancelOnTap = {
+                                LocationManager.shared.isLocationSetNotNow = true
+                                complition(false)
+                            }
+                            self.present(vc, animated: true)
+                        }
+                        
                     }
-                case .failure(let error):
-                    print("Error fetching location: \(error.localizedDescription)")
-                    if LocationManager.shared.isLocationSetNotNow == true{
-                        complition("",false)
-                    }else{
-                        let vc = DeletePostVC.instantiate(fromStoryboard: .Sell)
-                        vc.modalPresentationStyle = .overFullScreen
-                        vc.modalTransitionStyle = .crossDissolve
-                        vc.isCancelHide = false
-                        vc.deleteTitle = "Allow Access"
-                        vc.cancelTitle = "Not Now"
-                        vc.deleteBgColor = .black
-                        vc.titleMain = "Turn on Location"
-                        vc.subTitle = " Location services are required to provide the best experience on Clothing Click. Please enable them in your device settings"
-                        vc.imgMain = UIImage(named: "ic_location_big")
-                        vc.deleteOnTap = {
-                            LocationManager.shared.openSettings()
-                        }
-                        vc.cancelOnTap = {
-                            LocationManager.shared.isLocationSetNotNow = true
-                            complition("",false)
-                        }
-                        self.present(vc, animated: true)
-                    }
-                    
                 }
-                //                }
             }
         } else {
             print("Location services are disabled")
             showLocationErrorAlert(error: LocationManager.LocationError.servicesDisabled)
         }
     }
+    
     
     private func showLocationErrorAlert(error: Error) {
         let alert = UIAlertController(
@@ -443,14 +449,15 @@ extension DiscoverVC{
     
     func callHomeList() {
         guard appDelegate.reachable.connection != .none else { return }
-        
+        let param = ["latitude" : appDelegate.userLocation?.latitude ?? "",
+                     "longitude" : appDelegate.userLocation?.longitude ?? ""]
         APIManager().apiCall(
             of: HomeModel.self,
             isShowHud: true,
             URL: BASE_URL,
             apiName: APINAME.HOME_PAGE.rawValue,
             method: .post,
-            parameters: [:]
+            parameters: param
         ) { (response, error) in
             
             if let error = error {

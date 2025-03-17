@@ -421,33 +421,27 @@ class ClothPrefCVCell : UICollectionViewCell {
     }
     
     func configure(with imageUrl: URL, tintColor: UIColor) {
-        // Cancel any previous image loading
         currentImageUrl = imageUrl
         imgCat.image = UIImage(named: "placeholder") // Placeholder image
         
-        // Check if the image is already cached
+        // Check for cached image
         if let cachedImage = ImageCache.shared.image(forKey: imageUrl.absoluteString) {
             self.imgCat.image = cachedImage.withRenderingMode(.alwaysTemplate)
             self.imgCat.tintColor = tintColor
             return
         }
         
-        // Asynchronously load the image
+        // Asynchronously load and cache the image
         DispatchQueue.global().async { [weak self] in
             guard let self = self else { return }
-            
-            guard let imageData = try? Data(contentsOf: imageUrl),
-                  let image = UIImage(data: imageData) else {
+            guard let imageData = try? Data(contentsOf: imageUrl), let image = UIImage(data: imageData) else {
                 return
             }
             
             let templateImage = image.withRenderingMode(.alwaysTemplate)
-            
-            // Cache the image
             ImageCache.shared.save(image: templateImage, forKey: imageUrl.absoluteString)
             
             DispatchQueue.main.async {
-                // Ensure the cell is still displaying the correct image
                 if self.currentImageUrl == imageUrl {
                     self.imgCat.image = templateImage
                     self.imgCat.tintColor = tintColor

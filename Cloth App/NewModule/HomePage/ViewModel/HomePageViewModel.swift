@@ -19,7 +19,9 @@ class HomePageViewModel{
             "page": self.page,
             "cat_id": cat_id,
             "sort_by": sort_by,
-            "sort_value": sort_value
+            "sort_value": sort_value,
+            "latitude" : appDelegate.userLocation?.latitude ?? "",
+            "longitude" : appDelegate.userLocation?.longitude ?? ""
         ]
         
         APIManager().apiCall(of: ResponseData.self, isShowHud: isShowHud, URL: BASE_URL, apiName: APINAME.HOME_PAGE_PRODUCTLIST.rawValue, method: .post, parameters: param) { dict, error in
