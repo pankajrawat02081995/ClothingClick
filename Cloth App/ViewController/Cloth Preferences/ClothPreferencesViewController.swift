@@ -114,15 +114,16 @@ class ClothPreferencesViewController: BaseViewController {
                 
                 print(self.saveSize)
                 
-                if let genserId = self.mysizeList[self.selectGengerIndex]?.gender_id{
+                if let genserId = self.mysizeList[self.selectGengerIndex == -1 ? 1 : self.selectGengerIndex]?.gender_id{
                     let sizeAreeString = self.saveSize.joined(separator: ",")
                     let brandAreeString = self.saveBrand.joined(separator: ",")
                     FilterSingleton.share.filter.sizes = self.saveSize.joined(separator: ",")
-                    self.navigateToHomeScreen()
                     print(sizeAreeString)
                     print(brandAreeString)
                 }
-                
+                if self.saveSize.isEmpty == false{
+                    self.navigateToHomeScreen()
+                }
             }
         }else{
             
@@ -146,7 +147,7 @@ class ClothPreferencesViewController: BaseViewController {
             }
             print(self.saveSize)
             
-            if let genserId = self.mysizeList[self.selectGengerIndex]?.gender_id{
+            if let genserId = self.mysizeList[self.selectGengerIndex == -1 ? 1 : self.selectGengerIndex]?.gender_id{
                 let sizeAreeString = self.saveSize.joined(separator: ",")
                 let brandAreeString = self.saveBrand.joined(separator: ",")
                 FilterSingleton.share.filter.sizes = self.saveSize.joined(separator: ",")
@@ -500,9 +501,7 @@ extension ClothPreferencesViewController {
                 if selectedIndex < self.mysizeList.count, let categories = self.mysizeList[selectedIndex]?.categories {
                     self.categoryList = categories.filter { !($0.sizes?.isEmpty ?? true) }
                 }
-                
-                
-                
+                                
                 self.setSelectedSizeDate()
             } else {
                 if self.isUserLogin == nil {
