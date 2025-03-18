@@ -44,7 +44,7 @@ class SignupViewController: BaseViewController {
     var firstName = ""
     var lastName = ""
     var emailId = ""
-    var loginType = ""
+    var loginType = "1"
     var profilePicture = ""
     var accesscode = ""
     
