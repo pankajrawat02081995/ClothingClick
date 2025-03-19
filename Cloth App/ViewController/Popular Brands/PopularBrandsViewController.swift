@@ -126,9 +126,7 @@ extension PopularBrandsViewController : UICollisionBehaviorDelegate,UICollection
             cell.btnWatch.isSelected = is_favourite
         }
         if let url = objet.image?[0].image {
-            if let imgUrl = URL.init(string: url){
-                cell.imgBrand.kf.setImage(with: imgUrl, placeholder: PlaceHolderImage)
-            }
+            cell.imgBrand.setImageFast(with: url)
         }
     
         cell.btnWatch.addTarget(self, action: #selector(btnWatch_Clicked(_:)), for: .touchUpInside)

@@ -71,9 +71,16 @@ class BaseViewController: UIViewController, UINavigationBarDelegate {
                             let otherUserDetailsData = data
                             if let seller = otherUserDetailsData.role_id {
                                 if seller == 1 {
-                                    let viewController = self.storyBoard.instantiateViewController(withIdentifier: "OtherUserProfileViewController") as! OtherUserProfileViewController
-                                    viewController.userId = String(otherUserDetailsData.id ?? 0)
-                                    self.navigationController?.pushViewController(viewController, animated: true)
+//                                    let viewController = self.storyBoard.instantiateViewController(withIdentifier: "OtherUserProfileViewController") as! OtherUserProfileViewController
+//                                    viewController.userId = String(otherUserDetailsData.id ?? 0)
+//                                    self.navigationController?.pushViewController(viewController, animated: true)
+                                    if otherUserDetailsData.id ?? 0 == appDelegate.userDetails?.id {
+                                        self.tabBarController?.selectedIndex = 4
+                                    }else{
+                                        let viewController = OtherUserProfileViewController.instantiate(fromStoryboard: .Main)
+                                        viewController.userId = "\(otherUserDetailsData.id ?? 0)"
+                                        self.pushViewController(vc: viewController)
+                                    }
                                 }
                                 else if seller == 2{
                                     let viewController = self.storyBoard.instantiateViewController(withIdentifier: "StoreProfileViewController") as! StoreProfileViewController

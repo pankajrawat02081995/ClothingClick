@@ -178,11 +178,8 @@ extension ChatViewController : UITableViewDelegate , UITableViewDataSource {
         }
         
         cell.lblName.text = object.username?.capitalized ?? ""
-        if let url = URL.init(string: object.post_image?.first?.image ?? ""){
-            cell.imgUser.kf.setImage(with: url,placeholder: PlaceHolderImage)
-        }else{
-            cell.imgUser.image = PlaceHolderImage
-        }
+        cell.imgUser.setImageFast(with: object.post_image?.first?.image ?? "")
+       
         if let strDate = object.created_at{
             let date = self.convertWebStringToDate(strDate: strDate).toLocalTime()
             print(date)

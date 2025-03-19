@@ -361,12 +361,7 @@ extension ConditionAndSellerViewController : UITableViewDelegate,UITableViewData
             else{
                 if let url = objet?[indexPath.row].photo{
                     print("image: - \(url)")
-                    if let imag = URL.init(string: url){
-                        cell.imgColor.kf.setImage(with: imag,placeholder: PlaceHolderImage)
-                    }else{
-                        cell.imgColor.image = nil
-                        cell.imgColor.backgroundColor = .clear
-                    }
+                    cell.imgColor.setImageFast(with: url)
                 }
             }
             

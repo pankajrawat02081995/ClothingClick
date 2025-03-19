@@ -236,8 +236,9 @@ class UserViewController: BaseViewController {
             
             if let url = userData?.photo {
                 self.lblNameLatter.isHidden = false
+                self.imgUser.setImageFast(with: url)
                 if let image = URL.init(string: url){
-                    self.imgUser.kf.setImage(with: image,placeholder: ProfileHolderImage)
+                    self.imgUser.setImageFast(with: url)
                 }else{
                     self.imgUser.backgroundColor = .black
                     self.lblNameLatter.text = userData?.name?.first?.description.capitalized ?? ""
@@ -271,7 +272,7 @@ class UserViewController: BaseViewController {
         }
         if let url = userData?.photo {
             if let image = URL.init(string: url){
-                self.imgUser.kf.setImage(with: image,placeholder: ProfileHolderImage)
+                self.imgUser.setImageFast(with: url)
             }else{
                 self.imgUser.backgroundColor = .black
                 self.lblNameLatter.text = userData?.name?.first?.description.capitalized ?? ""
@@ -398,7 +399,7 @@ class UserViewController: BaseViewController {
             }
             if let url = userData?.photo {
                 if let image = URL.init(string: url){
-                    self.imgUser.kf.setImage(with: image,placeholder: ProfileHolderImage)
+                    self.imgUser.setImageFast(with: url)
                 }else{
                     self.imgUser.backgroundColor = .black
                     self.lblNameLatter.text = userData?.name?.first?.description.capitalized ?? ""

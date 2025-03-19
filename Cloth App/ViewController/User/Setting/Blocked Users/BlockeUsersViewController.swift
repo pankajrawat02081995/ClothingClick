@@ -54,9 +54,7 @@ extension BlockeUsersViewController : UITableViewDelegate,UITableViewDataSource 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "BlackUserCell", for: indexPath) as! BlackUserCell
         if let url = self.blockUserList[indexPath.row].image{
-            if let image = URL.init(string: url){
-                cell.imgUser.kf.setImage(with: image,placeholder: ProfileHolderImage)
-            }
+            cell.imgUser.setImageFast(with: url)
         }
 //        if let userName = self.blockUserList[indexPath.row].username {
 //            cell.lblUserName.text = userName

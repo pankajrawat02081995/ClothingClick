@@ -54,7 +54,7 @@ extension UIViewController{
 //
 //        self.present(activityViewController, animated: true, completion: nil)
 //    }
-    
+
     func share(userName: String) {
         let appSchemeURL = URL(string: "clothingclick://profile/\(userName)")!
         let appStoreURL = URL(string: "https://apps.apple.com/us/app/clothing-click-second-hand/id1605715607")!
@@ -68,18 +68,10 @@ extension UIViewController{
             .print, .postToWeibo, .addToReadingList, .postToVimeo
         ]
 
-        // Try opening the app, otherwise go to the App Store
-        if UIApplication.shared.canOpenURL(appSchemeURL) {
-            UIApplication.shared.open(appSchemeURL, options: [:], completionHandler: nil)
-        } else {
-            UIApplication.shared.open(appStoreURL, options: [:], completionHandler: nil)
-        }
-
-        self.present(activityViewController, animated: true, completion: nil)
+        // Present the activity view controller first
+        activityViewController.modalPresentationStyle = .overCurrentContext
+        self.present(activityViewController, animated: true)
     }
-
-
-
     
     func playVideo(url: URL) {
           // Create an AVPlayer

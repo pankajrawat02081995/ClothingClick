@@ -293,7 +293,7 @@ class EditProfileViewController: BaseViewController {
         if let url = appDelegate.userDetails?.photo {
             if let imgUrl = URL.init(string: url) {
                 self.lblFirstLatterName.isHidden = true
-                self.imgUserProfilPic.kf.setImage(with: imgUrl, placeholder: ProfileHolderImage)
+                self.imgUserProfilPic.setImageFast(with: url)
             }else{
                 self.imgUserProfilPic.backgroundColor = .black
                 self.lblFirstLatterName.isHidden = true

@@ -8,6 +8,9 @@
 
 import UIKit
 import IBAnimatable
+
+var isSharingSheetPresented = false
+
 class OtherUserProfileViewController: BaseViewController {
     
     @IBOutlet weak var postFollowerStack: UIStackView!
@@ -254,8 +257,9 @@ class OtherUserProfileViewController: BaseViewController {
         
         if let url = self.otherUserDetailsData?.photo {
             self.lblNameLater.isHidden = true
+            
             if let image = URL.init(string: url){
-                self.imgUser.kf.setImage(with: image,placeholder: ProfileHolderImage)
+                self.imgUser.setImageFast(with: url)
             }else{
                 self.imgUser.backgroundColor = .black
                 self.lblNameLater.text = self.otherUserDetailsData?.name?.first?.description ?? ""
@@ -435,9 +439,7 @@ extension OtherUserProfileViewController : UICollectionViewDelegate,UICollection
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HomePageBrowserXIB", for: indexPath) as! HomePageBrowserXIB
             let objet = self.posts[indexPath.item]
             if let url = objet.image?.first?.image {
-                if let image = URL.init(string: url){
-                    cell.imgProduct.kf.setImage(with: image,placeholder: PlaceHolderImage)
-                }
+                cell.imgProduct.setImageFast(with: url)
             }
             
             cell.btnLike.tag = indexPath.row

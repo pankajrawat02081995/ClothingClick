@@ -222,9 +222,7 @@ class StoreProfileViewController: BaseViewController {
             self.lblTitle.text = title
         }
         if let url = self.otherUserDetailsData?.photo {
-            if let imge = URL.init(string: url){
-                self.imgUser.kf.setImage(with: imge,placeholder: ProfileHolderImage)
-            }
+            self.imgUser.setImageFast(with: url)
         }
         if let postCount = self.otherUserDetailsData?.totalPosts {
             self.lblPostsCount.text = "\(postCount)"
@@ -298,9 +296,7 @@ extension StoreProfileViewController : UICollectionViewDelegate,UICollectionView
                 cell.lblDayAgo.text = Date().offset(from: date)
             }
             if let url = objet.image?[0].image {
-                if let image = URL.init(string: url){
-                    cell.imgBrand.kf.setImage(with: image,placeholder: PlaceHolderImage)
-                }
+                cell.imgBrand.setImageFast(with: url)
             }
             if let brsnd = objet.brand_name {
                 cell.lblBrand.text = brsnd

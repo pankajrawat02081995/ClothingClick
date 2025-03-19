@@ -542,10 +542,7 @@ extension AddProductViewController : UICollectionViewDelegate,UICollectionViewDa
             if self.productImage.count > indexPath.item {
                 cell.imgProduct.contentMode = .scaleAspectFill
                 if let url = self.productImage[indexPath.item]["image_url"] as? String {
-                    if let image  = URL.init(string: url){
-                        
-                        cell.imgProduct.kf.setImage(with: image,placeholder: PlaceHolderImage)
-                    }
+                    cell.imgProduct.setImageFast(with: url)
                 }
                 if let image = self.productImage[indexPath.item]["image_url"] as? UIImage {
                     cell.imgProduct.image = image

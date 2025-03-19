@@ -154,7 +154,8 @@ extension RatingListViewController: UITableViewDelegate,UITableViewDataSource  {
                         let date = self.convertWebStringToDate(strDate: object.created_at ?? "").toLocalTime()
 
         cell.lblTime.text = Date().offset(from: date)
-        cell.imgProduct.kf.setImage(with: URL(string: object.photo?.first?.image ?? ""),placeholder: PlaceHolderImage)
+        cell.imgProduct.setImageFast(with: object.photo?.first?.image ?? "")
+        
 //        if object.rating == 5 {
 //            cell.imgLikeDislik.image = UIImage.init(named: "thumbs-Up-Unsel")
 //            if let datetiem = object.created_at{
