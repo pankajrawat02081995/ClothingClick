@@ -133,17 +133,30 @@ class PostDetailsVC: BaseViewController {
             txtModelTitle.text = "\(brandSearchList?.name ?? "") \(subcategoryName)"
         }
         
-        guard let userLocations = appDelegate.userDetails?.locations else { return }
-        
-        addresslist = userLocations.filter { $0.isPayAddress() || $0.isSelectedAddress() }
-        
-        if let firstAddress = addresslist.first {
-            txtLocation.text = firstAddress?.address ?? ""
-            selectAddress = addresslist
-            addressIdLIst.append("\(firstAddress?.id ?? 0)")
-        } else {
-            txtLocation.text = appDelegate.userLocation?.address == nil ? "\(addresslist.count) select location" : appDelegate.userLocation?.address
-        }
+        let json = ["address": appDelegate.userLocation?.address ?? "",
+                    "latitude" : appDelegate.userLocation?.latitude ?? "",
+                    "longitude" : appDelegate.userLocation?.longitude ?? "",
+                    "location_ids" : "0",
+                    "city" : appDelegate.userLocation?.city ?? "",
+                    "postal_code" : appDelegate.userLocation?.postal_code ?? "",
+                    "area" : appDelegate.userLocation?.area ?? "",
+                    "id" : appDelegate.userDetails?.id ?? 0] as [String : Any]
+        let objet = Locations.init(JSON: json)
+        selectAddress.removeAll()
+        selectAddress.append(objet)
+        txtLocation.text = appDelegate.userLocation?.address ?? ""
+
+//        guard let userLocations = appDelegate.userDetails?.locations else { return }
+//        
+//        addresslist = userLocations.filter { $0.isPayAddress() || $0.isSelectedAddress() }
+//        
+//        if let firstAddress = addresslist.first {
+//            txtLocation.text = firstAddress?.address ?? ""
+//            selectAddress = addresslist
+//            addressIdLIst.append("\(firstAddress?.id ?? 0)")
+//        } else {
+//            txtLocation.text = appDelegate.userLocation?.address == nil ? "\(addresslist.count) select location" : appDelegate.userLocation?.address
+//        }
     }
     
     override func viewDidLayoutSubviews() {
@@ -180,7 +193,7 @@ class PostDetailsVC: BaseViewController {
         self.txtDescription.text = postDetails.description ?? ""
         
         // Process images
-        self.productImage = postDetails.images?.compactMap { ["image_url": $0.image ?? "","isLocal":false] } ?? []
+        self.productImage = postDetails.images?.compactMap { ["image_url": $0.image ?? "","isLocal":false,"id":$0.id ?? 0] } ?? []
         
         // Process videos
         //        self.productVideo = postDetails.videos?.compactMap { ["video_url": $0.video ?? ""] } ?? []
@@ -511,6 +524,27 @@ class PostDetailsVC: BaseViewController {
 
 
 extension PostDetailsVC{
+    
+    func removeImage(index:Int){
+        debugPrint(self.productImage[index]["id"] as? Int ?? 0)
+        let param =  ["image_id":self.productImage[index]["id"] as? Int ?? 0,"post_id":self.postDetails?.id ?? 0]
+
+        if appDelegate.reachable.connection != .unavailable {
+            APIManager().apiCall(of: FaqModel.self, isShowHud: true, URL: BASE_URL, apiName: APINAME.REMOVE_IMAGE.rawValue, method: .get, parameters: param) { (response, error) in
+                if error == nil {
+                    if let response = response {
+                        UIAlertController().alertViewWithTitleAndMessage(self, message: response.message ?? ""){
+                            self.productImage.remove(at: index)
+                            self.CVAddProductImage.reloadData()
+                        }
+                    }
+                }
+                else {
+                    UIAlertController().alertViewWithTitleAndMessage(self, message: error!.domain)
+                }
+            }
+        }
+    }
     
     func apiCallWithImageVideoList<T: Mappable>(
         of type: T.Type = T.self,
@@ -1002,9 +1036,12 @@ extension PostDetailsVC: UICollectionViewDelegate,UICollectionViewDataSource {
         
         let yesAction = UIAlertAction(title: "Remove", style: .default) { [weak self] _ in
             guard let self = self else { return }
-            
             if sender.tag < self.productImage.count {
-                self.productImage.remove(at: sender.tag)
+                if self.productImage[sender.tag]["isLocal"] as? Bool ?? false == false{
+                    self.removeImage(index: sender.tag)
+                }else{
+                    self.productImage.remove(at: sender.tag)
+                }
             }
             
             self.btnAddImage.isHidden = !self.productImage.isEmpty

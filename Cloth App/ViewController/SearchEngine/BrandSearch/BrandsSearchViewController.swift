@@ -143,11 +143,7 @@ extension BrandsSearchViewController : UITableViewDelegate,UITableViewDataSource
         cell.lblName.text = objet?.name
         cell.imgUser.contentMode = .scaleAspectFit
         cell.lblFollowerCount.text = "\(objet?.photo ?? "") Listings"
-        if let image = URL.init(string: objet?.image ?? ""){
-            cell.imgUser.kf.setImage(with: image,placeholder: ProfileHolderImage)
-        }else{
-            cell.imgUser.image = PlaceHolderImage
-        }
+        cell.imgUser.setImageFast(with: objet?.image ?? "")
         
         return cell
     }

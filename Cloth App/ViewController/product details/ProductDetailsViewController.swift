@@ -305,9 +305,8 @@ class ProductDetailsViewController: BaseViewController {
             self.lblUserName.text = username
         }
         if let url = self.postDetails?.user_profile_picture {
-            if let imge = URL.init(string: url){
-                self.imgUserProfile.kf.setImage(with: imge,placeholder: ProfileHolderImage)
-            }
+            self.imgUserProfile.setImageFast(with: url)
+            
         }
         var categoryList = [String]()
         for i in 0..<(self.postDetails?.categories?.count ?? 0) {
@@ -403,9 +402,7 @@ extension ProductDetailsViewController : UICollectionViewDataSource,UICollection
             cell.imgPlay.isHidden = true
             if objet.type == "image"{
                 if let url = objet.image {
-                    if let imageurl = URL.init(string: url){
-                        cell.imgProductImages.kf.setImage(with: imageurl,placeholder: PlaceHolderImage)
-                    }
+                    cell.imgProductImages.setImageFast(with: url)
                 }
             }
             else {
@@ -441,9 +438,7 @@ extension ProductDetailsViewController : UICollectionViewDataSource,UICollection
             }
             
             if let url = objet.image?[0].image {
-                if let imgUrl = URL.init(string: url) {
-                    cell.imgBrand.kf.setImage(with: imgUrl, placeholder: PlaceHolderImage)
-                }
+                cell.imgBrand.setImageFast(with: url)
             }
             if let brand = objet.brand_name{
                 cell.lblBrand.text = brand
@@ -506,9 +501,7 @@ extension ProductDetailsViewController : UICollectionViewDataSource,UICollection
             }
             
             if let url = objet.image?[0].image {
-                if let imgUrl = URL.init(string: url) {
-                    cell.imgBrand.kf.setImage(with: imgUrl, placeholder: PlaceHolderImage)
-                }
+                cell.imgBrand.setImageFast(with: url)
             }
             if let brand = objet.brand_name{
                 cell.lblBrand.text = brand

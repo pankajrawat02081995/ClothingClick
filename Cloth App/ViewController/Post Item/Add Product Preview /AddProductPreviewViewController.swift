@@ -240,10 +240,7 @@ extension AddProductPreviewViewController : UICollectionViewDataSource,UICollect
         }
         else {
             if let url = self.productImageUrl[indexPath.item]["image_url"] as? String {
-                if let imega = URL.init(string: url){
-                    cell.imgProductImages.kf.setImage(with: imega,placeholder: PlaceHolderImage)
-                }
-                
+                cell.imgProductImages.setImageFast(with: url)
             }
             if let image = self.productImageUrl[indexPath.item]["image_url"] as? UIImage {
                 cell.imgProductImages.image = image

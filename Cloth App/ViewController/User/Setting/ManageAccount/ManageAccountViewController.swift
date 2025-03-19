@@ -50,9 +50,7 @@ extension ManageAccountViewController : UITableViewDelegate,UITableViewDataSourc
         }
         
         if let url = dict["photo"] as? String {
-            if let imge = URL.init(string: url){
-                cell.imgUser.kf.setImage(with: imge,placeholder: ProfileHolderImage)
-            }
+            cell.imgUser.setImageFast(with: url)
         }
         cell.btnRemove.isHidden = true
         cell.lblLoggedIn.isHidden = true

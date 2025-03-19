@@ -176,9 +176,7 @@ extension ClothPreferencesViewController : UITableViewDataSource, UITableViewDel
         cell.imgCloths.isHidden = false
         cell.lblTitle.text = objct?.name
         if let url = objct?.image?.replacingOccurrences(of: " ", with: "%20").trim() {
-            if let imgUrl = URL.init(string: url) {
-                cell.imgCloths.kf.setImage(with: imgUrl, placeholder: PlaceHolderImage)
-            }
+            cell.imgCloths.setImageFast(with: url)
         }
         return cell.contentView
     }

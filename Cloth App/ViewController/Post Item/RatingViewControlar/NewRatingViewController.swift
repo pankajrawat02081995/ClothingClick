@@ -97,11 +97,9 @@ class NewRatingViewController: BaseViewController {
     
     func setUsetAndPostData() {
         let object = self.reviewData
-        if let url = object?.user?.photo {
-            if let image = URL.init(string: url){
-                self.imgVwUser.kf.setImage(with: image,placeholder: ProfileHolderImage)
-            }
-        }
+        
+        self.imgVwUser.setImageFast(with: object?.user?.photo ?? "")
+        
         if let usertypename = object?.user?.user_type_name {
             if usertypename.lowercased() == "store" || usertypename.lowercased() == "brand"{
 //                self.viewFloatRating.isHidden = true

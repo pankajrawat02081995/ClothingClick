@@ -34,9 +34,7 @@ class CheckoutViewController: BaseViewController {
     func SetDataProductAndUser() {
         let object = postDetails
         if let url = object?.images?[0].image{
-            if let image = URL.init(string: url){
-                self.imgProduct.kf.setImage(with: image,placeholder: PlaceHolderImage)
-            }
+            self.imgProduct.setImageFast(with: url)
         }
         if let branName = object?.brand_name {
             self.lblBrandName.text = branName
@@ -66,9 +64,7 @@ class CheckoutViewController: BaseViewController {
         }
         
         if let url = object?.user_profile_picture {
-            if let imamge = URL.init(string: url){
-                self.imgUser.kf.setImage(with: imamge,placeholder: ProfileHolderImage)
-            }
+            self.imgUser.setImageFast(with: url)
         }
         if let userName = object?.user_name {
             self.lblUserName.text = userName

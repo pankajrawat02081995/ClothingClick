@@ -1375,6 +1375,7 @@ enum APINAME : String {
     case USER_POSTS                     = "user/posts"
     case POST_DELETE                    = "post/delete"
     case POST_SOLD                      = "post/sold"
+    case REMOVE_IMAGE                   = "post/delete_image"
     
     //Promate Coinse API
     case GET_PROMOTE                    = "promot"

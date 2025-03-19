@@ -130,7 +130,8 @@ extension NotificationsViewController : UITableViewDelegate,UITableViewDataSourc
                 if let image = URL.init(string: urlString ?? ""){
                     cell.imgUser.isHidden = false
                     cell.constleadingtxttitle.constant = 5
-                    cell.imgUser.kf.setImage(with: image,placeholder: ProfileHolderImage)
+                    cell.imgUser.setImageFast(with: urlString ?? "")
+                    
                 }
                 else{
                     cell.imgUser.isHidden = true
@@ -169,9 +170,7 @@ extension NotificationsViewController : UITableViewDelegate,UITableViewDataSourc
             cell.imgBookmark.image = UIImage.init(named: "like-ic")
             if let data = object.post_image {
                 if  let imageurl = data[0].image{
-                    if let image = URL.init(string: imageurl){
-                        cell.imgUser.kf.setImage(with: image,placeholder: ProfileHolderImage)
-                    }
+                    cell.imgUser.setImageFast(with: imageurl)
                 }
             }
             return cell
@@ -182,9 +181,10 @@ extension NotificationsViewController : UITableViewDelegate,UITableViewDataSourc
             cell.lblCC.isHidden = true
             if object.type == "SAVED_SEARCH_ALERT"{
                 if let url = object.post_image?.first {
+                    
                     if let image = URL.init(string: url.image ?? ""){
                         cell.lblCC.isHidden = true
-                        cell.imgUser.kf.setImage(with: image,placeholder: ProfileHolderImage)
+                        cell.imgUser.setImageFast(with: url.image ?? "")
                     }
                     else {
                         cell.lblCC.isHidden = false
@@ -195,7 +195,7 @@ extension NotificationsViewController : UITableViewDelegate,UITableViewDataSourc
                 if let url = object.user_photo {
                     if let image = URL.init(string: url){
                         cell.lblCC.isHidden = true
-                        cell.imgUser.kf.setImage(with: image,placeholder: ProfileHolderImage)
+                        cell.imgUser.setImageFast(with: url ?? "")
                     }
                     else {
                         cell.lblCC.isHidden = false
@@ -237,9 +237,7 @@ extension NotificationsViewController : UITableViewDelegate,UITableViewDataSourc
             let cell = tableView.dequeueReusableCell(withIdentifier: "FavoritesUserCell", for: indexPath) as! FavoritesUserCell
             cell.viewCoine.isHidden = true
             if let url = object.user_photo {
-                if let image = URL.init(string: url){
-                    cell.imgUser.kf.setImage(with: image,placeholder: nil)
-                }
+                cell.imgUser.setImageFast(with: url ?? "")
             }
             cell.lblTitle.text = object.name ?? ""
             cell.lblSubTitle.text = object.title
@@ -264,9 +262,7 @@ extension NotificationsViewController : UITableViewDelegate,UITableViewDataSourc
                 cell.lblTitle.text = titel
             }
             if let url = object.user_photo {
-                if let image = URL.init(string: url){
-                    cell.imgUser.kf.setImage(with: image,placeholder: nil)
-                }
+                cell.imgUser.setImageFast(with: url ?? "")
             }
             if let strDate = object.created_at {
                 let date = self.convertWebStringToDate(strDate: strDate).toLocalTime()
@@ -286,9 +282,7 @@ extension NotificationsViewController : UITableViewDelegate,UITableViewDataSourc
                 cell.lblSubTitle.text = userename.capitalized
             }
             if let url = object.user_photo {
-                if let image = URL.init(string: url){
-                    cell.imgUser.kf.setImage(with: image,placeholder: ProfileHolderImage)
-                }
+                cell.imgUser.setImageFast(with: url ?? "")
             }
             cell.imgBookmark.isHidden = true
             cell.viewCoine.isHidden = true
