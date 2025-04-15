@@ -296,10 +296,17 @@ class EditProfileViewController: BaseViewController {
                 self.imgUserProfilPic.setImageFast(with: url)
             }else{
                 self.imgUserProfilPic.backgroundColor = .black
-                self.lblFirstLatterName.isHidden = true
-                self.lblFirstLatterName.text = appDelegate.userDetails?.name?.first?.description
+                self.lblFirstLatterName.isHidden = false
+                self.lblFirstLatterName.isUserInteractionEnabled = false
+                self.lblFirstLatterName.text = appDelegate.userDetails?.name?.first?.description.capitalized
             }
+        }else{
+            self.imgUserProfilPic.backgroundColor = .black
+            self.lblFirstLatterName.isHidden = false
+            self.lblFirstLatterName.isUserInteractionEnabled = false
+            self.lblFirstLatterName.text = appDelegate.userDetails?.name?.first?.description.capitalized
         }
+        
         if appDelegate.userDetails?.role_id == 1 {
             if let name = appDelegate.userDetails?.name {
                 

@@ -301,8 +301,15 @@ class MessagesViewController: BaseViewController {
         }
         
         
-        let urlString1 = object?.post_image?[0].image?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
-        self.imgProduct.setImageFast(with: urlString1)
+        if let imageStr = object?.post_image?.first?.image,
+           let encodedStr = imageStr.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
+            self.imgProduct.setImageFast(with: encodedStr)
+        } else {
+            print("Image string is nil or invalid.")
+            // Optionally, set a placeholder image
+            self.imgProduct.image = PlaceHolderImage
+        }
+
         
         if let brandName = object?.post_brand {
             self.lblBrandName.text = brandName
