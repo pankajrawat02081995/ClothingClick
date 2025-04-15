@@ -58,7 +58,7 @@ extension UIViewController{
     func share(userName: String) {
         let appSchemeURL = URL(string: "clothingclick://profile/\(userName)")!
         let appStoreURL = URL(string: "https://apps.apple.com/us/app/clothing-click-second-hand/id1605715607")!
-        let universalLink = "https://apps.clothingclick.online/public/profile/\(userName)"
+        let universalLink = "https://app.clothingclick.ca/api/v1/profile/\(userName)"
 
         let text = "I'm on Clothing Click as \(userName). Install the app to follow my posts and discover great deals on clothing in your area. Join me here: \(universalLink)"
 

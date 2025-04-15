@@ -93,9 +93,9 @@ let ErrorMessage = "Oops something went wrong, please try again later"
 
 //Base URL
 let SOCKET_URL = "http://65.0.84.44:2031" //Live
-let BASE = "https://apps.clothingclick.online/public/"
+let BASE = "https://app.clothingclick.ca/"
 //let BASE = "https://staging.clothingclick.online/"
-let Forurl = "apps.clothingclick.online/public/"
+let Forurl = "app.clothingclick.ca/"
 let SERVER_URL = "\(BASE)api/"
 let BASE_URL = "\(SERVER_URL)v1/"
 let GOOGLE_GET_CITY_URL = "https://maps.googleapis.com/maps/api/place/autocomplete/json?"

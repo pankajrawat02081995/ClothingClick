@@ -201,7 +201,7 @@ extension NewRatingViewController: UICollectionViewDelegate, UICollectionViewDat
 extension NewRatingViewController {
     func callAddReview() {
         
-        if self.txtVwDescription.text == placeholder{
+        if self.txtVwDescription.text.trim() == placeholder.trim(){
             self.txtVwDescription.text = ""
         }
         

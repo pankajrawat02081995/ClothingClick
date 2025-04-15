@@ -33,7 +33,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             }
             NotificationCenter.default.post(name: NSNotification.Name(rawValue: "deeplinknavigate"), object: nil)
         }
-       
+        
         guard let url = URLContexts.first?.url else {
             return
         }
