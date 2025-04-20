@@ -75,6 +75,8 @@ class StoreVC: UIViewController {
     }
     
     
+    @IBAction func rateOnPress(_ sender: UIButton) {
+    }
     
     @IBAction func btnSoldClicked(_ sender: UIButton) {
         self.viewTwo.backgroundColor = .black

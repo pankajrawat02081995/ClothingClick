@@ -21,7 +21,9 @@ class HomePageViewModel{
             "sort_by": sort_by,
             "sort_value": sort_value,
             "latitude" : appDelegate.userLocation?.latitude ?? "",
-            "longitude" : appDelegate.userLocation?.longitude ?? ""
+            "longitude" : appDelegate.userLocation?.longitude ?? "",
+            "gender": appDelegate.selectGenderId == "0" ? "1" : appDelegate.selectGenderId == "1" ? "2" : "",
+            "sizes" : FilterSingleton.share.filter.sizes ?? ""
         ]
         
         APIManager().apiCall(of: ResponseData.self, isShowHud: isShowHud, URL: BASE_URL, apiName: APINAME.HOME_PAGE_PRODUCTLIST.rawValue, method: .post, parameters: param) { dict, error in

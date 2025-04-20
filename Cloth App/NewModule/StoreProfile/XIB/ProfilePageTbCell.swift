@@ -10,7 +10,7 @@ import IBAnimatable
 
 class ProfilePageTbCell: UITableViewCell {
     
-    
+    @IBOutlet weak var btnRate: UIButton!
     @IBOutlet weak var btnOpenTime: UIButton!
     @IBOutlet weak var lblFollowingCount: UILabel!
     @IBOutlet weak var lblFollowerCount: UILabel!
@@ -30,7 +30,6 @@ class ProfilePageTbCell: UITableViewCell {
     @IBOutlet weak var viewOne: UIView!
     
     @IBOutlet weak var btnDirection: UIButton!
-    
     
     @IBOutlet weak var viewTwo: UIView!
     

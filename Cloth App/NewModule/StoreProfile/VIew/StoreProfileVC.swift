@@ -128,6 +128,14 @@ class StoreProfileVC: BaseViewController {
         }
     }
     
+    @objc func rateOnPress(sender:UIButton){
+        let viewController = RatingListViewController.instantiate(fromStoryboard: .Main)
+        viewController.userId = "\(self.viewModel.userID ?? "")"
+        viewController.userName = self.viewModel.otherUserDetailsData?.name?.capitalized ?? ""
+        viewController.hidesBottomBarWhenPushed = true
+        self.navigationController?.pushViewController(viewController, animated: true)
+    }
+    
     @objc func filterOnPress(sender:UIButton){
         if appDelegate.userDetails == nil {
             self.showLogIn()
@@ -210,6 +218,7 @@ extension StoreProfileVC:UITableViewDelegate,UITableViewDataSource{
             cell.btnOpenTime.addTarget(self, action: #selector(self.storeOpenOnPress(sender:)), for: .touchUpInside)
 
             cell.btnShare.addTarget(self, action: #selector(self.shareOnPress(sender:)), for: .touchUpInside)
+            cell.btnRate.addTarget(self, action: #selector(self.rateOnPress(sender:)), for: .touchUpInside)
             cell.btnFollow.addTarget(self, action: #selector(self.btnFollow_Clicked(_:)), for: .touchUpInside)
             cell.lblWebsite.addTarget(self, action: #selector(self.websiteOnPress(sender:)), for: .touchUpInside)
             cell.btnContact.addTarget(self, action: #selector(self.contactOnPress(sender:)), for: .touchUpInside)

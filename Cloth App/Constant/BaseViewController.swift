@@ -71,9 +71,9 @@ class BaseViewController: UIViewController, UINavigationBarDelegate {
                             let otherUserDetailsData = data
                             if let seller = otherUserDetailsData.role_id {
                                 if seller == 1 {
-//                                    let viewController = self.storyBoard.instantiateViewController(withIdentifier: "OtherUserProfileViewController") as! OtherUserProfileViewController
-//                                    viewController.userId = String(otherUserDetailsData.id ?? 0)
-//                                    self.navigationController?.pushViewController(viewController, animated: true)
+                                    //                                    let viewController = self.storyBoard.instantiateViewController(withIdentifier: "OtherUserProfileViewController") as! OtherUserProfileViewController
+                                    //                                    viewController.userId = String(otherUserDetailsData.id ?? 0)
+                                    //                                    self.navigationController?.pushViewController(viewController, animated: true)
                                     if otherUserDetailsData.id ?? 0 == appDelegate.userDetails?.id {
                                         self.tabBarController?.selectedIndex = 4
                                     }else{
@@ -351,15 +351,15 @@ class BaseViewController: UIViewController, UINavigationBarDelegate {
             appDelegate.deviceToken = defaults.value(forKey: kDeviceToken) as! String
         }
         
-//        if defaults.value(forKey: kHeaderToken) as? String != nil {
-//            appDelegate.headerToken = defaults.value(forKey: kHeaderToken) as! String
-//        }
+        //        if defaults.value(forKey: kHeaderToken) as? String != nil {
+        //            appDelegate.headerToken = defaults.value(forKey: kHeaderToken) as! String
+        //        }
         
         UserDefaults.standard.removePersistentDomain(forName: Bundle.main.bundleIdentifier!)
         UserDefaults.standard.synchronize()
         
         defaults.set(appDelegate.deviceToken, forKey: kDeviceToken)
-//        defaults.set(appDelegate.headerToken, forKey: kHeaderToken)
+        //        defaults.set(appDelegate.headerToken, forKey: kHeaderToken)
         defaults.synchronize()
     }
     
@@ -754,7 +754,7 @@ class BaseViewController: UIViewController, UINavigationBarDelegate {
             print("Error: Unable to retrieve window from SceneDelegate or AppDelegate.")
         }
     }
-
+    
     private func navigateToHomeScreen(with window: UIWindow) {
         // Instantiate the home screen (TabbarViewController)
         let homeViewController = TabbarViewController.instantiate(fromStoryboard: .Main)
@@ -768,8 +768,8 @@ class BaseViewController: UIViewController, UINavigationBarDelegate {
         window.rootViewController = navigationController
         window.makeKeyAndVisible()
     }
-
-
+    
+    
     
     func navigateToClothPreferece() {
         let loginViewController = ClothPreferencesViewController.instantiate(fromStoryboard: .Main)
@@ -799,7 +799,7 @@ class BaseViewController: UIViewController, UINavigationBarDelegate {
         sceneDelegate.window = window
         window.makeKeyAndVisible()
     }
-
+    
     
     func navigateToVerfyPhoneNo() {
         let loginViewController = MobileNumberVC.instantiate(fromStoryboard: .Auth)
@@ -1189,7 +1189,7 @@ extension BaseViewController{
                      "devices_token": appDelegate.deviceToken,
                      "login_type": loginType]
         
-        param["gender"] = appDelegate.selectGenderId
+        param["gender"] = appDelegate.selectGenderId == "0" ? "1" : appDelegate.selectGenderId == "1" ? "2" : ""
         param["sizes"] = FilterSingleton.share.filter.sizes
         
         if appDelegate.reachable.connection != .none {
