@@ -449,8 +449,28 @@ extension DiscoverVC{
     
     func callHomeList() {
         guard appDelegate.reachable.connection != .none else { return }
-        let param = ["latitude" : appDelegate.userLocation?.latitude ?? "",
-                     "longitude" : appDelegate.userLocation?.longitude ?? ""]
+        let latitude = appDelegate.userLocation?.latitude.map { "\($0)" } ?? ""
+        let longitude = appDelegate.userLocation?.longitude.map { "\($0)" } ?? ""
+
+        let gender: String
+        switch appDelegate.selectGenderId {
+        case "0":
+            gender = "1"
+        case "1":
+            gender = "2"
+        default:
+            gender = ""
+        }
+
+        let sizes = FilterSingleton.share.filter.sizes ?? ""
+
+        let param: [String: String] = [
+            "latitude": latitude,
+            "longitude": longitude,
+            "gender": gender,
+            "sizes": sizes
+        ]
+
         APIManager().apiCall(
             of: HomeModel.self,
             isShowHud: true,

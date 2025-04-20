@@ -10,6 +10,9 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
+        <array key="HelveticaNeue.ttc">
+            <string>HelveticaNeue</string>
+        </array>
         <array key="Roboto-Medium.ttf">
             <string>Roboto-Medium</string>
         </array>
@@ -322,15 +325,23 @@
                                                 <color key="textColor" name="Black_Theme_Color"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AA8-la-PYP">
+                                                <rect key="frame" x="0.0" y="0.0" width="126.66666666666667" height="20"/>
+                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                            </button>
                                         </subviews>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <constraints>
                                             <constraint firstItem="NaC-w8-LsF" firstAttribute="centerY" secondItem="6OA-Sa-560" secondAttribute="centerY" id="3Uk-V5-uTj"/>
                                             <constraint firstItem="hqW-F0-uMa" firstAttribute="leading" secondItem="NaC-w8-LsF" secondAttribute="trailing" constant="6" id="EeK-af-dnX"/>
+                                            <constraint firstItem="AA8-la-PYP" firstAttribute="top" secondItem="6OA-Sa-560" secondAttribute="top" id="PCy-lg-N35"/>
                                             <constraint firstAttribute="height" constant="20" id="XZo-lx-uiR"/>
+                                            <constraint firstItem="AA8-la-PYP" firstAttribute="leading" secondItem="6OA-Sa-560" secondAttribute="leading" id="ZTS-Bf-4Op"/>
                                             <constraint firstItem="NaC-w8-LsF" firstAttribute="leading" secondItem="6OA-Sa-560" secondAttribute="leading" id="Zni-6f-397"/>
+                                            <constraint firstAttribute="trailing" secondItem="AA8-la-PYP" secondAttribute="trailing" id="auH-Vb-VJL"/>
                                             <constraint firstAttribute="bottom" secondItem="hqW-F0-uMa" secondAttribute="bottom" id="bLI-WJ-DdP"/>
                                             <constraint firstAttribute="trailing" secondItem="hqW-F0-uMa" secondAttribute="trailing" constant="8" id="guB-fS-chf"/>
+                                            <constraint firstAttribute="bottom" secondItem="AA8-la-PYP" secondAttribute="bottom" id="qL9-8f-0aN"/>
                                             <constraint firstItem="hqW-F0-uMa" firstAttribute="top" secondItem="6OA-Sa-560" secondAttribute="top" id="zfo-SL-oik"/>
                                         </constraints>
                                     </view>
@@ -582,6 +593,7 @@
                 <outlet property="btnDirection" destination="QLW-36-U9A" id="iAA-6C-QsA"/>
                 <outlet property="btnFollow" destination="e6I-me-zKz" id="dXv-ck-1zV"/>
                 <outlet property="btnOpenTime" destination="AdI-Vg-lzw" id="7C7-Gt-0i7"/>
+                <outlet property="btnRate" destination="AA8-la-PYP" id="b0w-Bq-tZQ"/>
                 <outlet property="btnShare" destination="hx7-Xw-eb5" id="GLt-QJ-50J"/>
                 <outlet property="collectionView" destination="loZ-MY-lbR" id="inr-9e-di2"/>
                 <outlet property="imgStore" destination="Byw-jb-LXq" id="nAG-fx-Sg2"/>

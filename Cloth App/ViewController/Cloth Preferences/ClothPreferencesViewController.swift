@@ -344,7 +344,7 @@ extension ClothPreferencesViewController: UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-
+        
         if collectionView == self.CVGender{
             if self.mysizeList.count < 2{
                 return CGSize(width: self.CVGender.frame.size.width, height: 55)
@@ -499,7 +499,7 @@ extension ClothPreferencesViewController {
                 if selectedIndex < self.mysizeList.count, let categories = self.mysizeList[selectedIndex]?.categories {
                     self.categoryList = categories.filter { !($0.sizes?.isEmpty ?? true) }
                 }
-                                
+                
                 self.setSelectedSizeDate()
             } else {
                 if self.isUserLogin == nil {
@@ -551,6 +551,8 @@ extension ClothPreferencesViewController {
             APIManager().apiCall(of: UserDetailsModel.self, isShowHud: true, URL: BASE_URL, apiName: APINAME.SIZES_SAVE.rawValue, method: .post, parameters: param) { (response, error) in
                 if error == nil {
                     if let userDetails = response?.dictData {
+                        appDelegate.selectGenderId = genderId == "2" ? "1" : "0"
+                        FilterSingleton.share.filter.sizes = size
                         self.saveUserDetails(userDetails: userDetails)
                         self.navigateToHomeScreen()
                     }

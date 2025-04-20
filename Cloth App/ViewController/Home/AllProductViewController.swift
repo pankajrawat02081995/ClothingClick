@@ -382,6 +382,8 @@ extension AllProductViewController {
         param?.removeValue(forKey: "slectedCategories")
         param?.removeValue(forKey: "categories")
 
+        param?["latitude"] = appDelegate.userLocation?.latitude ?? ""
+        param?["longitude"] = appDelegate.userLocation?.longitude ?? ""
         
         if appDelegate.reachable.connection != .none {
             APIManager().apiCall(of: HomeListDetailsModel.self, isShowHud: isShowHud, URL: BASE_URL, apiName: APINAME.HOME_LIST_POSTLIST.rawValue, method: .post, parameters: param) { (response, error) in
@@ -515,7 +517,9 @@ extension AllProductViewController {
                      "brand_id" : self.selectBrandId ,
                      "sort_by" : self.sort_by,
                      "sort_value" : self.sort_value,
-                     "page" : "\(self.currentPage)"]
+                     "page" : "\(self.currentPage)",
+                     "latitude" : appDelegate.userLocation?.latitude ?? "",
+                     "longitude" : appDelegate.userLocation?.longitude ?? ""]
             APIManager().apiCallWithMultipart(of: HomeListDetailsModel.self, isShowHud: isShowHud, URL: BASE_URL, apiName: APINAME.BRAND_POST.rawValue, parameters: param) { (response, error) in
                 if error == nil {
                     if let response = response {

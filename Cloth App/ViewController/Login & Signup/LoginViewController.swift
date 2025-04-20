@@ -83,7 +83,7 @@ extension LoginViewController {
                          "devices_token": appDelegate.deviceToken,
                          "login_type": "1"]
             
-            param["gender"] = appDelegate.selectGenderId
+            param["gender"] = appDelegate.selectGenderId == "0" ? "1" : appDelegate.selectGenderId == "1" ? "2" : ""
             param["sizes"] = FilterSingleton.share.filter.sizes
             
             APIManager().apiCall(of: UserDetailsModel.self, isShowHud: true, URL: BASE_URL, apiName: APINAME.LOGIN.rawValue, method: .post, parameters: param) { (response, error) in

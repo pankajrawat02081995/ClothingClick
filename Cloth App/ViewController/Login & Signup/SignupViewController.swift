@@ -238,6 +238,8 @@ extension SignupViewController {
             }
             
             dictGeneral["locations"] = self.json(from: address)
+            dictGeneral["gender"] = appDelegate.selectGenderId == "0" ? "1" : appDelegate.selectGenderId == "1" ? "2" : ""
+            dictGeneral["sizes"] = FilterSingleton.share.filter.sizes
             
             APIManager().apiCallWithMultipart(of: UserDetailsModel.self, isShowHud: true, URL: BASE_URL, apiName: APINAME.SIGNUP.rawValue, parameters: dictGeneral) { (response, error) in
                 if error == nil {
