@@ -628,12 +628,14 @@ extension OtherPostDetailsVC : UICollectionViewDataSource,UICollectionViewDelega
             //            cell.imgPlay.isHidden = true
             if objet.type == "image"{
                 cell.imgPost.setImageFast(with: objet.image ?? "")
+                cell.imgPost.contentMode = .scaleAspectFill
             }
             else {
                 if let url = objet.video {
                     if let videourl = URL.init(string: url){
                         self.getThumbnailImageFromVideoUrl(url:videourl) { (thumbImage) in
                             cell.imgPost.image = thumbImage
+                            cell.imgPost.contentMode = .scaleAspectFill
                             //                            cell.imgPlay.isHidden = false
                         }
                     }

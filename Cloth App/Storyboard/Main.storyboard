@@ -12429,18 +12429,6 @@ Cg
                                             <action selector="backOnPress:" destination="G0a-DF-3Vc" eventType="touchUpInside" id="zhI-zD-N9H"/>
                                         </connections>
                                     </button>
-                                    <button hidden="YES" opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XZf-km-eL7">
-                                        <rect key="frame" x="354" y="5" width="40" height="40"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="40" id="IsJ-XV-gqr"/>
-                                            <constraint firstAttribute="width" constant="40" id="SGz-C3-Gzc"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="18"/>
-                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                        <state key="normal" image="ic_sell_cross">
-                                            <color key="titleColor" name="Black_Theme_Color"/>
-                                        </state>
-                                    </button>
                                     <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HyY-XP-RXB">
                                         <rect key="frame" x="0.0" y="49" width="414" height="1"/>
                                         <color key="backgroundColor" name="App_Light_Border_Color"/>
@@ -12448,19 +12436,34 @@ Cg
                                             <constraint firstAttribute="height" constant="1" id="APc-r8-Ep5"/>
                                         </constraints>
                                     </view>
+                                    <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tnf-za-D5c">
+                                        <rect key="frame" x="356" y="13" width="38" height="24"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="38" id="720-oh-kgy"/>
+                                            <constraint firstAttribute="height" constant="24" id="dwQ-US-WPF"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="10"/>
+                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                        <state key="normal" title="Clear All">
+                                            <color key="titleColor" name="Black_Theme_Color"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="clearAllOnPress:" destination="G0a-DF-3Vc" eventType="touchUpInside" id="Utq-Qf-0MV"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="4db-UE-Mjp"/>
-                                    <constraint firstAttribute="trailing" secondItem="XZf-km-eL7" secondAttribute="trailing" constant="20" id="Dbd-2a-0nJ"/>
                                     <constraint firstAttribute="bottom" secondItem="HyY-XP-RXB" secondAttribute="bottom" id="EPv-me-nu3"/>
                                     <constraint firstAttribute="trailing" secondItem="HyY-XP-RXB" secondAttribute="trailing" id="Ej2-AZ-v5C"/>
                                     <constraint firstItem="dlF-7j-4if" firstAttribute="centerY" secondItem="zoc-4z-0t5" secondAttribute="centerY" id="IaH-So-Opz"/>
                                     <constraint firstItem="dlF-7j-4if" firstAttribute="centerX" secondItem="zoc-4z-0t5" secondAttribute="centerX" id="Ixj-Ya-Ert"/>
                                     <constraint firstItem="4eV-ZO-dLT" firstAttribute="leading" secondItem="zoc-4z-0t5" secondAttribute="leading" constant="20" id="JfM-dV-zWS"/>
-                                    <constraint firstItem="XZf-km-eL7" firstAttribute="centerY" secondItem="zoc-4z-0t5" secondAttribute="centerY" id="Z3e-QY-DKf"/>
+                                    <constraint firstItem="tnf-za-D5c" firstAttribute="centerY" secondItem="zoc-4z-0t5" secondAttribute="centerY" id="LIi-N3-c6a"/>
                                     <constraint firstItem="4eV-ZO-dLT" firstAttribute="centerY" secondItem="zoc-4z-0t5" secondAttribute="centerY" id="i3j-B0-PA6"/>
                                     <constraint firstItem="HyY-XP-RXB" firstAttribute="leading" secondItem="zoc-4z-0t5" secondAttribute="leading" id="rL1-9R-ZBd"/>
+                                    <constraint firstAttribute="trailing" secondItem="tnf-za-D5c" secondAttribute="trailing" constant="20" id="sVx-1W-lqw"/>
                                 </constraints>
                             </view>
                             <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2XS-Jw-VMh" customClass="CustomButton" customModule="Clothing_Click" customModuleProvider="target">
@@ -27617,7 +27620,7 @@ method of payment</string>
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemGroupedBackgroundColor">
-            <color red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

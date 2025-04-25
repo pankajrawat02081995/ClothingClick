@@ -164,6 +164,7 @@
 		321489622C404B9E00CD4E84 /* FollowRequestXIB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3214895F2C404B9E00CD4E84 /* FollowRequestXIB.swift */; };
 		32187BB52C84ADFE001979CA /* Store.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 32187BB42C84ADFE001979CA /* Store.storyboard */; };
 		32187BB92C84B0EE001979CA /* StoreVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32187BB82C84B0EE001979CA /* StoreVC.swift */; };
+		321C05D72DB6BF2B00696A49 /* LoaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 321C05D62DB6BF2700696A49 /* LoaderView.swift */; };
 		322545722BF9D23E005A1793 /* Dashboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 322545712BF9D23E005A1793 /* Dashboard.storyboard */; };
 		322545782BF9D687005A1793 /* HomePageVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 322545772BF9D687005A1793 /* HomePageVC.swift */; };
 		3225457A2BF9D7AC005A1793 /* TypealiasClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 322545792BF9D7AC005A1793 /* TypealiasClass.swift */; };
@@ -501,6 +502,7 @@
 		321489602C404B9E00CD4E84 /* FollowRequestXIB.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FollowRequestXIB.xib; sourceTree = "<group>"; };
 		32187BB42C84ADFE001979CA /* Store.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Store.storyboard; sourceTree = "<group>"; };
 		32187BB82C84B0EE001979CA /* StoreVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreVC.swift; sourceTree = "<group>"; };
+		321C05D62DB6BF2700696A49 /* LoaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoaderView.swift; sourceTree = "<group>"; };
 		322545712BF9D23E005A1793 /* Dashboard.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Dashboard.storyboard; sourceTree = "<group>"; };
 		322545772BF9D687005A1793 /* HomePageVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageVC.swift; sourceTree = "<group>"; };
 		322545792BF9D7AC005A1793 /* TypealiasClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypealiasClass.swift; sourceTree = "<group>"; };
@@ -1544,6 +1546,7 @@
 		322545702BF9D211005A1793 /* HelperClass */ = {
 			isa = PBXGroup;
 			children = (
+				321C05D62DB6BF2700696A49 /* LoaderView.swift */,
 				32A8514F2CED00030089215C /* EmailAndCall.swift */,
 				325C57072C6A6BA700304298 /* GoogleLoginIntegration.swift */,
 				32E0043D2C6141290072EAC2 /* PaymentViewController.swift */,
@@ -2917,6 +2920,7 @@
 				18468E2F2660BD49007344DA /* ExistingSavedSearchsViewController.swift in Sources */,
 				321489622C404B9E00CD4E84 /* FollowRequestXIB.swift in Sources */,
 				18468E232660BD49007344DA /* LoginSocialViewController.swift in Sources */,
+				321C05D72DB6BF2B00696A49 /* LoaderView.swift in Sources */,
 				325C57082C6A6BA700304298 /* GoogleLoginIntegration.swift in Sources */,
 				322545782BF9D687005A1793 /* HomePageVC.swift in Sources */,
 				327BD95A2C4593B300E04895 /* Model.swift in Sources */,

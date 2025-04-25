@@ -83,7 +83,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         StripeAPI.defaultPublishableKey = "pk_test_51HoxITH8pVCp4ycElWEGx500WjsGV6DtiOpWBxoparNkQdIzhkPtK2oT4zrUDaaqw0W8Ty7DiIuBh6nGzfDLwXFW00c9xiol5S"
         
-        
         FirebaseApp.configure()
         print("FirebaseApp.configure")
         Messaging.messaging().delegate = self

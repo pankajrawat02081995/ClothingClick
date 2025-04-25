@@ -934,7 +934,8 @@ extension AddProductViewController {
         }
         
         if isShowHud {
-            KRProgressHUD.show()
+            //        KRProgressHUD.show()
+        LoaderManager.shared.show()
         }
         
         Alamofire.upload(multipartFormData: {
@@ -964,7 +965,8 @@ extension AddProductViewController {
                 upload.responseJSON(completionHandler: {
                     response in
                     if isShowHud {
-                        KRProgressHUD.dismiss()
+                        //            KRProgressHUD.dismiss()
+            LoaderManager.shared.hide()
                     }
                     switch response.result {
                     case .success:
@@ -995,7 +997,8 @@ extension AddProductViewController {
                 })
             case .failure(let encodingError):
                 if isShowHud {
-                    KRProgressHUD.dismiss()
+                    //            KRProgressHUD.dismiss()
+            LoaderManager.shared.hide()
                 }
                print (encodingError)
                 completion(nil, NSError.init(domain: ErrorMessage, code: 0, userInfo: nil))

@@ -13,6 +13,7 @@ import IBAnimatable
 import YPImagePicker
 import AVFoundation
 import Photos
+import TOCropViewController
 
 enum MediaItem {
     case photo(image: UIImage,imageString:String)
@@ -77,6 +78,9 @@ class PostDetailsVC: BaseViewController {
     
     var selectedStyleID : Int?
     
+    var selectedImagesToCrop: [UIImage] = []
+    var croppedImages: [[String: Any]] = []
+    var currentImageIndex = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -145,18 +149,18 @@ class PostDetailsVC: BaseViewController {
         selectAddress.removeAll()
         selectAddress.append(objet)
         txtLocation.text = appDelegate.userLocation?.address ?? ""
-
-//        guard let userLocations = appDelegate.userDetails?.locations else { return }
-//        
-//        addresslist = userLocations.filter { $0.isPayAddress() || $0.isSelectedAddress() }
-//        
-//        if let firstAddress = addresslist.first {
-//            txtLocation.text = firstAddress?.address ?? ""
-//            selectAddress = addresslist
-//            addressIdLIst.append("\(firstAddress?.id ?? 0)")
-//        } else {
-//            txtLocation.text = appDelegate.userLocation?.address == nil ? "\(addresslist.count) select location" : appDelegate.userLocation?.address
-//        }
+        
+        //        guard let userLocations = appDelegate.userDetails?.locations else { return }
+        //
+        //        addresslist = userLocations.filter { $0.isPayAddress() || $0.isSelectedAddress() }
+        //
+        //        if let firstAddress = addresslist.first {
+        //            txtLocation.text = firstAddress?.address ?? ""
+        //            selectAddress = addresslist
+        //            addressIdLIst.append("\(firstAddress?.id ?? 0)")
+        //        } else {
+        //            txtLocation.text = appDelegate.userLocation?.address == nil ? "\(addresslist.count) select location" : appDelegate.userLocation?.address
+        //        }
     }
     
     override func viewDidLayoutSubviews() {
@@ -288,49 +292,37 @@ class PostDetailsVC: BaseViewController {
             var config = YPImagePickerConfiguration()
             let remainingSlots = 9 - (self.productImage.count + self.productVideo.count)
             
-            // Configure image picker for photos only
             config.library.maxNumberOfItems = remainingSlots
             config.library.mediaType = .photo
-            config.library.skipSelectionsGallery = true
             config.library.defaultMultipleSelection = true
+            config.library.skipSelectionsGallery = true
             config.wordings.libraryTitle = "Gallery"
             config.wordings.cameraTitle = "Camera"
             config.targetImageSize = YPImageSize.original
-            config.showsVideoTrimmer = false  // Disable video-related options
+            config.showsVideoTrimmer = false
             config.showsPhotoFilters = false
-            config.startOnScreen = YPPickerScreen.library
+            config.startOnScreen = .library
             config.screens = [.library, .photo]
             
             let picker = YPImagePicker(configuration: config)
             
-            picker.didFinishPicking { [unowned picker] items, cancelled in
+            picker.didFinishPicking { [unowned self, unowned picker] items, cancelled in
                 guard !cancelled else {
                     picker.dismiss(animated: true)
                     return
                 }
                 
-                // Update images array
-                var updatedImages = self.productImage
-                for item in items {
-                    switch item {
-                    case .photo(p: let image):
-                        updatedImages.append(["image_url": image.originalImage, "isLocal": true])
-                    case .video(v: let v):
-                        break
-                    @unknown default:
-                        break
+                picker.dismiss(animated: true) {
+                    self.selectedImagesToCrop = items.compactMap {
+                        if case let .photo(p) = $0 {
+                            return p.originalImage
+                        }
+                        return nil
                     }
-                    
+                    self.croppedImages = []
+                    self.currentImageIndex = 0
+                    self.presentNextCropper()
                 }
-                
-                self.productImage = updatedImages
-                self.btnAddImage.isHidden = true
-                self.CVAddProductImage.isHidden = false
-                self.CVAddProductImage.reloadData()
-                self.viewDidLayoutSubviews()
-                // self.combineMediaArrays()  // Uncomment if needed for additional processing
-                
-                picker.dismiss(animated: true)
             }
             
             self.present(picker, animated: true)
@@ -528,7 +520,7 @@ extension PostDetailsVC{
     func removeImage(index:Int){
         debugPrint(self.productImage[index]["id"] as? Int ?? 0)
         let param =  ["image_id":self.productImage[index]["id"] as? Int ?? 0,"post_id":self.postDetails?.id ?? 0]
-
+        
         if appDelegate.reachable.connection != .unavailable {
             APIManager().apiCall(of: FaqModel.self, isShowHud: true, URL: BASE_URL, apiName: APINAME.REMOVE_IMAGE.rawValue, method: .get, parameters: param) { (response, error) in
                 if error == nil {
@@ -569,7 +561,8 @@ extension PostDetailsVC{
         }
         
         if isShowHud {
-            KRProgressHUD.show()
+            //        KRProgressHUD.show()
+            LoaderManager.shared.show()
         }
         
         Alamofire.upload(multipartFormData: { multipartFormData in
@@ -588,7 +581,8 @@ extension PostDetailsVC{
             }
         }, usingThreshold: 1, to: api_url, method: .post, headers: headers) { encodingResult in
             if isShowHud {
-                //                KRProgressHUD.dismiss()
+                //                //            KRProgressHUD.dismiss()
+                LoaderManager.shared.hide()
             }
             
             debugPrint("test : \(encodingResult)")
@@ -600,7 +594,8 @@ extension PostDetailsVC{
                     case .success:
                         do {
                             guard let responseData = response.data else {
-                                KRProgressHUD.dismiss()
+                                //            KRProgressHUD.dismiss()
+                                LoaderManager.shared.hide()
                                 completion(nil, NSError(domain: "Empty response data", code: 0, userInfo: nil))
                                 return
                             }
@@ -609,7 +604,8 @@ extension PostDetailsVC{
                             
                             if let dataResponse = dataResponse {
                                 if dataResponse.status == kIsSuccess {
-                                    KRProgressHUD.dismiss()
+                                    //            KRProgressHUD.dismiss()
+                                    LoaderManager.shared.hide()
                                     completion(dataResponse, nil)
                                 } else if dataResponse.status == kUserNotFound {
                                     let alert = UIAlertController(title: AlertViewTitle, message: dataResponse.message, preferredStyle: .alert)
@@ -618,37 +614,45 @@ extension PostDetailsVC{
                                         BaseViewController.sharedInstance.clearAllUserDataFromPreference()
                                     }
                                     alert.addAction(hideAction)
-                                    KRProgressHUD.dismiss()
+                                    //            KRProgressHUD.dismiss()
+                                    LoaderManager.shared.hide()
                                     sceneDelegate.window?.rootViewController?.present(alert, animated: true)
                                 } else {
-                                    KRProgressHUD.dismiss()
+                                    //            KRProgressHUD.dismiss()
+                                    LoaderManager.shared.hide()
                                     completion(nil, NSError(domain: dataResponse.message ?? "Unknown Error", code: dataResponse.status ?? -1, userInfo: nil))
                                 }
                             } else {
-                                KRProgressHUD.dismiss()
+                                //            KRProgressHUD.dismiss()
+                                LoaderManager.shared.hide()
                                 completion(nil, NSError(domain: "Invalid response format", code: 0, userInfo: nil))
                             }
                         } catch {
-                            KRProgressHUD.dismiss()
+                            //            KRProgressHUD.dismiss()
+                            LoaderManager.shared.hide()
                             completion(nil, NSError(domain: "JSON Parsing Error", code: 0, userInfo: nil))
                         }
                         
                     case .failure(let error):
                         print(error.localizedDescription)
-                        KRProgressHUD.dismiss()
+                        //            KRProgressHUD.dismiss()
+                        LoaderManager.shared.hide()
                         completion(nil, NSError(domain: error.localizedDescription, code: 0, userInfo: nil))
                     @unknown default:
-                        KRProgressHUD.dismiss()
+                        //            KRProgressHUD.dismiss()
+                        LoaderManager.shared.hide()
                         completion(nil, NSError(domain: ErrorMessage, code: 0, userInfo: nil))
                     }
                 }
                 
             case .failure(let encodingError):
                 print(encodingError.localizedDescription)
-                KRProgressHUD.dismiss()
+                //            KRProgressHUD.dismiss()
+                LoaderManager.shared.hide()
                 completion(nil, NSError(domain: encodingError.localizedDescription, code: 0, userInfo: nil))
             @unknown default:
-                KRProgressHUD.dismiss()
+                //            KRProgressHUD.dismiss()
+                LoaderManager.shared.hide()
             }
         }
     }
@@ -671,7 +675,8 @@ extension PostDetailsVC{
         }
     }
     func callAddProduct() async {
-        KRProgressHUD.show()
+        //        KRProgressHUD.show()
+        LoaderManager.shared.show()
         self.sendproductImage.removeAll()
         self.sendproductImage = await self.convertToUIImageArray(from: self.productImage)
         
@@ -799,7 +804,8 @@ extension PostDetailsVC{
     
     
     func callEditProduct() async {
-        KRProgressHUD.show()
+        //        KRProgressHUD.show()
+        LoaderManager.shared.show()
         // Clear previous images
         self.sendproductImage.removeAll()
         self.sendproductImage = await self.convertToUIImageArray(from: self.productImage)
@@ -1366,4 +1372,39 @@ func dictionaryToJsonString(_ dict: [String: Any]) -> String? {
         return nil
     }
     return String(data: jsonData, encoding: .utf8)
+}
+
+extension PostDetailsVC:TOCropViewControllerDelegate{
+    // MARK: - Crop Flow
+    func presentNextCropper() {
+        guard currentImageIndex < selectedImagesToCrop.count else {
+            self.productImage += croppedImages
+            self.btnAddImage.isHidden = true
+            self.CVAddProductImage.isHidden = false
+            self.CVAddProductImage.reloadData()
+            return
+        }
+        
+        let image = selectedImagesToCrop[currentImageIndex]
+        let cropVC = TOCropViewController(croppingStyle: .default, image: image)
+        cropVC.aspectRatioPreset = .preset4x3
+        cropVC.aspectRatioLockEnabled = true
+        cropVC.delegate = self
+        self.present(cropVC, animated: true)
+    }
+    
+    func cropViewController(_ cropViewController: TOCropViewController, didCropTo image: UIImage, with cropRect: CGRect, angle: Int) {
+        self.croppedImages.append(["image_url": image, "isLocal": true])
+        cropViewController.dismiss(animated: true) {
+            self.currentImageIndex += 1
+            self.presentNextCropper()
+        }
+    }
+    
+    func cropViewController(_ cropViewController: TOCropViewController, didFinishCancelled cancelled: Bool) {
+        cropViewController.dismiss(animated: true) {
+            self.currentImageIndex += 1
+            self.presentNextCropper()
+        }
+    }
 }
