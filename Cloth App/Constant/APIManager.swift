@@ -23,9 +23,12 @@ public class APIManager {
     }
     
     func apiCall<T:Mappable>(of type: T.Type = T.self,isShowHud: Bool, URL : String, apiName : String, method: HTTPMethod, parameters : [String : Any]?, completion:@escaping (_ dict: BaseResponseModel<T>?,_ error: NSError?) -> ()) {
-                
+        if isShowHud {
+            //        KRProgressHUD.show()
+            LoaderManager.shared.show()
+        }
         let api_url = URL + apiName
-
+        
         if parameters == nil {
             print("API URL = \(api_url)")
         }
@@ -38,19 +41,15 @@ public class APIManager {
             headers["Authorization"] = "Bearer \(appDelegate.headerToken)"
         }
         
-        if isShowHud {
-            KRProgressHUD.show()
-        }
+        
         let request: DataRequest = Alamofire.request(api_url, method: method, parameters: parameters, headers: headers).validate().responseJSON { response in
-            if isShowHud {
-                KRProgressHUD.dismiss()
-            }
-
+            
+            
             switch response.result {
             case .success:
                 let json = try! JSONSerialization.jsonObject(with: response.data!)
                 print(response)
-
+                
                 let dataResponse = Mapper<BaseResponseModel<T>>().map(JSON: json as! [String : Any])
                 
                 if dataResponse?.status == kIsSuccess {
@@ -83,7 +82,7 @@ public class APIManager {
                 }
             case .failure(let error):
                 print (error)
-//                completion(nil, NSError.init(domain: ErrorMessage, code: 0, userInfo: nil))
+                //                completion(nil, NSError.init(domain: ErrorMessage, code: 0, userInfo: nil))
                 if let json = try? JSONSerialization.jsonObject(with: response.data!) as? [String : Any] {
                     let dataResponse = Mapper<BaseResponseModel<T>>().map(JSON: json)
                     print (dataResponse!.message ?? "")
@@ -117,15 +116,22 @@ public class APIManager {
                     completion(nil, NSError.init(domain: ErrorMessage, code: 0, userInfo: nil))
                 }
             }
+            if isShowHud {
+                //            KRProgressHUD.dismiss()
+                LoaderManager.shared.hide()
+            }
         }
         
         NSLog("%@", request.request?.allHTTPHeaderFields ?? "")
     }
-
+    
     func apiCallJSON<T:Mappable>(of type: T.Type = T.self,isShowHud: Bool, URL : String, apiName : String, method: HTTPMethod, parameters : [String : Any]?, completion:@escaping (_ dict: BaseResponseModel<T>?,_ error: NSError?) -> ()) {
-                
+        if isShowHud {
+            //        KRProgressHUD.show()
+            LoaderManager.shared.show()
+        }
         let api_url = URL + apiName
-
+        
         if parameters == nil {
             print("API URL = \(api_url)")
         }
@@ -138,20 +144,16 @@ public class APIManager {
             headers = ["Authorization": "Bearer \(appDelegate.headerToken)"]
         }
         
-        if isShowHud {
-            KRProgressHUD.show()
-        }
+        
         
         let request: DataRequest = Alamofire.request(api_url, method: method, parameters: parameters, encoding: JSONEncoding.default, headers: headers).validate().responseJSON { response in
-            if isShowHud {
-                KRProgressHUD.dismiss()
-            }
-
+            
+            
             switch response.result {
             case .success:
                 let json = try! JSONSerialization.jsonObject(with: response.data!)
                 print(response)
-
+                
                 let dataResponse = Mapper<BaseResponseModel<T>>().map(JSON: json as! [String : Any])
                 
                 if dataResponse?.status == kIsSuccess {
@@ -214,6 +216,10 @@ public class APIManager {
                     }
                 }
             }
+            if isShowHud {
+                //            KRProgressHUD.dismiss()
+                LoaderManager.shared.hide()
+            }
         }
         
         NSLog("%@", request.request?.allHTTPHeaderFields ?? "")
@@ -223,18 +229,19 @@ public class APIManager {
     
     //Mark: API call with image upload
     func apiCallWithImageAndVideo<T: Mappable>(of type: T.Type = T.self, isShowHud: Bool, URL: String, apiName: String, parameters: [String: Any], images: UIImage, videoData: Data, imageParameterName: String, imageName: String, completion: @escaping (_ dict: BaseResponseModel<T>?, _ error: NSError?) -> ()) {
-        
+        if isShowHud {
+            //        KRProgressHUD.show()
+            LoaderManager.shared.show()
+        }
         let api_url = URL + apiName
         print("API URL = \(api_url) parameters = \(parameters)")
-
+        
         var headers: HTTPHeaders? = nil
         if !appDelegate.headerToken.isEmpty {
             headers = ["Authorization": "Bearer \(appDelegate.headerToken)"]
         }
         
-        if isShowHud {
-            KRProgressHUD.show()
-        }
+        
         
         Alamofire.upload(multipartFormData: { multipartFormData in
             // Append image data
@@ -255,9 +262,7 @@ public class APIManager {
             switch encodingResult {
             case .success(let upload, _, _):
                 upload.responseJSON { response in
-                    if isShowHud {
-                        KRProgressHUD.dismiss()
-                    }
+                    
                     switch response.result {
                     case .success:
                         if let responseData = response.data {
@@ -288,10 +293,15 @@ public class APIManager {
                         print(error)
                         completion(nil, NSError(domain: ErrorMessage, code: 0, userInfo: nil))
                     }
+                    if isShowHud {
+                        //            KRProgressHUD.dismiss()
+                        LoaderManager.shared.hide()
+                    }
                 }
             case .failure(let encodingError):
                 if isShowHud {
-                    KRProgressHUD.dismiss()
+                    //            KRProgressHUD.dismiss()
+                    LoaderManager.shared.hide()
                 }
                 print(encodingError)
                 completion(nil, NSError(domain: ErrorMessage, code: 0, userInfo: nil))
@@ -303,16 +313,17 @@ public class APIManager {
         
         let api_url = URL + apiName
         print("API URL = \(api_url) parameters = \(parameters)")
-
+        
         var headers: HTTPHeaders? = nil
         if appDelegate.headerToken != "" {
             headers = ["Authorization": "Bearer \(appDelegate.headerToken)"]
         }
         
         if isShowHud {
-            KRProgressHUD.show()
+            //        KRProgressHUD.show()
+            LoaderManager.shared.show()
         }
-      
+        
         Alamofire.upload(multipartFormData: {
             multipartFormData in
             if images.count > 1 {
@@ -341,14 +352,15 @@ public class APIManager {
                 upload.responseJSON(completionHandler: {
                     response in
                     if isShowHud {
-                        KRProgressHUD.dismiss()
+                        //            KRProgressHUD.dismiss()
+                        LoaderManager.shared.hide()
                     }
                     switch response.result {
                     case .success:
                         
                         let json = try! JSONSerialization.jsonObject(with: response.data!)
                         print(response)
-
+                        
                         let dataResponse = Mapper<BaseResponseModel<T>>().map(JSON: json as! [String : Any])
                         
                         if dataResponse?.status == kIsSuccess {
@@ -386,7 +398,8 @@ public class APIManager {
                 })
             case .failure(let encodingError):
                 if isShowHud {
-                    KRProgressHUD.dismiss()
+                    //            KRProgressHUD.dismiss()
+                    LoaderManager.shared.hide()
                 }
                 print (encodingError)
                 completion(nil, NSError.init(domain: ErrorMessage, code: 0, userInfo: nil))
@@ -399,19 +412,20 @@ public class APIManager {
         
         let api_url = URL + apiName
         print("API URL = \(api_url) parameters = \(parameters)")
-
+        
         var headers: HTTPHeaders? = nil
         if appDelegate.headerToken != "" {
             headers = ["Authorization": "Bearer \(appDelegate.headerToken)"]
         }
         
         if isShowHud {
-            KRProgressHUD.show()
+            //        KRProgressHUD.show()
+            LoaderManager.shared.show()
         }
-      
+        
         Alamofire.upload(multipartFormData: {
             multipartFormData in
-           
+            
             //Append Param
             for (key, value) in parameters {
                 multipartFormData.append((value as AnyObject).data(using: String.Encoding.utf8.rawValue)!, withName: key)
@@ -423,7 +437,8 @@ public class APIManager {
                 upload.responseJSON(completionHandler: {
                     response in
                     if isShowHud {
-                        KRProgressHUD.dismiss()
+                        //            KRProgressHUD.dismiss()
+                        LoaderManager.shared.hide()
                     }
                     switch response.result {
                     case .success:
@@ -467,7 +482,8 @@ public class APIManager {
                 })
             case .failure(let encodingError):
                 if isShowHud {
-                    KRProgressHUD.dismiss()
+                    //            KRProgressHUD.dismiss()
+                    LoaderManager.shared.hide()
                 }
                 print (encodingError)
                 completion(nil, NSError.init(domain: ErrorMessage, code: 0, userInfo: nil))

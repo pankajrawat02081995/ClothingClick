@@ -50,7 +50,16 @@ class ClothPreferencesViewController: BaseViewController {
         super.viewWillAppear(animated)
     }
     
+    @IBAction func clearAllOnPress(_ sender: UIButton) {
+        if let genserId = self.mysizeList[self.selectGengerIndex == -1 ? 1 : self.selectGengerIndex]?.gender_id{
+            FilterSingleton.share.filter.sizes = ""
+            FilterSingleton.share.selectedFilter.sizes = ""
+            self.callSaveSizeList(size: "" , brand: "", genderId: String(genserId))
+        }
+    }
+    
     func setSelectedSizeDate() {
+        
         guard let userSizes = appDelegate.userDetails?.user_size, !userSizes.isEmpty else { return }
         
         for (i, outerModel) in categoryList.enumerated() {
@@ -556,7 +565,6 @@ extension ClothPreferencesViewController {
                         self.saveUserDetails(userDetails: userDetails)
                         self.navigateToHomeScreen()
                     }
-                    
                 }
                 else {
                     UIAlertController().alertViewWithTitleAndMessage(self, message: error?.domain ?? ErrorMessage)

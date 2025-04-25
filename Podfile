@@ -83,6 +83,7 @@ target 'Cloth App' do
   
   pod 'libPhoneNumber-iOS'
   pod 'SDWebImage'
+  pod 'TOCropViewController'
 
   
   post_install do |installer|

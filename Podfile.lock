@@ -281,6 +281,7 @@ PODS:
     - StripeCore (= 24.3.0)
   - SwiftyJSON (5.0.2)
   - TagListView (1.4.1)
+  - TOCropViewController (2.7.4)
   - TTRangeSlider (1.0.7)
   - YPImagePicker (5.2.2):
     - PryntTrimmerView (= 4.0.2)
@@ -320,6 +321,7 @@ DEPENDENCIES:
   - StripePaymentSheet (~> 24.3.0)
   - SwiftyJSON
   - TagListView (~> 1.0)
+  - TOCropViewController
   - TTRangeSlider
   - YPImagePicker
 
@@ -392,6 +394,7 @@ SPEC REPOS:
     - StripeUICore
     - SwiftyJSON
     - TagListView
+    - TOCropViewController
     - TTRangeSlider
     - YPImagePicker
 
@@ -463,9 +466,10 @@ SPEC CHECKSUMS:
   StripeUICore: 493639a9b6463cfe2ac729e01a785d77feee1714
   SwiftyJSON: f5b1bf1cd8dd53cd25887ac0eabcfd92301c6a5a
   TagListView: a1c236d17960a0cf64156725a76ce6d73ebce2be
+  TOCropViewController: 80b8985ad794298fb69d3341de183f33d1853654
   TTRangeSlider: 8cf72eca457c3b700c92eb0074be908c986e25ec
   YPImagePicker: afc81b3cffab05a6e7261c5daf80dc31b4e917b4
 
-PODFILE CHECKSUM: edbe8074d4f3561a09fffbb394b9ed67c22899b7
+PODFILE CHECKSUM: 61bb1b3cc12c7bdb53d25dea5bc8253bc4b4b525
 
 COCOAPODS: 1.16.2

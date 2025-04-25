@@ -123,8 +123,9 @@ class BuyNowVC: UIViewController {
 
 extension BuyNowVC {
     func setupPaymentSheet() {
-        KRProgressHUD.show()
-        
+//        //        KRProgressHUD.show()
+        LoaderManager.shared.show()
+
         guard let backendUrl = URL(string: "\(BASE_URL)create_payment_intent") else {
             print("Invalid URL.")
             return
@@ -146,14 +147,16 @@ extension BuyNowVC {
             request.httpBody = try JSONSerialization.data(withJSONObject: body)
         } catch {
             print("Error encoding request body: \(error.localizedDescription)")
-            KRProgressHUD.dismiss()
+            //            KRProgressHUD.dismiss()
+            LoaderManager.shared.hide()
             return
         }
         
         URLSession.shared.dataTask(with: request) { data, response, error in
             guard let data = data, error == nil else {
                 DispatchQueue.main.async {
-                    KRProgressHUD.dismiss()
+                    //            KRProgressHUD.dismiss()
+            LoaderManager.shared.hide()
                     print("Error: \(error?.localizedDescription ?? "Unknown error")")
                 }
                 return
@@ -161,7 +164,8 @@ extension BuyNowVC {
             
             if let httpResponse = response as? HTTPURLResponse, !(200...299).contains(httpResponse.statusCode) {
                 DispatchQueue.main.async {
-                    KRProgressHUD.dismiss()
+                    //            KRProgressHUD.dismiss()
+            LoaderManager.shared.hide()
                     print("HTTP Error: \(httpResponse.statusCode)")
                 }
                 return
@@ -199,7 +203,8 @@ extension BuyNowVC {
                         // Initialize PaymentSheet with client secret and configuration
                         self.paymentSheet = PaymentSheet(paymentIntentClientSecret: clientSecret, configuration: configuration)
                         
-                        KRProgressHUD.dismiss()
+                        //            KRProgressHUD.dismiss()
+            LoaderManager.shared.hide()
                         
                         DispatchQueue.main.async {
                             self.payButtonTapped()
@@ -207,13 +212,15 @@ extension BuyNowVC {
                     }
                 } else if let errorResponse = try JSONSerialization.jsonObject(with: data) as? [String: Any] {
                     DispatchQueue.main.async {
-                        KRProgressHUD.dismiss()
+                        //            KRProgressHUD.dismiss()
+            LoaderManager.shared.hide()
                         print("Error Response: \(errorResponse)")
                     }
                 }
             } catch {
                 DispatchQueue.main.async {
-                    KRProgressHUD.dismiss()
+                    //            KRProgressHUD.dismiss()
+            LoaderManager.shared.hide()
                     print("Error: \(error.localizedDescription)")
                 }
             }
