@@ -99,6 +99,7 @@ class StoreProfileVC: BaseViewController {
             }
         }
 
+        vc.timings = timings
         vc.todaysTime = " Until \(GetData.shared.getTodayCloseTime(for: timings) ?? "")"
         vc.arrDays = arrDays
         vc.arrTime = arrTime
@@ -129,9 +130,9 @@ class StoreProfileVC: BaseViewController {
     }
     
     @objc func rateOnPress(sender:UIButton){
-        let viewController = RatingListViewController.instantiate(fromStoryboard: .Main)
-        viewController.userId = "\(self.viewModel.userID ?? "")"
-        viewController.userName = self.viewModel.otherUserDetailsData?.name?.capitalized ?? ""
+        let viewController = StoreRatingListVC.instantiate(fromStoryboard: .Store)
+//        viewController.userId = "\(self.viewModel.userID ?? "")"
+//        viewController.userName = self.viewModel.otherUserDetailsData?.name?.capitalized ?? ""
         viewController.hidesBottomBarWhenPushed = true
         self.navigationController?.pushViewController(viewController, animated: true)
     }

@@ -673,6 +673,11 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		3218FEDD2DBE8AE600B7D569 /* View */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = View;
+			sourceTree = "<group>";
+		};
 		32A851512CED07820089215C /* StoreOpen */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = StoreOpen;
@@ -1543,6 +1548,14 @@
 			path = View;
 			sourceTree = "<group>";
 		};
+		3218FEDC2DBE8AD600B7D569 /* StoreRatingList */ = {
+			isa = PBXGroup;
+			children = (
+				3218FEDD2DBE8AE600B7D569 /* View */,
+			);
+			path = StoreRatingList;
+			sourceTree = "<group>";
+		};
 		322545702BF9D211005A1793 /* HelperClass */ = {
 			isa = PBXGroup;
 			children = (
@@ -1570,6 +1583,7 @@
 		322545752BF9D667005A1793 /* NewModule */ = {
 			isa = PBXGroup;
 			children = (
+				3218FEDC2DBE8AD600B7D569 /* StoreRatingList */,
 				32A851512CED07820089215C /* StoreOpen */,
 				32A8514B2CECFC3C0089215C /* StoreContact */,
 				327C10992CDD367200664E65 /* FilterProduct */,
@@ -2536,6 +2550,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
+				3218FEDD2DBE8AE600B7D569 /* View */,
 				32A851512CED07820089215C /* StoreOpen */,
 			);
 			name = "Cloth App";

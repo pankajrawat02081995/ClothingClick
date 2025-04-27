@@ -64,13 +64,13 @@ class SearchItemAndMembersViewController: BaseViewController {
     }
     
     @IBAction func filterOnPress(_ sender: UIButton) {
-//        let viewController = ShortByViewController.instantiate(fromStoryboard: .Main)
-//        viewController.sort_by = self.sort_by
-//        viewController.sort_value = self.sort_value
-//        viewController.shortByDeleget = self
-//        viewController.modalPresentationStyle = .custom
-//        viewController.transitioningDelegate = customTransitioningDelegate
-//        self.present(viewController, animated: true, completion: nil)
+        //        let viewController = ShortByViewController.instantiate(fromStoryboard: .Main)
+        //        viewController.sort_by = self.sort_by
+        //        viewController.sort_value = self.sort_value
+        //        viewController.shortByDeleget = self
+        //        viewController.modalPresentationStyle = .custom
+        //        viewController.transitioningDelegate = customTransitioningDelegate
+        //        self.present(viewController, animated: true, completion: nil)
         
         let vc = FilterProductVC.instantiate(fromStoryboard: .Dashboard)
         vc.modalPresentationStyle = .custom
@@ -120,7 +120,7 @@ class SearchItemAndMembersViewController: BaseViewController {
         //            self.btnProfile.isSelected = false
         self.viewItem.isHidden = false
         self.viewProfile.isHidden = true
-//        self.btnFilter.isHidden = trur
+        //        self.btnFilter.isHidden = trur
         //        }
         //        else {
         //            self.btnItem.backgroundColor = UIColor.init(named: "LightGrayColor")
@@ -229,9 +229,9 @@ extension SearchItemAndMembersViewController : UITableViewDelegate,UITableViewDa
         if tableView == self.tblViewProfile {
             let objet = self.searchData[indexPath.row]
             let cell = tableView.dequeueReusableCell(withIdentifier: "UserProfileListXIB", for: indexPath) as! UserProfileListXIB
-           
+            
             cell.imgUser.setImageFast(with: objet.userimage?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "")
-
+            
             cell.lblFollowerCount.text = "\(objet.total_posts ?? 0) Listings"
             
             if objet.userimage == nil || objet.userimage?.isEmpty == true{
@@ -253,7 +253,7 @@ extension SearchItemAndMembersViewController : UITableViewDelegate,UITableViewDa
             let objet = self.searchData[indexPath.row]
             
             cell.imgItem.setImageFast(with: objet.image?[0].image?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "")
-
+            
             if let name = objet.title {
                 cell.lblItemName.text = name
             }
@@ -305,10 +305,10 @@ extension SearchItemAndMembersViewController {
     
     func callGlobalSearch(searchtext : String,searchType : String) {
         if appDelegate.reachable.connection != .none {
-//            let param = ["search_value": searchtext,
-//                         "search_type" : searchType,
-//                         "page" : "\(self.currentPage)"
-//            ]
+            //            let param = ["search_value": searchtext,
+            //                         "search_type" : searchType,
+            //                         "page" : "\(self.currentPage)"
+            //            ]
             
             var param = FilterSingleton.share.filter.toDictionary()
             param?.removeValue(forKey: "is_only_count")
@@ -376,9 +376,13 @@ extension SearchItemAndMembersViewController {
                             else {
                                 if let seller = objet.role_id {
                                     if seller == 2{
-                                        let viewController = self.storyboard?.instantiateViewController(identifier: "StoreProfileViewController") as! StoreProfileViewController
-                                        viewController.userId = "\(objet.id ?? 0)"
-                                        self.navigationController?.pushViewController(viewController, animated: true)
+//                                        let viewController = self.storyboard?.instantiateViewController(identifier: "StoreProfileViewController") as! StoreProfileViewController
+//                                        viewController.userId = "\(objet.id ?? 0)"
+//                                        self.navigationController?.pushViewController(viewController, animated: true)
+                                        
+                                        let vc = StoreProfileVC.instantiate(fromStoryboard: .Store)
+                                        vc.viewModel.userID = "\(objet.id ?? 0)"
+                                        self.pushViewController(vc: vc)
                                     }
                                     else if seller == 3 {
                                         let viewController = self.storyboard?.instantiateViewController(identifier: "BrandProfileViewController") as! BrandProfileViewController

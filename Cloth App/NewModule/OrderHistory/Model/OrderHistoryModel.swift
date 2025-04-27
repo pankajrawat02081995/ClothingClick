@@ -64,7 +64,7 @@ struct OrderDetails:Mappable{
 
 struct SellerDetails:Mappable{
     var name : String?
-    var image : String?
+    var image : SellerDetailsProfile?
     init?(map: Map) {
         
     }
@@ -73,6 +73,17 @@ struct SellerDetails:Mappable{
         
         name <- map["name"]
         image <- map["image"]
+    }
+}
+
+struct SellerDetailsProfile:Mappable{
+    var profile_image : String?
+    init?(map: Map) {
+        
+    }
+    
+    mutating func mapping(map: Map) {
+        profile_image <- map["profile_image"]
     }
 }
 

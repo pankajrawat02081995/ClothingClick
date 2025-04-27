@@ -71,7 +71,7 @@ class OrderProductDetailsVC: UIViewController {
     }
     
     func setupView(model:OrderDetailsModel){
-    
+        
         if self.isShip == true{
             self.shipView.isHidden = false
             self.pickupView.isHidden = true
@@ -111,7 +111,9 @@ class OrderProductDetailsVC: UIViewController {
         
         self.imgProduct.setImageFast(with: model.product?.images?.first?.image ?? "")
         
-        self.imgSaller.setImageFast(with: model.sellerDetails?.image ?? "")
+        if let encodedUrlString = model.sellerDetails?.image?.profile_image?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed){
+            self.imgSaller.setImageFast(with: encodedUrlString)
+    }
         
         self.lblProductName.text = model.product?.title ?? ""
         self.lblSize.text = "\(model.product?.sizes?.first ?? "") . $\(model.product?.price ?? "")"
