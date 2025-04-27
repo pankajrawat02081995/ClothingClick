@@ -1319,12 +1319,17 @@ USA, t6j 1m3</string>
                                                     <constraint firstAttribute="height" constant="1" id="hXC-Xa-u4q"/>
                                                 </constraints>
                                             </view>
-                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_circle_uncheck" translatesAutoresizingMaskIntoConstraints="NO" id="Q9X-jV-o7G">
+                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_circle_uncheck" translatesAutoresizingMaskIntoConstraints="NO" id="Q9X-jV-o7G" customClass="AnimatableImageView" customModule="IBAnimatable">
                                                 <rect key="frame" x="162.66666666666666" y="1318.6666666666667" width="68" height="68"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="68" id="mhl-ud-10D"/>
                                                     <constraint firstAttribute="height" constant="68" id="yj7-Ck-dVH"/>
                                                 </constraints>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                        <real key="value" value="34"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
                                             </imageView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Purchased on 2-24-2024" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MES-jv-j3S">
                                                 <rect key="frame" x="108.33333333333333" y="1396.6666666666667" width="176.66666666666669" height="19"/>

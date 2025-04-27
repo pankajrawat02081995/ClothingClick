@@ -46,6 +46,78 @@ class ProfilePageTbCell: UITableViewCell {
         collectionView.register(UINib(nibName: "PostImageXIB", bundle: nil), forCellWithReuseIdentifier: "PostImageXIB")
         
     }
+    func updateOpenCloseLabel(timings: [String: [String: String]], label: UILabel) {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "EEEE"
+        
+        let timeFormatter = DateFormatter()
+        timeFormatter.dateFormat = "HH:mm"
+        
+        let displayTimeFormatter = DateFormatter()
+        displayTimeFormatter.dateFormat = "h:mm a"
+        
+        let calendar = Calendar.current
+        let now = Date()
+        
+        let today = formatter.string(from: now)
+        
+        guard let todayTiming = timings[today],
+              let openTimeStr = todayTiming["open"],
+              let closeTimeStr = todayTiming["close"],
+              let closeTime = timeFormatter.date(from: closeTimeStr) else {
+            label.attributedText = colorText(fullText: "Closed", coloredWord: "Closed", color: .red)
+            return
+        }
+        
+        var closeDate = calendar.date(bySettingHour: calendar.component(.hour, from: closeTime),
+                                      minute: calendar.component(.minute, from: closeTime),
+                                      second: 0,
+                                      of: now)!
+        
+        if now < closeDate {
+            // Still open
+            let closeDisplay = displayTimeFormatter.string(from: closeDate)
+            let fullText = "Open until \(closeDisplay)"
+            label.attributedText = colorText(fullText: fullText, coloredWord: "Open", color: .green)
+        } else {
+            // Closed, find next open day
+            var nextDay = calendar.date(byAdding: .day, value: 1, to: now)!
+            var nextDayName = formatter.string(from: nextDay)
+            
+            while timings[nextDayName] == nil {
+                nextDay = calendar.date(byAdding: .day, value: 1, to: nextDay)!
+                nextDayName = formatter.string(from: nextDay)
+            }
+            
+            if let nextTiming = timings[nextDayName],
+               let nextOpenTimeStr = nextTiming["open"],
+               let nextOpenTime = timeFormatter.date(from: nextOpenTimeStr) {
+                
+                var openDate = calendar.date(bySettingHour: calendar.component(.hour, from: nextOpenTime),
+                                             minute: calendar.component(.minute, from: nextOpenTime),
+                                             second: 0,
+                                             of: nextDay)!
+                
+                let openDisplay = displayTimeFormatter.string(from: openDate)
+                let fullText = "Closed - Opens \(openDisplay)"
+                label.attributedText = colorText(fullText: fullText, coloredWord: "Closed", color: .red)
+            } else {
+                label.attributedText = colorText(fullText: "Closed", coloredWord: "Closed", color: .red)
+            }
+        }
+    }
+
+    func colorText(fullText: String, coloredWord: String, color: UIColor) -> NSAttributedString {
+        let attributedString = NSMutableAttributedString(string: fullText)
+        let range = (fullText as NSString).range(of: coloredWord)
+        
+        if range.location != NSNotFound {
+            attributedString.addAttribute(.foregroundColor, value: color, range: range)
+        }
+        
+        return attributedString
+    }
+
     
     func setData(otherUserDetailsData:UserDetailsModel) {
         self.otherUserDetailsData = otherUserDetailsData
@@ -53,7 +125,9 @@ class ProfilePageTbCell: UITableViewCell {
         
         //Show Store timings
         let timings = otherUserDetailsData.storeDetail?.timings ?? [:]
-        lblOpenTime.text = "Open Until \(GetData.shared.getTodayCloseTime(for: timings) ?? "")"
+//        lblOpenTime.text = "Open Until \(GetData.shared.getTodayCloseTime(for: timings) ?? "")"
+        
+        self.updateOpenCloseLabel(timings: timings, label: self.lblOpenTime)
         
         if let url = self.otherUserDetailsData?.photo {
             self.lblNameLater.isHidden = true

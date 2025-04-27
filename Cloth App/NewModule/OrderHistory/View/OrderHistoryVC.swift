@@ -58,7 +58,7 @@ extension OrderHistoryVC:UITableViewDelegate,UITableViewDataSource{
         cell.imgPost.setImageFast(with: indexData?.product?.images?.first?.image ?? "")
         
         cell.lblSellerName.text = indexData?.sellerDetails?.name ?? ""
-        cell.imgSeller.setImageFast(with: indexData?.sellerDetails?.image ?? "")
+        cell.imgSeller.setImageFast(with: indexData?.sellerDetails?.image?.profile_image ?? "")
         
         cell.lblSize.text = "\(indexData?.product?.sizes?.first ?? "") . $\(indexData?.product?.price ?? "")"
         cell.lblName.text = indexData?.product?.title ?? ""
