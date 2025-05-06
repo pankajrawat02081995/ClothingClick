@@ -3003,10 +3003,6 @@ Copyright 2022 Google
 
 Copyright 2019 Google
 
-## GooglePlacePicker
-
-Copyright 2019 Google
-
 ## GooglePlaces
 
 Copyright 2019 Google
