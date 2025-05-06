@@ -14,7 +14,7 @@ class ItemTbCell: UITableViewCell {
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.registerCell(nib: UINib(nibName: "HomePageBrowserXIB", bundle: nil), identifier: "HomePageBrowserXIB")
-        self.collectionView.contentInset = UIEdgeInsets(top: 10, left: 20, bottom: 10, right: 20)
+        self.collectionView.contentInset = UIEdgeInsets(top: 10, left: 14, bottom: 10, right: 14)
         
         collectionView.addObserver(self, forKeyPath: "contentSize", options: .new, context: nil)
     }
@@ -103,7 +103,7 @@ extension ItemTbCell: UICollectionViewDelegate, UICollectionViewDataSource, UICo
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: ((self.collectionView.frame.size.width / 2) - 40 ), height: 230)
+        return CGSize(width: (self.collectionView.frame.size.width / 2) - 20, height: 230)
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {

@@ -235,7 +235,7 @@ class UserViewController: BaseViewController {
             }
             
             if let url = userData?.photo {
-                self.lblNameLatter.isHidden = false
+                self.lblNameLatter.isHidden = true
                 self.imgUser.setImageFast(with: url)
                 if let image = URL.init(string: url){
                     self.imgUser.setImageFast(with: url)

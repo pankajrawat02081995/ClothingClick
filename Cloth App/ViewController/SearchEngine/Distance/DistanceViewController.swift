@@ -46,16 +46,21 @@ class DistanceViewController: BaseViewController {
         super.viewDidLoad()
 //        sliderDistanceKm.maximumValue = 50
         let objet = appDelegate.userDetails?.locations
-        if objet?.count ?? 0 > 0 {
-            if let lat  = objet?[0].latitude {
-                self.lat = Double(lat) ?? 0.0
-            }
-            
-            if let lon = objet?[0].longitude {
-                self.log = Double(lon) ?? 0.0
-            }
-            self.lblSarchLocation.text = objet?[0].address
-        }
+//        if objet?.count ?? 0 > 0 {
+//            if let lat  = objet?[0].latitude {
+//                self.lat = Double(lat) ?? 0.0
+//            }
+//            
+//            if let lon = objet?[0].longitude {
+//                self.log = Double(lon) ?? 0.0
+//            }
+//            self.lblSarchLocation.text = objet?[0].address
+//        }
+        
+        self.lblSarchLocation.text = appDelegate.userLocation?.address ?? ""
+        self.log = Double(appDelegate.userLocation?.longitude ?? "") ?? 0.0
+        self.lat = Double(appDelegate.userLocation?.latitude ?? "") ?? 0.0
+        
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(labelTapped))
         self.lblSarchLocation.isUserInteractionEnabled = true
         self.lblSarchLocation.addGestureRecognizer(tapGesture)
@@ -309,6 +314,9 @@ extension  DistanceViewController:GMSAutocompleteViewControllerDelegate{
             FilterSingleton.share.filter.is_only_count = "1"
             var dict = FilterSingleton.share.filter.toDictionary() ?? [:]
             dict.removeValue(forKey: "slectedCategories")
+            dict["latitude"] = appDelegate.userLocation?.latitude ?? ""
+            dict["longitude"] = appDelegate.userLocation?.longitude ?? ""
+
             APIManager().apiCallWithMultipart(of: ViewCountModel.self, isShowHud: true, URL: BASE_URL, apiName: APINAME.FILTER_POST.rawValue, parameters: dict) { (response, error) in
                 if error == nil {
                     if let response = response {

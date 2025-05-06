@@ -10,6 +10,7 @@ import AVKit
 import IBAnimatable
 import FBSDKLoginKit
 import IQKeyboardManagerSwift
+import TOCropViewController
 
 class EditProfileViewController: BaseViewController {
     
@@ -481,16 +482,16 @@ extension EditProfileViewController: UINavigationControllerDelegate, UIImagePick
     
     // When image is selected
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
-        DispatchQueue.main.async {
-            if let image = info[.originalImage] as? UIImage {
-                let fixedImage = self.fixOrientation(image: image)
-                self.imgUserProfilPic.image = fixedImage
-                self.lblFirstLatterName.isHidden = true
-                self.selectedImage = fixedImage
-            }
-        }
         
-        dismiss(animated: true)
+        picker.dismiss(animated: true, completion: nil)
+
+            guard let selectedImage = info[.originalImage] as? UIImage else {
+                return
+            }
+
+            let cropViewController = TOCropViewController(image: selectedImage)
+            cropViewController.delegate = self
+            present(cropViewController, animated: true, completion: nil)
     }
     
     // Fix image orientation if needed
@@ -927,4 +928,25 @@ extension EditProfileViewController{
             UIAlertController().alertViewWithNoInternet(self)
         }
     }
+}
+
+extension EditProfileViewController:TOCropViewControllerDelegate{
+    func cropViewController(_ cropViewController: TOCropViewController, didCropTo image: UIImage, with cropRect: CGRect, angle: Int) {
+        cropViewController.dismiss(animated: true, completion: nil)
+        
+        // Use the cropped image
+        DispatchQueue.main.async {
+            let fixedImage = self.fixOrientation(image: image)
+            self.imgUserProfilPic.image = fixedImage
+            self.lblFirstLatterName.isHidden = true
+            self.selectedImage = fixedImage
+        }
+        
+        dismiss(animated: true)
+    }
+    
+    func cropViewController(_ cropViewController: TOCropViewController, didFinishCancelled cancelled: Bool) {
+        cropViewController.dismiss(animated: true, completion: nil)
+    }
+
 }

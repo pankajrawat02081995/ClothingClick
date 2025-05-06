@@ -33,10 +33,10 @@ class StoreRatingListVC: UIViewController {
     }
     
     @IBAction func leaveOnPress(_ sender: UIButton) {
-//        let viewController = NewRatingViewController.instantiate(fromStoryboard: .Setting)
-//        //        viewController.userId = "\(object.seller_id ?? 0)"
-//        //        viewController.postId = "\(object.post_id ?? 0)"
-//        self.navigationController?.pushViewController(viewController, animated: true)
+        //        let viewController = NewRatingViewController.instantiate(fromStoryboard: .Setting)
+        //        //        viewController.userId = "\(object.seller_id ?? 0)"
+        //        //        viewController.postId = "\(object.post_id ?? 0)"
+        //        self.navigationController?.pushViewController(viewController, animated: true)
     }
     
 }

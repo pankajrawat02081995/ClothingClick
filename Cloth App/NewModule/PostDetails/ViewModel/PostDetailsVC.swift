@@ -580,10 +580,6 @@ extension PostDetailsVC{
                 }
             }
         }, usingThreshold: 1, to: api_url, method: .post, headers: headers) { encodingResult in
-            if isShowHud {
-                //                //            KRProgressHUD.dismiss()
-                LoaderManager.shared.hide()
-            }
             
             debugPrint("test : \(encodingResult)")
             
