@@ -12920,7 +12920,7 @@ Cg
                                     <constraint firstAttribute="height" constant="649" id="wZq-xs-EhY"/>
                                 </constraints>
                                 <view key="tableFooterView" contentMode="scaleToFill" id="Oap-0p-uOs">
-                                    <rect key="frame" x="0.0" y="874.5" width="414" height="160"/>
+                                    <rect key="frame" x="0.0" y="768.5" width="414" height="160"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <subviews>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kfb-fz-8T0" customClass="CustomButton" customModule="Clothing_Click" customModuleProvider="target">
@@ -17561,7 +17561,7 @@ Cg
         <!--Photo View Controller-->
         <scene sceneID="npL-XI-Qhf">
             <objects>
-                <viewController storyboardIdentifier="PhotoViewController" id="fGB-cg-HKF" customClass="PhotoViewController" customModule="Cloth_App" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="PhotoViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="fGB-cg-HKF" customClass="PhotoViewController" customModule="Clothing_Click" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="wUQ-jj-g0G">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -17958,7 +17958,7 @@ Cg
                                                     <constraint firstItem="ktM-7t-Zir" firstAttribute="top" secondItem="grF-9w-C8g" secondAttribute="top" id="Z98-HI-gmm"/>
                                                 </constraints>
                                             </view>
-                                            <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mJw-e8-fhs">
+                                            <view clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mJw-e8-fhs">
                                                 <rect key="frame" x="0.0" y="86" width="374" height="68"/>
                                                 <subviews>
                                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Username(display Name)" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ost-Er-OtA" customClass="AnimatableTextField" customModule="IBAnimatable">
@@ -27620,7 +27620,7 @@ method of payment</string>
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemGroupedBackgroundColor">
-            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

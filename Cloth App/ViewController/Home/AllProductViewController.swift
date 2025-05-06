@@ -462,6 +462,8 @@ extension AllProductViewController {
             var param = FilterSingleton.share.filter.toDictionary() ?? [:]
             let searchID = ["save_search_id": "\( self.saveSearchId ?? 0)","page" : "\(page)"]
             param.removeValue(forKey: "slectedCategories")
+            param["latitude"] = appDelegate.userLocation?.latitude ?? ""
+            param["longitude"] = appDelegate.userLocation?.longitude ?? ""
             APIManager().apiCallWithMultipart(of: HomeListDetailsModel.self, isShowHud: isShowHud, URL: BASE_URL, apiName: self.isSaveList == true ? APINAME.SAVE_SEARCH_POSTS.rawValue : APINAME.FILTER_POST.rawValue, parameters: self.isSaveList == true ? searchID : param) { (response, error) in
                 if error == nil {
                     if let response = response {

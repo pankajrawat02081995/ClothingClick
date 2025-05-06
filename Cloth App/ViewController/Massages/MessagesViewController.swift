@@ -422,7 +422,7 @@ extension MessagesViewController : UITableViewDelegate , UITableViewDataSource {
         let objcet = self.messegaList[indexPath.row]
         if objcet.message == "" {
             if objcet.type?.lowercased() == "image"{
-                let viewController = self.storyboard?.instantiateViewController(identifier: "PhotoViewController") as! PhotoViewController
+                let viewController = PhotoViewController.instantiate(fromStoryboard: .Main)
                 viewController.imageUrl = objcet.file ?? ""
                 self.present(viewController, animated: true, completion: nil)
             }else{

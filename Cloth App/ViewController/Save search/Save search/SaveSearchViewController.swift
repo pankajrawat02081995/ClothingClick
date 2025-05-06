@@ -965,6 +965,8 @@ extension SaveSearchViewController {
                          "seller" : appDelegate.selectSellerId ,
                          "brand_id" : appDelegate.selectBrandId ,
                          "notification_item_counter" : "",
+                         "latitude" : appDelegate.userLocation?.latitude ?? "",
+                         "longitude" : appDelegate.userLocation?.longitude ?? "",
                          "name" :  "",
                          "price_type" : appDelegate.selectPriceId ,
                          "price_from" : appDelegate.priceFrom ,

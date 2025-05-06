@@ -136,6 +136,8 @@ extension NewCategoryVC{
             FilterSingleton.share.filter.is_only_count = "1"
             var dict = FilterSingleton.share.filter.toDictionary() ?? [:]
             dict.removeValue(forKey: "slectedCategories")
+            dict["latitude"] = appDelegate.userLocation?.latitude ?? ""
+            dict["longitude"] = appDelegate.userLocation?.longitude ?? ""
             APIManager().apiCallWithMultipart(of: ViewCountModel.self, isShowHud: true, URL: BASE_URL, apiName: APINAME.FILTER_POST.rawValue, parameters: dict) { (response, error) in
                 if error == nil {
                     if let response = response {
