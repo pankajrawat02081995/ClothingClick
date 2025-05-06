@@ -675,11 +675,15 @@
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		3218FEDD2DBE8AE600B7D569 /* View */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
 			path = View;
 			sourceTree = "<group>";
 		};
 		32A851512CED07820089215C /* StoreOpen */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
 			path = StoreOpen;
 			sourceTree = "<group>";
 		};
@@ -2542,7 +2546,6 @@
 				18468CC12660BA71007344DA /* Frameworks */,
 				18468CC22660BA71007344DA /* Resources */,
 				322A3A5A2BE9DAFE00575A62 /* ShellScript */,
-				E09DAACED9FACABDE73CBCA1 /* [CP] Embed Pods Frameworks */,
 				78A6714C76485EE8E459EBC6 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
@@ -2702,8 +2705,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
-			shellScript = "
-";
+			shellScript = "\n";
 		};
 		39AD417B6059B8B8C47E6F54 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2742,23 +2744,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Cloth App/Pods-Cloth App-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		E09DAACED9FACABDE73CBCA1 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Cloth App/Pods-Cloth App-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Cloth App/Pods-Cloth App-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Cloth App/Pods-Cloth App-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
