@@ -1554,7 +1554,7 @@ USA, t6j 1m3</string>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="300" id="KqV-R8-pBu"/>
                                                 </constraints>
-                                                <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="10" id="Hih-Hi-nCB">
+                                                <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="Hih-Hi-nCB">
                                                     <size key="itemSize" width="128" height="128"/>
                                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
@@ -2664,17 +2664,14 @@ USA, t6j 1m3</string>
                                                                 <rect key="frame" x="0.0" y="302" width="393" height="302"/>
                                                                 <subviews>
                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Recently Viewed" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Uk5-nc-PVH">
-                                                                        <rect key="frame" x="20" y="20" width="153.66666666666666" height="34"/>
+                                                                        <rect key="frame" x="20" y="20" width="153.66666666666666" height="24"/>
                                                                         <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="20"/>
                                                                         <color key="textColor" name="Black_Theme_Color"/>
                                                                         <nil key="highlightedColor"/>
                                                                     </label>
                                                                     <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="Yk7-2f-uLH">
-                                                                        <rect key="frame" x="20" y="62" width="353" height="240"/>
+                                                                        <rect key="frame" x="20" y="52" width="353" height="250"/>
                                                                         <color key="backgroundColor" name="App_White_Color"/>
-                                                                        <constraints>
-                                                                            <constraint firstAttribute="height" constant="240" id="4nQ-rR-NTt"/>
-                                                                        </constraints>
                                                                         <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="10" id="1lf-1S-h2g">
                                                                             <size key="itemSize" width="128" height="128"/>
                                                                             <size key="headerReferenceSize" width="0.0" height="0.0"/>
@@ -2992,6 +2989,106 @@ USA, t6j 1m3</string>
                                     <constraint firstAttribute="trailing" secondItem="dKY-vT-61J" secondAttribute="trailing" constant="20" id="w2A-dU-EIn"/>
                                 </constraints>
                             </view>
+                            <view hidden="YES" clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dJV-0R-cZ1">
+                                <rect key="frame" x="0.0" y="0.0" width="393" height="1313"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="wTy-vb-Bks">
+                                        <rect key="frame" x="20" y="1080.3333333333333" width="353" height="212.66666666666674"/>
+                                        <subviews>
+                                            <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yyq-qz-mhV">
+                                                <rect key="frame" x="0.0" y="0.0" width="353" height="212.66666666666666"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Ready to make a deal?" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ulk-Ae-bFM">
+                                                        <rect key="frame" x="20" y="20" width="200.66666666666666" height="71"/>
+                                                        <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="20"/>
+                                                        <color key="textColor" name="Black_Theme_Color"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tap here for any product questions and to arrange a meet up with the seller" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2E4-Wp-fXz">
+                                                        <rect key="frame" x="20" y="91" width="313" height="37.666666666666657"/>
+                                                        <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="16"/>
+                                                        <color key="textColor" name="Black_Theme_Color"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="30" translatesAutoresizingMaskIntoConstraints="NO" id="h7U-l3-0mS">
+                                                        <rect key="frame" x="20" y="148.66666666666674" width="313" height="44"/>
+                                                        <subviews>
+                                                            <button opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3Kz-Vn-wlM" customClass="CustomButton" customModule="Clothing_Click" customModuleProvider="target">
+                                                                <rect key="frame" x="0.0" y="0.0" width="141.66666666666666" height="44"/>
+                                                                <color key="backgroundColor" name="App_White_Color"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="44" id="3Hm-GL-fUi"/>
+                                                                </constraints>
+                                                                <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="16"/>
+                                                                <state key="normal">
+                                                                    <color key="titleColor" name="Black_Theme_Color"/>
+                                                                </state>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                                        <real key="value" value="5"/>
+                                                                    </userDefinedRuntimeAttribute>
+                                                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                                                        <color key="value" name="Black_Theme_Color"/>
+                                                                    </userDefinedRuntimeAttribute>
+                                                                </userDefinedRuntimeAttributes>
+                                                                <connections>
+                                                                    <action selector="cancelOnPress:" destination="n46-t1-d19" eventType="touchUpInside" id="bPS-Ps-6jP"/>
+                                                                </connections>
+                                                            </button>
+                                                            <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CqU-fv-2wA" customClass="CustomButton" customModule="Clothing_Click" customModuleProvider="target">
+                                                                <rect key="frame" x="171.66666666666663" y="0.0" width="141.33333333333337" height="44"/>
+                                                                <color key="backgroundColor" name="Black_Theme_Color"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="44" id="DLM-Q6-xEh"/>
+                                                                </constraints>
+                                                                <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="16"/>
+                                                                <state key="normal" title="Got it">
+                                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                </state>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                                        <real key="value" value="5"/>
+                                                                    </userDefinedRuntimeAttribute>
+                                                                </userDefinedRuntimeAttributes>
+                                                                <connections>
+                                                                    <action selector="gotItOnPress:" destination="n46-t1-d19" eventType="touchUpInside" id="LZV-CB-EtF"/>
+                                                                </connections>
+                                                            </button>
+                                                        </subviews>
+                                                    </stackView>
+                                                </subviews>
+                                                <color key="backgroundColor" name="App_White_Color"/>
+                                                <constraints>
+                                                    <constraint firstItem="h7U-l3-0mS" firstAttribute="top" secondItem="2E4-Wp-fXz" secondAttribute="bottom" constant="20" id="2dW-5z-pOk"/>
+                                                    <constraint firstItem="Ulk-Ae-bFM" firstAttribute="top" secondItem="yyq-qz-mhV" secondAttribute="top" constant="20" id="3Ga-tL-e3y"/>
+                                                    <constraint firstAttribute="bottom" secondItem="h7U-l3-0mS" secondAttribute="bottom" constant="20" id="3sX-OK-16w"/>
+                                                    <constraint firstAttribute="trailing" secondItem="h7U-l3-0mS" secondAttribute="trailing" constant="20" id="4rK-PT-9Si"/>
+                                                    <constraint firstItem="2E4-Wp-fXz" firstAttribute="top" secondItem="Ulk-Ae-bFM" secondAttribute="bottom" id="F3z-5R-CSf"/>
+                                                    <constraint firstItem="Ulk-Ae-bFM" firstAttribute="leading" secondItem="yyq-qz-mhV" secondAttribute="leading" constant="20" id="PTw-KG-kID"/>
+                                                    <constraint firstItem="2E4-Wp-fXz" firstAttribute="leading" secondItem="yyq-qz-mhV" secondAttribute="leading" constant="20" id="aRX-Je-hVI"/>
+                                                    <constraint firstItem="h7U-l3-0mS" firstAttribute="leading" secondItem="yyq-qz-mhV" secondAttribute="leading" constant="20" id="te7-wo-Tdm"/>
+                                                    <constraint firstAttribute="trailing" secondItem="2E4-Wp-fXz" secondAttribute="trailing" constant="20" id="zfs-X3-wQy"/>
+                                                </constraints>
+                                            </view>
+                                        </subviews>
+                                    </stackView>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_polygon" translatesAutoresizingMaskIntoConstraints="NO" id="Q2E-Vo-DJb">
+                                        <rect key="frame" x="100.66666666666667" y="1287" width="20" height="20"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="20" id="2fg-xp-N2S"/>
+                                            <constraint firstAttribute="height" constant="20" id="8IN-DL-jBK"/>
+                                        </constraints>
+                                    </imageView>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.69999999999999996" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="wTy-vb-Bks" secondAttribute="trailing" constant="20" id="2hg-cN-CoS"/>
+                                    <constraint firstItem="Q2E-Vo-DJb" firstAttribute="bottom" secondItem="wTy-vb-Bks" secondAttribute="bottom" constant="14" id="9fu-FH-f6s"/>
+                                    <constraint firstItem="Q2E-Vo-DJb" firstAttribute="centerX" secondItem="3Kz-Vn-wlM" secondAttribute="centerX" id="Fki-Jg-x9O"/>
+                                    <constraint firstAttribute="bottom" secondItem="wTy-vb-Bks" secondAttribute="bottom" constant="20" id="LCB-1J-ugp"/>
+                                    <constraint firstItem="wTy-vb-Bks" firstAttribute="leading" secondItem="dJV-0R-cZ1" secondAttribute="leading" constant="20" id="fnm-pm-U50"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="W5D-V0-50W"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -3002,9 +3099,13 @@ USA, t6j 1m3</string>
                             <constraint firstItem="SLq-NN-qC4" firstAttribute="trailing" secondItem="W5D-V0-50W" secondAttribute="trailing" id="E6U-AK-nFD"/>
                             <constraint firstItem="LjC-7c-rK1" firstAttribute="leading" secondItem="W5D-V0-50W" secondAttribute="leading" constant="20" id="FGz-rp-cTk"/>
                             <constraint firstItem="W5D-V0-50W" firstAttribute="trailing" secondItem="LjC-7c-rK1" secondAttribute="trailing" constant="20" id="MpT-Ew-cK0"/>
+                            <constraint firstItem="LjC-7c-rK1" firstAttribute="top" secondItem="dJV-0R-cZ1" secondAttribute="bottom" constant="20" id="NiC-pq-OWI"/>
                             <constraint firstItem="Fbd-k2-aXY" firstAttribute="leading" secondItem="kpP-qo-PKX" secondAttribute="leading" id="OWA-3B-lYp"/>
                             <constraint firstItem="j6a-41-zTu" firstAttribute="top" secondItem="Fbd-k2-aXY" secondAttribute="bottom" id="Oud-I9-OJQ"/>
+                            <constraint firstItem="dJV-0R-cZ1" firstAttribute="leading" secondItem="SLq-NN-qC4" secondAttribute="leading" id="UJM-gx-srz"/>
+                            <constraint firstItem="dJV-0R-cZ1" firstAttribute="trailing" secondItem="SLq-NN-qC4" secondAttribute="trailing" id="YTe-yz-RaE"/>
                             <constraint firstItem="Fbd-k2-aXY" firstAttribute="top" secondItem="W5D-V0-50W" secondAttribute="top" id="bzg-gE-bhc"/>
+                            <constraint firstItem="dJV-0R-cZ1" firstAttribute="top" secondItem="SLq-NN-qC4" secondAttribute="top" id="ccm-CM-BCx"/>
                             <constraint firstAttribute="bottom" secondItem="SLq-NN-qC4" secondAttribute="bottom" id="gYs-6w-iOK"/>
                             <constraint firstItem="W5D-V0-50W" firstAttribute="trailing" secondItem="Fbd-k2-aXY" secondAttribute="trailing" id="lmg-xZ-8e8"/>
                             <constraint firstItem="W5D-V0-50W" firstAttribute="trailing" secondItem="j6a-41-zTu" secondAttribute="trailing" id="pgO-1f-LpX"/>
@@ -3022,11 +3123,14 @@ USA, t6j 1m3</string>
                         <outlet property="btnLike" destination="loT-Nr-rmn" id="4Td-RD-o1i"/>
                         <outlet property="btnMarkSold" destination="Omv-BC-sHM" id="vGj-2A-y8f"/>
                         <outlet property="collectionView" destination="tKz-j5-Gs8" id="Ebx-2R-kaI"/>
+                        <outlet property="dealPopup" destination="dJV-0R-cZ1" id="XK3-CT-o6y"/>
                         <outlet property="deletePostView" destination="fSo-nk-iZL" id="a3H-Sx-nPA"/>
                         <outlet property="imgSellerProfile" destination="u6J-ES-fod" id="vCu-i3-Bql"/>
                         <outlet property="imgStart" destination="N3R-Bq-J7f" id="YAP-qV-NDt"/>
                         <outlet property="lblAddress" destination="KdP-ye-HUP" id="2hX-Ba-VDQ"/>
                         <outlet property="lblCondition" destination="Rha-4Q-hJN" id="LJ8-4t-vip"/>
+                        <outlet property="lblDealPopupSubtile" destination="2E4-Wp-fXz" id="nul-BW-GZ1"/>
+                        <outlet property="lblDealPopupTitle" destination="Ulk-Ae-bFM" id="XMA-Sh-Juq"/>
                         <outlet property="lblDese" destination="kzd-S9-PHZ" id="6Wh-dm-Dhh"/>
                         <outlet property="lblFirstLatter" destination="S3g-2b-gs4" id="dml-Kb-kTl"/>
                         <outlet property="lblLikeCount" destination="99C-0o-Ta6" id="qnJ-5I-j1n"/>
@@ -3753,6 +3857,7 @@ USA, t6j 1m3</string>
         <image name="ic_guide" width="12.333333015441895" height="12.333333015441895"/>
         <image name="ic_map" width="17.333333969116211" height="15.666666984558105"/>
         <image name="ic_next_arrow" width="7.6666665077209473" height="12.666666984558105"/>
+        <image name="ic_polygon" width="17" height="15"/>
         <image name="ic_sell_cross" width="11.666666984558105" height="11.666666984558105"/>
         <image name="ic_share" width="15" height="17"/>
         <image name="ic_shipping" width="67.333335876464844" height="67.333335876464844"/>

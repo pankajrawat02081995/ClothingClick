@@ -2,16 +2,15 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+    <key>CFBundleIconName</key>
+    <string>AppIcon</string>
+
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
 	<string>Clothing Click</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
-	<key>CFBundleIcons</key>
-	<dict/>
-	<key>CFBundleIcons~ipad</key>
-	<dict/>
 	<key>CFBundleIdentifier</key>
 	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleInfoDictionaryVersion</key>
@@ -127,9 +126,9 @@
 	<key>NSCameraUsageDescription</key>
 	<string>Clothing Click use a camera permission to capture profile picture.</string>
 	<key>NSLocationUsageDescription</key>
-	<string>We'll use your current locations to show nearest products</string>
+	<string>We&apos;ll use your current locations to show nearest products</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>We'll use your current locations to show nearest products</string>
+	<string>We&apos;ll use your current locations to show nearest products</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Clothing Click use a microphone permission to capture video voice.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>

@@ -54,6 +54,37 @@ extension UIViewController{
 //
 //        self.present(activityViewController, animated: true, completion: nil)
 //    }
+    
+    func presentCustomPopup() {
+        let popup = RateAppPopup(frame: CGRect(x: 0, y: 0, width: 300, height: 200))
+        popup.center = self.view.center
+        popup.layer.cornerRadius = 12
+        popup.clipsToBounds = true
+        popup.backgroundColor = .white
+
+        // Optional fade-in animation
+        popup.alpha = 0
+        self.view.addSubview(popup)
+        UIView.animate(withDuration: 0.3) {
+            popup.alpha = 1
+        }
+
+        // Example dismiss action
+//        popup.rateNowTapped.addTarget(self, action: #selector(dismissPopup(_:)), for: .touchUpInside)
+    }
+
+    @objc func dismissPopup(_ sender: UIButton) {
+        if let popup = sender.superview?.superview { // Adjust hierarchy if needed
+            UIView.animate(withDuration: 0.3, animations: {
+                popup.alpha = 0
+            }) { _ in
+                popup.removeFromSuperview()
+            }
+        }
+    }
+
+
+
 
     func share(userName: String) {
         let appSchemeURL = URL(string: "clothingclick://profile/\(userName)")!

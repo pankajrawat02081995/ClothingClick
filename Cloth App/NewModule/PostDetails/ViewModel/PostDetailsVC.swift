@@ -433,7 +433,7 @@ class PostDetailsVC: BaseViewController {
             viewController.selectSubcategory = selectSubcategory
         }
         
-        viewController.addresslist = edit ? selectAddress : addresslist
+        viewController.addresslist = selectAddress //edit ? selectAddress : addresslist
         viewController.savegenderId = savegenderId
         
         viewController.price = (txtCADPrice.text?.isEmpty ?? true) || txtCADPrice.text == "0" ? "0.00" : txtCADPrice.text!
@@ -451,10 +451,10 @@ class PostDetailsVC: BaseViewController {
     
     @IBAction func btnPost_Clicked(_ button: UIButton) {
         
-        if self.txtBrandDesignerName.text?.trim().count == 0 {
-            UIAlertController().alertViewWithTitleAndMessage(self, message: "Please select brand name")
-            return
-        }
+//        if self.txtBrandDesignerName.text?.trim().count == 0 {
+//            UIAlertController().alertViewWithTitleAndMessage(self, message: "Please select brand name")
+//            return
+//        }
         if self.productImage.count == 0 {
             UIAlertController().alertViewWithTitleAndMessage(self, message: "Please take a product photo")
             return
@@ -979,27 +979,35 @@ extension PostDetailsVC: UICollectionViewDelegate,UICollectionViewDataSource {
             }
             return cell
         }else{
-            if indexPath.item == self.productImage.count && self.productImage.count < 9{
+            if indexPath.item == self.productImage.count && self.productImage.count < 9 {
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "AddImgXIB", for: indexPath) as! AddImgXIB
-                
                 return cell
-            }else{
+            } else {
                 let item = self.productImage[indexPath.item]
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PostItemXIB", for: indexPath) as! PostItemXIB
-                
-                cell.lblCoverPhoto.isHidden = indexPath.item != 0
-                
+
+                // ✅ Only show label if this is the first image in the data model
+                DispatchQueue.main.async {
+                    if indexPath.item == 0 {
+                        cell.lblCoverPhoto.isHidden = false
+                    } else {
+                        cell.lblCoverPhoto.isHidden = true
+                    }
+                }
+
+
                 cell.btnDelete.tag = indexPath.item
                 cell.btnDelete.addTarget(self, action: #selector(btnRemoveImage_Clicked(sender:)), for: .touchUpInside)
-                
-                if item["isLocal"] as? Bool == true{
+
+                if item["isLocal"] as? Bool == true {
                     cell.imgProduct.image = item["image_url"] as? UIImage
-                }else{
+                } else {
                     cell.imgProduct.setImageFast(with: item["image_url"] as? String ?? "")
                 }
+
                 return cell
-                
             }
+
         }
     }
     
@@ -1274,48 +1282,88 @@ extension PostDetailsVC{
     }
 }
 
-extension PostDetailsVC:UICollectionViewDragDelegate, UICollectionViewDropDelegate{
+extension PostDetailsVC: UICollectionViewDragDelegate, UICollectionViewDropDelegate {
+
     // MARK: - UICollectionViewDragDelegate
-    
+
     func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
         let imageDict = productImage[indexPath.item]
-        
-        let itemProvider: NSItemProvider
-        if let image = imageDict["image_url"] as? UIImage {
-            itemProvider = NSItemProvider(object: image)
-        } else if let imageUrl = imageDict["image_url"] as? String {
-            itemProvider = NSItemProvider(object: imageUrl as NSString)
-        } else {
-            return []
-        }
-        
+        guard let imageUrl = imageDict["image_url"] as? String else { return [] }
+
+        let itemProvider = NSItemProvider(object: imageUrl as NSString)
         let dragItem = UIDragItem(itemProvider: itemProvider)
         dragItem.localObject = imageDict
         return [dragItem]
     }
-    
+
     // MARK: - UICollectionViewDropDelegate
-    
+
     func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {
+        // Use the default value if destinationIndexPath is nil
         let destinationIndexPath = coordinator.destinationIndexPath ?? IndexPath(item: productImage.count - 1, section: 0)
-        
+
         for item in coordinator.items {
             if let sourceIndexPath = item.sourceIndexPath {
-                // Move item locally
+                var toIndex = destinationIndexPath.item
+
+                // Prevent index out of bounds
+                toIndex = min(toIndex, productImage.count - 1)
+
+                // If dropping at the same index, no-op
+                if sourceIndexPath.item == toIndex {
+                    coordinator.drop(item.dragItem, toItemAt: destinationIndexPath)
+                    return
+                }
+
+                // Move the item in the data source and update collection view
                 collectionView.performBatchUpdates({
                     let movedItem = productImage.remove(at: sourceIndexPath.item)
-                    productImage.insert(movedItem, at: destinationIndexPath.item)
-                    collectionView.moveItem(at: sourceIndexPath, to: destinationIndexPath)
+                    productImage.insert(movedItem, at: toIndex)
+                    collectionView.moveItem(at: sourceIndexPath, to: IndexPath(item: toIndex, section: 0))
+                }, completion: { _ in
+                    // Reload only affected items after the update
+                    DispatchQueue.main.async {
+                        collectionView.reloadData()
+                    }
                 })
-                coordinator.drop(item.dragItem, toItemAt: destinationIndexPath)
+
+                coordinator.drop(item.dragItem, toItemAt: IndexPath(item: toIndex, section: 0))
             }
         }
     }
-    
+
+
+    // MARK: - Helper Method to Calculate Items to Reload
+
+    private func getIndexesToReload(from sourceIndex: Int, to toIndex: Int) -> [IndexPath] {
+        let maxIndex = productImage.count - 1
+        var indexesToReload = [0, sourceIndex, toIndex].filter { $0 <= maxIndex }
+        return indexesToReload.map { IndexPath(item: $0, section: 0) }
+    }
+
+    func collectionView(_ collectionView: UICollectionView, dragSessionWillBegin session: UIDragSession) {
+        // Optionally hide or adjust the item when drag starts
+        if let indexPath = session.items.first?.localObject as? IndexPath {
+            collectionView.cellForItem(at: indexPath)?.alpha = 0.0  // Hide the cell temporarily
+        }
+    }
+
+    func collectionView(_ collectionView: UICollectionView, dragSessionDidEnd session: UIDragSession) {
+        // Optionally show the item again when drag ends
+        if let indexPath = session.items.first?.localObject as? IndexPath {
+            collectionView.cellForItem(at: indexPath)?.alpha = 1.0  // Show the cell again
+        }
+    }
+
+
+    // MARK: - UICollectionViewDropDelegate: Can Handle Drop
+
     func collectionView(_ collectionView: UICollectionView, canHandle session: UIDropSession) -> Bool {
         return session.canLoadObjects(ofClass: NSString.self) || session.canLoadObjects(ofClass: UIImage.self)
     }
-    
+
+    // MARK: - UICollectionViewDropDelegate: Handle Drop Feedback
+
     func collectionView(_ collectionView: UICollectionView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
         return UICollectionViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
     }
