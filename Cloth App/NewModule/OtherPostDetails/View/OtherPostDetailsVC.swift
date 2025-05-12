@@ -11,6 +11,9 @@ import AVFoundation
 import AVKit
 class OtherPostDetailsVC: BaseViewController {
     
+    @IBOutlet weak var lblDealPopupSubtile: UILabel!
+    @IBOutlet weak var lblDealPopupTitle: UILabel!
+    @IBOutlet weak var dealPopup: UIView!
     @IBOutlet weak var lblFirstLatter: UILabel!
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var imgStart: UIImageView!
@@ -64,6 +67,11 @@ class OtherPostDetailsVC: BaseViewController {
         self.setupCollectionView()
         self.deeplinkClear()
         self.callPostDetails(postId: self.postId)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
     }
     
     func setupCollectionView(){
@@ -151,6 +159,10 @@ class OtherPostDetailsVC: BaseViewController {
         }else{
             self.navigateToHomeScreen()
         }
+    }
+    
+    @IBAction func gotItOnPress(_ sender: UIButton) {
+        self.dealPopup.isHidden = true
     }
     
     @IBAction func cancelOnPress(_ sender: UIButton) {
@@ -517,12 +529,32 @@ extension OtherPostDetailsVC {
                                 self.btnChetAndByNow.setTitle("Buy Now", for: .normal)
                                 self.btnChetAndByNow.setImage(UIImage(named: "ic_cart"), for: .normal)
                                 
+                                let isDeal = UserDefaults.standard.value(forKey: "isStoreDeal") as? Bool ?? false
+                                
+                                if isDeal == true{
+                                    self.dealPopup.isHidden = true
+                                }else{
+                                    self.lblDealPopupTitle.text = "Buy now from local stores"
+                                    self.lblDealPopupSubtile.text = "Purchase items directly within the app. Choose delivery to your doorstep or pickup at the store."
+                                    UserDefaults.standard.set(true, forKey: "isStoreDeal")
+                                    self.dealPopup.isHidden = false
+                                }
+                                
                             }else{
                                 self.imgStart.isHidden = false
                                 self.lblRate.isHidden = false
                                 self.btnChetAndByNow.setTitle("Chat", for: .normal)
                                 self.btnChetAndByNow.setImage(UIImage(named: "ic_white_chat"), for: .normal)
+                                let isDeal = UserDefaults.standard.value(forKey: "isDeal") as? Bool ?? false
                                 
+                                if isDeal == true{
+                                    self.dealPopup.isHidden = true
+                                }else{
+                                    self.lblDealPopupTitle.text = "Ready to make a deal?"
+                                    self.lblDealPopupSubtile.text = "Tap here for any product questions and to arrange a meet up with the seller"
+                                    UserDefaults.standard.set(true, forKey: "isDeal")
+                                    self.dealPopup.isHidden = false
+                                }
                             }
                             self.pageControlle.numberOfPages = self.postImageVideo.count
                             self.pageControlle.currentPage = 0

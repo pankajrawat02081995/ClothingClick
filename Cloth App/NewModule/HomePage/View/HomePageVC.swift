@@ -30,6 +30,7 @@ class HomePageVC: BaseViewController {
         self.viewModel.view = self
         self.setupCollectionView()
         self.viewModel.callCategoryList()
+//        presentCustomPopup()
     }
     
     @objc func deepLinkNavigate(_ notification: NSNotification) {

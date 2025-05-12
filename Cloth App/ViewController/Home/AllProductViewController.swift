@@ -114,9 +114,10 @@ class AllProductViewController: BaseViewController {
         }
         
         if self.titleStr == "Search Results"{
-            let bool = defaults.value(forKey: KBookMarkPopup) as? Bool ?? true
+            let bool = defaults.value(forKey: KBookMarkPopup) as? Bool ?? false
             if bool == false{
                 self.alertViewForBookMark.isHidden = false
+                defaults.set(true, forKey: KBookMarkPopup)
             }else{
                 self.alertViewForBookMark.isHidden = true
             }

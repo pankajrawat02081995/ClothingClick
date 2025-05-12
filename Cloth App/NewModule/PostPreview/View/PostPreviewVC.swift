@@ -74,7 +74,13 @@ class PostPreviewVC: UIViewController {
         self.lblNameUser.text = appDelegate.userDetails?.name ?? ""
         self.lblUserNameAndPostCOunt.text = "@\(appDelegate.userDetails?.username ?? "") . \(appDelegate.userDetails?.totalPosts ?? 0) posts"
         self.lblReview.text = "\(appDelegate.userDetails?.avg_rating ?? 0) (\(appDelegate.userDetails?.total_reviews ?? 0) Reviews)"
-        self.imgUser.setImageFast(with: appDelegate.userDetails?.photo ?? "")
+//        if appDelegate.userDetails?.photo.isEmpty == true{
+//            
+//        }else{
+//            self.imgUser.setImageFast(with: appDelegate.userDetails?.photo ?? "")
+//        }
+        self.imgUser.setProfileImage(from: appDelegate.userDetails?.photo ?? "", placeholderName: appDelegate.userDetails?.name ?? "")
+
         
         for index in self.productImage{
             
@@ -110,13 +116,13 @@ class PostPreviewVC: UIViewController {
     }
     
     @IBAction func mapOnTap(_ sender: UIButton) {
-        let lat = appDelegate.userDetails?.locations?.first?.latitude ?? ""
+        let lat = self.addresslist.first??.latitude ?? ""
         
-        let log = appDelegate.userDetails?.locations?.first?.longitude ?? ""
+        let log = self.addresslist.first??.longitude ?? ""
         // let address = self.postDetails?.locations?[0].address
         // let postal_code = self.postDetails?.locations?[0].postal_code
         let viewController = FindLocation.instantiate(fromStoryboard: .Main)
-        viewController.addresslist = appDelegate.userDetails?.locations ?? []
+        viewController.addresslist = self.addresslist
         viewController.lat = (lat as NSString).doubleValue
         viewController.log = (log as NSString).doubleValue
         viewController.usertype = appDelegate.userDetails?.role_id ?? 0
@@ -297,12 +303,13 @@ extension PostPreviewVC: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt
                         indexPath: IndexPath) -> CGSize {
+    
         if collectionView == self.productCollection {
             let sectionPadding = sectionInsets.left * (itemsPerRow + 1)
             let interitemPadding = max(0.0, itemsPerRow - 1) * interitemSpace
             let availableWidth = collectionView.bounds.width - sectionPadding - interitemPadding
             let widthPerItem = availableWidth
-            return CGSize(width: widthPerItem, height: 300)
+            return CGSize(width: collectionView.bounds.width, height: 300)
         }
         else {
             //            return CGSize(width: 160, height: 233)
@@ -313,16 +320,25 @@ extension PostPreviewVC: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         insetForSectionAt section: Int) -> UIEdgeInsets {
+        if collectionView == self.productCollection{
+            return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        }
         return sectionInsets
     }
     
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        if collectionView == self.productCollection{
+            return 0.0
+        }
         return interitemSpace
     }
     
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        if collectionView == self.productCollection{
+            return 0.0
+        }
         return interitemSpace
     }
 }

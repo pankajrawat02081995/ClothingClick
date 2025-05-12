@@ -46,3 +46,40 @@ extension UIImageView {
 }
 
 
+import UIKit
+import SDWebImage
+
+extension UIImageView {
+    func setProfileImage(from urlString: String?, placeholderName name: String) {
+        if let urlString = urlString, let url = URL(string: urlString), !urlString.isEmpty {
+            self.sd_setImage(with: url, placeholderImage: nil, options: [.retryFailed, .continueInBackground]) { image, error, _, _ in
+                if image == nil {
+                    self.setInitialsPlaceholder(name: name)
+                }
+            }
+        } else {
+            self.setInitialsPlaceholder(name: name)
+        }
+    }
+
+    private func setInitialsPlaceholder(name: String) {
+        let initial = String(name.prefix(1)).uppercased()
+        let label = UILabel()
+        label.text = initial
+        label.textAlignment = .center
+        label.textColor = .white
+        label.backgroundColor = .black
+        label.font = UIFont.systemFont(ofSize: self.bounds.height / 2, weight: .bold)
+        label.frame = self.bounds
+        label.clipsToBounds = true
+
+        UIGraphicsBeginImageContextWithOptions(self.bounds.size, false, 0.0)
+        guard let context = UIGraphicsGetCurrentContext() else { return }
+
+        label.layer.render(in: context)
+        let img = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+
+        self.image = img
+    }
+}
