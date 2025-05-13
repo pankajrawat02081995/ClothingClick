@@ -30,7 +30,6 @@ class HomePageVC: BaseViewController {
         self.viewModel.view = self
         self.setupCollectionView()
         self.viewModel.callCategoryList()
-//        presentCustomPopup()
     }
     
     @objc func deepLinkNavigate(_ notification: NSNotification) {
@@ -75,7 +74,7 @@ class HomePageVC: BaseViewController {
             if let address = placemark.name {
                 result.address = appDelegate.userLocation?.address == nil ? address : appDelegate.userLocation?.address
             }
-        
+            
             
             if let city = placemark.locality {
                 result.city = city

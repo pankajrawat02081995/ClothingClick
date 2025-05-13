@@ -330,6 +330,12 @@ extension BuyNowVC {
         if appDelegate.reachable.connection != .none {
             APIManager().apiCall(of: OrderDetails.self, isShowHud: true, URL: BASE_URL, apiName: APINAME.SAVE_ORDER.rawValue, method: .post, parameters: param) { (response, error) in
                 if error == nil {
+                    let isRate = UserDefaults.value(forKey: "isRate") as? Bool ?? true
+                    DispatchQueue.main.async{
+                        if isRate == false{
+                            self.showRatepopup()
+                        }
+                    }
                     UIAlertController().alertViewWithTitleAndMessage(self , message: response?.message ?? "") {
                         let vc = OrderProductDetailsVC.instantiate(fromStoryboard: .Sell)
                         vc.orderID = response?.dictData?.id ?? 0
