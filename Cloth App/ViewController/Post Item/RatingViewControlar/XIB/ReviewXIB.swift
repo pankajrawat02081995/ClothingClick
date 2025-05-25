@@ -7,6 +7,7 @@
 
 import UIKit
 import IBAnimatable
+
 class ReviewXIB: UITableViewCell {
 
     @IBOutlet weak var imgProduct: AnimatableImageView!
@@ -14,6 +15,7 @@ class ReviewXIB: UITableViewCell {
     @IBOutlet weak var lblDesc: UILabel!
     @IBOutlet weak var lblTitle: UILabel!
     @IBOutlet weak var rateView: FloatRatingView!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

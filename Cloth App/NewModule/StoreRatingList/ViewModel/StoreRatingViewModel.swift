@@ -40,6 +40,13 @@ class StoreRatingViewModel{
                                     self.reviews.append(temp)
                                 }
                             }
+                            
+                            if data.already_reviewed == 1{
+                                self.view?.rateView.isHidden = true
+                            }else{
+                                self.view?.rateView.isHidden = false
+                            }
+                            
                             self.view?.tableView.setBackGroundLabel(count: self.reviews.count,text: "No Reviews Found")
                             self.view?.tableView.reloadData()
                         }

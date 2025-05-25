@@ -11,6 +11,7 @@ import AVFoundation
 import AVKit
 class OtherPostDetailsVC: BaseViewController {
     
+    @IBOutlet weak var lblStyle: UILabel!
     @IBOutlet weak var lblDealPopupSubtile: UILabel!
     @IBOutlet weak var lblDealPopupTitle: UILabel!
     @IBOutlet weak var dealPopup: UIView!
@@ -566,6 +567,8 @@ extension OtherPostDetailsVC {
                                     self.dealPopup.isHidden = false
                                 }
                             }
+                            
+                            self.lblStyle.text = "\(self.postDetails?.style_name ?? "")"
                             self.pageControlle.numberOfPages = self.postImageVideo.count
                             self.pageControlle.currentPage = 0
                             self.pageControlle.hidesForSinglePage = true

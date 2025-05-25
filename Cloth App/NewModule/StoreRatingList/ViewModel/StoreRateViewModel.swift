@@ -23,7 +23,7 @@ class StoreRateViewModel{
                          "review" : self.view?.txtDescription.text ?? "",
             ] as [String : Any]
             
-            APIManager().apiCallWithImage(of: StoreRatingModel.self, isShowHud: true, URL: BASE_URL, apiName: APINAME.POST_REVIEW.rawValue, parameters: param, images: [self.view?.imgProduct.image ?? UIImage()], imageParameterName: "image[]", imageName: "post_image.png"){  (response, error) in
+            APIManager().apiCallWithImage(of: StoreRatingModel.self, isShowHud: true, URL: BASE_URL, apiName: APINAME.POST_REVIEW.rawValue, parameters: param, images: view?.isNewImage ?? true ? [self.view?.imgProduct.image ?? UIImage()] : [UIImage()], imageParameterName: "image[]", imageName: "post_image.png"){  (response, error) in
                 if error == nil {
                     if let mesage = response?.message {
                         let alert: UIAlertController = UIAlertController.init(title: AlertViewTitle, message: mesage, preferredStyle: .alert)

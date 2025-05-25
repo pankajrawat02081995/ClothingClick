@@ -22,9 +22,12 @@ class StoreRatingListVC: UIViewController {
         
         viewModel = StoreRatingViewModel(view: self)
         self.setupTableVew()
-        viewModel?.callGetReviews(userId: userId ?? "")
-        
         setupData()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        viewModel?.callGetReviews(userId: userId ?? "")
     }
     
     func setupData(){
@@ -67,6 +70,7 @@ extension StoreRatingListVC:UITableViewDelegate,UITableViewDataSource{
 
         cell.lblTime.text = Date().offset(from: date)
         cell.imgProduct.setImageFast(with: object?.photo?.first?.image ?? "")
+        cell.imgProduct.contentMode = .scaleAspectFill
         return cell
     }
     
@@ -96,5 +100,11 @@ extension StoreRatingListVC:UITableViewDelegate,UITableViewDataSource{
             return Date()
         }
     }
-    
+ 
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if indexPath.item == (self.viewModel?.reviews.count ?? 0) - 1 && self.viewModel?.hasMorePages == true {
+            self.viewModel?.currentPage = (self.viewModel?.currentPage ?? 0) + 1
+            viewModel?.callGetReviews(userId: userId ?? "")
+        }
+    }
 }

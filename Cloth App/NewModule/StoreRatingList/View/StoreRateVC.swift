@@ -13,7 +13,7 @@ import TOCropViewController
 import Cosmos
 
 class StoreRateVC: UIViewController {
-
+    
     @IBOutlet weak var rateVIew: CosmosView!
     @IBOutlet weak var imgProduct: UIImageView!
     @IBOutlet weak var lblStoreName: UILabel!
@@ -21,7 +21,7 @@ class StoreRateVC: UIViewController {
     @IBOutlet weak var lblTitle: UILabel!
     @IBOutlet weak var txtDescription: CustomTextView!
     
-    private var isNewImage : Bool?
+    var isNewImage : Bool?
     var otherUserDetailsData : UserDetailsModel?
     private var selectedImagesToCrop: UIImage = UIImage()
     
@@ -38,7 +38,7 @@ class StoreRateVC: UIViewController {
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(cellTappedMethod(_:)))
         imgProduct.isUserInteractionEnabled = true
         imgProduct.addGestureRecognizer(tapGestureRecognizer)
-
+        
     }
     
     func setupData(){
@@ -55,10 +55,17 @@ class StoreRateVC: UIViewController {
             }
         }
     }
-
+    
     @IBAction func reviewOnPress(_ sender: UIButton) {
-        viewModel?.callAddReview()
+        if rateVIew.rating < 1 {
+            BaseViewController.sharedInstance.showAlertWithTitleAndMessage(title: AlertViewTitle, message: "Please provide a rating before submitting your review.")
+        } else if txtDescription.text.trim().isEmpty {
+            BaseViewController.sharedInstance.showAlertWithTitleAndMessage(title: AlertViewTitle, message: "Please enter a review description.")
+        } else {
+            viewModel?.callAddReview()
+        }
     }
+    
     
     @IBAction func backOnPress(_ sender: UIButton) {
         self.popViewController()
