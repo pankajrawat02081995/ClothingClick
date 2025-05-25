@@ -31,47 +31,58 @@ class UserNameVC: BaseViewController {
 }
 
 extension UserNameVC{
-    func updateUserName(){
-        var dictGeneral = [String:Any]()
-        var address = [[String:Any]]()
-        dictGeneral["name"] = appDelegate.userDetails?.name ?? ""
-        dictGeneral["email"] = appDelegate.userDetails?.email ?? ""
-        dictGeneral["username"] = self.txtUserName.text ?? ""
-        dictGeneral["phone"] = appDelegate.userDetails?.phone ?? ""
-        dictGeneral["country_code"] = appDelegate.userDetails?.country_code ?? ""
-        dictGeneral["country_prefix"] = appDelegate.userDetails?.country_prefix ?? ""
-        for i in appDelegate.userDetails?.locations ?? []{
-            var dict = [String:Any]()
-            dict["id"] = "\(i.id ?? 0)"
-            dict["address"] = "\(i.address ?? "")"
-            dict["postal_code"] = "\(i.postal_code ?? "")"
-            dict["latitude"] = "\(i.latitude ?? "")"
-            dict["longitude"] = "\(i.longitude ?? "")"
-            dict["city"] = "\(i.city ?? "")"
-            dict["area"] = "\(i.area ?? "")"
-            address.append(dict)
-            print(address)
-            dictGeneral["locations"] = self.json(from: address)
-            
-            APIManager().apiCall(of: UserDetailsModel.self, isShowHud: true, URL: BASE_URL, apiName: APINAME.UPDATE_PROFILE.rawValue, method: .post, parameters: dictGeneral) { (response, error) in
-                if error == nil {
-                    if let response = response {
-                        if let userDetails = response.dictData {
-                            self.saveUserDetails(userDetails: userDetails)
-                            self.dismiss(animated: true){
-                                self.isLoginDone?()
-                            }
-                        }else{
-                            self.dismiss(animated: true)
-                        }
-                        
-                    }
-                }
-                else {
-                    UIAlertController().alertViewWithTitleAndMessage(self, message: error?.domain ?? ErrorMessage)
-                }
+    func updateUserName() {
+        guard let userDetails = appDelegate.userDetails else {
+            UIAlertController().alertViewWithTitleAndMessage(self, message: "User details not available")
+            return
+        }
+
+        var dictGeneral = [String: Any]()
+        dictGeneral["name"] = userDetails.name ?? ""
+        dictGeneral["email"] = userDetails.email ?? ""
+        dictGeneral["username"] = txtUserName.text ?? ""
+        dictGeneral["phone"] = userDetails.phone ?? ""
+        dictGeneral["country_code"] = userDetails.country_code ?? ""
+        dictGeneral["country_prefix"] = userDetails.country_prefix ?? ""
+
+        var addressArray = [[String: Any]]()
+        for location in userDetails.locations ?? [] {
+            let addressDict: [String: Any] = [
+                "id": "\(location.id ?? 0)",
+                "address": location.address ?? "",
+                "postal_code": location.postal_code ?? "",
+                "latitude": location.latitude ?? "",
+                "longitude": location.longitude ?? "",
+                "city": location.city ?? "",
+                "area": location.area ?? ""
+            ]
+            addressArray.append(addressDict)
+        }
+
+        dictGeneral["locations"] = json(from: addressArray)
+
+        APIManager().apiCall(
+            of: UserDetailsModel.self,
+            isShowHud: true,
+            URL: BASE_URL,
+            apiName: APINAME.UPDATE_PROFILE.rawValue,
+            method: .post,
+            parameters: dictGeneral
+        ) { response, error in
+            if let error = error {
+                UIAlertController().alertViewWithTitleAndMessage(self, message: error.domain ?? ErrorMessage)
+                return
             }
-            
+
+            if let response = response, let userDetails = response.dictData {
+                self.saveUserDetails(userDetails: userDetails)
+                self.dismiss(animated: true) {
+                    self.isLoginDone?()
+                }
+            } else {
+                self.dismiss(animated: true)
+            }
         }
     }
+
 }

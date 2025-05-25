@@ -13,6 +13,7 @@ struct ReviewsListModel : Mappable {
     var total_seller_review : Int?
     var currentPage : Int?
     var hasMorePages : Bool?
+    var already_reviewed : Int?
     var reviews : [Reviews]?
 
     init?(map: Map) {
@@ -24,6 +25,7 @@ struct ReviewsListModel : Mappable {
         total_buyer_review <- map["total_buyer_review"]
         total_seller_review <- map["total_seller_review"]
         currentPage <- map["currentPage"]
+        already_reviewed <- map["already_reviewed"]
         hasMorePages <- map["hasMorePages"]
         reviews <- map["reviews"]
     }
@@ -44,7 +46,7 @@ struct Reviews : Mappable {
     mutating func mapping(map: Map) {
 
         id <- map["id"]
-        photo <- map["photo"]
+        photo <- map["review_images"]
         review_by_name <- map["review_by_name"]
         review_by_photo <- map["review_by_photo"]
         review_by <- map["review_by"]

@@ -16,6 +16,7 @@ struct PostDetailsModel : Mappable {
     var product_url : String?
     var type : String?
     var style_id : Int?
+    var style_name : String?
     var gender_id : Int?
     var categories : [Categories]?
     var sizes : [Size]?
@@ -80,6 +81,7 @@ struct PostDetailsModel : Mappable {
         total_reviews <- map["total_reviews"]
         user_id <- map["user_id"]
         style_id <- map["style_id"]
+        style_name <- map["style_name"]
         brand_id <- map["brand_id"]
         gender_id <- map["gender_id"]
         categories <- map["categories"]
