@@ -15,13 +15,14 @@ class RatingListViewController: BaseViewController {
     @IBOutlet weak var tblReviews: UITableView!
     
     var reviewData : ReviewsListModel?
+    var reviews = [Reviews]()
     var selIndexForCVCategory = 0
     var tabs = [Tabs?]()
     var tabId = ""
     var userId = ""
     var currentPage = 1
     var hasMorePages = false
-    var reviews = [Reviews]()
+    
     var categoryList = ["Purchased","Sold"]
     var userName : String?
     

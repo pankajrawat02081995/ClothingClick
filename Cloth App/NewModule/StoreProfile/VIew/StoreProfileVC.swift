@@ -23,6 +23,8 @@ class StoreProfileVC: BaseViewController {
         super.viewDidLoad()
         self.setupTableView()
         self.viewModel.view = self
+        FilterSingleton.share.filter = Filters()
+        FilterSingleton.share.selectedFilter = FiltersSelectedData()
         self.viewModel.callGetOtherUserDetails(userId: self.viewModel.userID ?? "")
     }
     
@@ -131,8 +133,8 @@ class StoreProfileVC: BaseViewController {
     
     @objc func rateOnPress(sender:UIButton){
         let viewController = StoreRatingListVC.instantiate(fromStoryboard: .Store)
-//        viewController.userId = "\(self.viewModel.userID ?? "")"
-//        viewController.userName = self.viewModel.otherUserDetailsData?.name?.capitalized ?? ""
+        viewController.userId = "\(self.viewModel.userID ?? "")"
+        viewController.otherUserDetailsData = self.viewModel.otherUserDetailsData
         viewController.hidesBottomBarWhenPushed = true
         self.navigationController?.pushViewController(viewController, animated: true)
     }

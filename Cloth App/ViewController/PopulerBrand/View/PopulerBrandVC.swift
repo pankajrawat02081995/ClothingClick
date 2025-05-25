@@ -111,11 +111,16 @@ extension PopulerBrandVC{
 //        let param = ["list_type":  listType,
 //                     "page": self.currentPage
 //        ] as [String : Any]
+        let latitude = appDelegate.userLocation?.latitude.map { "\($0)" } ?? ""
+        let longitude = appDelegate.userLocation?.longitude.map { "\($0)" } ?? ""
+
         var param = FilterSingleton.share.filter.toDictionary()
         param?.removeValue(forKey: "is_only_count")
         param?.removeValue(forKey: "notification_item_counter")
         param?["page"] = "\(self.currentPage)"
         param?["list_type"] = listType
+        param?["latitude"] = latitude
+        param?["longitude"] = longitude
         param?.removeValue(forKey: "slectedCategories")
         param?.removeValue(forKey: "categories")
         

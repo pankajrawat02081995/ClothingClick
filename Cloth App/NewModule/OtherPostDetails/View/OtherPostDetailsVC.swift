@@ -228,11 +228,21 @@ class OtherPostDetailsVC: BaseViewController {
             viewController.hidesBottomBarWhenPushed = true
             self.pushViewController(vc: viewController)
         }else{
-            let viewController = MessagesViewController.instantiate(fromStoryboard: .Main)
-            viewController.receiverId = String(postDetails?.receiver_id ?? 0)
-            viewController.postId = String (postDetails?.id ?? 0)
-            viewController.hidesBottomBarWhenPushed = true
-            self.pushViewController(vc: viewController)
+            let isComplete =  appDelegate.userDetails?.phone?.trim().isEmpty ?? true
+            if isComplete == true{
+                UIAlertController().alertViewWithTitleAndMessage(self, message: "Please complete your profile to chat with other users.") { [weak self] in
+                    guard self != nil else {return}
+                    let viewController = MobileNumberVC.instantiate(fromStoryboard: .Auth)
+                    viewController.hidesBottomBarWhenPushed = true
+                    self?.pushViewController(vc: viewController)
+                }
+            }else{
+                let viewController = MessagesViewController.instantiate(fromStoryboard: .Main)
+                viewController.receiverId = String(postDetails?.receiver_id ?? 0)
+                viewController.postId = String (postDetails?.id ?? 0)
+                viewController.hidesBottomBarWhenPushed = true
+                self.pushViewController(vc: viewController)
+            }
         }
     }
     

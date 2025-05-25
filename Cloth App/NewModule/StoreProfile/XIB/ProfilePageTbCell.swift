@@ -43,6 +43,7 @@ class ProfilePageTbCell: UITableViewCell {
         super.awakeFromNib()
         collectionView.delegate = self
         collectionView.dataSource = self
+        collectionView.isScrollEnabled = false
         collectionView.register(UINib(nibName: "PostImageXIB", bundle: nil), forCellWithReuseIdentifier: "PostImageXIB")
         
     }
@@ -204,7 +205,7 @@ class ProfilePageTbCell: UITableViewCell {
 
 extension ProfilePageTbCell: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 3 // Example number of items; update this based on your data
+        return 1 // Example number of items; update this based on your data
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -213,28 +214,28 @@ extension ProfilePageTbCell: UICollectionViewDelegate, UICollectionViewDataSourc
         }
         
         cell.imgPost.setImageFast(with: self.otherUserDetailsData?.cover_image ?? "")
-        
+        cell.imgPost.contentMode = .scaleAspectFill
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let numberOfItemsInRow: CGFloat = 2 // Two items per row
+        let numberOfItemsInRow: CGFloat = 1 // Two items per row
         let totalSpacing = (numberOfItemsInRow - 1) * 10 // Assuming a 10-point spacing
         let itemWidth = (collectionView.frame.width - totalSpacing) / numberOfItemsInRow
         
         // Return size for the item
-        return CGSize(width: itemWidth, height: itemWidth) // Adjust height if needed
+        return CGSize(width: collectionView.frame.width, height: collectionView.frame.height) // Adjust height if needed
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 10 // Spacing between items in the same row
+        return 0 // Spacing between items in the same row
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 10 // Spacing between rows
+        return 0 // Spacing between rows
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10) // Adjust insets if necessary
-    }
+//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+//        return UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10) // Adjust insets if necessary
+//    }
 }

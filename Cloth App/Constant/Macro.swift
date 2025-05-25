@@ -1384,7 +1384,9 @@ enum APINAME : String {
     
     //Reviews API
     case ADD_REVIEW                     = "review/add"
+    case POST_REVIEW                    = "post_review"
     case REVIEWS_LIST                   = "reviews"
+    case REVIEWS_STORE_LIST             = "list_all_reviews"
     case REVIEW_USER_POST_DETAILS       = "review/user_post/details"
     case POST_SOLD_USER_LIST            = "post/sold/user_list"
     //GlobalSearch

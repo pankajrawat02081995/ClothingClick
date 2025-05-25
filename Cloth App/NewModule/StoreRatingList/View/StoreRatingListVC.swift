@@ -14,10 +14,21 @@ class StoreRatingListVC: UIViewController {
     @IBOutlet weak var lblStoreName: UILabel!
     @IBOutlet weak var rateView: AnimatableView!
     
+    var viewModel : StoreRatingViewModel?
+    var userId : String?
+    var otherUserDetailsData : UserDetailsModel?
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        viewModel = StoreRatingViewModel(view: self)
         self.setupTableVew()
+        viewModel?.callGetReviews(userId: userId ?? "")
+        
+        setupData()
+    }
+    
+    func setupData(){
+        lblStoreName.text = otherUserDetailsData?.name ?? ""
     }
     
     func setupTableVew(){
@@ -33,22 +44,57 @@ class StoreRatingListVC: UIViewController {
     }
     
     @IBAction func leaveOnPress(_ sender: UIButton) {
-        //        let viewController = NewRatingViewController.instantiate(fromStoryboard: .Setting)
-        //        //        viewController.userId = "\(object.seller_id ?? 0)"
-        //        //        viewController.postId = "\(object.post_id ?? 0)"
-        //        self.navigationController?.pushViewController(viewController, animated: true)
+        let viewController = StoreRateVC.instantiate(fromStoryboard: .Store)
+        viewController.otherUserDetailsData = self.otherUserDetailsData
+        self.pushViewController(vc: viewController)
     }
     
 }
 
 extension StoreRatingListVC:UITableViewDelegate,UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3
+        return self.viewModel?.reviews.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ReviewXIB", for: indexPath) as! ReviewXIB
+        let object = self.viewModel?.reviews[indexPath.row]
+        cell.lblDesc.text = object?.review ?? ""
+        cell.rateView.rating = Double(object?.rating ?? 0)
+        cell.lblTitle.text = object?.review_by_name ?? ""
+        
+        let date = self.convertWebStringToDate(strDate: object?.created_at ?? "").toLocalTime()
+
+        cell.lblTime.text = Date().offset(from: date)
+        cell.imgProduct.setImageFast(with: object?.photo?.first?.image ?? "")
         return cell
+    }
+    
+    func convertWebStringToDate(strDate: String) -> Date {
+        let dateString = strDate.replace("T", replacement: " ")
+        var format: String = ""
+        if(dateString.count == 27 ){
+            format = "yyyy-MM-dd HH:mm:ss.SSSSSS'Z'"
+        }
+        if(dateString.count == 26 ){
+            format = "yyyy-MM-dd HH:mm:ss.SSSSSS"
+        }
+        if(dateString.count == 19 ){
+            format = "yyyy-MM-dd HH:mm:ss"
+        }
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = format
+        dateFormatter.timeZone = NSTimeZone.local
+        
+        if dateString.isEmpty {
+            return Date()
+        }
+        else {
+            if let date = dateFormatter.date(from: dateString) {
+                return date
+            }
+            return Date()
+        }
     }
     
 }

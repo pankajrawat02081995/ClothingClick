@@ -129,7 +129,7 @@ extension DiscoveTableCellXIB: UICollectionViewDelegate, UICollectionViewDataSou
             FilterSingleton.share.selectedFilter = FiltersSelectedData()
             FilterSingleton.share.filter.categories = "\(object.category_id ?? 0)"
             FilterSingleton.share.selectedFilter.categories = object.name ?? ""
-            
+            FilterSingleton.share.filter.gender_id = isMensware == true ? "1" : "2"
             vc.isShowFilter = false
             view?.pushViewController(vc: vc)
             
