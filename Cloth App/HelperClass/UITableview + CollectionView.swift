@@ -20,14 +20,14 @@ extension UITableView{
 //    }
     
     //MARK:- Set Table View Background label
-    func setBackGroundLabel(yPosition: CGFloat? = nil, count: Int){
+    func setBackGroundLabel(yPosition: CGFloat? = nil, count: Int,text:String?="No Data Found"){
         if count > 0 {
             self.backgroundView = nil
         }else{
             let y = (yPosition != nil ? yPosition : self.frame.height/2-40) ?? self.frame.height/2-40
             
             let backLabel = UILabel.init(frame: CGRect(x: 0.0, y: y, width: self.frame.width, height: 60))
-            backLabel.text = "No Data Found"
+            backLabel.text = text
             backLabel.numberOfLines = 0
             if #available(iOS 12.0, *) {
                 if traitCollection.userInterfaceStyle == .dark{
