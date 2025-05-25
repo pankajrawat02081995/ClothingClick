@@ -87,6 +87,7 @@ struct UserDetailsModel : Mappable {
         user_sizes_details <- map["user_sizes_details"]
         storeDetail <- map["store_details"]
         name <- map["name"]
+        is_first_login <- map["is_first_login"]
         email <- map["email"]
         username <- map["username"]
         role_id <- map["role_id"]

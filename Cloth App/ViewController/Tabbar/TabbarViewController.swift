@@ -5,7 +5,7 @@ class TabbarViewController: UITabBarController, UITabBarControllerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.delegate = self
-
+        
         // Configure view controllers for the tab bar
         let firstNavController = createNavController(
             viewController: HomePageVC.instantiate(fromStoryboard: .Dashboard),
@@ -13,35 +13,35 @@ class TabbarViewController: UITabBarController, UITabBarControllerDelegate {
             unselectedImage: "ic_home_unselected",
             selectedImage: "ic_home_selected"
         )
-
+        
         let secondNavController = createNavController(
             viewController: DiscoverVC.instantiate(fromStoryboard: .Dashboard),
             title: "Discover",
             unselectedImage: "ic_discover_unselect",
             selectedImage: "ic_discover_selected"
         )
-
+        
         let thirdNavController = createNavController(
             viewController: PostItemViewController.instantiate(fromStoryboard: .Main),
             title: "Sell",
             unselectedImage: "ic_sell_unselected",
             selectedImage: "ic_maket_selected"
         )
-
+        
         let fourthNavController = createNavController(
             viewController: ChatViewController.instantiate(fromStoryboard: .Main),
             title: "Messages",
             unselectedImage: "ic_msg_unselected",
             selectedImage: "ic_message_selected"
         )
-
+        
         let fifthNavController = createNavController(
             viewController: UserViewController.instantiate(fromStoryboard: .Main),
             title: "Account",
             unselectedImage: "ic_user_unselected",
             selectedImage: "ic_account_selected"
         )
-
+        
         // Assign view controllers to the tab bar
         self.viewControllers = [
             firstNavController,
@@ -50,11 +50,11 @@ class TabbarViewController: UITabBarController, UITabBarControllerDelegate {
             fourthNavController,
             fifthNavController
         ]
-
+        
         // Add customizations to the tab bar
         self.addTopBorderToTabBar()
     }
-
+    
     // Create a UINavigationController with proper configuration
     private func createNavController(viewController: UIViewController, title: String, unselectedImage: String, selectedImage: String) -> UINavigationController {
         let navController = UINavigationController(rootViewController: viewController)
@@ -65,7 +65,7 @@ class TabbarViewController: UITabBarController, UITabBarControllerDelegate {
         )
         return navController
     }
-
+    
     // UITabBarControllerDelegate method to handle tab selection behavior
     func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
         // Handle special case for the second tab (index 1)
@@ -86,12 +86,15 @@ class TabbarViewController: UITabBarController, UITabBarControllerDelegate {
                 if index == 2 {
                     let isComplete =  appDelegate.userDetails?.phone?.trim().isEmpty ?? true
                     if isComplete == true{
-                        UIAlertController().alertViewWithTitleAndMessage(self, message: "Please complete your profile to chat with other users.") { [weak self] in
+                        UIAlertController().alertViewWithTitleAndMessage(self, message: "Please complete your profile to sell your cloth's.") { [weak self] in
                             guard self != nil else {return}
-                            let viewController = MobileNumberVC.instantiate(fromStoryboard: .Auth)
-                            viewController.hidesBottomBarWhenPushed = true
-                            self?.pushViewController(vc: viewController)
+                            if let currentNav = tabBarController.selectedViewController as? UINavigationController {
+                                let viewController = MobileNumberVC.instantiate(fromStoryboard: .Auth)
+                                viewController.hidesBottomBarWhenPushed = true
+                                currentNav.pushViewController(viewController, animated: true)
+                            }
                         }
+                        return false
                     }else {
                         if let navController = viewController as? UINavigationController {
                             // Always pop to the root view controller
@@ -104,7 +107,6 @@ class TabbarViewController: UITabBarController, UITabBarControllerDelegate {
         return true // Allow tab selection
     }
 
-
     // Add a top border to the tab bar
     private func addTopBorderToTabBar() {
         let topBorder = CALayer()
@@ -112,7 +114,7 @@ class TabbarViewController: UITabBarController, UITabBarControllerDelegate {
         topBorder.backgroundColor = UIColor(named: "App_Light_Border_Color")?.cgColor
         tabBar.layer.addSublayer(topBorder)
     }
-
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         // Customize tab bar appearance
