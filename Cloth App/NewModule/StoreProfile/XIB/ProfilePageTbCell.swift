@@ -214,7 +214,7 @@ extension ProfilePageTbCell: UICollectionViewDelegate, UICollectionViewDataSourc
         }
         
         cell.imgPost.setImageFast(with: self.otherUserDetailsData?.cover_image ?? "")
-        cell.imgPost.contentMode = .scaleAspectFill
+        cell.imgPost.contentMode = .scaleToFill
         return cell
     }
     
