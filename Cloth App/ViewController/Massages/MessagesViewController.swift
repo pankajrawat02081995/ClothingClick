@@ -294,7 +294,9 @@ class MessagesViewController: BaseViewController {
         let object = self.messageDetails
         
         let urlString = object?.getHeaderDeatils()?.user_profile_picture?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
-        self.imgUser.setImageFast(with: urlString)
+//        self.imgUser.setImageFast(with: urlString)
+        self.imgUser.setProfileImage(from: urlString, placeholderName: object?.getHeaderDeatils()?.username ?? "")
+
         
         if let userName = object?.getHeaderDeatils()?.username {
             self.lblUserName.text = userName.capitalized

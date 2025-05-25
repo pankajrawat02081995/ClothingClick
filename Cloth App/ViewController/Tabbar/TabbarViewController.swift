@@ -84,9 +84,19 @@ class TabbarViewController: UITabBarController, UITabBarControllerDelegate {
             } else {
                 // Additional logic for specific tabs
                 if index == 2 {
-                    if let navController = viewController as? UINavigationController {
-                        // Always pop to the root view controller
-                        navController.popToRootViewController(animated: false)
+                    let isComplete =  appDelegate.userDetails?.phone?.trim().isEmpty ?? true
+                    if isComplete == true{
+                        UIAlertController().alertViewWithTitleAndMessage(self, message: "Please complete your profile to chat with other users.") { [weak self] in
+                            guard self != nil else {return}
+                            let viewController = MobileNumberVC.instantiate(fromStoryboard: .Auth)
+                            viewController.hidesBottomBarWhenPushed = true
+                            self?.pushViewController(vc: viewController)
+                        }
+                    }else {
+                        if let navController = viewController as? UINavigationController {
+                            // Always pop to the root view controller
+                            navController.popToRootViewController(animated: false)
+                        }
                     }
                 }
             }
