@@ -309,6 +309,9 @@
 		32E8F7E52C04F68B009560FC /* CommonUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32E8F7E42C04F68B009560FC /* CommonUtility.swift */; };
 		32E969E52C142BA00015948A /* ReviewXIB.xib in Resources */ = {isa = PBXBuildFile; fileRef = 32E969E42C142BA00015948A /* ReviewXIB.xib */; };
 		32E969E62C142BA00015948A /* ReviewXIB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32E969E32C142BA00015948A /* ReviewXIB.swift */; };
+		32EDEFC12DE343140078E0DE /* StoreRateViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32EDEFBE2DE343140078E0DE /* StoreRateViewModel.swift */; };
+		32EDEFC22DE343140078E0DE /* StoreRatingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32EDEFBF2DE343140078E0DE /* StoreRatingViewModel.swift */; };
+		32EDEFC52DE343680078E0DE /* StoreRatingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32EDEFC32DE343680078E0DE /* StoreRatingModel.swift */; };
 		32F78ABD2D0EDA35009D2ACC /* ReportXIB.xib in Resources */ = {isa = PBXBuildFile; fileRef = 32F78ABC2D0EDA35009D2ACC /* ReportXIB.xib */; };
 		32F78ABE2D0EDA35009D2ACC /* ReportXIB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32F78ABB2D0EDA35009D2ACC /* ReportXIB.swift */; };
 		32FFC5062C04D9760088EB9E /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32FFC5052C04D9760088EB9E /* String.swift */; };
@@ -647,6 +650,9 @@
 		32E8F7E42C04F68B009560FC /* CommonUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonUtility.swift; sourceTree = "<group>"; };
 		32E969E32C142BA00015948A /* ReviewXIB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewXIB.swift; sourceTree = "<group>"; };
 		32E969E42C142BA00015948A /* ReviewXIB.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ReviewXIB.xib; sourceTree = "<group>"; };
+		32EDEFBE2DE343140078E0DE /* StoreRateViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreRateViewModel.swift; sourceTree = "<group>"; };
+		32EDEFBF2DE343140078E0DE /* StoreRatingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreRatingViewModel.swift; sourceTree = "<group>"; };
+		32EDEFC32DE343680078E0DE /* StoreRatingModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreRatingModel.swift; sourceTree = "<group>"; };
 		32F78ABB2D0EDA35009D2ACC /* ReportXIB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportXIB.swift; sourceTree = "<group>"; };
 		32F78ABC2D0EDA35009D2ACC /* ReportXIB.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ReportXIB.xib; sourceTree = "<group>"; };
 		32FFC5052C04D9760088EB9E /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
@@ -1413,6 +1419,8 @@
 		3218FEDC2DBE8AD600B7D569 /* StoreRatingList */ = {
 			isa = PBXGroup;
 			children = (
+				32EDEFC42DE343680078E0DE /* Model */,
+				32EDEFC02DE343140078E0DE /* ViewModel */,
 				3218FEDD2DBE8AE600B7D569 /* View */,
 			);
 			path = StoreRatingList;
@@ -2494,6 +2502,23 @@
 			path = XIB;
 			sourceTree = "<group>";
 		};
+		32EDEFC02DE343140078E0DE /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				32EDEFBE2DE343140078E0DE /* StoreRateViewModel.swift */,
+				32EDEFBF2DE343140078E0DE /* StoreRatingViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		32EDEFC42DE343680078E0DE /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				32EDEFC32DE343680078E0DE /* StoreRatingModel.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		747FB9D800D5857E49D8A5AD /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -2741,9 +2766,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Cloth App/Pods-Cloth App-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Cloth App/Pods-Cloth App-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -2758,9 +2787,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Cloth App/Pods-Cloth App-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Cloth App/Pods-Cloth App-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -2903,6 +2936,8 @@
 				32CD78952DD1C1590061A855 /* CountryPickerWithSectionViewController.swift in Sources */,
 				32CD78962DD1C1590061A855 /* CountryPickerController.swift in Sources */,
 				32CD78972DD1C1590061A855 /* KNPercentLabel.m in Sources */,
+				32EDEFC12DE343140078E0DE /* StoreRateViewModel.swift in Sources */,
+				32EDEFC22DE343140078E0DE /* StoreRatingViewModel.swift in Sources */,
 				32CD78982DD1C1590061A855 /* CustomTextField.swift in Sources */,
 				327BD9552C4591C600E04895 /* StyleXIB.swift in Sources */,
 				B2EBEB732D2D08FF00DC3046 /* NewRatingViewController.swift in Sources */,
@@ -2926,6 +2961,7 @@
 				32FFC5062C04D9760088EB9E /* String.swift in Sources */,
 				32A851502CED00050089215C /* EmailAndCall.swift in Sources */,
 				327BD9502C45910300E04895 /* StyleVC.swift in Sources */,
+				32EDEFC52DE343680078E0DE /* StoreRatingModel.swift in Sources */,
 				184556A72694218D00DB4E8D /* MessageDetailsModel.swift in Sources */,
 				18468E1B2660BD49007344DA /* CongratulationsViewController.swift in Sources */,
 				18468E132660BD49007344DA /* PostItemViewController.swift in Sources */,
