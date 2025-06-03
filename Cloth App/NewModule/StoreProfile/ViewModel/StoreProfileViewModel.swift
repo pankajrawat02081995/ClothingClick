@@ -145,6 +145,11 @@ class StoreProfileViewModel{
                             }else{
                                 self.posts += data.posts ?? []
                             }
+                            
+                            //MARK: only for now
+                            if self.tabId == "2"{
+                                self.posts.removeAll()
+                            }
                             self.view?.tableView.reloadData()
                         }
                     }

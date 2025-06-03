@@ -790,7 +790,10 @@ extension PostDetailsVC{
                 alert.setAlertButtonColor()
                 
                 let hideAction = UIAlertAction(title: kOk, style: .default) { _ in
-                    self.tabBarController?.selectedIndex = 4
+                    let homeViewController = TabbarViewController.instantiate(fromStoryboard: .Main)
+                    homeViewController.selectedIndex = 4
+                    homeViewController.hidesBottomBarWhenPushed = true
+                    self.navigationController?.setViewControllers([homeViewController], animated: true)
                 }
                 alert.addAction(hideAction)
                 self.present(alert, animated: true)

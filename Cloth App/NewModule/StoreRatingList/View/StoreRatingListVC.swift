@@ -8,7 +8,7 @@
 import UIKit
 import IBAnimatable
 
-class StoreRatingListVC: UIViewController {
+class StoreRatingListVC: BaseViewController {
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var lblStoreName: UILabel!
@@ -47,10 +47,42 @@ class StoreRatingListVC: UIViewController {
     }
     
     @IBAction func leaveOnPress(_ sender: UIButton) {
+        if appDelegate.userDetails == nil {
+            self.showLogIn()
+            return
+        }
         let viewController = StoreRateVC.instantiate(fromStoryboard: .Store)
         viewController.otherUserDetailsData = self.otherUserDetailsData
         self.pushViewController(vc: viewController)
     }
+    
+    
+    @objc func imageTapped(sender: UITapGestureRecognizer) {
+        guard let imageView = sender.view as? UIImageView else { return }
+        let index = imageView.tag
+
+        guard
+            let review = viewModel?.reviews[index],
+            let imageUrl = review.photo?.first?.image,
+            !imageUrl.isEmpty
+        else {
+            return
+        }
+
+        let imageData = ImagesVideoModel(JSON: [
+            "type": "Image",
+            "image": imageUrl
+        ])
+
+        guard let imageModel = imageData else { return }
+
+        let viewController = PhotosViewController.instantiate(fromStoryboard: .Main)
+        viewController.imagesList = [imageModel]
+        viewController.visibleIndex = 0 // Only one image shown, so 0 is safe
+
+        self.navigationController?.present(viewController, animated: true, completion: nil)
+    }
+
     
 }
 
@@ -64,6 +96,7 @@ extension StoreRatingListVC:UITableViewDelegate,UITableViewDataSource{
         let object = self.viewModel?.reviews[indexPath.row]
         cell.lblDesc.text = object?.review ?? ""
         cell.rateView.rating = Double(object?.rating ?? 0)
+        cell.rateView.isUserInteractionEnabled = false
         cell.lblTitle.text = object?.review_by_name ?? ""
         
         let date = self.convertWebStringToDate(strDate: object?.created_at ?? "").toLocalTime()
@@ -71,34 +104,12 @@ extension StoreRatingListVC:UITableViewDelegate,UITableViewDataSource{
         cell.lblTime.text = Date().offset(from: date)
         cell.imgProduct.setImageFast(with: object?.photo?.first?.image ?? "")
         cell.imgProduct.contentMode = .scaleAspectFill
-        return cell
-    }
-    
-    func convertWebStringToDate(strDate: String) -> Date {
-        let dateString = strDate.replace("T", replacement: " ")
-        var format: String = ""
-        if(dateString.count == 27 ){
-            format = "yyyy-MM-dd HH:mm:ss.SSSSSS'Z'"
-        }
-        if(dateString.count == 26 ){
-            format = "yyyy-MM-dd HH:mm:ss.SSSSSS"
-        }
-        if(dateString.count == 19 ){
-            format = "yyyy-MM-dd HH:mm:ss"
-        }
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = format
-        dateFormatter.timeZone = NSTimeZone.local
         
-        if dateString.isEmpty {
-            return Date()
-        }
-        else {
-            if let date = dateFormatter.date(from: dateString) {
-                return date
-            }
-            return Date()
-        }
+        cell.imgProduct.tag = indexPath.row
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(imageTapped))
+        cell.imgProduct.isUserInteractionEnabled = true
+        cell.imgProduct.addGestureRecognizer(tapGesture)
+        return cell
     }
  
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {

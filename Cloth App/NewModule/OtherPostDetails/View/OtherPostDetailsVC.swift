@@ -248,24 +248,33 @@ class OtherPostDetailsVC: BaseViewController {
     }
     
     @IBAction func mapOnPress(_ sender: UIButton) {
-        if appDelegate.userDetails == nil {
+        guard let userDetails = appDelegate.userDetails else {
             self.showLogIn()
             return
         }
-        let lat = self.postDetails?.locations?.first?.latitude ?? ""
         
-        let log = self.postDetails?.locations?.first?.longitude ?? ""
-        // let address = self.postDetails?.locations?[0].address
-        // let postal_code = self.postDetails?.locations?[0].postal_code
+        guard
+            let locations = postDetails?.locations,
+            let firstLocation = locations.first,
+            let latStr = firstLocation.latitude,
+            let logStr = firstLocation.longitude,
+            let lat = Double(latStr),
+            let log = Double(logStr)
+        else {
+            // Optionally, show an alert or silently return if location info is missing
+            return
+        }
+
         let viewController = FindLocation.instantiate(fromStoryboard: .Main)
-        viewController.addresslist = self.postDetails!.locations!
-        viewController.lat = (lat as NSString).doubleValue
-        viewController.log = (log as NSString).doubleValue
-        viewController.usertype = self.postDetails?.user_type ?? 0
-        // viewController.adddressArea =  "\(address ?? "") \(postal_code ?? "")"
+        viewController.addresslist = locations
+        viewController.lat = lat
+        viewController.log = log
+        viewController.usertype = postDetails?.user_type ?? 0
         viewController.hidesBottomBarWhenPushed = true
+        
         self.pushViewController(vc: viewController)
     }
+
 }
 
 
@@ -432,20 +441,26 @@ extension OtherPostDetailsVC {
     }
     
     @objc func labelTapped() {
-        let lat = self.postDetails?.locations?.first?.latitude ?? ""
+        guard
+            let locations = postDetails?.locations,
+            let firstLocation = locations.first,
+            let latStr = firstLocation.latitude,
+            let logStr = firstLocation.longitude,
+            let lat = Double(latStr),
+            let log = Double(logStr)
+        else {
+            // Optionally, show an alert or silently return if location info is missing
+            return
+        }
         
-        let log = self.postDetails?.locations?.first?.longitude ?? ""
-        // let address = self.postDetails?.locations?[0].address
-        // let postal_code = self.postDetails?.locations?[0].postal_code
         let viewController = FindLocation.instantiate(fromStoryboard: .Main)
-        viewController.addresslist = self.postDetails!.locations!
-        viewController.lat = (lat as NSString).doubleValue
-        viewController.log = (log as NSString).doubleValue
-        viewController.usertype = self.postDetails?.user_type ?? 0
-        // viewController.adddressArea =  "\(address ?? "") \(postal_code ?? "")"
+        viewController.addresslist = locations
+        viewController.lat = lat
+        viewController.log = log
+        viewController.usertype = postDetails?.user_type ?? 0
         viewController.hidesBottomBarWhenPushed = true
-        self.pushViewController(vc: viewController)
-    }
+        
+        self.pushViewController(vc: viewController)    }
     
     func callPostDetails(postId : String) {
         if appDelegate.reachable.connection != .none {
@@ -558,7 +573,7 @@ extension OtherPostDetailsVC {
                                 self.btnChetAndByNow.setImage(UIImage(named: "ic_white_chat"), for: .normal)
                                 let isDeal = UserDefaults.standard.value(forKey: "isDeal") as? Bool ?? false
                                 
-                                if isDeal == true{
+                                if isDeal == true || self.postDetails?.user_id == appDelegate.userDetails?.id {
                                     self.dealPopup.isHidden = true
                                 }else{
                                     self.lblDealPopupTitle.text = "Ready to make a deal?"
