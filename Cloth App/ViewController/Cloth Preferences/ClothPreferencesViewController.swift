@@ -33,6 +33,7 @@ class ClothPreferencesViewController: BaseViewController {
     var selectedIndexPath = [IndexPath]()
     
     var isUserLogin = defaults.value(forKey: kLoginUserList)
+    var selectedID = [String]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -80,6 +81,9 @@ class ClothPreferencesViewController: BaseViewController {
             
             categoryList[i] = updatedOuterModel
         }
+        
+        selectedID = userSizes.map { String($0) }
+        self.tblClothsPref.reloadData()
     }
     
     override func viewDidLayoutSubviews() {
@@ -126,11 +130,11 @@ class ClothPreferencesViewController: BaseViewController {
                 if let genserId = self.mysizeList[self.selectGengerIndex == -1 ? 1 : self.selectGengerIndex]?.gender_id{
                     let sizeAreeString = self.saveSize.joined(separator: ",")
                     let brandAreeString = self.saveBrand.joined(separator: ",")
-                    FilterSingleton.share.filter.sizes = self.saveSize.joined(separator: ",")
+                    FilterSingleton.share.filter.sizes = self.selectedID.joined(separator: ",")
                     print(sizeAreeString)
                     print(brandAreeString)
                 }
-                if self.saveSize.isEmpty == false{
+                if self.selectedID.isEmpty == false{
                     self.navigateToHomeScreen()
                 }
             }
@@ -157,9 +161,9 @@ class ClothPreferencesViewController: BaseViewController {
             print(self.saveSize)
             
             if let genserId = self.mysizeList[self.selectGengerIndex == -1 ? 1 : self.selectGengerIndex]?.gender_id{
-                let sizeAreeString = self.saveSize.joined(separator: ",")
+                let sizeAreeString = self.selectedID.joined(separator: ",")
                 let brandAreeString = self.saveBrand.joined(separator: ",")
-                FilterSingleton.share.filter.sizes = self.saveSize.joined(separator: ",")
+                FilterSingleton.share.filter.sizes = self.selectedID.joined(separator: ",")
                 self.callSaveSizeList(size: sizeAreeString , brand: brandAreeString, genderId: String(genserId))
                 print(sizeAreeString)
                 print(brandAreeString)
@@ -222,122 +226,104 @@ extension ClothPreferencesViewController : UITableViewDataSource, UITableViewDel
 extension ClothPreferencesViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        //        if collectionView == self.CVSelectedBrand {
-        //            return self.brandSearchList.count
-        //        }
-        //        else
-        if collectionView == self.CVGender {
-            return self.mysizeList.count
-        }
-        else{
-            return self.categoryList[collectionView.tag]?.sizes?.count ?? 0
+        if collectionView == CVGender {
+            return mysizeList.count
+        } else {
+            return categoryList[collectionView.tag]?.sizes?.count ?? 0
         }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ClothPrefCVCell", for: indexPath) as! ClothPrefCVCell
         
-        // Gender Collection View
         if collectionView == CVGender {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ClothPrefCVCell", for: indexPath) as! ClothPrefCVCell
-            
-            guard let gender = mysizeList[indexPath.item]?.gender_name else {
-                cell.lblTitle.text = "N/A" // Fallback text
-                return cell
-            }
-            
-            cell.lblTitle.text = gender
+            let genderName = mysizeList[indexPath.item]?.gender_name ?? "N/A"
+            cell.lblTitle.text = genderName
             
             let isSelected = (selectGengerIndex == indexPath.item) && (mysizeList.count > 1)
             cell.bottomView.backgroundColor = isSelected ? .customBlack : .customBorderColor
+        } else {
+            guard
+                let sizes = categoryList[collectionView.tag]?.sizes,
+                indexPath.item < sizes.count
+            else {
+                cell.lblTitle.text = "N/A"
+                return cell
+            }
             
-            return cell
+            let sizeData = sizes[indexPath.item]
+            cell.lblTitle.text = sizeData.name ?? "N/A"
+            let isSelected = self.selectedID.contains("\(sizeData.id ?? 0)")//sizeData.isSelect ?? false
+            cell.bgView.backgroundColor = isSelected ? .black : .white
+            cell.lblTitle.textColor = isSelected ? .white : .black
         }
-        
-        // Default Collection View (Category List)
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ClothPrefCVCell", for: indexPath) as! ClothPrefCVCell
-        
-        guard let sizes = categoryList[collectionView.tag]?.sizes,
-              indexPath.item < sizes.count,
-              let sizeData = sizes[indexPath.item].name else {
-            cell.lblTitle.text = "N/A" // Fallback text
-            return cell
-        }
-        
-        let isSelected = sizes[indexPath.item].isSelect
-        cell.lblTitle.text = sizeData
-        cell.bgView.backgroundColor = isSelected ?? false ? .black : .white
-        cell.lblTitle.textColor = isSelected ?? false ? .white : .black
         
         return cell
     }
     
-    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if collectionView == self.CVGender {
-            if self.mysizeList.count > 1{
-                self.selectGengerIndex = indexPath.item
-                self.categoryList.removeAll()
-                for j in 0..<(self.mysizeList[indexPath.item]?.categories?.count ?? 0) {
-                    if self.mysizeList[indexPath.item]?.categories?[j].sizes?.count != 0 {
-                        self.categoryList.append(self.mysizeList[indexPath.item]?.categories?[j])
-                    }
+        if collectionView == CVGender {
+            guard mysizeList.count > 1 else { return }
+            
+            selectGengerIndex = indexPath.item
+            categoryList.removeAll()
+            
+            if let categories = mysizeList[indexPath.item]?.categories {
+                for category in categories where (category.sizes?.isEmpty == false) {
+                    categoryList.append(category)
                 }
-                self.setSelectedSizeDate()
-                self.CVGender.reloadData()
-                self.CVGender.layoutIfNeeded()
-                self.constHeightForCVGender.constant = self.CVGender.contentSize.height
-                self.tblClothsPref.reloadData()
-                self.tblClothsPref.layoutIfNeeded()
-                self.constHeightForTblClothsPref.constant = self.tblClothsPref.contentSize.height
-            }
-        }
-        else {
-            for i in 0..<self.categoryList.count {
-                var outerModel = self.categoryList[i]
-                for j in 0..<(outerModel?.sizes!.count)! {
-                    var innerModel = outerModel?.sizes![j]
-                    if i == collectionView.tag {
-                        if j == indexPath.item {
-                            if innerModel?.isSelect == true{
-                                innerModel?.isSelect = false
-                            }
-                            else{
-                                innerModel?.isSelect = true
-                            }
-                        }
-                        else{
-                        }
-                        outerModel?.sizes![j] = innerModel!
-                    }
-                }
-                self.categoryList[i] = outerModel
-            }
-            // Check if any 'isSelect' is true in the entire categoryList
-            let isAnySelected = self.categoryList.contains { outerModel in
-                outerModel?.sizes?.contains { $0.isSelect == true } == true
             }
             
-            // Use the result of isAnySelected
-            if isAnySelected {
-                print("At least one item is selected.")
-                self.btnNext.backgroundColor = UIColor.customBlack
-                self.btnNext.isUserInteractionEnabled = true
-            } else {
-                print("No items are selected.")
-                self.btnNext.backgroundColor = UIColor.customButton_bg_gray
-                self.btnNext.isUserInteractionEnabled = false
+            setSelectedSizeDate()
+            
+            CVGender.reloadData()
+            CVGender.layoutIfNeeded()
+            constHeightForCVGender.constant = CVGender.contentSize.height
+            
+            tblClothsPref.reloadData()
+            tblClothsPref.layoutIfNeeded()
+            constHeightForTblClothsPref.constant = tblClothsPref.contentSize.height
+            
+        } else {
+            for i in 0..<categoryList.count {
+                guard var outerModel = categoryList[i], var sizes = outerModel.sizes else { continue }
+                
+                if i == collectionView.tag {
+                    if indexPath.item < sizes.count {
+                        if sizes[indexPath.item].isSelect == true{
+                            sizes[indexPath.item].isSelect = false
+                            let index = selectedID.firstIndex(of: "\(sizes[indexPath.item].id ?? 0)") ?? 0
+                            selectedID.remove(at: index)
+                        }
+                        else{
+                            selectedID.append("\(sizes[indexPath.item].id ?? 0)")
+                            sizes[indexPath.item].isSelect = true
+                        }
+                    }
+                    outerModel.sizes = sizes
+                    categoryList[i] = outerModel
+                }
             }
-            self.tblClothsPref.reloadData()
-            self.tblClothsPref.layoutIfNeeded()
-            self.constHeightForTblClothsPref.constant = self.tblClothsPref.contentSize.height
+            
+            
+            let isAnySelected = categoryList.contains {
+                $0?.sizes?.contains(where: { $0.isSelect == true }) == true
+            }
+            
+            btnNext.backgroundColor = isAnySelected ? .customBlack : .customButton_bg_gray
+            btnNext.isUserInteractionEnabled = isAnySelected
+            
+            tblClothsPref.reloadData()
+            tblClothsPref.layoutIfNeeded()
+            constHeightForTblClothsPref.constant = tblClothsPref.contentSize.height
         }
-        
     }
-    
     
     @objc func btnRemoveBrand_clicked(_ sender: AnyObject) {
+        // Implementation here
     }
 }
+
 
 extension ClothPreferencesViewController: UICollectionViewDelegateFlowLayout {
     fileprivate var sectionInsets: UIEdgeInsets {
@@ -563,7 +549,11 @@ extension ClothPreferencesViewController {
                         appDelegate.selectGenderId = genderId == "2" ? "1" : "0"
                         FilterSingleton.share.filter.sizes = size
                         self.saveUserDetails(userDetails: userDetails)
-                        self.navigateToHomeScreen()
+                        if self.isUserLogin == nil{
+                            self.navigateToHomeScreen()
+                        }else{
+                            self.navigationController?.popViewController(animated: true)
+                        }
                     }
                 }
                 else {

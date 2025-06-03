@@ -132,10 +132,7 @@ class StoreProfileVC: BaseViewController {
     }
     
     @objc func rateOnPress(sender:UIButton){
-        if appDelegate.userDetails == nil {
-            self.showLogIn()
-            return
-        }
+        
         let viewController = StoreRatingListVC.instantiate(fromStoryboard: .Store)
         viewController.userId = "\(self.viewModel.userID ?? "")"
         viewController.otherUserDetailsData = self.viewModel.otherUserDetailsData

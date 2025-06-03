@@ -86,7 +86,7 @@ class TabbarViewController: UITabBarController, UITabBarControllerDelegate {
                 if index == 2 {
                     let isComplete =  appDelegate.userDetails?.phone?.trim().isEmpty ?? true
                     if isComplete == true{
-                        UIAlertController().alertViewWithTitleAndMessage(self, message: "Please complete your profile to sell your cloth's.") { [weak self] in
+                        UIAlertController().alertViewWithTitleAndMessage(self, message: "Please complete your profile to sell your Clothes.") { [weak self] in
                             guard self != nil else {return}
                             if let currentNav = tabBarController.selectedViewController as? UINavigationController {
                                 let viewController = MobileNumberVC.instantiate(fromStoryboard: .Auth)

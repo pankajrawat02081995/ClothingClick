@@ -146,7 +146,7 @@ extension StoreRateVC {
     
     func presentCropper(with image: UIImage) {
         let cropVC = TOCropViewController(croppingStyle: .default, image: image)
-        cropVC.aspectRatioPreset = .preset4x3
+        cropVC.aspectRatioPreset = .presetSquare
         cropVC.aspectRatioLockEnabled = true
         cropVC.delegate = self
         self.present(cropVC, animated: true)

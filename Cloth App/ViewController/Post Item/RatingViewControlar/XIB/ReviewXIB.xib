@@ -35,7 +35,7 @@
                                 </constraints>
                             </view>
                             <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dg9-p6-494" customClass="FloatRatingView" customModule="Clothing_Click" customModuleProvider="target">
-                                <rect key="frame" x="20" y="14" width="132" height="30"/>
+                                <rect key="frame" x="0.0" y="14" width="132" height="30"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="J9S-nY-fGP"/>
@@ -53,25 +53,25 @@
                                 </userDefinedRuntimeAttributes>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Abram Rosser" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="t3w-FN-gbG">
-                                <rect key="frame" x="20" y="54" width="106" height="20"/>
+                                <rect key="frame" x="0.0" y="54" width="106" height="20"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="16"/>
                                 <color key="textColor" name="Black_Theme_Color"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Item description • Punctuality • Pricing • Communication " textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="b8D-1g-glZ">
-                                <rect key="frame" x="20" y="78" width="425" height="16.333333333333329"/>
+                                <rect key="frame" x="0.0" y="78" width="455" height="16.333333333333329"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="14"/>
                                 <color key="textColor" name="Chat_Read_Msg"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="2 days ago" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PZ0-nw-Y3g">
-                                <rect key="frame" x="20" y="128" width="69" height="20"/>
+                                <rect key="frame" x="0.0" y="128" width="69" height="20"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="14"/>
                                 <color key="textColor" name="Black_Theme_Color"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="DGz-cn-u05" customClass="AnimatableImageView" customModule="IBAnimatable">
-                                <rect key="frame" x="391" y="14" width="54" height="54"/>
+                                <rect key="frame" x="411" y="14" width="54" height="54"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="54" id="JTs-RT-5ic"/>
                                     <constraint firstAttribute="width" constant="54" id="dcE-JW-Oe7"/>
@@ -88,16 +88,16 @@
                         </subviews>
                         <color key="backgroundColor" name="App_White_Color"/>
                         <constraints>
-                            <constraint firstItem="t3w-FN-gbG" firstAttribute="leading" secondItem="KIa-yr-spK" secondAttribute="leading" constant="20" id="05d-aS-8fw"/>
-                            <constraint firstItem="dg9-p6-494" firstAttribute="leading" secondItem="KIa-yr-spK" secondAttribute="leading" constant="20" id="3Dh-IT-4Hf"/>
-                            <constraint firstAttribute="trailing" secondItem="DGz-cn-u05" secondAttribute="trailing" constant="20" id="6Yn-L6-Dhu"/>
-                            <constraint firstAttribute="trailing" secondItem="b8D-1g-glZ" secondAttribute="trailing" constant="20" id="6iu-I9-g2N"/>
+                            <constraint firstItem="t3w-FN-gbG" firstAttribute="leading" secondItem="KIa-yr-spK" secondAttribute="leading" id="05d-aS-8fw"/>
+                            <constraint firstItem="dg9-p6-494" firstAttribute="leading" secondItem="KIa-yr-spK" secondAttribute="leading" id="3Dh-IT-4Hf"/>
+                            <constraint firstAttribute="trailing" secondItem="DGz-cn-u05" secondAttribute="trailing" id="6Yn-L6-Dhu"/>
+                            <constraint firstAttribute="trailing" secondItem="b8D-1g-glZ" secondAttribute="trailing" constant="10" id="6iu-I9-g2N"/>
                             <constraint firstItem="dg9-p6-494" firstAttribute="top" secondItem="KIa-yr-spK" secondAttribute="top" constant="14" id="BFk-ly-IpW"/>
                             <constraint firstItem="PZ0-nw-Y3g" firstAttribute="top" secondItem="b8D-1g-glZ" secondAttribute="bottom" constant="10" id="Dmv-ZE-nDV"/>
                             <constraint firstItem="DGz-cn-u05" firstAttribute="top" secondItem="KIa-yr-spK" secondAttribute="top" constant="14" id="G9c-0d-0kw"/>
-                            <constraint firstItem="PZ0-nw-Y3g" firstAttribute="leading" secondItem="KIa-yr-spK" secondAttribute="leading" constant="20" id="PRH-Es-9ON"/>
+                            <constraint firstItem="PZ0-nw-Y3g" firstAttribute="leading" secondItem="KIa-yr-spK" secondAttribute="leading" id="PRH-Es-9ON"/>
                             <constraint firstItem="cz2-pJ-aWY" firstAttribute="top" secondItem="PZ0-nw-Y3g" secondAttribute="bottom" constant="20" id="RmT-Hm-bgj"/>
-                            <constraint firstItem="b8D-1g-glZ" firstAttribute="leading" secondItem="KIa-yr-spK" secondAttribute="leading" constant="20" id="XJR-De-Vrb"/>
+                            <constraint firstItem="b8D-1g-glZ" firstAttribute="leading" secondItem="KIa-yr-spK" secondAttribute="leading" id="XJR-De-Vrb"/>
                             <constraint firstItem="cz2-pJ-aWY" firstAttribute="leading" secondItem="KIa-yr-spK" secondAttribute="leading" id="bSI-Ig-jzk"/>
                             <constraint firstAttribute="trailing" secondItem="cz2-pJ-aWY" secondAttribute="trailing" id="dnn-wN-cl3"/>
                             <constraint firstItem="b8D-1g-glZ" firstAttribute="top" secondItem="t3w-FN-gbG" secondAttribute="bottom" constant="4" id="mig-D4-Lji"/>

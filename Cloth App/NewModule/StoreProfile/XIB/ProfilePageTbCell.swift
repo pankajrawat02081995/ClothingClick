@@ -47,6 +47,9 @@ class ProfilePageTbCell: UITableViewCell {
         collectionView.register(UINib(nibName: "PostImageXIB", bundle: nil), forCellWithReuseIdentifier: "PostImageXIB")
         
     }
+    
+    
+    
     func updateOpenCloseLabel(timings: [String: [String: String]], label: UILabel) {
         let formatter = DateFormatter()
         formatter.dateFormat = "EEEE"
@@ -164,7 +167,7 @@ class ProfilePageTbCell: UITableViewCell {
         }
         
         if let ratingCount = self.otherUserDetailsData?.avg_rating{
-            self.lblRate.text = "\(Double(ratingCount)) (\(self.otherUserDetailsData?.total_reviews ?? 0) Reviews)"
+            self.lblRate.text = "\(round(Double(ratingCount))) (\(self.otherUserDetailsData?.total_reviews ?? 0) Reviews)"
         }
 //        if let contact = self.otherUserDetailsData?.phone{
 //            self.viewContact.isHidden = false

@@ -70,10 +70,7 @@ class UserViewController: BaseViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        FilterSingleton.share.selectedFilter = FiltersSelectedData()
-        FilterSingleton.share.filter = Filters()
-        
+                
         self.lblNoData.isHidden = true
         self.scrollView.setContentOffset(.zero, animated: true)
         NotificationCenter.default.addObserver(self, selector: #selector(self.refresh(_:)), name: NSNotification.Name(rawValue: "refresh"), object: nil)
@@ -84,6 +81,8 @@ class UserViewController: BaseViewController {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(false, animated: animated)
         self.navigationController?.navigationBar.isHidden = true
+        FilterSingleton.share.selectedFilter = FiltersSelectedData()
+        FilterSingleton.share.filter = Filters()
         self.getUserDetails()
     }
     
