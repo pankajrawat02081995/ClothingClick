@@ -93,57 +93,67 @@ extension NewCategoryDetailsVC:UITableViewDelegate,UITableViewDataSource{
         }else{
             cell.imgCheck.image = UIImage(named: "ic_circle_uncheck")
         }
-
+        
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let id = self.subCategoryList[indexPath.row]?.id ?? 0
-        if FilterSingleton.share.filter.slectedCategories?.components(separatedBy: ",").contains("\(id)") == true{
-            let index = FilterSingleton.share.filter.slectedCategories?.components(separatedBy: ",").firstIndex(of: "\(id)") ?? 0
+        if indexPath.row == 0{
+            FilterSingleton.share.filter.slectedCategories = self.subCategoryList.map{"\($0?.id ?? 0)"}.filter { !$0.trimmingCharacters(in: .whitespaces).isEmpty }.joined(separator: ",")
+        }else{
+            
             var data = FilterSingleton.share.filter.slectedCategories?.components(separatedBy: ",")
-            data?.remove(at: index)
-            FilterSingleton.share.filter.slectedCategories = data?.filter { !$0.trimmingCharacters(in: .whitespaces).isEmpty }.joined(separator: ",").trimmingCharacters(in: .whitespacesAndNewlines)
-        }else{
-            var category = FilterSingleton.share.filter.slectedCategories?.components(separatedBy: ",")
-            category?.append("\(id)")
-            FilterSingleton.share.filter.slectedCategories = category?.filter { !$0.trimmingCharacters(in: .whitespaces).isEmpty }.joined(separator: ",")
-        }
-        
-        let ids = self.subCategoryList.map{"\($0?.id ?? 0)"}
-        let array = FilterSingleton.share.filter.slectedCategories?.components(separatedBy: ",")
-        let filterArray = array?.filter { (ids.contains($0)) == true }
-        
-        if filterArray?.isEmpty == false{
-            var category = FilterSingleton.share.selectedFilter.categories?.components(separatedBy: ",")
-            if !(category?.contains(self.headertitle) ?? true) == true{
-                category?.append(self.headertitle)
+            if let index = data?.firstIndex(where: { $0 == "\(self.subCategoryList.first??.id ?? 0)" }) {
+                data?.remove(at: index)
+                FilterSingleton.share.filter.slectedCategories = data?.filter { !$0.trimmingCharacters(in: .whitespaces).isEmpty }.joined(separator: ",").trimmingCharacters(in: .whitespacesAndNewlines)
             }
-            FilterSingleton.share.selectedFilter.categories = category?.filter { !$0.trimmingCharacters(in: .whitespaces).isEmpty }.joined(separator: ",")
-            
-            var catID = FilterSingleton.share.filter.categories?.components(separatedBy: ",")
-            if !(catID?.contains(self.catID ?? "") ?? true) == true{
-                catID?.append(self.catID ?? "")
+            if FilterSingleton.share.filter.slectedCategories?.components(separatedBy: ",").contains("\(id)") == true{
+                let index = FilterSingleton.share.filter.slectedCategories?.components(separatedBy: ",").firstIndex(of: "\(id)") ?? 0
+                var data = FilterSingleton.share.filter.slectedCategories?.components(separatedBy: ",")
+                data?.remove(at: index)
+                FilterSingleton.share.filter.slectedCategories = data?.filter { !$0.trimmingCharacters(in: .whitespaces).isEmpty }.joined(separator: ",").trimmingCharacters(in: .whitespacesAndNewlines)
+            }else{
+                var category = FilterSingleton.share.filter.slectedCategories?.components(separatedBy: ",")
+                category?.append("\(id)")
+                FilterSingleton.share.filter.slectedCategories = category?.filter { !$0.trimmingCharacters(in: .whitespaces).isEmpty }.joined(separator: ",")
             }
-            FilterSingleton.share.filter.categories = catID?.filter { !$0.trimmingCharacters(in: .whitespaces).isEmpty }.joined(separator: ",")
             
-        }else{
-            let index = FilterSingleton.share.filter.categories?.components(separatedBy: ",").firstIndex(of: self.catID ?? "") ?? 0
-            var data = FilterSingleton.share.filter.categories?.components(separatedBy: ",")
-            data?.remove(at: index)
-            FilterSingleton.share.filter.categories = data?.filter { !$0.trimmingCharacters(in: .whitespaces).isEmpty }.joined(separator: ",").trimmingCharacters(in: .whitespacesAndNewlines)
+            let ids = self.subCategoryList.map{"\($0?.id ?? 0)"}
+            let array = FilterSingleton.share.filter.slectedCategories?.components(separatedBy: ",")
+            let filterArray = array?.filter { (ids.contains($0)) == true }
             
-            let index1 = FilterSingleton.share.selectedFilter.categories?.components(separatedBy: ",").firstIndex(of: self.catID ?? "") ?? 0
-            var data1 = FilterSingleton.share.selectedFilter.categories?.components(separatedBy: ",")
-            data1?.remove(at: index)
-            FilterSingleton.share.selectedFilter.categories = data1?.filter { !$0.trimmingCharacters(in: .whitespaces).isEmpty }.joined(separator: ",").trimmingCharacters(in: .whitespacesAndNewlines)
-
+            if filterArray?.isEmpty == false{
+                var category = FilterSingleton.share.selectedFilter.categories?.components(separatedBy: ",")
+                if !(category?.contains(self.headertitle) ?? true) == true{
+                    category?.append(self.headertitle)
+                }
+                FilterSingleton.share.selectedFilter.categories = category?.filter { !$0.trimmingCharacters(in: .whitespaces).isEmpty }.joined(separator: ",")
+                
+                var catID = FilterSingleton.share.filter.categories?.components(separatedBy: ",")
+                if !(catID?.contains(self.catID ?? "") ?? true) == true{
+                    catID?.append(self.catID ?? "")
+                }
+                FilterSingleton.share.filter.categories = catID?.filter { !$0.trimmingCharacters(in: .whitespaces).isEmpty }.joined(separator: ",")
+                
+            }else{
+                let index = FilterSingleton.share.filter.categories?.components(separatedBy: ",").firstIndex(of: self.catID ?? "") ?? 0
+                var data = FilterSingleton.share.filter.categories?.components(separatedBy: ",")
+                data?.remove(at: index)
+                FilterSingleton.share.filter.categories = data?.filter { !$0.trimmingCharacters(in: .whitespaces).isEmpty }.joined(separator: ",").trimmingCharacters(in: .whitespacesAndNewlines)
+                
+                let index1 = FilterSingleton.share.selectedFilter.categories?.components(separatedBy: ",").firstIndex(of: self.catID ?? "") ?? 0
+                var data1 = FilterSingleton.share.selectedFilter.categories?.components(separatedBy: ",")
+                data1?.remove(at: index)
+                FilterSingleton.share.selectedFilter.categories = data1?.filter { !$0.trimmingCharacters(in: .whitespaces).isEmpty }.joined(separator: ",").trimmingCharacters(in: .whitespacesAndNewlines)
+                
+            }
         }
-        
         self.tableView.reloadData()
         if self.isSaveSearch ?? false == false && self.isFilterProduct ?? false == false{
             self.callViewCount()
         }
+        
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
