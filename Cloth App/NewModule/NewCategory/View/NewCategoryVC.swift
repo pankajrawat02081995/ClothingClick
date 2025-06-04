@@ -47,6 +47,8 @@ class NewCategoryVC: UIViewController {
     @IBAction func clearAllOnPress(_ sender: UIButton) {
         FilterSingleton.share.filter.categories = ""
         FilterSingleton.share.selectedFilter.categories = ""
+        FilterSingleton.share.filter.slectedCategories?.removeAll()
+        
         self.tableView.reloadData()
         if self.isFilterProduct == false{
             self.callViewCount()
