@@ -400,7 +400,7 @@ class AddProductViewController: BaseViewController {
         myPickerController.delegate = self
         myPickerController.sourceType = .camera
         myPickerController.mediaTypes = [kUTTypeMovie as String]
-        myPickerController.allowsEditing = true
+        myPickerController.allowsEditing = false
         self.present(myPickerController, animated: true, completion: nil)
     }
     
@@ -408,7 +408,7 @@ class AddProductViewController: BaseViewController {
         let myPickerController = UIImagePickerController()
         myPickerController .delegate = self
         myPickerController.sourceType = .photoLibrary
-        myPickerController.allowsEditing = true
+        myPickerController.allowsEditing = false
         myPickerController.modalPresentationStyle = .overCurrentContext
         myPickerController.mediaTypes = [kUTTypeMovie as String]
         myPickerController.addStatusBarBackgroundView()

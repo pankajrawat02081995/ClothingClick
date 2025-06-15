@@ -107,9 +107,10 @@ extension StoreRateVC {
             guard let self = self else { return }
             
             var config = YPImagePickerConfiguration()
+
             config.library.mediaType = .photo
             config.library.maxNumberOfItems = 1
-            config.library.defaultMultipleSelection = true
+            config.library.defaultMultipleSelection = false // ✅ KEY LINE
             config.library.skipSelectionsGallery = true
             config.wordings.libraryTitle = "Gallery"
             config.wordings.cameraTitle = "Camera"
@@ -118,8 +119,10 @@ extension StoreRateVC {
             config.showsPhotoFilters = false
             config.startOnScreen = .library
             config.screens = [.library, .photo]
-            
+            config.library.preselectedItems = [] // ✅ Safe, but not needed once auto-selection is off
+
             let picker = YPImagePicker(configuration: config)
+
             
             picker.didFinishPicking { [weak self, weak picker] items, cancelled in
                 guard let self = self, let picker = picker else { return }

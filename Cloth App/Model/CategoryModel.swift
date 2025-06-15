@@ -77,7 +77,7 @@ struct ChildCategories : Mappable,Equatable {
 
     mutating func mapping(map: Map) {
 
-        id <- map["id"]
+        id <- map["category_id"]
         mainid <- map["id"]
         name <- map["name"]
         parent_id <- map["parent_id"]

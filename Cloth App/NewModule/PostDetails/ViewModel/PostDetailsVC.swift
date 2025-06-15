@@ -295,6 +295,7 @@ class PostDetailsVC: BaseViewController {
             config.library.maxNumberOfItems = remainingSlots
             config.library.mediaType = .photo
             config.library.defaultMultipleSelection = true
+            config.library.preSelectItemOnMultipleSelection = false
             config.library.skipSelectionsGallery = true
             config.wordings.libraryTitle = "Gallery"
             config.wordings.cameraTitle = "Camera"

@@ -11,6 +11,7 @@ import AVFoundation
 import AVKit
 class OtherPostDetailsVC: BaseViewController {
     
+    @IBOutlet weak var sizeViewContainer: UIView!
     @IBOutlet weak var lblStyle: UILabel!
     @IBOutlet weak var lblDealPopupSubtile: UILabel!
     @IBOutlet weak var lblDealPopupTitle: UILabel!
@@ -353,6 +354,9 @@ extension OtherPostDetailsVC {
         //        }
         if let gender = self.postDetails?.gender_name,let size  = self.postDetails?.sizes?.first?.name {
             self.lblSize.text = "\(gender == "Menswear" ? "Men" : "Women")'s \(size)"
+            self.sizeViewContainer.isHidden = false
+        }else{
+            self.sizeViewContainer.isHidden = true
         }
         //        if let color = self.postDetails?.colors {
         //            self.imgProductColor.isHidden = true

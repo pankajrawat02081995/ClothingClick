@@ -86,7 +86,7 @@ class FavouriteBrandSearchViewController: BaseViewController {
         let myPickerController = UIImagePickerController()
         myPickerController.delegate = self
         myPickerController.sourceType = .camera
-        myPickerController.allowsEditing = true
+        myPickerController.allowsEditing = false
         self.present(myPickerController, animated: true, completion: nil)
     }
     

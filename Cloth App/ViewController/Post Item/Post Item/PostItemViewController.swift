@@ -12,6 +12,7 @@ import AlignedCollectionViewFlowLayout
 
 class PostItemViewController: BaseViewController {
     
+    @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var btnDelete: UIButton!
     @IBOutlet weak var btnBack: UIButton!
 //    @IBOutlet weak var lblTitle: UILabel!
@@ -133,6 +134,9 @@ class PostItemViewController: BaseViewController {
             ViewController.hidesBottomBarWhenPushed = true
             ViewController.edit = self.edit
             ViewController.postDetails = self.postDetails
+            if self.saveCategoriseId?.name?.lowercased() == "accessories"{
+                ViewController.isAccessories = true
+            }
             self.navigationController?.pushViewController(ViewController, animated: true)
         }
     }
@@ -352,7 +356,7 @@ extension PostItemViewController: UICollectionViewDelegate, UICollectionViewData
             if let subcategory = objet?.name {
                 cell.lblTitle.text = subcategory
             }
-            if self.saveSubCategoryId?.id == objet?.id {
+            if self.saveSubCategoryId?.id == objet?.id &&  self.saveSubCategoryId?.id != nil{
                 cell.bgView.backgroundColor = .customBlack
                 cell.lblTitle.textColor = .customWhite
             }else{
@@ -412,6 +416,17 @@ extension PostItemViewController: UICollectionViewDelegate, UICollectionViewData
             self.saveCategoriseId = objet
             self.nextButtonHideShow()
             
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                let bottomInset = self.scrollView.contentInset.bottom
+                let scrollViewHeight = self.scrollView.bounds.height
+                let contentHeight = self.scrollView.contentSize.height
+
+                let maxOffsetY = contentHeight - scrollViewHeight + bottomInset
+                let safeOffsetY = max(0, maxOffsetY)
+
+                self.scrollView.setContentOffset(CGPoint(x: 0, y: safeOffsetY), animated: true)
+            }
+
         }
         if collectionView.tag == 2 {
             self.selectSubCategoryIndex = indexPath.item
