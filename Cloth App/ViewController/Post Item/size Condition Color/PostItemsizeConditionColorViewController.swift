@@ -50,6 +50,7 @@ class PostItemsizeConditionColorViewController: BaseViewController {
     
     var colorCoutn = 1
     var i = 1
+    var isAccessories : Bool?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -180,6 +181,10 @@ class PostItemsizeConditionColorViewController: BaseViewController {
             }
         }
         }
+        
+        if self.isAccessories ?? false == true{
+            self.lblSizeTitle.text = ""
+        }
     }
     
     override func viewDidLayoutSubviews() {
@@ -305,7 +310,7 @@ class PostItemsizeConditionColorViewController: BaseViewController {
             }
         }else{
         print(self.selectColor)
-        if self.selectSize == nil && self.condictionColorLise?.size?.count != 0{
+        if self.selectSize == nil && self.condictionColorLise?.size?.count != 0 && (isAccessories == false || isAccessories == nil){
             UIAlertController().alertViewWithTitleAndMessage(self, message: "Please select size")
         }
         else
@@ -346,7 +351,7 @@ class PostItemsizeConditionColorViewController: BaseViewController {
 extension PostItemsizeConditionColorViewController : UICollectionViewDelegate,UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView == self.CVSize {
-            return self.condictionColorLise?.size!.count ?? 0
+            return isAccessories ?? false ? 0 : self.condictionColorLise?.size!.count ?? 0
         }
         else{
             return self.condictionColorLise?.conditions!.count ?? 0
@@ -461,7 +466,7 @@ extension PostItemsizeConditionColorViewController : UITableViewDelegate,UITable
                 UIAlertController().alertViewWithTitleAndMessage(self, message: "Please select any two color")
             }
         }
-        if self.selectSize != nil && self.selectConditionIndex != -1 && self.colorCoutn != 1{
+        if ((self.selectSize != nil && self.isAccessories == nil) || (self.selectSize == nil && self.isAccessories == true)) && self.selectConditionIndex != -1 && self.colorCoutn != 1{
             self.btnNext.backgroundColor = .customBlack
         }else{
             self.btnNext.backgroundColor = .customButton_bg_gray

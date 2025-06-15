@@ -208,6 +208,7 @@ class MessagesViewController: BaseViewController {
         config.showsVideoTrimmer = true
         config.showsPhotoFilters = false
         config.startOnScreen = YPPickerScreen.library
+        config.library.defaultMultipleSelection = false
         config.video.compression = AVAssetExportPresetHighestQuality
         config.video.fileType = .mov
         config.video.recordingTimeLimit = 30.0
@@ -261,7 +262,7 @@ class MessagesViewController: BaseViewController {
         let myPickerController = UIImagePickerController()
         myPickerController.delegate = self
         myPickerController.sourceType = .camera
-        myPickerController.allowsEditing = true
+        myPickerController.allowsEditing = false
         self.present(myPickerController, animated: true, completion: nil)
     }
     
