@@ -1034,7 +1034,7 @@ extension AddProductViewController {
         }
         else {
             categorySubCategoryId.append(String(self.selectCategory?.category_id ?? 0))
-            categorySubCategoryId.append(String(self.selectSubcategory?.id ?? 0))
+            categorySubCategoryId.append(String(self.selectSubcategory?.category_id ?? 0))
         }
         let category = String(categorySubCategoryId.joined(separator: ","))
         let colorIdString = colorArre.joined(separator: ",")
@@ -1180,7 +1180,7 @@ extension AddProductViewController {
         }
         else {
             categorySubCategoryId.append(String(self.selectCategory?.category_id ?? 0))
-            categorySubCategoryId.append(String(self.selectSubcategory?.id ?? 0))
+            categorySubCategoryId.append(String(self.selectSubcategory?.category_id ?? 0))
         }
         let category = String(categorySubCategoryId.joined(separator: ","))
         let colorIdString = colorArre.joined(separator: ",")

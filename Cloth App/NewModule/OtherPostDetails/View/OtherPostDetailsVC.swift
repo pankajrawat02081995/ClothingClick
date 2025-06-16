@@ -587,7 +587,7 @@ extension OtherPostDetailsVC {
                                 }
                             }
                             
-                            self.lblStyle.text = "\(self.postDetails?.style_name ?? "")"
+                            self.lblStyle.text = "\(self.postDetails?.categories?.last?.name ?? "")"
                             self.pageControlle.numberOfPages = self.postImageVideo.count
                             self.pageControlle.currentPage = 0
                             self.pageControlle.hidesForSinglePage = true

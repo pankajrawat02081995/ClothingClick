@@ -452,10 +452,10 @@ class PostDetailsVC: BaseViewController {
     
     @IBAction func btnPost_Clicked(_ button: UIButton) {
         
-//        if self.txtBrandDesignerName.text?.trim().count == 0 {
-//            UIAlertController().alertViewWithTitleAndMessage(self, message: "Please select brand name")
-//            return
-//        }
+        //        if self.txtBrandDesignerName.text?.trim().count == 0 {
+        //            UIAlertController().alertViewWithTitleAndMessage(self, message: "Please select brand name")
+        //            return
+        //        }
         if self.productImage.count == 0 {
             UIAlertController().alertViewWithTitleAndMessage(self, message: "Please take a product photo")
             return
@@ -523,7 +523,7 @@ extension PostDetailsVC{
         let param =  ["image_id":self.productImage[index]["id"] as? Int ?? 0,"post_id":self.postDetails?.id ?? 0]
         
         if appDelegate.reachable.connection != .unavailable {
-            APIManager().apiCall(of: FaqModel.self, isShowHud: true, URL: BASE_URL, apiName: APINAME.REMOVE_IMAGE.rawValue, method: .get, parameters: param) { (response, error) in
+            APIManager().apiCall(of: FaqModel.self, isShowHud: true, URL: BASE_URL, apiName: APINAME.REMOVE_IMAGE.rawValue, method: .post, parameters: param) { (response, error) in
                 if error == nil {
                     if let response = response {
                         UIAlertController().alertViewWithTitleAndMessage(self, message: response.message ?? ""){
@@ -688,7 +688,7 @@ extension PostDetailsVC{
             if self.edit {
                 categoryIDs = self.categorysAndSubCategory.compactMap { $0.category_id }.map(String.init).joined(separator: ",")
             } else {
-                categoryIDs = [self.selectCategory?.category_id, self.selectSubcategory?.id]
+                categoryIDs = [self.selectCategory?.category_id, self.selectSubcategory?.category_id]
                     .compactMap { $0 }
                     .map(String.init)
                     .joined(separator: ",")
@@ -820,7 +820,7 @@ extension PostDetailsVC{
                 categorySubCategoryId = self.categorysAndSubCategory.compactMap { String($0.category_id ?? 0) }
             } else {
                 categorySubCategoryId.append(String(self.selectCategory?.category_id ?? 0))
-                categorySubCategoryId.append(String(self.selectSubcategory?.id ?? 0))
+                categorySubCategoryId.append(String(self.selectSubcategory?.category_id ?? 0))
             }
             
             let category = categorySubCategoryId.joined(separator: ",")
@@ -989,7 +989,7 @@ extension PostDetailsVC: UICollectionViewDelegate,UICollectionViewDataSource {
             } else {
                 let item = self.productImage[indexPath.item]
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PostItemXIB", for: indexPath) as! PostItemXIB
-
+                
                 // ✅ Only show label if this is the first image in the data model
                 DispatchQueue.main.async {
                     if indexPath.item == 0 {
@@ -998,20 +998,20 @@ extension PostDetailsVC: UICollectionViewDelegate,UICollectionViewDataSource {
                         cell.lblCoverPhoto.isHidden = true
                     }
                 }
-
-
+                
+                
                 cell.btnDelete.tag = indexPath.item
                 cell.btnDelete.addTarget(self, action: #selector(btnRemoveImage_Clicked(sender:)), for: .touchUpInside)
-
+                
                 if item["isLocal"] as? Bool == true {
                     cell.imgProduct.image = item["image_url"] as? UIImage
                 } else {
                     cell.imgProduct.setImageFast(with: item["image_url"] as? String ?? "")
                 }
-
+                
                 return cell
             }
-
+            
         }
     }
     
@@ -1031,46 +1031,46 @@ extension PostDetailsVC: UICollectionViewDelegate,UICollectionViewDataSource {
     }
     
     @objc func btnRemoveImage_Clicked(sender: UIButton) {
-        let buttonPosition = sender.convert(CGPoint.zero, to: self.CVAddProductImage)
+        let buttonPosition = sender.convert(CGPoint.zero, to: CVAddProductImage)
         
-        guard sender.tag < self.productImage.count, let indexPath = self.CVAddProductImage.indexPathForItem(at: buttonPosition) else { return }
+        guard let indexPath = CVAddProductImage.indexPathForItem(at: buttonPosition),
+              indexPath.item < productImage.count else { return }
         
-        let item = self.productImage[sender.tag]
-        let msg: String
-        //
-        //        switch item {
-        //        case .photo:
-        msg = "Are you sure you want to remove image?"
-        //        case .video:
-        //            msg = "Are you sure you want to remove video?"
-        //        }
+        let msg = "Are you sure you want to remove image?"
         
         let alert = UIAlertController(title: AlertViewTitle, message: msg, preferredStyle: .alert)
         alert.setAlertButtonColor()
         
         let yesAction = UIAlertAction(title: "Remove", style: .default) { [weak self] _ in
             guard let self = self else { return }
-            if sender.tag < self.productImage.count {
-                if self.productImage[sender.tag]["isLocal"] as? Bool ?? false == false{
-                    self.removeImage(index: sender.tag)
-                }else{
-                    self.productImage.remove(at: sender.tag)
-                }
+            
+            let item = self.productImage[indexPath.item]
+            
+            if let isLocal = item["isLocal"] as? Bool, !isLocal {
+                self.removeImage(index: indexPath.item)
+            } else {
+                self.productImage.remove(at: indexPath.item)
             }
             
             self.btnAddImage.isHidden = !self.productImage.isEmpty
             self.CVAddProductImage.isHidden = self.productImage.isEmpty
             self.CVAddProductImage.reloadData()
-            self.viewDidLayoutSubviews()
+            
+            // Optional: If using height constraint
+            DispatchQueue.main.async {
+                self.CVAddProductImage.layoutIfNeeded()
+                self.collectionViewHeight.constant = self.CVAddProductImage.collectionViewLayout.collectionViewContentSize.height
+            }
         }
         
-        let noAction = UIAlertAction(title: "Cancel", style: .default)
+        let noAction = UIAlertAction(title: "Cancel", style: .cancel)
         
         alert.addAction(noAction)
         alert.addAction(yesAction)
         
-        self.present(alert, animated: true)
+        present(alert, animated: true)
     }
+    
     
 }
 
@@ -1287,38 +1287,48 @@ extension PostDetailsVC{
 }
 
 extension PostDetailsVC: UICollectionViewDragDelegate, UICollectionViewDropDelegate {
-
+    
     // MARK: - UICollectionViewDragDelegate
-
+    
     func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
         let imageDict = productImage[indexPath.item]
-        guard let imageUrl = imageDict["image_url"] as? String else { return [] }
-
-        let itemProvider = NSItemProvider(object: imageUrl as NSString)
-        let dragItem = UIDragItem(itemProvider: itemProvider)
-        dragItem.localObject = imageDict
-        return [dragItem]
+        
+        if let isLocal = imageDict["isLocal"] as? Bool, isLocal,
+           let image = imageDict["image_url"] as? UIImage {
+            let provider = NSItemProvider(object: image)
+            let item = UIDragItem(itemProvider: provider)
+            item.localObject = imageDict
+            return [item]
+        } else if let url = imageDict["image_url"] as? String {
+            let provider = NSItemProvider(object: url as NSString)
+            let item = UIDragItem(itemProvider: provider)
+            item.localObject = imageDict
+            return [item]
+        }
+        
+        return []
     }
-
+    
+    
     // MARK: - UICollectionViewDropDelegate
-
+    
     func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {
         // Use the default value if destinationIndexPath is nil
         let destinationIndexPath = coordinator.destinationIndexPath ?? IndexPath(item: productImage.count - 1, section: 0)
-
+        
         for item in coordinator.items {
             if let sourceIndexPath = item.sourceIndexPath {
                 var toIndex = destinationIndexPath.item
-
+                
                 // Prevent index out of bounds
                 toIndex = min(toIndex, productImage.count - 1)
-
+                
                 // If dropping at the same index, no-op
                 if sourceIndexPath.item == toIndex {
                     coordinator.drop(item.dragItem, toItemAt: destinationIndexPath)
                     return
                 }
-
+                
                 // Move the item in the data source and update collection view
                 collectionView.performBatchUpdates({
                     let movedItem = productImage.remove(at: sourceIndexPath.item)
@@ -1330,44 +1340,44 @@ extension PostDetailsVC: UICollectionViewDragDelegate, UICollectionViewDropDeleg
                         collectionView.reloadData()
                     }
                 })
-
+                
                 coordinator.drop(item.dragItem, toItemAt: IndexPath(item: toIndex, section: 0))
             }
         }
     }
-
-
+    
+    
     // MARK: - Helper Method to Calculate Items to Reload
-
+    
     private func getIndexesToReload(from sourceIndex: Int, to toIndex: Int) -> [IndexPath] {
         let maxIndex = productImage.count - 1
         var indexesToReload = [0, sourceIndex, toIndex].filter { $0 <= maxIndex }
         return indexesToReload.map { IndexPath(item: $0, section: 0) }
     }
-
+    
     func collectionView(_ collectionView: UICollectionView, dragSessionWillBegin session: UIDragSession) {
         // Optionally hide or adjust the item when drag starts
         if let indexPath = session.items.first?.localObject as? IndexPath {
             collectionView.cellForItem(at: indexPath)?.alpha = 0.0  // Hide the cell temporarily
         }
     }
-
+    
     func collectionView(_ collectionView: UICollectionView, dragSessionDidEnd session: UIDragSession) {
         // Optionally show the item again when drag ends
         if let indexPath = session.items.first?.localObject as? IndexPath {
             collectionView.cellForItem(at: indexPath)?.alpha = 1.0  // Show the cell again
         }
     }
-
-
+    
+    
     // MARK: - UICollectionViewDropDelegate: Can Handle Drop
-
+    
     func collectionView(_ collectionView: UICollectionView, canHandle session: UIDropSession) -> Bool {
         return session.canLoadObjects(ofClass: NSString.self) || session.canLoadObjects(ofClass: UIImage.self)
     }
-
+    
     // MARK: - UICollectionViewDropDelegate: Handle Drop Feedback
-
+    
     func collectionView(_ collectionView: UICollectionView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
         return UICollectionViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
     }
@@ -1382,7 +1392,7 @@ extension UIImage {
         var compressionQuality: CGFloat = 1.0
         
         // Resize image to target size (maintains aspect ratio)
-        let resizedImage = self.resizeImage(targetSize: targetSize)
+        let resizedImage = resizeImage(self, targetSize: targetSize)
         
         // Compress using Image I/O
         guard let imageData = resizedImage.jpegData(compressionQuality: compressionQuality) else { return nil }
@@ -1400,19 +1410,27 @@ extension UIImage {
     }
     
     /// Resize an image while maintaining aspect ratio
-    func resizeImage(targetSize: CGSize) -> UIImage {
-        let widthRatio  = targetSize.width  / size.width
-        let heightRatio = targetSize.height / size.height
-        let scaleFactor = min(widthRatio, heightRatio)  // Maintain aspect ratio
-        
-        let newSize = CGSize(width: size.width * scaleFactor, height: size.height * scaleFactor)
-        let format = UIGraphicsImageRendererFormat()
-        format.scale = 1
-        
-        return UIGraphicsImageRenderer(size: newSize, format: format).image { _ in
-            draw(in: CGRect(origin: .zero, size: newSize))
+    //    func resizeImage(targetSize: CGSize) -> UIImage {
+    //        let widthRatio  = targetSize.width  / size.width
+    //        let heightRatio = targetSize.height / size.height
+    //        let scaleFactor = min(widthRatio, heightRatio)  // Maintain aspect ratio
+    //
+    //        let newSize = CGSize(width: size.width * scaleFactor, height: size.height * scaleFactor)
+    //        let format = UIGraphicsImageRendererFormat()
+    //        format.scale = 1
+    //
+    //        return UIGraphicsImageRenderer(size: newSize, format: format).image { _ in
+    //            draw(in: CGRect(origin: .zero, size: newSize))
+    //        }
+    //    }
+    
+    func resizeImage(_ image: UIImage, targetSize: CGSize) -> UIImage {
+        let renderer = UIGraphicsImageRenderer(size: targetSize)
+        return renderer.image { _ in
+            image.draw(in: CGRect(origin: .zero, size: targetSize))
         }
     }
+    
 }
 
 func dictionaryToJsonString(_ dict: [String: Any]) -> String? {
@@ -1422,14 +1440,25 @@ func dictionaryToJsonString(_ dict: [String: Any]) -> String? {
     return String(data: jsonData, encoding: .utf8)
 }
 
-extension PostDetailsVC:TOCropViewControllerDelegate{
+extension PostDetailsVC: TOCropViewControllerDelegate {
+    
     // MARK: - Crop Flow
     func presentNextCropper() {
         guard currentImageIndex < selectedImagesToCrop.count else {
-            self.productImage += croppedImages
-            self.btnAddImage.isHidden = true
-            self.CVAddProductImage.isHidden = false
-            self.CVAddProductImage.reloadData()
+            // All images cropped – update data and UI
+            DispatchQueue.main.async {
+                self.productImage += self.croppedImages
+                self.btnAddImage.isHidden = true
+                self.CVAddProductImage.isHidden = false
+                
+                self.CVAddProductImage.reloadData()
+                self.CVAddProductImage.layoutIfNeeded()
+                self.collectionViewHeight.constant = self.CVAddProductImage.collectionViewLayout.collectionViewContentSize.height
+                
+                if self.productImage.count > 1 {
+                    self.CVAddProductImage.dragInteractionEnabled = true
+                }
+            }
             return
         }
         
@@ -1441,8 +1470,11 @@ extension PostDetailsVC:TOCropViewControllerDelegate{
         self.present(cropVC, animated: true)
     }
     
+    
     func cropViewController(_ cropViewController: TOCropViewController, didCropTo image: UIImage, with cropRect: CGRect, angle: Int) {
+        // Append without triggering UI changes yet
         self.croppedImages.append(["image_url": image, "isLocal": true])
+        
         cropViewController.dismiss(animated: true) {
             self.currentImageIndex += 1
             self.presentNextCropper()

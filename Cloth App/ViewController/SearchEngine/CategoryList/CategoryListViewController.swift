@@ -406,7 +406,7 @@ extension CategoryListViewController : CategoryselectionDelegate {
         //        self.selectSubCategoryId.removeAll()
         for i in 0..<self.selectSubcategory.count {
             self.categoryselectData.append(self.selectSubcategory[i]?.name ?? "")
-            self.selectSubCategoryId.append(String(self.selectSubcategory[i]?.id ?? 0))
+            self.selectSubCategoryId.append(String(self.selectSubcategory[i]?.category_id ?? 0))
             self.selectSubCategoryName.append(self.selectSubcategory[i]?.name ?? "")
         }
         self.selectSubCategoryId = self.selectSubCategoryId.removeDuplicates()
@@ -436,7 +436,7 @@ extension CategoryListViewController {
                                             if let id = self.categoryList[j]?.category_id{
                                                 if appDelegate.selectSubCategoryId.contains("\(id)") {
                                                     for suubcategory in 0..<(self.categoryList[j]?.childCategories?.count ?? 0){
-                                                        if let ids = self.self.categoryList[j]?.childCategories?[suubcategory].id{
+                                                        if let ids = self.self.categoryList[j]?.childCategories?[suubcategory].category_id{
                                                             if appDelegate.selectSubCategoryId.contains("\(ids)") {
                                                                 print(appDelegate.selectSubCategoryId.contains("\(ids)"))
                                                                 self.categoryList[j]?.childCategories?[suubcategory].isSelect = true
@@ -466,7 +466,7 @@ extension CategoryListViewController {
                                                 if let id = self.categoryList[j]?.category_id{
                                                     if self.selectSubCategoryId.contains("\(id)") {
                                                         for suubcategory in 0..<(self.categoryList[j]?.childCategories?.count ?? 0){
-                                                            if let ids = self.self.categoryList[j]?.childCategories?[suubcategory].id{
+                                                            if let ids = self.self.categoryList[j]?.childCategories?[suubcategory].category_id{
                                                                 if self.selectSubCategoryId.contains("\(ids)") {
                                                                     
                                                                     self.categoryList[j]?.childCategories?[suubcategory].isSelect = true
@@ -493,7 +493,7 @@ extension CategoryListViewController {
                                                 if let id = self.categoryList[j]?.category_id{
                                                     if self.selectSubCategoryId.contains("\(id)") {
                                                         for suubcategory in 0..<(self.categoryList[j]?.childCategories?.count ?? 0){
-                                                            if let ids = self.self.categoryList[j]?.childCategories?[suubcategory].id{
+                                                            if let ids = self.self.categoryList[j]?.childCategories?[suubcategory].category_id{
                                                                 if self.selectSubCategoryId.contains("\(ids)") {
                                                                     
                                                                     self.categoryList[j]?.childCategories?[suubcategory].isSelect = true

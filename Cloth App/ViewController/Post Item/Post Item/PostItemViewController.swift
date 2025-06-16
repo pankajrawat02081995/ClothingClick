@@ -356,7 +356,7 @@ extension PostItemViewController: UICollectionViewDelegate, UICollectionViewData
             if let subcategory = objet?.name {
                 cell.lblTitle.text = subcategory
             }
-            if self.saveSubCategoryId?.id == objet?.id &&  self.saveSubCategoryId?.id != nil{
+            if self.saveSubCategoryId?.category_id == objet?.category_id &&  self.saveSubCategoryId?.category_id != nil{
                 cell.bgView.backgroundColor = .customBlack
                 cell.lblTitle.textColor = .customWhite
             }else{
@@ -412,7 +412,7 @@ extension PostItemViewController: UICollectionViewDelegate, UICollectionViewData
             self.subCategoryList.removeAll()
             let objet = self.categoryList[indexPath.item]
             self.selectCategoryIndex = indexPath.item
-            self.subCategoryList = objet?.childCategories ?? []
+            self.subCategoryList = objet?.childCategories?.filter{!($0.name?.lowercased().contains("all") ?? false)} ?? []
             self.saveCategoriseId = objet
             self.nextButtonHideShow()
             
@@ -528,11 +528,11 @@ extension PostItemViewController {
                                     self.subCategoryList.removeAll()
                                     let objet = self.categoryList[index]
                                     self.selectCategoryIndex = index
-                                    self.subCategoryList = objet?.childCategories as! [ChildCategories?]
+                                    self.subCategoryList = objet?.childCategories?.filter{!($0.name?.lowercased().contains("all") ?? false)} ?? [] as! [ChildCategories?]
                                     self.saveCategoriseId = objet
                                 }
                                 
-                                if let index = self.subCategoryList.firstIndex(where: { $0?.id == self.postDetails?.categories?.last?.id ?? 0  }) {
+                                if let index = self.subCategoryList.firstIndex(where: { $0?.category_id == self.postDetails?.categories?.last?.id ?? 0  }) {
                                     
                                     self.selectSubCategoryIndex = index
                                     let objet = self.subCategoryList[index]
