@@ -2452,8 +2452,8 @@ USA, t6j 1m3</string>
                                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="54A-6y-pHD">
                                                                 <rect key="frame" x="258.66666666666669" y="0.0" width="72.333333333333314" height="79.666666666666671"/>
                                                                 <subviews>
-                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Style" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WPC-oJ-MhV">
-                                                                        <rect key="frame" x="0.0" y="0.0" width="32.333333333333336" height="17"/>
+                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Category" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WPC-oJ-MhV">
+                                                                        <rect key="frame" x="0.0" y="0.0" width="72.333333333333329" height="17"/>
                                                                         <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="14"/>
                                                                         <color key="textColor" red="0.56078431370000004" green="0.56078431370000004" blue="0.56078431370000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                         <nil key="highlightedColor"/>
@@ -2468,6 +2468,7 @@ USA, t6j 1m3</string>
                                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                                 <constraints>
                                                                     <constraint firstItem="kXs-6T-Xnw" firstAttribute="leading" secondItem="WPC-oJ-MhV" secondAttribute="leading" id="25A-FK-VnY"/>
+                                                                    <constraint firstAttribute="trailing" secondItem="WPC-oJ-MhV" secondAttribute="trailing" id="PMn-0P-uqf"/>
                                                                     <constraint firstItem="WPC-oJ-MhV" firstAttribute="top" secondItem="54A-6y-pHD" secondAttribute="top" id="QuW-If-LGV"/>
                                                                     <constraint firstAttribute="trailing" secondItem="kXs-6T-Xnw" secondAttribute="trailing" id="YHX-HA-iMY"/>
                                                                     <constraint firstItem="WPC-oJ-MhV" firstAttribute="leading" secondItem="54A-6y-pHD" secondAttribute="leading" id="svv-Pz-9ln"/>

@@ -118,7 +118,7 @@ extension NewCategoryVC:UITableViewDelegate,UITableViewDataSource{
             viewController.headertitle = self.categoryList[indexPath.row]?.name ?? ""
             viewController.catID = "\(self.categoryList[indexPath.row]?.category_id ?? 0)"
             debugPrint(self.categoryList[indexPath.row]?.childCategories?.first?.mainid ?? "")
-            debugPrint(self.categoryList[indexPath.row]?.childCategories?.first?.id ?? 0)
+            debugPrint(self.categoryList[indexPath.row]?.childCategories?.first?.category_id ?? 0)
             viewController.isFilterProduct = self.isFilterProduct
             viewController.subCategoryList = self.categoryList[indexPath.row]?.childCategories ?? []
             viewController.isSaveSearch = self.isSaveSearch

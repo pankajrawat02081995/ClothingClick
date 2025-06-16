@@ -20,8 +20,9 @@ class NewCategoryDetailsVC: UIViewController {
     var isFilterProduct : Bool?
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         self.lbltitle.text = self.headertitle
+        debugPrint(self.subCategoryList)
         self.setupTableView()
     }
     
@@ -41,7 +42,7 @@ class NewCategoryDetailsVC: UIViewController {
     }
     
     @IBAction func clearAllOnPress(_ sender: UIButton) {
-        let ids = self.subCategoryList.map{"\($0?.id ?? 0)"}
+        let ids = self.subCategoryList.map{"\($0?.category_id ?? 0)"}
         let array = FilterSingleton.share.filter.slectedCategories?.components(separatedBy: ",").filter { !$0.trimmingCharacters(in: .whitespaces).isEmpty }
         let filterArray = array?.filter { !(ids.contains($0)) == true }
         FilterSingleton.share.filter.slectedCategories = filterArray?.filter { !$0.trimmingCharacters(in: .whitespaces).isEmpty }.joined(separator: ",").trimmingCharacters(in: .whitespacesAndNewlines)
@@ -68,14 +69,14 @@ class NewCategoryDetailsVC: UIViewController {
             self.pushViewController(vc: viewController)
         }
     }
-  
+    
     func setupTableView(){
         self.tableView.delegate = self
         self.tableView.dataSource = self
         self.tableView.tableFooterView = UIView()
         self.tableView.register(UINib(nibName: "NewCatXIB", bundle: nil), forCellReuseIdentifier: "NewCatXIB")
     }
-
+    
 }
 
 extension NewCategoryDetailsVC:UITableViewDelegate,UITableViewDataSource{
@@ -88,7 +89,7 @@ extension NewCategoryDetailsVC:UITableViewDelegate,UITableViewDataSource{
         let cell = tableView.dequeueReusableCell(withIdentifier: "NewCatXIB", for: indexPath) as! NewCatXIB
         let indexData = self.subCategoryList[indexPath.row]
         cell.lblTitle.text = indexData?.name ?? ""
-        if FilterSingleton.share.filter.slectedCategories?.components(separatedBy: ",").contains("\(indexData?.id ?? 0)") == true{
+        if FilterSingleton.share.filter.slectedCategories?.components(separatedBy: ",").contains("\(indexData?.category_id ?? 0)") == true{
             cell.imgCheck.image = UIImage(named: "ic_circle_check")
         }else{
             cell.imgCheck.image = UIImage(named: "ic_circle_uncheck")
@@ -98,13 +99,14 @@ extension NewCategoryDetailsVC:UITableViewDelegate,UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let id = self.subCategoryList[indexPath.row]?.id ?? 0
+        let id = self.subCategoryList[indexPath.row]?.category_id ?? 0
+        
         if indexPath.row == 0{
-            FilterSingleton.share.filter.slectedCategories = self.subCategoryList.map{"\($0?.id ?? 0)"}.filter { !$0.trimmingCharacters(in: .whitespaces).isEmpty }.joined(separator: ",")
+            FilterSingleton.share.filter.slectedCategories = self.subCategoryList.map{"\($0?.category_id ?? 0)"}.filter { !$0.trimmingCharacters(in: .whitespaces).isEmpty }.joined(separator: ",")
         }else{
             
             var data = FilterSingleton.share.filter.slectedCategories?.components(separatedBy: ",")
-            if let index = data?.firstIndex(where: { $0 == "\(self.subCategoryList.first??.id ?? 0)" }) {
+            if let index = data?.firstIndex(where: { $0 == "\(self.subCategoryList.first??.category_id ?? 0)" }) {
                 data?.remove(at: index)
                 FilterSingleton.share.filter.slectedCategories = data?.filter { !$0.trimmingCharacters(in: .whitespaces).isEmpty }.joined(separator: ",").trimmingCharacters(in: .whitespacesAndNewlines)
             }
@@ -119,7 +121,7 @@ extension NewCategoryDetailsVC:UITableViewDelegate,UITableViewDataSource{
                 FilterSingleton.share.filter.slectedCategories = category?.filter { !$0.trimmingCharacters(in: .whitespaces).isEmpty }.joined(separator: ",")
             }
             
-            let ids = self.subCategoryList.map{"\($0?.id ?? 0)"}
+            let ids = self.subCategoryList.map{"\($0?.category_id ?? 0)"}
             let array = FilterSingleton.share.filter.slectedCategories?.components(separatedBy: ",")
             let filterArray = array?.filter { (ids.contains($0)) == true }
             

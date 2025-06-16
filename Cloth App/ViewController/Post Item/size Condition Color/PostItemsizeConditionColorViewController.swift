@@ -83,7 +83,7 @@ class PostItemsizeConditionColorViewController: BaseViewController {
                              "name": self.selectCategory?.name  ?? ""] as [String : Any]
                 let categoryobjCat = Categorie.init(JSON: dict1)!
                 self.categorysAndSubCategory.append(categoryobjCat)
-                let dict2 = ["category_id": self.selectSubcategory?.id ?? 0,
+                let dict2 = ["category_id": self.selectSubcategory?.category_id ?? 0,
                              "name": self.selectSubcategory?.name ?? ""] as [String : Any]
                 let subcategoryobjCat = Categorie.init(JSON: dict2)!
                 self.categorysAndSubCategory.append(subcategoryobjCat)
@@ -120,7 +120,7 @@ class PostItemsizeConditionColorViewController: BaseViewController {
                              "name": self.selectCategory?.name  ?? ""] as [String : Any]
                 let categoryobjCat = Categorie.init(JSON: dict1)!
                 self.categorysAndSubCategory.append(categoryobjCat)
-                let dict2 = ["category_id": self.selectSubcategory?.id ?? 0,
+                let dict2 = ["category_id": self.selectSubcategory?.category_id ?? 0,
                              "name": self.selectSubcategory?.name ?? ""] as [String : Any]
                 let subcategoryobjCat = Categorie.init(JSON: dict2)!
                 self.categorysAndSubCategory.append(subcategoryobjCat)
@@ -151,7 +151,7 @@ class PostItemsizeConditionColorViewController: BaseViewController {
                             "name": self.selectCategory?.name  ?? ""] as [String : Any]
                 let categoryobjCat = Categorie.init(JSON: dict1)!
                 self.categorysAndSubCategory.append(categoryobjCat)
-                let dict2 = ["category_id": self.selectSubcategory?.id ?? 0,
+                let dict2 = ["category_id": self.selectSubcategory?.category_id ?? 0,
                             "name": self.selectSubcategory?.name ?? ""] as [String : Any]
                 let subcategoryobjCat = Categorie.init(JSON: dict2)!
                 self.categorysAndSubCategory.append(subcategoryobjCat)
@@ -169,7 +169,7 @@ class PostItemsizeConditionColorViewController: BaseViewController {
                         "name": self.selectCategory?.name  ?? ""] as [String : Any]
             let categoryobjCat = Categorie.init(JSON: dict1)!
             self.categorysAndSubCategory.append(categoryobjCat)
-            let dict2 = ["category_id": self.selectSubcategory?.id ?? 0,
+            let dict2 = ["category_id": self.selectSubcategory?.category_id ?? 0,
                         "name": self.selectSubcategory?.name ?? ""] as [String : Any]
             let subcategoryobjCat = Categorie.init(JSON: dict2)!
             self.categorysAndSubCategory.append(subcategoryobjCat)

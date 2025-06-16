@@ -62,6 +62,7 @@ struct PostDetailsModel : Mappable {
     var bump_expire_at : String?
     var hightlight_expire_at : String?
     var sale_expire_at : String?
+    var search_category : String?
     var profile_promote_expire_at : String?
     
     init?(map: Map) {
@@ -78,6 +79,7 @@ struct PostDetailsModel : Mappable {
         sale_price <- map["sale_price"]
         type <- map["type"]
         id <- map["id"]
+        search_category <- map["search_category"]
         total_reviews <- map["total_reviews"]
         user_id <- map["user_id"]
         style_id <- map["style_id"]

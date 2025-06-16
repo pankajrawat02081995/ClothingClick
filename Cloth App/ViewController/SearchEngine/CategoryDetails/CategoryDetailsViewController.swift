@@ -76,7 +76,7 @@ class CategoryDetailsViewController: BaseViewController {
                 if self.subCategoryList[i]?.isSelect == true {
                     self.selectSubcategory.append(self.subCategoryList[i])
                     self.categoryData.append(subCategoryList[i]?.name ?? "")
-                    appDelegate.selectSubCategoryId.append("\(subCategoryList[i]?.id ?? 0)")
+                    appDelegate.selectSubCategoryId.append("\(subCategoryList[i]?.category_id ?? 0)")
                 }
             }
             if self.delegate != nil {
@@ -157,11 +157,11 @@ extension CategoryDetailsViewController : UITableViewDelegate,UITableViewDataSou
 //            appDelegate.selectSubCategoryId.append("\(subCategoryList[indexPath.item]?.id ?? 0)")
 //            appDelegate.selectSubCategoryName.append("\(subCategoryList[indexPath.item]?.name ?? "")")
 //        }
-        if appDelegate.selectSubCategoryId.contains("\(subCategoryList[indexPath.item]?.id ?? 0)"){
-            let index = appDelegate.selectSubCategoryId.firstIndex(of: "\(subCategoryList[indexPath.item]?.id ?? 0)") ?? 0
+        if appDelegate.selectSubCategoryId.contains("\(subCategoryList[indexPath.item]?.category_id ?? 0)"){
+            let index = appDelegate.selectSubCategoryId.firstIndex(of: "\(subCategoryList[indexPath.item]?.category_id ?? 0)") ?? 0
             appDelegate.selectSubCategoryId.remove(at: index)
         }else{
-            appDelegate.selectSubCategoryId.append("\(subCategoryList[indexPath.item]?.id ?? 0)")
+            appDelegate.selectSubCategoryId.append("\(subCategoryList[indexPath.item]?.category_id ?? 0)")
 
         }
         

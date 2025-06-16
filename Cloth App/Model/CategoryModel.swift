@@ -14,11 +14,11 @@ struct CategoryModel : Mappable {
     var name : String?
     var categories : [Categorie]?
     var styles : [Styles]?
-
+    
     init?(map: Map) {
-
+        
     }
-
+    
     mutating func mapping(map: Map) {
         styles <- map["styles"]
         gender_id <- map["gender_id"]
@@ -33,13 +33,13 @@ struct Categorie : Mappable {
     var photo : String?
     var childCategories : [ChildCategories]?
     var isSelect : Bool?
-
+    
     init?(map: Map) {
-
+        
     }
-
+    
     mutating func mapping(map: Map) {
-
+        
         category_id <- map["category_id"]
         photo <- map["photo"]
         name <- map["name"]
@@ -47,7 +47,7 @@ struct Categorie : Mappable {
     }
     
     
-
+    
 }
 
 struct Styles : Mappable {
@@ -55,7 +55,7 @@ struct Styles : Mappable {
     var name : String?
     
     init?(map: Map) {
-
+        
     }
     mutating func mapping(map: Map) {
         id <- map["id"]
@@ -64,7 +64,7 @@ struct Styles : Mappable {
 }
 
 struct ChildCategories : Mappable,Equatable {
-    var id : Int?
+    var category_id : Int?
     var mainid : String?
     var name : String?
     var parent_id : Int?
@@ -72,12 +72,12 @@ struct ChildCategories : Mappable,Equatable {
     var isSelect : Bool?
     
     init?(map: Map) {
-
+        
     }
-
+    
     mutating func mapping(map: Map) {
-
-        id <- map["category_id"]
+        
+        category_id <- map["id"]
         mainid <- map["id"]
         name <- map["name"]
         parent_id <- map["parent_id"]
@@ -85,8 +85,8 @@ struct ChildCategories : Mappable,Equatable {
     }
     
     // Conformance to Equatable
-        static func == (lhs: ChildCategories, rhs: ChildCategories) -> Bool {
-            return lhs.id == rhs.id
-        }
-
+    static func == (lhs: ChildCategories, rhs: ChildCategories) -> Bool {
+        return lhs.category_id == rhs.category_id
+    }
+    
 }
