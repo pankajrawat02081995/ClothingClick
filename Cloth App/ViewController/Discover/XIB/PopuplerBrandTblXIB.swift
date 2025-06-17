@@ -76,6 +76,7 @@ extension PopuplerBrandTblXIB: UICollectionViewDelegate, UICollectionViewDataSou
             cell.imgBrand.setImageFast(with: object.profile_image?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "")
 
             cell.lblName.text = object.name ?? ""
+            cell.imgBrand.layer.cornerRadius = 40
         }
         cell.imgBrand.contentMode = .scaleAspectFit
         return cell
