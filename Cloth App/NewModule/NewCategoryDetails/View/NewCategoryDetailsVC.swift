@@ -16,8 +16,8 @@ class NewCategoryDetailsVC: UIViewController {
     var subCategoryList = [ChildCategories?]()
     var headertitle = ""
     var catID : String?
-    var isSaveSearch : Bool?
-    var isFilterProduct : Bool?
+    var isSaveSearch : Bool? = false
+    var isFilterProduct : Bool? = false
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -99,64 +99,96 @@ extension NewCategoryDetailsVC:UITableViewDelegate,UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let id = self.subCategoryList[indexPath.row]?.category_id ?? 0
-        
-        if indexPath.row == 0{
-            FilterSingleton.share.filter.slectedCategories = self.subCategoryList.map{"\($0?.category_id ?? 0)"}.filter { !$0.trimmingCharacters(in: .whitespaces).isEmpty }.joined(separator: ",")
-        }else{
-            
-            var data = FilterSingleton.share.filter.slectedCategories?.components(separatedBy: ",")
-            if let index = data?.firstIndex(where: { $0 == "\(self.subCategoryList.first??.category_id ?? 0)" }) {
-                data?.remove(at: index)
-                FilterSingleton.share.filter.slectedCategories = data?.filter { !$0.trimmingCharacters(in: .whitespaces).isEmpty }.joined(separator: ",").trimmingCharacters(in: .whitespacesAndNewlines)
+        guard let selectedSubCategory = subCategoryList[indexPath.row],
+              let selectedID = selectedSubCategory.category_id else { return }
+
+        var selectedIDs = FilterSingleton.share.filter.slectedCategories?
+            .components(separatedBy: ",")
+            .filter { !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty } ?? []
+
+        if indexPath.row == 0 {
+            // Selecting "All" category
+            selectedIDs = subCategoryList
+                .compactMap { "\($0?.category_id ?? 0)" }
+            FilterSingleton.share.filter.slectedCategories = selectedIDs.joined(separator: ",")
+        } else {
+            let firstID = "\(subCategoryList.first??.category_id ?? 0)"
+
+            // Remove "All" if already present
+            if let index = selectedIDs.firstIndex(of: firstID) {
+                selectedIDs.remove(at: index)
             }
-            if FilterSingleton.share.filter.slectedCategories?.components(separatedBy: ",").contains("\(id)") == true{
-                let index = FilterSingleton.share.filter.slectedCategories?.components(separatedBy: ",").firstIndex(of: "\(id)") ?? 0
-                var data = FilterSingleton.share.filter.slectedCategories?.components(separatedBy: ",")
-                data?.remove(at: index)
-                FilterSingleton.share.filter.slectedCategories = data?.filter { !$0.trimmingCharacters(in: .whitespaces).isEmpty }.joined(separator: ",").trimmingCharacters(in: .whitespacesAndNewlines)
-            }else{
-                var category = FilterSingleton.share.filter.slectedCategories?.components(separatedBy: ",")
-                category?.append("\(id)")
-                FilterSingleton.share.filter.slectedCategories = category?.filter { !$0.trimmingCharacters(in: .whitespaces).isEmpty }.joined(separator: ",")
+
+            let idString = "\(selectedID)"
+            if selectedIDs.contains(idString) {
+                selectedIDs.removeAll { $0 == idString }
+            } else {
+                selectedIDs.append(idString)
             }
-            
-            let ids = self.subCategoryList.map{"\($0?.category_id ?? 0)"}
-            let array = FilterSingleton.share.filter.slectedCategories?.components(separatedBy: ",")
-            let filterArray = array?.filter { (ids.contains($0)) == true }
-            
-            if filterArray?.isEmpty == false{
-                var category = FilterSingleton.share.selectedFilter.categories?.components(separatedBy: ",")
-                if !(category?.contains(self.headertitle) ?? true) == true{
-                    category?.append(self.headertitle)
-                }
-                FilterSingleton.share.selectedFilter.categories = category?.filter { !$0.trimmingCharacters(in: .whitespaces).isEmpty }.joined(separator: ",")
-                
-                var catID = FilterSingleton.share.filter.categories?.components(separatedBy: ",")
-                if !(catID?.contains(self.catID ?? "") ?? true) == true{
-                    catID?.append(self.catID ?? "")
-                }
-                FilterSingleton.share.filter.categories = catID?.filter { !$0.trimmingCharacters(in: .whitespaces).isEmpty }.joined(separator: ",")
-                
-            }else{
-                let index = FilterSingleton.share.filter.categories?.components(separatedBy: ",").firstIndex(of: self.catID ?? "") ?? 0
-                var data = FilterSingleton.share.filter.categories?.components(separatedBy: ",")
-                data?.remove(at: index)
-                FilterSingleton.share.filter.categories = data?.filter { !$0.trimmingCharacters(in: .whitespaces).isEmpty }.joined(separator: ",").trimmingCharacters(in: .whitespacesAndNewlines)
-                
-                let index1 = FilterSingleton.share.selectedFilter.categories?.components(separatedBy: ",").firstIndex(of: self.catID ?? "") ?? 0
-                var data1 = FilterSingleton.share.selectedFilter.categories?.components(separatedBy: ",")
-                data1?.remove(at: index)
-                FilterSingleton.share.selectedFilter.categories = data1?.filter { !$0.trimmingCharacters(in: .whitespaces).isEmpty }.joined(separator: ",").trimmingCharacters(in: .whitespacesAndNewlines)
-                
-            }
+
+            FilterSingleton.share.filter.slectedCategories = selectedIDs.joined(separator: ",")
         }
-        self.tableView.reloadData()
-        if self.isSaveSearch ?? false == false && self.isFilterProduct ?? false == false{
-            self.callViewCount()
+
+        updateFilterCategorySelections()
+
+        tableView.reloadData()
+
+        if isSaveSearch ?? false == false && isFilterProduct ?? false == false {
+            callViewCount()
         }
-        
     }
+
+    // MARK: - Helper
+    private func updateFilterCategorySelections() {
+        let currentSelectedIDs = FilterSingleton.share.filter.slectedCategories?
+            .components(separatedBy: ",")
+            .filter { !$0.isEmpty } ?? []
+
+        let allValidIDs = subCategoryList
+            .compactMap { "\($0?.category_id ?? 0)" }
+
+        let intersectedIDs = currentSelectedIDs.filter { allValidIDs.contains($0) }
+
+        if !intersectedIDs.isEmpty {
+            updateCategoryList(add: true)
+        } else {
+            updateCategoryList(add: false)
+        }
+    }
+
+    private func updateCategoryList(add: Bool) {
+        let title = headertitle
+        let categoryID = catID ?? ""
+
+        if add {
+            addUniqueValue(to: &FilterSingleton.share.selectedFilter.categories, value: title)
+            addUniqueValue(to: &FilterSingleton.share.filter.categories, value: categoryID)
+        } else {
+            removeValue(from: &FilterSingleton.share.selectedFilter.categories, value: title)
+            removeValue(from: &FilterSingleton.share.filter.categories, value: categoryID)
+        }
+    }
+
+    private func addUniqueValue(to commaSeparatedString: inout String?, value: String) {
+        var values = commaSeparatedString?
+            .components(separatedBy: ",")
+            .filter { !$0.trimmingCharacters(in: .whitespaces).isEmpty } ?? []
+
+        if !values.contains(value) {
+            values.append(value)
+        }
+        commaSeparatedString = values.joined(separator: ",")
+    }
+
+    private func removeValue(from commaSeparatedString: inout String?, value: String) {
+        var values = commaSeparatedString?
+            .components(separatedBy: ",")
+            .filter { !$0.trimmingCharacters(in: .whitespaces).isEmpty } ?? []
+
+        values.removeAll { $0 == value }
+        commaSeparatedString = values.joined(separator: ",")
+    }
+
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 50
