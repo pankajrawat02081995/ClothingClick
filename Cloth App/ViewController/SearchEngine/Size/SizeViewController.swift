@@ -98,6 +98,7 @@ class SizeViewController: BaseViewController {
 //                self.callConditionColor(categoryId: String(self.selectSubCategoryId.joined(separator: ",")), genderId: "\(selectGenderId)" )
 //            }else{
                 
+            debugPrint(FilterSingleton.share.filter.gender_id ?? "")
                 self.callConditionColor(categoryId: FilterSingleton.share.filter.categories ?? "", genderId: FilterSingleton.share.filter.gender_id ?? "" )
 //            }
         }

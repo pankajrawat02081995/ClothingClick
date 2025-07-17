@@ -52,6 +52,15 @@ class OrderProductDetailsVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        let isRate = UserDefaults.standard.bool(forKey: "isRate")
+        debugPrint(isRate)
+
+        DispatchQueue.main.asyncAfter(deadline: .now()) {
+            if isRate == false {
+                self.showRatepopup()
+            }
+        }
+        
         self.viewModel = OrderHistoryViewModel()
         self.viewModel?.callGetOrderDetails(order_id: self.orderID ?? 0, complition: { [weak self] response in
             debugPrint(response.shipping_address?.address1 ?? "")

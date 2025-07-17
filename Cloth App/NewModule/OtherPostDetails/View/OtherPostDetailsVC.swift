@@ -378,13 +378,16 @@ extension OtherPostDetailsVC {
         //        if let username = self.postDetails?.user_username {
         //            self.lblUserName.text = username
         //        }
-        if let url = self.postDetails?.user_profile_picture {
-            self.imgSellerProfile.setImageFast(with: url)
-        }else{
-            self.lblFirstLatter.text = self.postDetails?.user_name?.first?.description.capitalized ?? ""
-            self.lblFirstLatter.isHidden = false
-            
-        }
+//        if let url = self.postDetails?.user_profile_picture {
+//            self.imgSellerProfile.setImageFast(with: url)
+//        }else{
+//            self.lblFirstLatter.text = self.postDetails?.user_name?.first?.description.capitalized ?? ""
+//            self.lblFirstLatter.isHidden = false
+//            
+//        }
+        self.lblFirstLatter.isHidden = true
+        self.imgSellerProfile.setProfileImage(from: self.postDetails?.user_profile_picture ?? "", placeholderName: self.postDetails?.user_name ?? "")
+        
         var categoryList = [String]()
         for i in 0..<(self.postDetails?.categories?.count ?? 0) {
             if let category = self.postDetails?.categories?[i].name {
@@ -692,14 +695,14 @@ extension OtherPostDetailsVC : UICollectionViewDataSource,UICollectionViewDelega
             //            cell.imgPlay.isHidden = true
             if objet.type == "image"{
                 cell.imgPost.setImageFast(with: objet.image ?? "")
-                cell.imgPost.contentMode = .scaleAspectFill
+                cell.imgPost.contentMode = .scaleToFill
             }
             else {
                 if let url = objet.video {
                     if let videourl = URL.init(string: url){
                         self.getThumbnailImageFromVideoUrl(url:videourl) { (thumbImage) in
                             cell.imgPost.image = thumbImage
-                            cell.imgPost.contentMode = .scaleAspectFill
+                            cell.imgPost.contentMode = .scaleToFill
                             //                            cell.imgPlay.isHidden = false
                         }
                     }

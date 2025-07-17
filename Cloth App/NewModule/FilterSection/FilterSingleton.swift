@@ -57,8 +57,10 @@ class FilterSingleton {
     private init() {}
     
     func getFilterData(completion: @escaping ((ViewCountModel?) -> Void)) {
-        guard let parameters = self.filter.toDictionary() else { return debugPrint("error") }
+        guard var parameters = self.filter.toDictionary() else { return debugPrint("error") }
         
+        parameters["latitude"] = appDelegate.userLocation?.latitude ?? ""
+        parameters["longitude"] = appDelegate.userLocation?.longitude ?? ""
         APIManager().apiCallWithMultipart(of: ViewCountModel.self,
                                           isShowHud: true,
                                           URL: BASE_URL,
