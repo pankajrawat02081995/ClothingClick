@@ -58,6 +58,7 @@ class BrandsSearchViewController: BaseViewController {
             }
         }
 
+        self.callBrandSearchList(searchtext: "")
     }
     
     @objc func textFieldDidChange(_ textField: UITextField) {
@@ -152,7 +153,11 @@ extension BrandsSearchViewController : UITableViewDelegate,UITableViewDataSource
         let bsrnds = self.brandSearchList[indexPath.row]
         FilterSingleton.share.filter.brand_id = "\(bsrnds?.brand_id ?? 0)"
         FilterSingleton.share.selectedFilter.brand_id = "\(bsrnds?.name ?? "")"
-        callViewCount()
+        if self.isFilterProduct == true {
+            self.navigationController?.popViewController(animated: true)
+        }else{
+            callViewCount()
+        }
 //        self.navigationController?.popViewController(animated: true)
 //
         

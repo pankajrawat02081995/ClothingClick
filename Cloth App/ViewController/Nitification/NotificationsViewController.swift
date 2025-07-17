@@ -191,6 +191,9 @@ extension NotificationsViewController : UITableViewDelegate,UITableViewDataSourc
                         cell.imgUser.image = nil
                     }
                 }
+            }else if object.type == "NEW_FOLLOWER"{
+                cell.lblCC.isHidden = true
+                cell.imgUser.setProfileImage(from: object.user_photo ?? "", placeholderName: object.name ?? "")
             }else{
                 if let url = object.user_photo {
                     if let image = URL.init(string: url){

@@ -434,6 +434,11 @@ class BaseViewController: UIViewController, UINavigationBarDelegate {
                 if error == nil {
                     if let response = response {
                         if let userDetails = response.dictData {
+                            let sizes = response.dictData?.user_size?.map { String($0) }.joined(separator: ",") ?? ""
+                            debugPrint(sizes)
+                            FilterSingleton.share.filter.gender_id = "\(userDetails.user_selected_gender ?? 0)"
+                            debugPrint("\(userDetails.user_selected_gender ?? 0)")
+                            FilterSingleton.share.filter.sizes = sizes
                             self.saveUserDetails(userDetails: userDetails)
                             self.startWithAuth(userData: userDetails)
                         }

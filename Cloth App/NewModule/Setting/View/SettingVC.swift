@@ -449,7 +449,7 @@ extension SettingVC:MFMailComposeViewControllerDelegate, MFMessageComposeViewCon
     }
     
     func sendInvitation(from viewController: UIViewController) {
-        let appURL = URL(string: "https://example.com/app-download-link")!
+        let appURL = URL(string: "https://apps.apple.com/in/app/clothing-click-second-hand/id1605715607")!
         let activityViewController = UIActivityViewController(activityItems: [appURL], applicationActivities: nil)
         
         if let popoverController = activityViewController.popoverPresentationController {
@@ -467,7 +467,7 @@ extension SettingVC:MFMailComposeViewControllerDelegate, MFMessageComposeViewCon
             mailComposeViewController.mailComposeDelegate = self
             
             mailComposeViewController.setSubject("Check out this app!")
-            mailComposeViewController.setMessageBody("I want to invite you to check out this amazing app! Download it from the following link: https://example.com/app-download-link", isHTML: false)
+            mailComposeViewController.setMessageBody("I want to invite you to check out this amazing app! Download it from the following link: https://apps.apple.com/in/app/clothing-click-second-hand/id1605715607", isHTML: false)
             
             viewController.present(mailComposeViewController, animated: true, completion: nil)
         } else {
@@ -480,7 +480,7 @@ extension SettingVC:MFMailComposeViewControllerDelegate, MFMessageComposeViewCon
             let messageComposeViewController = MFMessageComposeViewController()
             messageComposeViewController.messageComposeDelegate = self
             
-            messageComposeViewController.body = "I want to invite you to check out this amazing app! Download it from the following link: https://example.com/app-download-link"
+            messageComposeViewController.body = "I want to invite you to check out this amazing app! Download it from the following link: https://apps.apple.com/in/app/clothing-click-second-hand/id1605715607"
             
             viewController.present(messageComposeViewController, animated: true, completion: nil)
         } else {

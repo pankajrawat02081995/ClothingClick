@@ -187,12 +187,14 @@ extension DepartmentVC:UITableViewDelegate,UITableViewDataSource{
 
         if self.isFromSearch == false{
             FilterSingleton.share.filter.is_only_count = "1"
+            
             FilterSingleton.share.getFilterData {[weak self] model in
                 DispatchQueue.main.async {
                     self?.btnResult.isUserInteractionEnabled = true
                     self?.btnResult.alpha = 1
                     self?.tableView.reloadData()
                     self?.btnResult.setTitle("View \(model?.total_posts ?? 0) Items", for: .normal)
+                    self?.tableView.reloadData()
                 }
             }
         }else{

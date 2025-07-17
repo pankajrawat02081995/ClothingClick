@@ -3045,10 +3045,10 @@ USA, t6j 1m3</string>
                                 </constraints>
                             </view>
                             <view hidden="YES" clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dJV-0R-cZ1">
-                                <rect key="frame" x="0.0" y="0.0" width="393" height="1352.6666666666667"/>
+                                <rect key="frame" x="0.0" y="0.0" width="393" height="1392.6666666666667"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="wTy-vb-Bks">
-                                        <rect key="frame" x="20" y="1120" width="353" height="212.66666666666674"/>
+                                        <rect key="frame" x="20" y="1160" width="353" height="212.66666666666674"/>
                                         <subviews>
                                             <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yyq-qz-mhV">
                                                 <rect key="frame" x="0.0" y="0.0" width="353" height="212.66666666666666"/>
@@ -3128,7 +3128,7 @@ USA, t6j 1m3</string>
                                         </subviews>
                                     </stackView>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_polygon" translatesAutoresizingMaskIntoConstraints="NO" id="Q2E-Vo-DJb">
-                                        <rect key="frame" x="100.66666666666667" y="1326.6666666666667" width="20" height="20"/>
+                                        <rect key="frame" x="100.66666666666667" y="1366.6666666666667" width="20" height="20"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="20" id="2fg-xp-N2S"/>
                                             <constraint firstAttribute="height" constant="20" id="8IN-DL-jBK"/>
@@ -3167,12 +3167,6 @@ USA, t6j 1m3</string>
                             <constraint firstItem="j6a-41-zTu" firstAttribute="leading" secondItem="W5D-V0-50W" secondAttribute="leading" id="qOp-K4-NLt"/>
                             <constraint firstItem="SLq-NN-qC4" firstAttribute="top" secondItem="kpP-qo-PKX" secondAttribute="top" id="sSd-8j-qJK"/>
                         </constraints>
-                        <variation key="default">
-                            <mask key="subviews">
-                                <exclude reference="SLq-NN-qC4"/>
-                                <exclude reference="dJV-0R-cZ1"/>
-                            </mask>
-                        </variation>
                     </view>
                     <size key="freeformSize" width="393" height="1600"/>
                     <connections>

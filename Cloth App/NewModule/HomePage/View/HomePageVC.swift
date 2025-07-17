@@ -55,6 +55,7 @@ class HomePageVC: BaseViewController {
     }
     
     private func getCityOrState(from latitude: Double, longitude: Double, completion: @escaping (Result<Bool, Error>) -> Void) {
+        
         let geocoder = CLGeocoder()
         let location = CLLocation(latitude: latitude, longitude: longitude)
         
