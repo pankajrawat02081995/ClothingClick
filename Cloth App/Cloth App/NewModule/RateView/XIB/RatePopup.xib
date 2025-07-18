@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="Roboto-Medium.ttf">
+            <string>Roboto-Medium</string>
+        </array>
+        <array key="Roboto-Regular.ttf">
+            <string>Roboto-Regular</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="RatePopup" customModule="Clothing_Click" customModuleProvider="target">
+            <connections>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Hzf-BR-Voh">
+                    <rect key="frame" x="30" y="343.33333333333331" width="333" height="165.33333333333331"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Enjoying Your Experience?" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Klt-4z-ndO">
+                            <rect key="frame" x="20.000000000000014" y="20" width="235.33333333333337" height="23.666666666666671"/>
+                            <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="20"/>
+                            <color key="textColor" name="Black_Theme_Color"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Please rate us on the App Store, we value your support and feedback. Thank you." lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZGT-kc-3Hv">
+                            <rect key="frame" x="20" y="43.666666666666686" width="293" height="37.666666666666657"/>
+                            <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="16"/>
+                            <color key="textColor" name="Black_Theme_Color"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="30" translatesAutoresizingMaskIntoConstraints="NO" id="JXP-G7-7bz">
+                            <rect key="frame" x="20" y="101.33333333333337" width="293" height="44"/>
+                            <subviews>
+                                <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zX0-ws-8Uf" customClass="CustomButton" customModule="Clothing_Click" customModuleProvider="target">
+                                    <rect key="frame" x="0.0" y="0.0" width="131.66666666666666" height="44"/>
+                                    <color key="backgroundColor" name="App_White_Color"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="44" id="nqf-Ip-jkq"/>
+                                    </constraints>
+                                    <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="16"/>
+                                    <state key="normal" title="Skip">
+                                        <color key="titleColor" name="DarkGrayColor"/>
+                                    </state>
+                                    <userDefinedRuntimeAttributes>
+                                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                            <real key="value" value="5"/>
+                                        </userDefinedRuntimeAttribute>
+                                        <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                            <color key="value" name="Black_Theme_Color"/>
+                                        </userDefinedRuntimeAttribute>
+                                    </userDefinedRuntimeAttributes>
+                                    <connections>
+                                        <action selector="skipOnPress:" destination="-1" eventType="touchUpInside" id="m4v-Vg-OP5"/>
+                                    </connections>
+                                </button>
+                                <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wir-qx-4My" customClass="CustomButton" customModule="Clothing_Click" customModuleProvider="target">
+                                    <rect key="frame" x="161.66666666666663" y="0.0" width="131.33333333333337" height="44"/>
+                                    <color key="backgroundColor" name="Black_Theme_Color"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="44" id="eUV-Ap-W1l"/>
+                                    </constraints>
+                                    <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="16"/>
+                                    <state key="normal" title="Rate Us">
+                                        <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </state>
+                                    <userDefinedRuntimeAttributes>
+                                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                            <real key="value" value="5"/>
+                                        </userDefinedRuntimeAttribute>
+                                    </userDefinedRuntimeAttributes>
+                                    <connections>
+                                        <action selector="rateOnPress:" destination="-1" eventType="touchUpInside" id="S8Z-Cb-SDB"/>
+                                    </connections>
+                                </button>
+                            </subviews>
+                        </stackView>
+                    </subviews>
+                    <color key="backgroundColor" name="App_White_Color"/>
+                    <constraints>
+                        <constraint firstAttribute="trailing" secondItem="JXP-G7-7bz" secondAttribute="trailing" constant="20" id="9yq-hd-m48"/>
+                        <constraint firstAttribute="trailing" secondItem="ZGT-kc-3Hv" secondAttribute="trailing" constant="20" id="BCD-Pz-fdv"/>
+                        <constraint firstItem="Klt-4z-ndO" firstAttribute="top" secondItem="Hzf-BR-Voh" secondAttribute="top" constant="20" id="DIQ-5E-7kF"/>
+                        <constraint firstItem="ZGT-kc-3Hv" firstAttribute="top" secondItem="Klt-4z-ndO" secondAttribute="bottom" id="K6Q-XS-2c7"/>
+                        <constraint firstItem="JXP-G7-7bz" firstAttribute="top" secondItem="ZGT-kc-3Hv" secondAttribute="bottom" constant="20" id="QIc-9d-0Kv"/>
+                        <constraint firstAttribute="bottom" secondItem="JXP-G7-7bz" secondAttribute="bottom" constant="20" id="REP-TG-AEA"/>
+                        <constraint firstItem="JXP-G7-7bz" firstAttribute="leading" secondItem="Hzf-BR-Voh" secondAttribute="leading" constant="20" id="YbL-9p-6tL"/>
+                        <constraint firstItem="ZGT-kc-3Hv" firstAttribute="leading" secondItem="Hzf-BR-Voh" secondAttribute="leading" constant="20" id="bGk-h5-8gz"/>
+                        <constraint firstItem="Klt-4z-ndO" firstAttribute="leading" secondItem="Hzf-BR-Voh" secondAttribute="leading" constant="20" id="cTZ-ir-Mf5"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
+            <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.29999999999999999" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="Hzf-BR-Voh" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="30" id="1bP-oF-BBJ"/>
+                <constraint firstItem="Hzf-BR-Voh" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="SI0-gr-Blv"/>
+                <constraint firstItem="Hzf-BR-Voh" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" id="Xy4-Aq-rJF"/>
+                <constraint firstAttribute="trailing" secondItem="Hzf-BR-Voh" secondAttribute="trailing" constant="30" id="ZJn-pO-2PN"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <point key="canvasLocation" x="48" y="-1"/>
+        </view>
+    </objects>
+    <resources>
+        <namedColor name="App_White_Color">
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="Black_Theme_Color">
+            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="DarkGrayColor">
+            <color red="0.43900001049041748" green="0.43900001049041748" blue="0.43900001049041748" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
+</document>

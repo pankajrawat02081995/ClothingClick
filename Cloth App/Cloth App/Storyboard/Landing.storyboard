@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="uMn-Cj-Cq3">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="Roboto-Bold.ttf">
+            <string>Roboto-Bold</string>
+        </array>
+        <array key="Roboto-Light.ttf">
+            <string>Roboto-Light</string>
+        </array>
+    </customFonts>
+    <scenes>
+        <!--LandingVC-->
+        <scene sceneID="s0d-6b-0kx">
+            <objects>
+                <viewController storyboardIdentifier="LandingVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Y6W-OH-hqX" customClass="LandingVC" customModule="Clothing_Click" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="5EZ-qb-Rvc">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_dummy_img" translatesAutoresizingMaskIntoConstraints="NO" id="Kua-sY-zpL">
+                                <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                            </imageView>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_fade" translatesAutoresizingMaskIntoConstraints="NO" id="VEQ-jH-O3G">
+                                <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                            </imageView>
+                            <stackView opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="xpv-kC-gJN">
+                                <rect key="frame" x="20" y="646" width="353" height="152"/>
+                                <subviews>
+                                    <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WN8-Rb-UNN" customClass="AnimatableButton" customModule="IBAnimatable">
+                                        <rect key="frame" x="0.0" y="0.0" width="353" height="44"/>
+                                        <color key="backgroundColor" name="LightGrayColor"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="44" id="1my-ct-TZe"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="Roboto-Bold" family="Roboto" pointSize="16"/>
+                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                        <state key="normal" title="MENSWEAR">
+                                            <color key="titleColor" name="Black_Theme_Color"/>
+                                        </state>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                <real key="value" value="5"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <action selector="menswearOnPress:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="1bC-y4-LHf"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1ow-4l-CKQ" customClass="AnimatableButton" customModule="IBAnimatable">
+                                        <rect key="frame" x="0.0" y="54" width="353" height="44"/>
+                                        <color key="backgroundColor" name="LightGrayColor"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="44" id="ig0-Ux-Sdo"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="Roboto-Bold" family="Roboto" pointSize="16"/>
+                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                        <state key="normal" title="WOMENSWEAR">
+                                            <color key="titleColor" name="Black_Theme_Color"/>
+                                        </state>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                <real key="value" value="5"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <action selector="womenswearOnPress:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="hy4-gG-mHZ"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sPH-wq-hoA" customClass="AnimatableButton" customModule="IBAnimatable">
+                                        <rect key="frame" x="0.0" y="108" width="353" height="44"/>
+                                        <color key="backgroundColor" name="LightGrayColor"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="44" id="vUb-kJ-iR6"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="Roboto-Bold" family="Roboto" pointSize="16"/>
+                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                        <state key="normal" title="BOTH">
+                                            <color key="titleColor" name="Black_Theme_Color"/>
+                                        </state>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                <real key="value" value="5"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <action selector="bothOnPress:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="95M-qo-8Gq"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                            </stackView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Set your preferences to personalize your experience." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="INk-46-T4Z">
+                                <rect key="frame" x="20" y="594.33333333333337" width="353" height="37.666666666666629"/>
+                                <fontDescription key="fontDescription" name="Roboto-Light" family="Roboto" pointSize="16"/>
+                                <color key="textColor" name="App_White_Color"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hGj-gN-7WS">
+                                <rect key="frame" x="20" y="539.33333333333337" width="353" height="47"/>
+                                <string key="text">What are you shopping 
+for?</string>
+                                <fontDescription key="fontDescription" name="Roboto-Bold" family="Roboto" pointSize="20"/>
+                                <color key="textColor" name="App_White_Color"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="Kua-sY-zpL" secondAttribute="bottom" id="0Rw-TP-xTR"/>
+                            <constraint firstItem="VEQ-jH-O3G" firstAttribute="bottom" secondItem="Kua-sY-zpL" secondAttribute="bottom" id="6Dl-FH-TxA"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="INk-46-T4Z" secondAttribute="trailing" constant="20" id="8ka-2a-EN5"/>
+                            <constraint firstItem="Kua-sY-zpL" firstAttribute="top" secondItem="5EZ-qb-Rvc" secondAttribute="top" id="9nU-Si-N17"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="hGj-gN-7WS" secondAttribute="trailing" constant="20" id="F69-aa-kxJ"/>
+                            <constraint firstItem="xpv-kC-gJN" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="20" id="OPw-gd-e6X"/>
+                            <constraint firstItem="INk-46-T4Z" firstAttribute="top" secondItem="hGj-gN-7WS" secondAttribute="bottom" constant="8" id="TrE-Iv-11V"/>
+                            <constraint firstItem="Kua-sY-zpL" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="YDV-XU-mdJ"/>
+                            <constraint firstItem="VEQ-jH-O3G" firstAttribute="top" secondItem="Kua-sY-zpL" secondAttribute="top" id="YIf-hk-Cs7"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="Kua-sY-zpL" secondAttribute="trailing" id="gXm-pO-T2h"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="xpv-kC-gJN" secondAttribute="trailing" constant="20" id="hds-5r-xFB"/>
+                            <constraint firstItem="VEQ-jH-O3G" firstAttribute="trailing" secondItem="Kua-sY-zpL" secondAttribute="trailing" id="jkg-ap-j6Q"/>
+                            <constraint firstItem="INk-46-T4Z" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="20" id="lJD-z3-xYp"/>
+                            <constraint firstItem="xpv-kC-gJN" firstAttribute="top" secondItem="INk-46-T4Z" secondAttribute="bottom" constant="14" id="vQT-of-DW7"/>
+                            <constraint firstItem="VEQ-jH-O3G" firstAttribute="leading" secondItem="Kua-sY-zpL" secondAttribute="leading" id="yCT-U0-s5N"/>
+                            <constraint firstItem="hGj-gN-7WS" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="20" id="ySn-f7-3R2"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="bottom" secondItem="xpv-kC-gJN" secondAttribute="bottom" constant="20" id="ySt-Zo-W0y"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="GgU-n1-Ra0"/>
+                    <connections>
+                        <outlet property="btnMenWear" destination="WN8-Rb-UNN" id="kn1-gC-0j5"/>
+                        <outlet property="imgBranding" destination="Kua-sY-zpL" id="Zd7-eF-gMr"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="999.23664122137404" y="3.5211267605633805"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="d5X-6l-Q61">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" navigationBarHidden="YES" id="uMn-Cj-Cq3" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="6kK-Ai-AbI">
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="Y6W-OH-hqX" kind="relationship" relationship="rootViewController" id="TlP-xT-CNC"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="d2m-3x-quS" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="72.51908396946564" y="3.5211267605633805"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="ic_dummy_img" width="375" height="812"/>
+        <image name="ic_fade" width="375" height="812"/>
+        <namedColor name="App_White_Color">
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="Black_Theme_Color">
+            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="LightGrayColor">
+            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.94901960784313721" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

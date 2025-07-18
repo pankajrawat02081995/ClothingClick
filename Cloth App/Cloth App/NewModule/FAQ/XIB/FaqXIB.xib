@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22685"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="FaqXIB" rowHeight="256" id="KGk-i7-Jjw" customClass="FaqXIB" customModule="Cloth_App" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="589" height="256"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="589" height="256"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XZq-Fa-XQX" customClass="AnimatableView" customModule="IBAnimatable">
+                        <rect key="frame" x="20" y="6" width="549" height="244"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Q. Whats Clothing Clicks mission?" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1Zi-ky-VdW">
+                                <rect key="frame" x="13.999999999999972" y="14" width="494.33333333333326" height="17"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="14"/>
+                                <color key="textColor" name="Black_Theme_Color"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_dropdown" translatesAutoresizingMaskIntoConstraints="NO" id="4jA-se-gB1">
+                                <rect key="frame" x="518.33333333333337" y="19" width="10.666666666666629" height="7"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="6.6699999999999999" id="Fbd-Uo-Vnp"/>
+                                    <constraint firstAttribute="width" constant="10.67" id="emD-8P-DeX"/>
+                                </constraints>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JVk-h9-W1a">
+                                <rect key="frame" x="13.999999999999972" y="33.000000000000007" width="494.33333333333326" height="81.666666666666686"/>
+                                <string key="text">A. Clothing Click's mission is to positively transform the fashion industry for people and the planet. Our goal is to offer the community an easy-to-use platform for buying and selling fashion locally. We are committed to providing a space for you to earn money, save money, and contribute to sustainable fashion. </string>
+                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="14"/>
+                                <color key="textColor" name="Chat_Read_Msg"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" name="Light_Bg_Color"/>
+                        <constraints>
+                            <constraint firstItem="1Zi-ky-VdW" firstAttribute="top" secondItem="XZq-Fa-XQX" secondAttribute="top" constant="14" id="34W-16-Mbw"/>
+                            <constraint firstItem="1Zi-ky-VdW" firstAttribute="leading" secondItem="XZq-Fa-XQX" secondAttribute="leading" constant="14" id="4GF-aB-0di"/>
+                            <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="JVk-h9-W1a" secondAttribute="bottom" constant="12" id="AGw-UX-tWS"/>
+                            <constraint firstItem="JVk-h9-W1a" firstAttribute="trailing" secondItem="1Zi-ky-VdW" secondAttribute="trailing" id="G7s-3J-0IW"/>
+                            <constraint firstAttribute="trailing" secondItem="4jA-se-gB1" secondAttribute="trailing" constant="20" id="I4n-w9-Du5"/>
+                            <constraint firstItem="JVk-h9-W1a" firstAttribute="leading" secondItem="1Zi-ky-VdW" secondAttribute="leading" id="Iv6-ET-zYs"/>
+                            <constraint firstItem="4jA-se-gB1" firstAttribute="leading" secondItem="1Zi-ky-VdW" secondAttribute="trailing" constant="10" id="QkR-uk-SeZ"/>
+                            <constraint firstItem="JVk-h9-W1a" firstAttribute="top" secondItem="1Zi-ky-VdW" secondAttribute="bottom" constant="2" id="gzq-kt-jZW"/>
+                            <constraint firstItem="1Zi-ky-VdW" firstAttribute="centerY" secondItem="4jA-se-gB1" secondAttribute="centerY" id="oMn-e2-mSu"/>
+                        </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                <real key="value" value="5"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </view>
+                </subviews>
+                <constraints>
+                    <constraint firstAttribute="trailing" secondItem="XZq-Fa-XQX" secondAttribute="trailing" constant="20" id="2gH-d7-dnZ"/>
+                    <constraint firstItem="XZq-Fa-XQX" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="6" id="CIx-Nl-p5r"/>
+                    <constraint firstAttribute="bottom" secondItem="XZq-Fa-XQX" secondAttribute="bottom" constant="6" id="VGE-4S-Ie0"/>
+                    <constraint firstItem="XZq-Fa-XQX" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="20" id="cL2-Zt-a1m"/>
+                </constraints>
+            </tableViewCellContentView>
+            <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <connections>
+                <outlet property="imgDropDown" destination="4jA-se-gB1" id="gdp-Cn-pxX"/>
+                <outlet property="lblSubtitle" destination="JVk-h9-W1a" id="Osv-NL-wae"/>
+                <outlet property="lblTitle" destination="1Zi-ky-VdW" id="jVK-QX-i7W"/>
+            </connections>
+            <point key="canvasLocation" x="205.34351145038167" y="73.239436619718319"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="ic_dropdown" width="10.666666984558105" height="6.6666665077209473"/>
+        <namedColor name="Black_Theme_Color">
+            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="Chat_Read_Msg">
+            <color red="0.48600000143051147" green="0.48600000143051147" blue="0.48600000143051147" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="Light_Bg_Color">
+            <color red="0.96100002527236938" green="0.96100002527236938" blue="0.96100002527236938" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
+</document>
