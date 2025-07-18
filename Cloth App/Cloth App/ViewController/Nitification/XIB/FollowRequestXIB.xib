@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22685"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="Roboto-Medium.ttf">
+            <string>Roboto-Medium</string>
+        </array>
+        <array key="Roboto-Regular.ttf">
+            <string>Roboto-Regular</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="FollowRequestXIB" rowHeight="190" id="KGk-i7-Jjw" customClass="FollowRequestXIB" customModule="Cloth_App" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="387" height="190"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="387" height="190"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qvU-cr-KL0">
+                        <rect key="frame" x="0.0" y="189" width="387" height="1"/>
+                        <color key="backgroundColor" name="App_Light_Border_Color"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="1" id="f1p-U2-eOB"/>
+                        </constraints>
+                    </view>
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="k4H-Tr-enB" customClass="CustomImageView" customModule="Cloth_App" customModuleProvider="target">
+                        <rect key="frame" x="20" y="13" width="70" height="70"/>
+                        <color key="backgroundColor" red="0.6588235294" green="0.6588235294" blue="0.6588235294" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="70" id="KRg-qw-jhZ"/>
+                            <constraint firstAttribute="height" constant="70" id="VUu-Bs-TKs"/>
+                        </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                <real key="value" value="35"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                <real key="value" value="1"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                <color key="value" name="LightGrayColor"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="asdasd" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nce-vW-6VO">
+                        <rect key="frame" x="100" y="21" width="52" height="19"/>
+                        <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="16"/>
+                        <color key="textColor" name="Black_Theme_Color"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="asdasd" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="X7N-t3-prk">
+                        <rect key="frame" x="100" y="45" width="45.666666666666657" height="16.666666666666671"/>
+                        <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="14"/>
+                        <color key="textColor" name="Black_Theme_Color"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1 Year Ago" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gBA-yw-zGC">
+                        <rect key="frame" x="318.66666666666669" y="24.666666666666668" width="48.333333333333314" height="12.000000000000004"/>
+                        <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="10"/>
+                        <color key="textColor" name="Black_Theme_Color"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="a0n-ct-jSg">
+                        <rect key="frame" x="100" y="71.666666666666671" width="267" height="40"/>
+                        <subviews>
+                            <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QOa-BY-HSo" customClass="AnimatableButton" customModule="IBAnimatable">
+                                <rect key="frame" x="0.0" y="0.0" width="129.66666666666666" height="40"/>
+                                <color key="backgroundColor" name="Black_Theme_Color"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="eGL-XV-O6M"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="10"/>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal" title="Confirm"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                        <real key="value" value="5"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </button>
+                            <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uno-cL-vIZ" customClass="AnimatableButton" customModule="IBAnimatable">
+                                <rect key="frame" x="137.66666666666663" y="0.0" width="129.33333333333337" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="mvi-aT-aOt"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="10"/>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal" title="Delete">
+                                    <color key="titleColor" name="Black_Theme_Color"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                        <real key="value" value="5"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                        <color key="value" name="App_Light_Border_Color"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                        <real key="value" value="1"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </button>
+                        </subviews>
+                    </stackView>
+                </subviews>
+                <color key="backgroundColor" name="App_White_Color"/>
+                <constraints>
+                    <constraint firstItem="a0n-ct-jSg" firstAttribute="leading" secondItem="X7N-t3-prk" secondAttribute="leading" id="8ZZ-1G-0Vz"/>
+                    <constraint firstAttribute="trailing" secondItem="gBA-yw-zGC" secondAttribute="trailing" constant="20" id="9XE-Gv-Cdu"/>
+                    <constraint firstItem="X7N-t3-prk" firstAttribute="top" secondItem="nce-vW-6VO" secondAttribute="bottom" constant="5" id="CJO-QU-ILs"/>
+                    <constraint firstAttribute="trailing" secondItem="qvU-cr-KL0" secondAttribute="trailing" id="GyU-am-HlH"/>
+                    <constraint firstItem="X7N-t3-prk" firstAttribute="leading" secondItem="nce-vW-6VO" secondAttribute="leading" id="IAM-Ef-u0X"/>
+                    <constraint firstItem="qvU-cr-KL0" firstAttribute="top" relation="greaterThanOrEqual" secondItem="a0n-ct-jSg" secondAttribute="bottom" constant="13" id="Szu-VW-rhd"/>
+                    <constraint firstItem="a0n-ct-jSg" firstAttribute="top" secondItem="X7N-t3-prk" secondAttribute="bottom" constant="10" id="WNo-48-hBW"/>
+                    <constraint firstItem="gBA-yw-zGC" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="X7N-t3-prk" secondAttribute="trailing" constant="10" id="We0-bI-r1N"/>
+                    <constraint firstItem="gBA-yw-zGC" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="nce-vW-6VO" secondAttribute="trailing" constant="10" id="Whu-Eh-gj1"/>
+                    <constraint firstItem="k4H-Tr-enB" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="20" id="aQR-Ch-nDp"/>
+                    <constraint firstItem="qvU-cr-KL0" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="ci9-fj-ZiW"/>
+                    <constraint firstItem="a0n-ct-jSg" firstAttribute="trailing" secondItem="gBA-yw-zGC" secondAttribute="trailing" id="eIP-CT-ARH"/>
+                    <constraint firstItem="k4H-Tr-enB" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="13" id="gqd-kb-OEc"/>
+                    <constraint firstItem="nce-vW-6VO" firstAttribute="leading" secondItem="k4H-Tr-enB" secondAttribute="trailing" constant="10" id="nT0-vR-JgE"/>
+                    <constraint firstAttribute="bottom" secondItem="qvU-cr-KL0" secondAttribute="bottom" id="vZq-Hi-5XD"/>
+                    <constraint firstItem="nce-vW-6VO" firstAttribute="centerY" secondItem="gBA-yw-zGC" secondAttribute="centerY" id="wez-sz-dLB"/>
+                    <constraint firstItem="nce-vW-6VO" firstAttribute="top" secondItem="k4H-Tr-enB" secondAttribute="top" constant="8" id="xOc-gd-293"/>
+                </constraints>
+            </tableViewCellContentView>
+            <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
+            <connections>
+                <outlet property="btnConfirm" destination="QOa-BY-HSo" id="Ug7-Lw-N4T"/>
+                <outlet property="btnDelete" destination="uno-cL-vIZ" id="rY1-h9-u0q"/>
+                <outlet property="imgUser" destination="k4H-Tr-enB" id="uew-Tt-yn0"/>
+                <outlet property="lblSubTitle" destination="X7N-t3-prk" id="YWF-N1-0ZP"/>
+                <outlet property="lblTime" destination="gBA-yw-zGC" id="rQn-Cq-UVG"/>
+                <outlet property="lblTitle" destination="nce-vW-6VO" id="KRQ-n6-dlf"/>
+            </connections>
+            <point key="canvasLocation" x="110.68702290076335" y="101.40845070422536"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <namedColor name="App_Light_Border_Color">
+            <color red="0.91399997472763062" green="0.91399997472763062" blue="0.91399997472763062" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="App_White_Color">
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="Black_Theme_Color">
+            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="LightGrayColor">
+            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.94901960784313721" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
+</document>

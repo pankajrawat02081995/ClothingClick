@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22685"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="Roboto-Regular.ttf">
+            <string>Roboto-Regular</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="HeaderSearchXIB" rowHeight="99" id="KGk-i7-Jjw" customClass="HeaderSearchXIB" customModule="Cloth_App" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="364" height="99"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="364" height="99"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GJ9-gS-wQA">
+                        <rect key="frame" x="20" y="27.666666666666671" width="324" height="44"/>
+                        <subviews>
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Search Profiles" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="j93-04-2j4">
+                                <rect key="frame" x="0.0" y="0.0" width="324" height="44"/>
+                                <color key="textColor" name="Black_Theme_Color"/>
+                                <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                        </subviews>
+                        <color key="backgroundColor" name="App_Light_Border_Color"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="44" id="4QB-v0-37O"/>
+                            <constraint firstAttribute="bottom" secondItem="j93-04-2j4" secondAttribute="bottom" id="8z8-Y8-CMO"/>
+                            <constraint firstAttribute="trailing" secondItem="j93-04-2j4" secondAttribute="trailing" id="Nyd-po-DfK"/>
+                            <constraint firstItem="j93-04-2j4" firstAttribute="leading" secondItem="GJ9-gS-wQA" secondAttribute="leading" id="gbB-lF-UxE"/>
+                            <constraint firstItem="j93-04-2j4" firstAttribute="top" secondItem="GJ9-gS-wQA" secondAttribute="top" id="q4t-bt-Hik"/>
+                        </constraints>
+                    </view>
+                </subviews>
+                <color key="backgroundColor" name="App_White_Color"/>
+                <constraints>
+                    <constraint firstAttribute="trailing" secondItem="GJ9-gS-wQA" secondAttribute="trailing" constant="20" id="9Y1-WL-NHC"/>
+                    <constraint firstItem="GJ9-gS-wQA" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="WFd-t9-a31"/>
+                    <constraint firstItem="GJ9-gS-wQA" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="20" id="vWI-TB-6Uz"/>
+                </constraints>
+            </tableViewCellContentView>
+            <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <point key="canvasLocation" x="1.5267175572519083" y="17.95774647887324"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <namedColor name="App_Light_Border_Color">
+            <color red="0.91399997472763062" green="0.91399997472763062" blue="0.91399997472763062" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="App_White_Color">
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="Black_Theme_Color">
+            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
+</document>

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22685"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="SettingXIB" rowHeight="79" id="KGk-i7-Jjw" customClass="SettingXIB" customModule="Cloth_App" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="373" height="79"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="373" height="79"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Kyx-Mz-EuL">
+                        <rect key="frame" x="0.0" y="0.0" width="373" height="79"/>
+                        <subviews>
+                            <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pn2-7M-DL3">
+                                <rect key="frame" x="0.0" y="78" width="373" height="1"/>
+                                <color key="backgroundColor" name="App_Light_Border_Color"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="1" id="gJ3-kR-7Ph"/>
+                                </constraints>
+                            </view>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="udM-gG-pnP">
+                                <rect key="frame" x="20" y="16" width="20" height="20"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="20" id="0jo-Ft-Bq4"/>
+                                    <constraint firstAttribute="height" constant="20" id="1Tv-Il-BJt"/>
+                                </constraints>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Order History" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UhO-Ad-cil">
+                                <rect key="frame" x="50" y="16" width="84" height="17"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="14"/>
+                                <color key="textColor" name="Black_Theme_Color"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="I7Q-VV-fcz">
+                                <rect key="frame" x="50" y="41" width="263" height="17"/>
+                                <string key="text">When your account is private only users you have approved can see your items for sale, your existing followers will not be affected.</string>
+                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="10"/>
+                                <color key="textColor" name="Chat_Read_Msg"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MPC-0f-F4B">
+                                <rect key="frame" x="323" y="29.666666666666671" width="30" height="20"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="30" id="q83-Vq-nSf"/>
+                                    <constraint firstAttribute="height" constant="20" id="qU1-YH-Bpn"/>
+                                </constraints>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" name="App_White_Color"/>
+                        <constraints>
+                            <constraint firstItem="I7Q-VV-fcz" firstAttribute="top" secondItem="UhO-Ad-cil" secondAttribute="bottom" id="BEH-BF-3eB"/>
+                            <constraint firstItem="udM-gG-pnP" firstAttribute="top" secondItem="Kyx-Mz-EuL" secondAttribute="top" constant="16" id="F1d-X1-jJE"/>
+                            <constraint firstItem="UhO-Ad-cil" firstAttribute="leading" secondItem="udM-gG-pnP" secondAttribute="trailing" constant="10" id="WjZ-pg-LuA"/>
+                            <constraint firstItem="MPC-0f-F4B" firstAttribute="centerY" secondItem="Kyx-Mz-EuL" secondAttribute="centerY" id="Y9i-H5-ZHL"/>
+                            <constraint firstItem="pn2-7M-DL3" firstAttribute="top" relation="greaterThanOrEqual" secondItem="I7Q-VV-fcz" secondAttribute="bottom" constant="15" id="dVI-lz-jGh"/>
+                            <constraint firstItem="I7Q-VV-fcz" firstAttribute="leading" secondItem="UhO-Ad-cil" secondAttribute="leading" id="dcx-IM-rNl"/>
+                            <constraint firstAttribute="trailing" secondItem="MPC-0f-F4B" secondAttribute="trailing" constant="20" id="j0P-N9-afo"/>
+                            <constraint firstItem="udM-gG-pnP" firstAttribute="leading" secondItem="Kyx-Mz-EuL" secondAttribute="leading" constant="20" id="mxx-9u-Cmx"/>
+                            <constraint firstItem="MPC-0f-F4B" firstAttribute="leading" secondItem="I7Q-VV-fcz" secondAttribute="trailing" constant="10" id="rGN-a5-8gE"/>
+                            <constraint firstAttribute="bottom" secondItem="pn2-7M-DL3" secondAttribute="bottom" id="tLC-sS-iaZ"/>
+                            <constraint firstItem="UhO-Ad-cil" firstAttribute="top" secondItem="Kyx-Mz-EuL" secondAttribute="top" constant="16" id="u0h-q9-JuV"/>
+                            <constraint firstAttribute="trailing" secondItem="pn2-7M-DL3" secondAttribute="trailing" id="vlx-fA-reF"/>
+                            <constraint firstItem="pn2-7M-DL3" firstAttribute="top" relation="greaterThanOrEqual" secondItem="udM-gG-pnP" secondAttribute="bottom" constant="16" id="wdk-fa-J6B"/>
+                            <constraint firstItem="pn2-7M-DL3" firstAttribute="leading" secondItem="Kyx-Mz-EuL" secondAttribute="leading" id="y4n-Ik-0eU"/>
+                        </constraints>
+                    </view>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="Kyx-Mz-EuL" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="CfW-uz-Sli"/>
+                    <constraint firstAttribute="bottom" secondItem="Kyx-Mz-EuL" secondAttribute="bottom" id="OBR-a5-Ahk"/>
+                    <constraint firstAttribute="trailing" secondItem="Kyx-Mz-EuL" secondAttribute="trailing" id="jLa-bO-ugp"/>
+                    <constraint firstItem="Kyx-Mz-EuL" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="rDN-jD-Gv0"/>
+                </constraints>
+            </tableViewCellContentView>
+            <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <connections>
+                <outlet property="btnToggle" destination="MPC-0f-F4B" id="9OX-8N-d69"/>
+                <outlet property="img" destination="udM-gG-pnP" id="mo7-AN-Ve9"/>
+                <outlet property="lblSubtitle" destination="I7Q-VV-fcz" id="MTy-Nd-klm"/>
+                <outlet property="lblTitle" destination="UhO-Ad-cil" id="9nN-72-Axj"/>
+            </connections>
+            <point key="canvasLocation" x="-6.8702290076335872" y="10.91549295774648"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <namedColor name="App_Light_Border_Color">
+            <color red="0.91399997472763062" green="0.91399997472763062" blue="0.91399997472763062" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="App_White_Color">
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="Black_Theme_Color">
+            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="Chat_Read_Msg">
+            <color red="0.48600000143051147" green="0.48600000143051147" blue="0.48600000143051147" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
+</document>
