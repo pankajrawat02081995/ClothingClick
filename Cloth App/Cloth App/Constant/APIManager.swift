@@ -33,14 +33,13 @@ public class APIManager {
             print("API URL = \(api_url)")
         }
         else {
-            print("API URL = \(api_url) parameters = \(parameters!)")
+            print("API URL = \(api_url) \nParameters = \(parameters!)")
         }
         
         var headers: HTTPHeaders = ["accept": "application/json"]
         if appDelegate.headerToken != "" {
             headers["Authorization"] = "Bearer \(appDelegate.headerToken)"
         }
-        
         
         let request: DataRequest = Alamofire.request(api_url, method: method, parameters: parameters, headers: headers).validate().responseJSON { response in
             

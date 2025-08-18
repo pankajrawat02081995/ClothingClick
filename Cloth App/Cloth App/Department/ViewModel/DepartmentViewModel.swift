@@ -62,7 +62,7 @@ class DepartmentViewModel{
             
           //  FilterSingleton.share.filter.gender_id = "\(genderId)"
             var dict = FilterSingleton.share.filter.toDictionary() ?? [:]
-            dict.removeValue(forKey: "slectedCategories")
+//            dict.removeValue(forKey: "slectedCategories")
             dict["latitude"] = appDelegate.userLocation?.latitude ?? ""
             dict["longitude"] = appDelegate.userLocation?.longitude ?? ""
             APIManager().apiCallWithMultipart(of: ViewCountModel.self, isShowHud: true, URL: BASE_URL, apiName: APINAME.FILTER_POST.rawValue, parameters: dict) { (response, error) in

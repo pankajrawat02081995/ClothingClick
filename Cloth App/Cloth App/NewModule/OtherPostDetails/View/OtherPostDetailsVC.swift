@@ -695,7 +695,6 @@ extension OtherPostDetailsVC : UICollectionViewDataSource,UICollectionViewDelega
             //            cell.imgPlay.isHidden = true
             if objet.type == "image"{
                 cell.imgPost.setImageFast(with: objet.image ?? "")
-                cell.imgPost.contentMode = .scaleToFill
             }
             else {
                 if let url = objet.video {

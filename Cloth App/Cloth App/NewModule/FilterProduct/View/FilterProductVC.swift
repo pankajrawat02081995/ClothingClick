@@ -176,7 +176,7 @@ extension FilterProductVC : UITableViewDelegate,UITableViewDataSource {
             viewController.selectedIndex = indexPath.row
             viewController.headerTitle = self.categoryList[indexPath.row]
             viewController.isFilterProduct = true
-//            viewController.isSaveSearch = true
+            viewController.isSaveSearch = isSaveSearch
             self.navigationController?.pushViewController(viewController, animated: true)
         }
         else if self.categoryList[indexPath.row] == "Condition" {

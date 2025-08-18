@@ -847,7 +847,7 @@ extension SaveSearchViewController {
             param?.removeValue(forKey: "sort_value")
             param?["notification_item_counter"] = self.txtItemCount.text ?? ""
             param?["name"] = self.txtItemAddName.text ?? ""
-            param?.removeValue(forKey: "slectedCategories")
+//            param?.removeValue(forKey: "slectedCategories")
             
             APIManager().apiCallWithMultipart(of: UserDetailsModel.self, isShowHud: true, URL: BASE_URL, apiName: APINAME.SAVE_SEARCH_CREATE.rawValue, parameters: param ?? [:]) { (response, error) in
                 if error == nil {
@@ -917,7 +917,7 @@ extension SaveSearchViewController {
             param?["notification_item_counter"] = self.txtItemCount.text ?? ""
             param?["name"] = self.txtItemAddName.text ?? ""
             param?["save_search_id"] = self.saveSearchId
-            param?.removeValue(forKey: "slectedCategories")
+//            param?.removeValue(forKey: "slectedCategories")
             APIManager().apiCallWithMultipart(of: UserDetailsModel.self, isShowHud: true, URL: BASE_URL, apiName: APINAME.SAVE_SEARCH_UPDATE.rawValue, parameters: param ?? [:]) { (response, error) in
                 if error == nil {
                     if let response = response {

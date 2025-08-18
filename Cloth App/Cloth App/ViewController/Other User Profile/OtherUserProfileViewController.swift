@@ -441,6 +441,7 @@ extension OtherUserProfileViewController : UICollectionViewDelegate,UICollection
             if let url = objet.image?.first?.image {
                 cell.imgProduct.setImageFast(with: url)
             }
+            cell.imgProduct.contentMode = .scaleAspectFit
             
             cell.btnLike.tag = indexPath.row
             cell.btnLike.addTarget(self, action: #selector(btnWatch_Clicked(_:)), for: .touchUpInside)

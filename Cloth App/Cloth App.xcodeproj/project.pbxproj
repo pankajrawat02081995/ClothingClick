@@ -14,6 +14,11 @@
 		320E525F2E2AD65900BEAAF2 /* Cloth App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Cloth App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		320E53572E2AD87900BEAAF2 /* ScanningModules.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = ScanningModules.xcodeproj; sourceTree = "<group>"; };
 		320E56FB2E2AD9F700BEAAF2 /* ScanningModules.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = ScanningModules.xcodeproj; sourceTree = "<group>"; };
+		3232184B2E3A85B900303857 /* ScanningModules.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = ScanningModules.xcodeproj; sourceTree = "<group>"; };
+		324D86822E49CF4D0089DE2F /* ScanningModules.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = ScanningModules.xcodeproj; sourceTree = "<group>"; };
+		326ECF992E474BBF00055163 /* ScanningModules.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = ScanningModules.xcodeproj; sourceTree = "<group>"; };
+		32B181042E43CDE2002AFE5E /* ScanningModules.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = ScanningModules.xcodeproj; sourceTree = "<group>"; };
+		32DA6C3A2E36A5F900300E64 /* ScanningModules.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = ScanningModules.xcodeproj; sourceTree = "<group>"; };
 		64B42800A1CC2FD215D32EA5 /* Pods-Cloth App.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Cloth App.release.xcconfig"; path = "Target Support Files/Pods-Cloth App/Pods-Cloth App.release.xcconfig"; sourceTree = "<group>"; };
 		7D7E8C838E2B949AD2BB8698 /* Pods-Cloth App.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Cloth App.debug.xcconfig"; path = "Target Support Files/Pods-Cloth App/Pods-Cloth App.debug.xcconfig"; sourceTree = "<group>"; };
 		EFCEBCD0E6AAB2084302300A /* Pods_Cloth_App.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Cloth_App.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -93,6 +98,41 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		323219AB2E3A85B900303857 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		324D87E32E49CF4D0089DE2F /* Products */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		326ED0FA2E474BBF00055163 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		32B182642E43CDE2002AFE5E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		32DA6D9A2E36A5F900300E64 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		A7C369000BA10EA3D12BFE4A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -114,6 +154,7 @@
 				320E525D2E2AD65900BEAAF2 /* Resources */,
 				6998F05B5C214FA2194E381C /* [CP] Embed Pods Frameworks */,
 				FB2E85EB15E6C00EDDBB34B7 /* [CP] Copy Pods Resources */,
+				324D894D2E49D2250089DE2F /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -160,8 +201,28 @@
 					ProjectRef = 320E56FB2E2AD9F700BEAAF2 /* ScanningModules.xcodeproj */;
 				},
 				{
+					ProductGroup = 32DA6D9A2E36A5F900300E64 /* Products */;
+					ProjectRef = 32DA6C3A2E36A5F900300E64 /* ScanningModules.xcodeproj */;
+				},
+				{
+					ProductGroup = 32B182642E43CDE2002AFE5E /* Products */;
+					ProjectRef = 32B181042E43CDE2002AFE5E /* ScanningModules.xcodeproj */;
+				},
+				{
 					ProductGroup = 320E54BD2E2AD87900BEAAF2 /* Products */;
 					ProjectRef = 320E53572E2AD87900BEAAF2 /* ScanningModules.xcodeproj */;
+				},
+				{
+					ProductGroup = 324D87E32E49CF4D0089DE2F /* Products */;
+					ProjectRef = 324D86822E49CF4D0089DE2F /* ScanningModules.xcodeproj */;
+				},
+				{
+					ProductGroup = 323219AB2E3A85B900303857 /* Products */;
+					ProjectRef = 3232184B2E3A85B900303857 /* ScanningModules.xcodeproj */;
+				},
+				{
+					ProductGroup = 326ED0FA2E474BBF00055163 /* Products */;
+					ProjectRef = 326ECF992E474BBF00055163 /* ScanningModules.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -182,6 +243,23 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		324D894D2E49D2250089DE2F /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 8;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n";
+		};
 		681DF72E7A620004139D37C7 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -265,6 +343,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "Cloth App/Cloth App.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = PRN69F6WNX;
@@ -285,11 +364,12 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 7.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.clothingclick.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -308,6 +388,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "Cloth App/Cloth App.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = PRN69F6WNX;
@@ -328,11 +409,12 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 7.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.clothingclick.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";

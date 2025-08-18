@@ -9,15 +9,32 @@ import UIKit
 import SDWebImage
 
 extension UIImageView {
+    
+    
+    func preferredContentMode() -> UIView.ContentMode {
+        guard let img = self.image else { return .scaleAspectFit }
+        
+        if img.size.width > img.size.height {
+            // Landscape image → fit inside view
+            return .scaleAspectFit
+        } else if img.size.width < img.size.height {
+            // Portrait image → fill the view
+            return .scaleAspectFill
+        } else {
+            // Square image → usually fill looks better
+            return .scaleAspectFill
+        }
+    }
+    
     func setImageFast(with urlString: String?, placeholder: UIImage? = PlaceHolderImage) {
         guard let urlString = urlString, let url = URL(string: urlString) else {
             self.image = placeholder
             return
         }
-
+        
         // Show activity indicator while loading
         self.sd_imageIndicator = SDWebImageActivityIndicator.gray
-
+        
         self.sd_setImage(
             with: url,
             placeholderImage: placeholder,
@@ -32,7 +49,7 @@ extension UIImageView {
                     self?.image = placeholder // Fallback to placeholder if loading fails
                     return
                 }
-
+                
                 // Use fade-in animation only if the image is newly downloaded
                 if cacheType == .none {
                     UIView.transition(with: self, duration: 0.3, options: .transitionCrossDissolve, animations: {
