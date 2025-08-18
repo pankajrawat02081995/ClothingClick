@@ -255,7 +255,7 @@ extension FavoritesViewController {
         var param = FilterSingleton.share.filter.toDictionary()
         param?.removeValue(forKey: "is_only_count")
         param?["page"] = "\(self.currentPage)"
-        param?.removeValue(forKey: "slectedCategories")
+//        param?.removeValue(forKey: "slectedCategories")
         
         if appDelegate.reachable.connection != .none {
             APIManager().apiCall(of: HomeListDetailsModel.self, isShowHud: isShowHud, URL: BASE_URL, apiName: APINAME.FAVOURITE_POST.rawValue, method: .post, parameters: param) { (response, error) in

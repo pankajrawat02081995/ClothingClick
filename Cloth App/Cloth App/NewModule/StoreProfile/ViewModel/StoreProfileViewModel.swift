@@ -135,7 +135,7 @@ class StoreProfileViewModel{
             param?["page"] = "\(self.currentPage)"
             param?["user_id"] = userId
             param?["tab"] = tabId
-            param?.removeValue(forKey: "slectedCategories")
+//            param?.removeValue(forKey: "slectedCategories")
             
             APIManager().apiCall(of:HomeListDetailsModel.self, isShowHud: true, URL: BASE_URL, apiName: APINAME.USER_POSTS.rawValue, method: .post, parameters: param) { (response, error) in
                 if error == nil {
@@ -148,9 +148,9 @@ class StoreProfileViewModel{
                             }
                             
                             //MARK: only for now
-                            if self.tabId == "2"{
-                                self.posts.removeAll()
-                            }
+//                            if self.tabId == "2"{
+//                                self.posts.removeAll()
+//                            }
                             self.view?.tableView.reloadData()
                         }
                     }

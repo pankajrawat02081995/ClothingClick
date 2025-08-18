@@ -52,10 +52,19 @@ class ClothPreferencesViewController: BaseViewController {
     }
     
     @IBAction func clearAllOnPress(_ sender: UIButton) {
-        if let genserId = self.mysizeList[self.selectGengerIndex == -1 ? 1 : self.selectGengerIndex]?.gender_id{
+        if appDelegate.userDetails == nil {
             FilterSingleton.share.filter.sizes = ""
             FilterSingleton.share.selectedFilter.sizes = ""
-            self.callSaveSizeList(size: "" , brand: "", genderId: String(genserId))
+            btnNext.backgroundColor = .customButton_bg_gray
+            btnNext.isUserInteractionEnabled = false
+            self.selectedID.removeAll()
+            self.tblClothsPref.reloadData()
+        }else{
+            if let genserId = self.mysizeList[self.selectGengerIndex == -1 ? 1 : self.selectGengerIndex]?.gender_id{
+                FilterSingleton.share.filter.sizes = ""
+                FilterSingleton.share.selectedFilter.sizes = ""
+                self.callSaveSizeList(size: "" , brand: "", genderId: String(genserId))
+            }
         }
     }
     
@@ -302,6 +311,7 @@ extension ClothPreferencesViewController: UICollectionViewDelegate, UICollection
                     }
                     outerModel.sizes = sizes
                     categoryList[i] = outerModel
+                    
                 }
             }
             
@@ -312,6 +322,7 @@ extension ClothPreferencesViewController: UICollectionViewDelegate, UICollection
             
             btnNext.backgroundColor = isAnySelected ? .customBlack : .customButton_bg_gray
             btnNext.isUserInteractionEnabled = isAnySelected
+            
             
             tblClothsPref.reloadData()
             tblClothsPref.layoutIfNeeded()
@@ -592,49 +603,57 @@ class ImageCache {
 }
 
 extension ClothPreferencesViewController{
-    private func checkAndFetchLocation(complition:@escaping((Bool) -> Void?)) {
+    private func checkAndFetchLocation(completion: @escaping (Bool) -> Void) {
         let locationManager = LocationManager.shared
         
-        if locationManager.isLocationServicesEnabled() {
-            locationManager.getCurrentLocation { result in
-                DispatchQueue.main.async {
-                    switch result {
-                    case .success(let location):
-                        print("Location fetched: \(location.coordinate.latitude), \(location.coordinate.longitude)")
-                        complition(true)
-                    case .failure(let error):
-                        print("Error fetching location: \(error.localizedDescription)")
-                        if LocationManager.shared.isLocationSetNotNow == true{
-                            complition(false)
-                        }else{
-                            let vc = DeletePostVC.instantiate(fromStoryboard: .Sell)
-                            vc.modalPresentationStyle = .overFullScreen
-                            vc.modalTransitionStyle = .crossDissolve
-                            vc.isCancelHide = false
-                            vc.deleteTitle = "Allow Access"
-                            vc.cancelTitle = "Not Now"
-                            vc.deleteBgColor = .black
-                            vc.titleMain = "Turn on Location"
-                            vc.subTitle = " Location services are required to provide the best experience on Clothing Click. Please enable them in your device settings"
-                            vc.imgMain = UIImage(named: "ic_location_big")
-                            vc.deleteOnTap = {
-                                LocationManager.shared.openSettings()
-                            }
-                            vc.cancelOnTap = {
-                                LocationManager.shared.isLocationSetNotNow = true
-                                complition(false)
-                            }
-                            self.present(vc, animated: true)
-                        }
-                        
-                    }
-                }
-            }
-        } else {
+        guard locationManager.isLocationServicesEnabled() else {
             print("Location services are disabled")
             showLocationErrorAlert(error: LocationManager.LocationError.servicesDisabled)
+            return
+        }
+        
+        locationManager.getCurrentLocation { result in
+            switch result {
+            case .success(let location):
+                print("Location fetched: \(location.coordinate.latitude), \(location.coordinate.longitude)")
+                DispatchQueue.main.async {
+                    completion(true)
+                }
+                
+            case .failure(let error):
+                print("Error fetching location: \(error.localizedDescription)")
+                
+                DispatchQueue.main.async {
+                    if locationManager.isLocationSetNotNow ?? false {
+                        completion(false)
+                        return
+                    }
+                    
+                    let vc = DeletePostVC.instantiate(fromStoryboard: .Sell)
+                    vc.modalPresentationStyle = .overFullScreen
+                    vc.modalTransitionStyle = .crossDissolve
+                    vc.isCancelHide = false
+                    vc.deleteTitle = "Allow Access"
+                    vc.cancelTitle = "Not Now"
+                    vc.deleteBgColor = .black
+                    vc.titleMain = "Turn on Location"
+                    vc.subTitle = "Location services are required to provide the best experience on Clothing Click. Please enable them in your device settings"
+                    vc.imgMain = UIImage(named: "ic_location_big")
+                    
+                    vc.deleteOnTap = {
+                        locationManager.openSettings()
+                    }
+                    vc.cancelOnTap = {
+                        locationManager.isLocationSetNotNow = true
+                        completion(false)
+                    }
+                    
+                    self.present(vc, animated: true)
+                }
+            }
         }
     }
+    
     
     private func showLocationErrorAlert(error: Error) {
         let alert = UIAlertController(

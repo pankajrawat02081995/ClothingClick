@@ -173,61 +173,75 @@ class DiscoverVC: BaseViewController {
         }
     }
     
-    private func checkAndFetchLocation(complition:@escaping((Bool) -> Void?)) {
+    private func checkAndFetchLocation(completion: @escaping (Bool) -> Void) {
         let locationManager = LocationManager.shared
         
-        if locationManager.isLocationServicesEnabled() {
-            locationManager.getCurrentLocation { result in
-                DispatchQueue.main.async {
-                    switch result {
-                    case .success(let location):
-                        print("Location fetched: \(location.coordinate.latitude), \(location.coordinate.longitude)")
-                        //                        complition(true)
-                        let lat = Double(appDelegate.userLocation?.latitude ?? "") ?? 0.0
-                        let long = Double(appDelegate.userLocation?.longitude ?? "") ?? 0.0
-                        
-                        self.getCityOrState(from: lat == 0.0 ? location.coordinate.latitude : lat, longitude: long == 0.0 ? location.coordinate.longitude : long) { result in
-                            switch result {
-                            case .success(let location):
-                                print("Location: \(location)")
-                                complition(true)
-                            case .failure(let error):
-                                print("Error: \(error.localizedDescription)")
-                            }
-                        }
-                    case .failure(let error):
-                        print("Error fetching location: \(error.localizedDescription)")
-                        if LocationManager.shared.isLocationSetNotNow == true{
-                            complition(false)
-                        }else{
-                            let vc = DeletePostVC.instantiate(fromStoryboard: .Sell)
-                            vc.modalPresentationStyle = .overFullScreen
-                            vc.modalTransitionStyle = .crossDissolve
-                            vc.isCancelHide = false
-                            vc.deleteTitle = "Allow Access"
-                            vc.cancelTitle = "Not Now"
-                            vc.deleteBgColor = .black
-                            vc.titleMain = "Turn on Location"
-                            vc.subTitle = " Location services are required to provide the best experience on Clothing Click. Please enable them in your device settings"
-                            vc.imgMain = UIImage(named: "ic_location_big")
-                            vc.deleteOnTap = {
-                                LocationManager.shared.openSettings()
-                            }
-                            vc.cancelOnTap = {
-                                LocationManager.shared.isLocationSetNotNow = true
-                                complition(false)
-                            }
-                            self.present(vc, animated: true)
-                        }
-                        
-                    }
-                }
-            }
-        } else {
+        guard locationManager.isLocationServicesEnabled() else {
             print("Location services are disabled")
             showLocationErrorAlert(error: LocationManager.LocationError.servicesDisabled)
+            return
+        }
+        
+        locationManager.getCurrentLocation { result in
+            switch result {
+            case .success(let location):
+                print("Location fetched: \(location.coordinate.latitude), \(location.coordinate.longitude)")
+                
+                // Use stored coordinates if available, otherwise use fetched ones
+                let storedLat = Double(appDelegate.userLocation?.latitude ?? "") ?? 0.0
+                let storedLong = Double(appDelegate.userLocation?.longitude ?? "") ?? 0.0
+                
+                let finalLat = (storedLat == 0.0) ? location.coordinate.latitude : storedLat
+                let finalLong = (storedLong == 0.0) ? location.coordinate.longitude : storedLong
+                
+                // Perform reverse geocoding in background
+                self.getCityOrState(from: finalLat, longitude: finalLong) { geoResult in
+                    DispatchQueue.main.async {
+                        switch geoResult {
+                        case .success(let place):
+                            print("Location: \(place)")
+                            completion(true)
+                        case .failure(let error):
+                            print("Reverse geocoding error: \(error.localizedDescription)")
+                            completion(false)
+                        }
+                    }
+                }
+                
+            case .failure(let error):
+                print("Error fetching location: \(error.localizedDescription)")
+                
+                DispatchQueue.main.async {
+                    if locationManager.isLocationSetNotNow ?? false{
+                        completion(false)
+                        return
+                    }
+                    
+                    let vc = DeletePostVC.instantiate(fromStoryboard: .Sell)
+                    vc.modalPresentationStyle = .overFullScreen
+                    vc.modalTransitionStyle = .crossDissolve
+                    vc.isCancelHide = false
+                    vc.deleteTitle = "Allow Access"
+                    vc.cancelTitle = "Not Now"
+                    vc.deleteBgColor = .black
+                    vc.titleMain = "Turn on Location"
+                    vc.subTitle = "Location services are required to provide the best experience on Clothing Click. Please enable them in your device settings."
+                    vc.imgMain = UIImage(named: "ic_location_big")
+                    
+                    vc.deleteOnTap = {
+                        locationManager.openSettings()
+                    }
+                    vc.cancelOnTap = {
+                        locationManager.isLocationSetNotNow = true
+                        completion(false)
+                    }
+                    
+                    self.present(vc, animated: true)
+                }
+            }
         }
     }
+
     
     
     private func showLocationErrorAlert(error: Error) {

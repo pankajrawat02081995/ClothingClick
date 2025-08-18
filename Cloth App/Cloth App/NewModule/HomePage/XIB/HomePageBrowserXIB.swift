@@ -12,7 +12,11 @@ class HomePageBrowserXIB: UICollectionViewCell {
     @IBOutlet weak var btnLike: UIButton!
     @IBOutlet weak var lblPrice: UILabel!
     @IBOutlet weak var lblProductName: UILabel!
-    @IBOutlet weak var imgProduct: UIImageView!
+    @IBOutlet weak var imgProduct: UIImageView!{
+        didSet{
+            imgProduct.contentMode = imgProduct.preferredContentMode()
+        }
+    }
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

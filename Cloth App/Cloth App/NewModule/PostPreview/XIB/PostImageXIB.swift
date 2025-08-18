@@ -9,7 +9,12 @@ import UIKit
 
 class PostImageXIB: UICollectionViewCell {
 
-    @IBOutlet weak var imgPost: UIImageView!
+    @IBOutlet weak var imgPost: UIImageView!{
+        didSet{
+            imgPost.contentMode = imgPost.preferredContentMode()
+        }
+    }
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

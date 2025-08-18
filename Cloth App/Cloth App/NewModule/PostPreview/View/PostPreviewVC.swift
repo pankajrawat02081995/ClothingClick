@@ -156,7 +156,7 @@ class PostPreviewVC: UIViewController {
             param?["page"] = "1"
             param?["user_id"] = userId
             param?["tab"] = tabId
-            param?.removeValue(forKey: "slectedCategories")
+//            param?.removeValue(forKey: "slectedCategories")
             APIManager().apiCall(of:HomeListDetailsModel.self, isShowHud: isShowHud, URL: BASE_URL, apiName: APINAME.USER_POSTS.rawValue, method: .post, parameters: param) { (response, error) in
                 if error == nil {
                     if let response = response {

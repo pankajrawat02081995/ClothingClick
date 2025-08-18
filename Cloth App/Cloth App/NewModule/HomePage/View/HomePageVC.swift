@@ -103,31 +103,38 @@ class HomePageVC: BaseViewController {
     
     private func checkAndFetchLocation(complition:@escaping((Bool) -> Void?)) {
         let locationManager = LocationManager.shared
-        
+
         if locationManager.isLocationServicesEnabled() {
             locationManager.getCurrentLocation { result in
-                DispatchQueue.main.async {
-                    switch result {
-                    case .success(let location):
-                        print("Location fetched: \(location.coordinate.latitude), \(location.coordinate.longitude)")
-                        //                        complition(true)
-                        let lat = Double(appDelegate.userLocation?.latitude ?? "") ?? 0.0
-                        let long = Double(appDelegate.userLocation?.longitude ?? "") ?? 0.0
+                switch result {
+                case .success(let location):
+                    print("Location fetched: \(location.coordinate.latitude), \(location.coordinate.longitude)")
+
+                    // Do geocoding in background to avoid blocking UI
+                    DispatchQueue.global(qos: .userInitiated).async {
+                        let lat = Double(appDelegate.userLocation?.latitude ?? "") ?? location.coordinate.latitude
+                        let long = Double(appDelegate.userLocation?.longitude ?? "") ?? location.coordinate.longitude
                         
-                        self.getCityOrState(from: lat == 0.0 ? location.coordinate.latitude : lat, longitude: long == 0.0 ? location.coordinate.longitude : long) { result in
-                            switch result {
-                            case .success(let location):
-                                print("Location: \(location)")
-                                complition(true)
-                            case .failure(let error):
-                                print("Error: \(error.localizedDescription)")
+                        self.getCityOrState(from: lat, longitude: long) { result in
+                            DispatchQueue.main.async {
+                                switch result {
+                                case .success:
+                                    print("Location: true")
+                                    complition(true)
+                                case .failure(let error):
+                                    print("Error: \(error.localizedDescription)")
+                                    complition(false)
+                                }
                             }
                         }
-                    case .failure(let error):
-                        print("Error fetching location: \(error.localizedDescription)")
-                        if LocationManager.shared.isLocationSetNotNow == true{
+                    }
+
+                case .failure(let error):
+                    print("Error fetching location: \(error.localizedDescription)")
+                    DispatchQueue.main.async {
+                        if LocationManager.shared.isLocationSetNotNow == true {
                             complition(false)
-                        }else{
+                        } else {
                             let vc = DeletePostVC.instantiate(fromStoryboard: .Sell)
                             vc.modalPresentationStyle = .overFullScreen
                             vc.modalTransitionStyle = .crossDissolve
@@ -136,7 +143,7 @@ class HomePageVC: BaseViewController {
                             vc.cancelTitle = "Not Now"
                             vc.deleteBgColor = .black
                             vc.titleMain = "Turn on Location"
-                            vc.subTitle = " Location services are required to provide the best experience on Clothing Click. Please enable them in your device settings"
+                            vc.subTitle = "Location services are required to provide the best experience on Clothing Click. Please enable them in your device settings"
                             vc.imgMain = UIImage(named: "ic_location_big")
                             vc.deleteOnTap = {
                                 LocationManager.shared.openSettings()
@@ -147,7 +154,6 @@ class HomePageVC: BaseViewController {
                             }
                             self.present(vc, animated: true)
                         }
-                        
                     }
                 }
             }
@@ -156,6 +162,7 @@ class HomePageVC: BaseViewController {
             showLocationErrorAlert(error: LocationManager.LocationError.servicesDisabled)
         }
     }
+
     
     private func showLocationErrorAlert(error: Error) {
         let alert = UIAlertController(

@@ -231,7 +231,7 @@ extension SearchItemAndMembersViewController : UITableViewDelegate,UITableViewDa
             let cell = tableView.dequeueReusableCell(withIdentifier: "UserProfileListXIB", for: indexPath) as! UserProfileListXIB
             
             cell.imgUser.setImageFast(with: objet.userimage?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "")
-            
+            cell.lblNameLetter.isHidden = true
             cell.lblFollowerCount.text = "\(objet.total_posts ?? 0) Listings"
             
             if objet.userimage == nil || objet.userimage?.isEmpty == true{
@@ -315,7 +315,7 @@ extension SearchItemAndMembersViewController {
             param?["page"] = "\(self.currentPage)"
             param?["search_value"] = searchtext
             param?["search_type"] = searchType
-            param?.removeValue(forKey: "slectedCategories")
+//            param?.removeValue(forKey: "slectedCategories")
             APIManager().apiCall(of: GlobalSearchModel.self, isShowHud: false, URL: BASE_URL, apiName: APINAME.GLOBAL_SEARCH.rawValue, method: .post, parameters: param) { (response, error) in
                 if error == nil {
                     if let response = response {
