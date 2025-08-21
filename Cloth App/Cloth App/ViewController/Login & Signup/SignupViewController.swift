@@ -35,6 +35,8 @@ class SignupViewController: BaseViewController {
     @IBOutlet weak var btnLocation: UIButton!
     @IBOutlet weak var btnNext: CustomButton!
 
+    @IBOutlet weak var lblValidation: UILabel!
+    
     // 1 = User ,2 = store ,3 = brand
     var selType = "1"
     var address : AddressListModel!
@@ -55,11 +57,51 @@ class SignupViewController: BaseViewController {
     
     func setdata (){
         self.txtUserName.delegate = self
+        txtPassword.delegate = self
+        updateValidation(for: "")
+        txtPassword.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
+        
         self.txtEmail.text = self.emailId
         if self.firstName != "" || self.lastName != ""{
             self.txtName.text = "\(self.firstName) \(self.lastName)"
         }
     }
+    @objc func textFieldDidChange(_ textField: UITextField) {
+        updateValidation(for: textField.text ?? "")
+    }
+    
+    private func updateValidation(for text: String) {
+        if text.isEmpty {
+            lblValidation.text = ""
+            return
+        }
+        lblValidation.isHidden = false
+        
+        let hasMinLength = text.count >= 8
+        let hasNumber = text.rangeOfCharacter(from: .decimalDigits) != nil
+        let hasUppercase = text.rangeOfCharacter(from: .uppercaseLetters) != nil
+        
+        let validationText = NSMutableAttributedString()
+        validationText.append(makeRuleText("8 Characters", isValid: hasMinLength))
+        validationText.append(NSAttributedString(string: "   "))
+        validationText.append(makeRuleText("1 Uppercase", isValid: hasUppercase))
+        validationText.append(NSAttributedString(string: "   "))
+        validationText.append(makeRuleText("1 Number", isValid: hasNumber))
+        
+        lblValidation.attributedText = validationText
+    }
+        
+        private func makeRuleText(_ text: String, isValid: Bool) -> NSAttributedString {
+            let symbol = isValid ? "🟢 " : "🔴 "
+            let color: UIColor = isValid ? .systemGreen : .systemRed
+            return NSAttributedString(
+                string: symbol + text,
+                attributes: [
+                    .foregroundColor: color,
+                    .font: UIFont.systemFont(ofSize: 14, weight: .medium)
+                ]
+            )
+        }
     
     @IBAction func btnPassword_Clicked(_ button: UIButton) {
         self.btnPassword.isSelected = !self.btnPassword.isSelected
@@ -282,6 +324,7 @@ extension SignupViewController: UITextFieldDelegate {
         else if txtConfirmPassword.isFirstResponder {
             txtConfirmPassword.resignFirstResponder()
         }
+        
         return true
     }
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
@@ -298,13 +341,14 @@ extension SignupViewController: UITextFieldDelegate {
             let currentText = textField.text ?? ""
             let newLength = currentText.count + string.count - range.length
             return newLength <= 20
+        }else if textField == txtPassword{
+            let currentText = textField.text ?? ""
+                    guard let stringRange = Range(range, in: currentText) else { return false }
+                    let updatedText = currentText.replacingCharacters(in: stringRange, with: string)
+                    
+                    // Limit to 8 characters
+                    return updatedText.count <= 8
         }
-//        if textField == txtName  {
-//            let allowedCharacterSet = CharacterSet(charactersIn: kNameCharacters)
-//            let typedCharacterSet = CharacterSet(charactersIn: string)
-//            let alphabet = allowedCharacterSet.isSuperset(of: typedCharacterSet)
-//            return alphabet
-//        }
         return true
     }
 }

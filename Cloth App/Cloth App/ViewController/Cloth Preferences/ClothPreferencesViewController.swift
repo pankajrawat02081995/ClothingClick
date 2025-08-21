@@ -70,7 +70,12 @@ class ClothPreferencesViewController: BaseViewController {
     
     func setSelectedSizeDate() {
         
-        guard let userSizes = appDelegate.userDetails?.user_size, !userSizes.isEmpty else { return }
+        guard let userSizes = appDelegate.userDetails?.user_size, !userSizes.isEmpty else {if isMySizes{
+            self.btnNext.backgroundColor = .black
+            self.btnNext.setTitleColor(.white, for: .normal)
+            self.btnNext.isUserInteractionEnabled = true
+        }
+            return }
         
         for (i, outerModel) in categoryList.enumerated() {
             guard var updatedOuterModel = outerModel else { continue }
@@ -92,6 +97,11 @@ class ClothPreferencesViewController: BaseViewController {
         }
         
         selectedID = userSizes.map { String($0) }
+        if isMySizes{
+            self.btnNext.backgroundColor = .black
+            self.btnNext.setTitleColor(.white, for: .normal)
+            self.btnNext.isUserInteractionEnabled = true
+        }
         self.tblClothsPref.reloadData()
     }
     
@@ -168,6 +178,38 @@ class ClothPreferencesViewController: BaseViewController {
                 
             }
             print(self.saveSize)
+            
+            var hasMen = false
+            var hasWomen = false
+
+            for item in mysizeList {
+                guard let genderId = item?.gender_id else { continue }
+                
+                for category in item?.categories ?? [] {
+                    let ids = category.sizes?.map { "\($0.id ?? 0)" } ?? []
+                    
+                    // Check if any of the sizes are selected
+                    if ids.contains(where: { selectedID.contains($0) }) {
+                        if genderId == 1 { // assuming 1 = men
+                            hasMen = true
+                        } else if genderId == 2 { // assuming 2 = women
+                            hasWomen = true
+                        }
+                    }
+                }
+            }
+            
+            // Final condition
+            let containsBothGenders = hasMen && hasWomen
+            print("Contains both genders? \(containsBothGenders)")
+            
+            if containsBothGenders{
+                FilterSingleton.share.genderSelection = nil
+                appDelegate.selectGenderId = ""
+            }else{
+                appDelegate.selectGenderId = "\(self.mysizeList[self.selectGengerIndex == -1 ? 1 : self.selectGengerIndex]?.gender_id ?? 0)"
+                FilterSingleton.share.genderSelection = self.mysizeList[self.selectGengerIndex == -1 ? 1 : self.selectGengerIndex]?.gender_id
+            }
             
             if let genserId = self.mysizeList[self.selectGengerIndex == -1 ? 1 : self.selectGengerIndex]?.gender_id{
                 let sizeAreeString = self.selectedID.joined(separator: ",")
@@ -292,7 +334,6 @@ extension ClothPreferencesViewController: UICollectionViewDelegate, UICollection
             tblClothsPref.reloadData()
             tblClothsPref.layoutIfNeeded()
             constHeightForTblClothsPref.constant = tblClothsPref.contentSize.height
-            
         } else {
             for i in 0..<categoryList.count {
                 guard var outerModel = categoryList[i], var sizes = outerModel.sizes else { continue }
@@ -320,9 +361,14 @@ extension ClothPreferencesViewController: UICollectionViewDelegate, UICollection
                 $0?.sizes?.contains(where: { $0.isSelect == true }) == true
             }
             
-            btnNext.backgroundColor = isAnySelected ? .customBlack : .customButton_bg_gray
-            btnNext.isUserInteractionEnabled = isAnySelected
-            
+            if isMySizes{
+                self.btnNext.backgroundColor = .black
+                self.btnNext.setTitleColor(.white, for: .normal)
+                self.btnNext.isUserInteractionEnabled = true
+            }else{
+                btnNext.backgroundColor = isAnySelected ? .customBlack : .customButton_bg_gray
+                btnNext.isUserInteractionEnabled = isAnySelected
+            }
             
             tblClothsPref.reloadData()
             tblClothsPref.layoutIfNeeded()
@@ -557,7 +603,7 @@ extension ClothPreferencesViewController {
             APIManager().apiCall(of: UserDetailsModel.self, isShowHud: true, URL: BASE_URL, apiName: APINAME.SIZES_SAVE.rawValue, method: .post, parameters: param) { (response, error) in
                 if error == nil {
                     if let userDetails = response?.dictData {
-                        appDelegate.selectGenderId = genderId == "2" ? "1" : "0"
+//                        appDelegate.selectGenderId = genderId == "2" ? "1" : "0"
                         FilterSingleton.share.filter.sizes = size
                         self.saveUserDetails(userDetails: userDetails)
                         if self.isUserLogin == nil{

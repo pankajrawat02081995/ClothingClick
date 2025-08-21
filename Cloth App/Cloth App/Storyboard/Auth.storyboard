@@ -30,7 +30,7 @@
         <!--LoginVC-->
         <scene sceneID="s0d-6b-0kx">
             <objects>
-                <viewController storyboardIdentifier="LoginVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Y6W-OH-hqX" customClass="LoginVC" customModule="Clothing_Click" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="LoginVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Y6W-OH-hqX" customClass="LoginVC" customModule="Cloth_App" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" clipsSubviews="YES" contentMode="scaleToFill" id="5EZ-qb-Rvc">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -301,7 +301,7 @@
         <!--Signup View Controller-->
         <scene sceneID="FYK-O2-flM">
             <objects>
-                <viewController storyboardIdentifier="SignupViewController" id="3LH-8P-z6J" customClass="SignupViewController" customModule="Clothing_Click" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="SignupViewController" id="3LH-8P-z6J" customClass="SignupViewController" customModule="Cloth_App" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="ZLP-W6-lUW">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -312,7 +312,7 @@
                                     <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kKJ-sc-0C5">
                                         <rect key="frame" x="0.0" y="0.0" width="393" height="625"/>
                                         <subviews>
-                                            <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cTV-ga-BAc" customClass="CustomButton" customModule="Clothing_Click" customModuleProvider="target">
+                                            <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cTV-ga-BAc" customClass="CustomButton" customModule="Cloth_App" customModuleProvider="target">
                                                 <rect key="frame" x="20" y="476" width="353" height="44"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
@@ -476,13 +476,13 @@
                                                         <rect key="frame" x="0.0" y="230.00000000000003" width="353" height="94.666666666666657"/>
                                                         <subviews>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Password" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="enh-2H-1bM">
-                                                                <rect key="frame" x="0.0" y="0.0" width="62" height="16.666666666666668"/>
+                                                                <rect key="frame" x="0.0" y="0.0" width="62" height="32.666666666666664"/>
                                                                 <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="14"/>
                                                                 <color key="textColor" name="Black_Theme_Color"/>
                                                                 <nil key="highlightedColor"/>
                                                             </label>
                                                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter here" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ob9-h3-HT1" customClass="AnimatableTextField" customModule="IBAnimatable">
-                                                                <rect key="frame" x="0.0" y="20.666666666666629" width="353" height="44"/>
+                                                                <rect key="frame" x="0.0" y="36.666666666666629" width="353" height="44"/>
                                                                 <color key="backgroundColor" name="Light_Bg_Color"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="height" constant="44" id="eLY-lu-FcQ"/>
@@ -506,7 +506,7 @@
                                                                 </userDefinedRuntimeAttributes>
                                                             </textField>
                                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="M44-jJ-jgY">
-                                                                <rect key="frame" x="309" y="30.666666666666629" width="24" height="24"/>
+                                                                <rect key="frame" x="309" y="46.666666666666629" width="24" height="24"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="height" constant="24" id="PFE-ZE-MV6"/>
                                                                     <constraint firstAttribute="width" constant="24" id="jLH-p7-6Id"/>
@@ -517,8 +517,8 @@
                                                                     <action selector="btnPassword_Clicked:" destination="3LH-8P-z6J" eventType="touchUpInside" id="Wnt-Je-fzx"/>
                                                                 </connections>
                                                             </button>
-                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="🟢 8 Characters   🔴 1 Uppercase   🔴 1 Number" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fDP-AR-Jfw">
-                                                                <rect key="frame" x="0.0" y="74.666666666666686" width="353" height="16"/>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fDP-AR-Jfw">
+                                                                <rect key="frame" x="0.0" y="90.666666666666686" width="353" height="0.0"/>
                                                                 <fontDescription key="fontDescription" name="ProximaNova-Medium" family="ProximaNova-Medium" pointSize="14"/>
                                                                 <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 <nil key="highlightedColor"/>
@@ -599,7 +599,7 @@
                                                     </view>
                                                 </subviews>
                                             </stackView>
-                                            <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UWd-TE-9Uv" customClass="CustomButton" customModule="Clothing_Click" customModuleProvider="target">
+                                            <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UWd-TE-9Uv" customClass="CustomButton" customModule="Cloth_App" customModuleProvider="target">
                                                 <rect key="frame" x="20" y="561" width="353" height="44"/>
                                                 <color key="backgroundColor" name="Black_Theme_Color"/>
                                                 <constraints>
@@ -706,6 +706,7 @@
                         <outlet property="btnConfirmPassword" destination="DXI-6I-bhB" id="S22-ud-Sxo"/>
                         <outlet property="btnNext" destination="UWd-TE-9Uv" id="Sjj-gC-OYQ"/>
                         <outlet property="btnPassword" destination="M44-jJ-jgY" id="qsd-BZ-08N"/>
+                        <outlet property="lblValidation" destination="fDP-AR-Jfw" id="2sp-oW-PQ9"/>
                         <outlet property="txtConfirmPassword" destination="wt7-IU-zQH" id="rir-Bs-dLV"/>
                         <outlet property="txtEmail" destination="Ehc-0M-nwm" id="Goz-L0-SYR"/>
                         <outlet property="txtName" destination="gkN-8V-RdB" id="D91-6Q-5qm"/>
@@ -720,7 +721,7 @@
         <!--Login View Controller-->
         <scene sceneID="p9B-Vi-RLl">
             <objects>
-                <viewController storyboardIdentifier="LoginViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Gsf-xl-T2h" customClass="LoginViewController" customModule="Clothing_Click" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="LoginViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Gsf-xl-T2h" customClass="LoginViewController" customModule="Cloth_App" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="3aE-QI-gdJ">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -832,7 +833,7 @@
                                     </view>
                                 </subviews>
                             </stackView>
-                            <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="axY-Ug-f09" customClass="CustomButton" customModule="Clothing_Click" customModuleProvider="target">
+                            <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="axY-Ug-f09" customClass="CustomButton" customModule="Cloth_App" customModuleProvider="target">
                                 <rect key="frame" x="20" y="720" width="353" height="44"/>
                                 <color key="backgroundColor" name="Black_Theme_Color"/>
                                 <constraints>
@@ -896,7 +897,7 @@
                                     <constraint firstAttribute="height" constant="1" id="xkh-XC-TVy"/>
                                 </constraints>
                             </view>
-                            <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MxP-Ko-hDg" customClass="CustomButton" customModule="Clothing_Click" customModuleProvider="target">
+                            <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MxP-Ko-hDg" customClass="CustomButton" customModule="Cloth_App" customModuleProvider="target">
                                 <rect key="frame" x="20" y="635" width="353" height="44"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
@@ -955,7 +956,7 @@
         <!--Mobile NumberVC-->
         <scene sceneID="u1P-Qh-tyl">
             <objects>
-                <viewController storyboardIdentifier="MobileNumberVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="kg6-iI-OUe" customClass="MobileNumberVC" customModule="Clothing_Click" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="MobileNumberVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="kg6-iI-OUe" customClass="MobileNumberVC" customModule="Cloth_App" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" clipsSubviews="YES" contentMode="scaleToFill" id="pOy-F2-AcC">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1048,7 +1049,7 @@
                                 <color key="textColor" name="Chat_Read_Msg"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mEp-id-Zdw" customClass="CustomButton" customModule="Clothing_Click" customModuleProvider="target">
+                            <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mEp-id-Zdw" customClass="CustomButton" customModule="Cloth_App" customModuleProvider="target">
                                 <rect key="frame" x="20" y="720" width="353" height="44"/>
                                 <color key="backgroundColor" name="Black_Theme_Color"/>
                                 <constraints>
@@ -1110,7 +1111,7 @@
         <!--Otp ViewVC-->
         <scene sceneID="0j7-ad-2OV">
             <objects>
-                <viewController storyboardIdentifier="OtpViewVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Bkl-IB-2Oa" customClass="OtpViewVC" customModule="Clothing_Click" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="OtpViewVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Bkl-IB-2Oa" customClass="OtpViewVC" customModule="Cloth_App" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" clipsSubviews="YES" contentMode="scaleToFill" id="rUX-kG-MQA">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1180,7 +1181,7 @@
                                     <constraint firstAttribute="bottom" secondItem="ilB-8c-waG" secondAttribute="bottom" id="yfN-6t-zGq"/>
                                 </constraints>
                             </view>
-                            <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6Nc-lY-3Kz" customClass="CustomButton" customModule="Clothing_Click" customModuleProvider="target">
+                            <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6Nc-lY-3Kz" customClass="CustomButton" customModule="Cloth_App" customModuleProvider="target">
                                 <rect key="frame" x="20" y="720" width="353" height="44"/>
                                 <color key="backgroundColor" name="Black_Theme_Color"/>
                                 <constraints>
@@ -1256,7 +1257,7 @@
         <!--New Change PasswordVC-->
         <scene sceneID="duN-8c-53L">
             <objects>
-                <viewController storyboardIdentifier="NewChangePasswordVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="I9O-wW-wIV" customClass="NewChangePasswordVC" customModule="Clothing_Click" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="NewChangePasswordVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="I9O-wW-wIV" customClass="NewChangePasswordVC" customModule="Cloth_App" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" clipsSubviews="YES" contentMode="scaleToFill" id="DSF-6a-BBW">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1330,7 +1331,7 @@
                                     <constraint firstItem="5yZ-QJ-zin" firstAttribute="top" secondItem="mfO-Nq-rVz" secondAttribute="top" id="zR5-DD-aqM"/>
                                 </constraints>
                             </view>
-                            <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6Et-lD-1ke" customClass="CustomButton" customModule="Clothing_Click" customModuleProvider="target">
+                            <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6Et-lD-1ke" customClass="CustomButton" customModule="Cloth_App" customModuleProvider="target">
                                 <rect key="frame" x="20" y="720" width="353" height="44"/>
                                 <color key="backgroundColor" name="Black_Theme_Color"/>
                                 <constraints>
@@ -1407,7 +1408,7 @@
         <!--New PasswordVC-->
         <scene sceneID="6EC-mw-zb5">
             <objects>
-                <viewController storyboardIdentifier="NewPasswordVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="rbQ-8g-ei7" customClass="NewPasswordVC" customModule="Clothing_Click" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="NewPasswordVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="rbQ-8g-ei7" customClass="NewPasswordVC" customModule="Cloth_App" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" clipsSubviews="YES" contentMode="scaleToFill" id="fBE-jh-Jwe">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1453,7 +1454,7 @@
                                 <color key="textColor" name="Black_Theme_Color"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8aQ-wp-EKn" customClass="CustomButton" customModule="Clothing_Click" customModuleProvider="target">
+                            <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8aQ-wp-EKn" customClass="CustomButton" customModule="Cloth_App" customModuleProvider="target">
                                 <rect key="frame" x="20" y="720" width="353" height="44"/>
                                 <color key="backgroundColor" name="Black_Theme_Color"/>
                                 <constraints>
@@ -1643,7 +1644,7 @@
         <!--User NameVC-->
         <scene sceneID="bzK-WS-VxW">
             <objects>
-                <viewController storyboardIdentifier="UserNameVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="LWO-3r-vAA" customClass="UserNameVC" customModule="Clothing_Click" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="UserNameVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="LWO-3r-vAA" customClass="UserNameVC" customModule="Cloth_App" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="t1W-Fx-aSb">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1694,7 +1695,7 @@
                                     </view>
                                 </subviews>
                             </stackView>
-                            <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6Nz-Ub-zYM" customClass="CustomButton" customModule="Clothing_Click" customModuleProvider="target">
+                            <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6Nz-Ub-zYM" customClass="CustomButton" customModule="Cloth_App" customModuleProvider="target">
                                 <rect key="frame" x="20" y="720" width="353" height="44"/>
                                 <color key="backgroundColor" name="Black_Theme_Color"/>
                                 <constraints>
