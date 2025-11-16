@@ -234,7 +234,6 @@ extension StoreProfileVC:UITableViewDelegate,UITableViewDataSource{
             cell.btnFilter.addTarget(self, action: #selector(self.filterOnPress(sender:)), for: .touchUpInside)
             cell.setPostData(post: self.viewModel.posts)
             cell.likeOnPress = { sender in
-                debugPrint(sender.tag)
                 if self.viewModel.posts[sender.tag].is_favourite ?? false == true{
 //                    self.viewModel.posts[sender.tag].is_favourite = false
                     self.viewModel.callPostFavourite(action_type: "0", postId:  "\(self.viewModel.posts[sender.tag].id ?? 0)", index: sender.tag)

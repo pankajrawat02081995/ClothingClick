@@ -103,6 +103,13 @@ import UIKit
         return contrastRatioToWhite > contrastRatioToBlack ? .white : .black
     }
 
+    /// Returns either black or white based on which color this color is closest to
+    var roundToBlackOrWhite: UIColor {
+        // contrastingColor returns the opposite color (white if this is dark, black if this is light)
+        // so we need to invert that logic to get the closest color
+        return contrastingColor == .white ? .black : .white
+    }
+
     /// Adjust color for minimum contrast with a given background color
     ///
     /// # Reference
@@ -137,19 +144,6 @@ import UIKit
     var disabledColor: UIColor {
         let (_, _, _, alpha) = rgba
         return self.withAlphaComponent(alpha * 0.4)
-    }
-
-    /// Returns a translucent mask based on the brightness of the color
-    var translucentMaskColor: UIColor {
-        let alpha: CGFloat = 0.075
-        let colorMaskForLight = UIColor.black.withAlphaComponent(alpha)
-        let colorMaskForDark = UIColor.white.withAlphaComponent(alpha)
-
-        return isBright
-            ? UIColor.dynamic(light: colorMaskForLight,
-                              dark: colorMaskForDark)
-            : UIColor.dynamic(light: colorMaskForDark,
-                              dark: colorMaskForLight)
     }
 
     /// Returns this color in a "disabled" state by reducing the alpha by 40% if `isDisabled` is `true`,

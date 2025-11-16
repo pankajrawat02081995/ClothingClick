@@ -22,6 +22,11 @@ public class APIManager {
         return Singleton.instance
     }
     
+    private func logAuthError(_ message: String, apiURL: String, file: String = #file, line: Int = #line) {
+        let fileName = (file as NSString).lastPathComponent
+        debugPrint("🚨 [AUTH ERROR] \(message)\n🔗 API: \(apiURL)\n📂 Class: \(fileName)\n📍 Line: \(line)\n⚠️ Check bearer token or authentication setup\n")
+    }
+    
     func apiCall<T:Mappable>(of type: T.Type = T.self,isShowHud: Bool, URL : String, apiName : String, method: HTTPMethod, parameters : [String : Any]?, completion:@escaping (_ dict: BaseResponseModel<T>?,_ error: NSError?) -> ()) {
         if isShowHud {
             //        KRProgressHUD.show()
@@ -30,24 +35,23 @@ public class APIManager {
         let api_url = URL + apiName
         
         if parameters == nil {
-            print("API URL = \(api_url)")
+            debugPrint("API URL = \(api_url)")
         }
         else {
-            print("API URL = \(api_url) \nParameters = \(parameters!)")
+            debugPrint("API URL = \(api_url) \nParameters = \(parameters!)")
         }
         
         var headers: HTTPHeaders = ["accept": "application/json"]
         if appDelegate.headerToken != "" {
             headers["Authorization"] = "Bearer \(appDelegate.headerToken)"
         }
-        
+        debugPrint(headers)
         let request: DataRequest = Alamofire.request(api_url, method: method, parameters: parameters, headers: headers).validate().responseJSON { response in
-            
             
             switch response.result {
             case .success:
                 let json = try! JSONSerialization.jsonObject(with: response.data!)
-                print(response)
+                debugPrint(response)
                 
                 let dataResponse = Mapper<BaseResponseModel<T>>().map(JSON: json as! [String : Any])
                 
@@ -80,11 +84,17 @@ public class APIManager {
                     completion(nil, NSError.init(domain: (dataResponse?.message)!, code: (dataResponse?.status)!, userInfo: nil))
                 }
             case .failure(let error):
-                print (error)
+                debugPrint(error)
+                if response.response?.statusCode == 401 {
+                    self.logAuthError("Unauthorized (401) — Bearer token missing or invalid", apiURL: api_url)
+                } else if appDelegate.headerToken.isEmpty {
+                    self.logAuthError("Bearer token is empty before API call", apiURL: api_url)
+                }
+
                 //                completion(nil, NSError.init(domain: ErrorMessage, code: 0, userInfo: nil))
                 if let json = try? JSONSerialization.jsonObject(with: response.data!) as? [String : Any] {
                     let dataResponse = Mapper<BaseResponseModel<T>>().map(JSON: json)
-                    print (dataResponse!.message ?? "")
+                    debugPrint(dataResponse!.message ?? "")
                     if dataResponse?.status == kUserNotFound {
                         let alert: UIAlertController = UIAlertController.init(title: AlertViewTitle, message: dataResponse?.message, preferredStyle: .alert)
                         alert.setAlertButtonColor()
@@ -132,10 +142,10 @@ public class APIManager {
         let api_url = URL + apiName
         
         if parameters == nil {
-            print("API URL = \(api_url)")
+            debugPrint("API URL = \(api_url)")
         }
         else {
-            print("API URL = \(api_url) parameters = \(parameters!)")
+            debugPrint("API URL = \(api_url) parameters = \(parameters!)")
         }
         
         var headers: HTTPHeaders? = nil
@@ -151,7 +161,7 @@ public class APIManager {
             switch response.result {
             case .success:
                 let json = try! JSONSerialization.jsonObject(with: response.data!)
-                print(response)
+                debugPrint(response)
                 
                 let dataResponse = Mapper<BaseResponseModel<T>>().map(JSON: json as! [String : Any])
                 
@@ -184,10 +194,16 @@ public class APIManager {
                     completion(nil, NSError.init(domain: (dataResponse?.message)!, code: (dataResponse?.status)!, userInfo: nil))
                 }
             case .failure(let error):
-                print (error)
+                debugPrint(error)
+                if response.response?.statusCode == 401 {
+                    self.logAuthError("Unauthorized (401) — Bearer token missing or invalid", apiURL: api_url)
+                } else if appDelegate.headerToken.isEmpty {
+                    self.logAuthError("Bearer token is empty before API call", apiURL: api_url)
+                }
+
                 if let json = try? JSONSerialization.jsonObject(with: response.data!) as? [String : Any] {
                     let dataResponse = Mapper<BaseResponseModel<T>>().map(JSON: json)
-                    print (dataResponse!.message!)
+                    debugPrint(dataResponse!.message!)
                     if dataResponse?.status == kUserNotFound {
                         let alert: UIAlertController = UIAlertController.init(title: AlertViewTitle, message: dataResponse?.message, preferredStyle: .alert)
                         alert.setAlertButtonColor()
@@ -233,7 +249,7 @@ public class APIManager {
             LoaderManager.shared.show()
         }
         let api_url = URL + apiName
-        print("API URL = \(api_url) parameters = \(parameters)")
+        debugPrint("API URL = \(api_url) parameters = \(parameters)")
         
         var headers: HTTPHeaders? = nil
         if !appDelegate.headerToken.isEmpty {
@@ -289,7 +305,13 @@ public class APIManager {
                             }
                         }
                     case .failure(let error):
-                        print(error)
+                        debugPrint(error)
+                        if response.response?.statusCode == 401 {
+                            self.logAuthError("Unauthorized (401) — Bearer token missing or invalid", apiURL: api_url)
+                        } else if appDelegate.headerToken.isEmpty {
+                            self.logAuthError("Bearer token is empty before API call", apiURL: api_url)
+                        }
+
                         completion(nil, NSError(domain: ErrorMessage, code: 0, userInfo: nil))
                     }
                     if isShowHud {
@@ -302,7 +324,7 @@ public class APIManager {
                     //            KRProgressHUD.dismiss()
                     LoaderManager.shared.hide()
                 }
-                print(encodingError)
+                debugPrint(encodingError)
                 completion(nil, NSError(domain: ErrorMessage, code: 0, userInfo: nil))
             }
         })
@@ -311,7 +333,7 @@ public class APIManager {
     func apiCallWithImage<T:Mappable>(of type: T.Type = T.self,isShowHud: Bool, URL : String, apiName : String, parameters : [String : Any], images: [UIImage], imageParameterName: String, imageName: String, completion:@escaping (_ dict: BaseResponseModel<T>?,_ error: NSError?) -> ()){
         
         let api_url = URL + apiName
-        print("API URL = \(api_url) parameters = \(parameters)")
+        debugPrint("API URL = \(api_url) parameters = \(parameters)")
         
         var headers: HTTPHeaders? = nil
         if appDelegate.headerToken != "" {
@@ -358,7 +380,7 @@ public class APIManager {
                     case .success:
                         
                         let json = try! JSONSerialization.jsonObject(with: response.data!)
-                        print(response)
+                        debugPrint(response)
                         
                         let dataResponse = Mapper<BaseResponseModel<T>>().map(JSON: json as! [String : Any])
                         
@@ -391,7 +413,13 @@ public class APIManager {
                             completion(nil, NSError.init(domain: (dataResponse?.message)!, code: (dataResponse?.status)!, userInfo: nil))
                         }
                     case .failure(let error):
-                        print (error)
+                        debugPrint(error)
+                        if response.response?.statusCode == 401 {
+                            self.logAuthError("Unauthorized (401) — Bearer token missing or invalid", apiURL: api_url)
+                        } else if appDelegate.headerToken.isEmpty {
+                            self.logAuthError("Bearer token is empty before API call", apiURL: api_url)
+                        }
+
                         completion(nil, NSError.init(domain: ErrorMessage, code: 0, userInfo: nil))
                     }
                 })
@@ -400,7 +428,7 @@ public class APIManager {
                     //            KRProgressHUD.dismiss()
                     LoaderManager.shared.hide()
                 }
-                print (encodingError)
+                debugPrint(encodingError)
                 completion(nil, NSError.init(domain: ErrorMessage, code: 0, userInfo: nil))
             }
         })
@@ -410,7 +438,7 @@ public class APIManager {
     func apiCallWithMultipart<T:Mappable>(of type: T.Type = T.self,isShowHud: Bool, URL : String, apiName : String, parameters : [String : Any], completion:@escaping (_ dict: BaseResponseModel<T>?,_ error: NSError?) -> ()){
         
         let api_url = URL + apiName
-        print("API URL = \(api_url) parameters = \(parameters)")
+        debugPrint("API URL = \(api_url) parameters = \(parameters)")
         
         var headers: HTTPHeaders? = nil
         if appDelegate.headerToken != "" {
@@ -443,7 +471,7 @@ public class APIManager {
                     case .success:
                         
                         let json = try! JSONSerialization.jsonObject(with: response.data!)
-                        print(response)
+                        debugPrint(response)
                         let dataResponse = Mapper<BaseResponseModel<T>>().map(JSON: json as! [String : Any])
                         
                         if dataResponse?.status == kIsSuccess {
@@ -475,19 +503,24 @@ public class APIManager {
                             completion(nil, NSError.init(domain: (dataResponse?.message)!, code: (dataResponse?.status)!, userInfo: nil))
                         }
                     case .failure(let error):
-                        print (error)
+                        debugPrint(error)
+                        if response.response?.statusCode == 401 {
+                            self.logAuthError("Unauthorized (401) — Bearer token missing or invalid", apiURL: api_url)
+                        } else if appDelegate.headerToken.isEmpty {
+                            self.logAuthError("Bearer token is empty before API call", apiURL: api_url)
+                        }
+
                         completion(nil, NSError.init(domain: ErrorMessage, code: 0, userInfo: nil))
                     }
                 })
             case .failure(let encodingError):
                 if isShowHud {
-                    //            KRProgressHUD.dismiss()
+                    // KRProgressHUD.dismiss()
                     LoaderManager.shared.hide()
                 }
-                print (encodingError)
+                debugPrint(encodingError)
                 completion(nil, NSError.init(domain: ErrorMessage, code: 0, userInfo: nil))
             }
         })
     }
 }
-

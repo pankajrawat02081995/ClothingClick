@@ -23,106 +23,118 @@ class FindLocation: BaseViewController {
     var address = ""
     var usertype = -1
     var userLocation: CLLocation?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.mapView.delegate = self
-        var distances = [CLLocationDistance]()
-        if appDelegate.userDetails?.locations!.count ?? 0 > 0 {
-        let locations = appDelegate.userDetails?.locations
+        mapView.delegate = self
+        setupNearestLocation()
+        setupMap()
+    }
+    
+    private func setupNearestLocation() {
+        guard let locations = appDelegate.userDetails?.locations,
+              let defaultLocation = locations.first(where: { $0.is_default == 1 }),
+              let ulat = Double(defaultLocation.latitude ?? ""),
+              let ulong = Double(defaultLocation.longitude ?? "") else {
+            return
+        }
         
-            let Location = locations?.filter {
-                $0.is_default == 1
+        userLocation = CLLocation(latitude: ulat, longitude: ulong)
+        
+        var distances: [CLLocationDistance] = []
+        for location in addresslist {
+            if let latStr = location?.latitude,
+               let logStr = location?.longitude,
+               let lat = Double(latStr),
+               let log = Double(logStr),
+               let userLocation = userLocation {
+                
+                let coord = CLLocation(latitude: lat, longitude: log)
+                let distance = coord.distance(from: userLocation)
+                distances.append(distance)
+                print("distance = \(distance)")
             }
-            print(Location ?? 0)
-            if Location?.count ?? 0>0{
-                let data = Location?[0]
-                let ulat = Double(data?.latitude ?? "")
-                let ulong = Double(data?.longitude ?? "")
-                userLocation = CLLocation(latitude: ulat!, longitude: ulong!)
-                for location in addresslist{
-                    let lat = Double(location?.latitude! ?? "0.0")!
-                    let log = Double(location?.longitude! ?? "0.0")!
-                    let coord = CLLocation(latitude: lat, longitude: log)
-                    // let coord = CLLocation(latitude: location?.latitude!, longitude: location?.longitude!)
-                    
-                    distances.append(coord.distance(from: userLocation!))
-                    print("distance = \(coord.distance(from: userLocation!))")
-                }
-            }
-            // }
-            let closest = distances.min()//shortest distance
-            let position = distances.firstIndex(of: closest!)//index of shortest distance
-            print("closest = \(closest!), index = \(position ?? 0)")
-            lat = Double(addresslist[position!]?.latitude! ?? "0.0")!
-            log = Double(addresslist[position!]?.longitude! ?? "0.0")!
         }
-        if usertype == USER_TYPE.USER.rawValue {
-            self.setInitDataUserLise(latitude: lat, longitude: log, tital: adddressArea)
-//            self.btnCopy.isHidden = true
-        }
-        else if usertype == USER_TYPE.STORE.rawValue{
-            self.setInitDataUserLiseStoreWise(latitude: lat, longitude: log, tital: adddressArea)
-//            self.btnCopy.isHidden = false
-        }else{
-            self.setInitDataUserLiseStoreWise(latitude: lat, longitude: log, tital: adddressArea)
-//            self.btnCopy.isHidden = true
+        
+        if let closest = distances.min(),
+           let position = distances.firstIndex(of: closest),
+           let selected = addresslist[position],
+           let latStr = selected.latitude,
+           let logStr = selected.longitude {
+            
+            lat = Double(latStr) ?? 0.0
+            log = Double(logStr) ?? 0.0
+            print("closest = \(closest), index = \(position)")
         }
     }
     
-    func setInitDataUserLise(latitude: Double , longitude : CLLocationDegrees ,tital : String){
-        if latitude != 0.0 || longitude != 0.0{
-            let circle = GMSCircle(position: CLLocationCoordinate2D(latitude: latitude, longitude: longitude), radius:3000)
-            circle.fillColor = UIColor.init(named: "BlueColor")!.withAlphaComponent(0.2)
-            circle.strokeWidth = 6
-            circle.strokeColor = UIColor.init(named: "BlueColor")
-            circle.map = self.mapView
-            let location = GMSCameraPosition.camera(withLatitude: latitude, longitude: longitude, zoom: 12)
-            self.mapView.camera = location
-            self.mapView.animate(to: location)
+    private func setupMap() {
+        if usertype == USER_TYPE.USER.rawValue {
+            setInitDataUserLise(latitude: lat, longitude: log, tital: adddressArea)
+        } else if usertype == USER_TYPE.STORE.rawValue {
+            setInitDataUserLiseStoreWise(latitude: lat, longitude: log, tital: adddressArea)
+        } else {
+            setInitDataUserLiseStoreWise(latitude: lat, longitude: log, tital: adddressArea)
         }
     }
-    func setInitDataUserLiseStoreWise(latitude: Double , longitude : CLLocationDegrees ,tital : String){
-        if latitude != 0.0 || longitude != 0.0{
-           // let position = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
-            for data in self.addresslist{
-                let lat = data?.latitude!
-                let log = data?.longitude!
-                let position = CLLocationCoordinate2D(latitude: (lat! as NSString).doubleValue, longitude: (log! as NSString).doubleValue)
+    
+    func setInitDataUserLise(latitude: Double, longitude: CLLocationDegrees, tital: String) {
+        guard latitude != 0.0, longitude != 0.0 else { return }
+        
+        let position = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+        let circle = GMSCircle(position: position, radius: 3000)
+        if let blueColor = UIColor(named: "BlueColor") {
+            circle.fillColor = blueColor.withAlphaComponent(0.2)
+            circle.strokeColor = blueColor
+        }
+        circle.strokeWidth = 6
+        circle.map = mapView
+        
+        let camera = GMSCameraPosition.camera(withLatitude: latitude, longitude: longitude, zoom: 12)
+        mapView.animate(to: camera)
+    }
+    
+    func setInitDataUserLiseStoreWise(latitude: Double, longitude: CLLocationDegrees, tital: String) {
+        guard latitude != 0.0, longitude != 0.0 else { return }
+        
+        for data in addresslist {
+            if let latStr = data?.latitude,
+               let logStr = data?.longitude,
+               let lat = Double(latStr),
+               let log = Double(logStr) {
+                
+                let position = CLLocationCoordinate2D(latitude: lat, longitude: log)
                 let marker = GMSMarker(position: position)
                 marker.title = data?.address
                 marker.tracksInfoWindowChanges = true
-                marker.map = self.mapView
-                }
-//            let marker = GMSMarker(position: position)
-//            marker.title = tital
-//            marker.map = self.mapView
-           
-            let location = GMSCameraPosition.camera(withLatitude: latitude, longitude: longitude, zoom: 12)
-            self.mapView.camera = location
-            
-            self.mapView.animate(to: location)
+                marker.map = mapView
+            }
         }
+        
+        let camera = GMSCameraPosition.camera(withLatitude: latitude, longitude: longitude, zoom: 12)
+        mapView.animate(to: camera)
     }
+    
     @IBAction func btnCopy_clicked(_ sender: Any) {
-        if self.adddressArea == "" {
+        if adddressArea.isEmpty {
             UIAlertController().alertViewWithTitleAndMessage(self, message: "Please Select Pin")
-        }else{
-        UIAlertController().alertViewWithTitleAndMessage(self, message: "Address Copied")
-        UIPasteboard.general.string = adddressArea
+        } else {
+            UIPasteboard.general.string = adddressArea
+            UIAlertController().alertViewWithTitleAndMessage(self, message: "Address Copied")
         }
     }
+    
     @IBAction func backOnPress(_ sender: UIButton) {
-        self.popViewController()
+        popViewController()
     }
 }
 
-extension FindLocation:GMSMapViewDelegate{
-
+extension FindLocation: GMSMapViewDelegate {
     func mapView(_ mapView: GMSMapView, didTap marker: GMSMarker) -> Bool {
-        UIAlertController().alertViewWithTitleAndMessage(self, message: "\(marker.title!) Selected")
-        self.adddressArea = marker.title!
+        if let title = marker.title {
+            adddressArea = title
+            UIAlertController().alertViewWithTitleAndMessage(self, message: "\(title) Selected")
+        }
         return true
     }
-    
-    
 }

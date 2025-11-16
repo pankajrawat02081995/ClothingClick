@@ -232,11 +232,11 @@ class PostDetailsVC: BaseViewController {
         self.btnAddImage.isHidden = hasMedia
     }
     
-    
     @IBAction func photoGuiedOnPress(_ sender: UIButton) {
         let vc = PhotoGuide.instantiate(fromStoryboard: .Sell)
         self.pushViewController(vc: vc)
     }
+    
     @IBAction func addImageOnPress(_ sender: UIButton) {
         self.imagePicker()
     }
@@ -646,6 +646,7 @@ extension PostDetailsVC{
                 print(encodingError.localizedDescription)
                 //            KRProgressHUD.dismiss()
                 LoaderManager.shared.hide()
+                
                 completion(nil, NSError(domain: encodingError.localizedDescription, code: 0, userInfo: nil))
             @unknown default:
                 //            KRProgressHUD.dismiss()
@@ -655,13 +656,17 @@ extension PostDetailsVC{
     }
     
     /// Resize and compress images efficiently
-    func resizeAndCompressImages(_ images: [UIImage], maxSizeKB: Int = 500, targetSize: CGSize = CGSize(width: 1024, height: 1024), completion: @escaping ([Data]) -> Void) {
-        
+    func resizeAndCompressImages(
+        _ images: [UIImage],
+        maxSizeKB: Int = 500,
+        targetWidth: CGFloat = 1024,
+        completion: @escaping ([Data]) -> Void
+    ) {
         DispatchQueue.global(qos: .userInitiated).async {
             var compressedImages: [Data] = []
             
             for image in images {
-                if let compressedData = image.compressImage(maxSizeKB: maxSizeKB, targetSize: targetSize) {
+                if let compressedData = image.compressImage(maxSizeKB: maxSizeKB, targetWidth: targetWidth) {
                     compressedImages.append(compressedData)
                 }
             }
@@ -671,6 +676,8 @@ extension PostDetailsVC{
             }
         }
     }
+
+    
     func callAddProduct() async {
         //        KRProgressHUD.show()
         LoaderManager.shared.show()
@@ -1386,15 +1393,19 @@ extension PostDetailsVC: UICollectionViewDragDelegate, UICollectionViewDropDeleg
 
 extension UIImage {
     
-    /// Compresses an image to a specific max size while maintaining quality
-    func compressImage(maxSizeKB: Int, targetSize: CGSize) -> Data? {
+    /// Compresses an image to a specific max size while maintaining quality and 4:3 ratio
+    func compressImage(maxSizeKB: Int, targetWidth: CGFloat = 1024) -> Data? {
         let maxSizeBytes = maxSizeKB * 1024
         var compressionQuality: CGFloat = 1.0
         
-        // Resize image to target size (maintains aspect ratio)
-        let resizedImage = resizeImage(self, targetSize: targetSize)
+        // ✅ Calculate target height for 4:3 ratio
+        let targetHeight = (targetWidth / 4) * 3
+        let targetSize = CGSize(width: targetWidth, height: targetHeight)
         
-        // Compress using Image I/O
+        // ✅ Resize maintaining aspect fit inside 4:3 frame
+        let resizedImage = resizeToAspectFit(targetSize: targetSize)
+        
+        // Compress
         guard let imageData = resizedImage.jpegData(compressionQuality: compressionQuality) else { return nil }
         
         var compressedData = imageData
@@ -1409,29 +1420,24 @@ extension UIImage {
         return compressedData
     }
     
-    /// Resize an image while maintaining aspect ratio
-    //    func resizeImage(targetSize: CGSize) -> UIImage {
-    //        let widthRatio  = targetSize.width  / size.width
-    //        let heightRatio = targetSize.height / size.height
-    //        let scaleFactor = min(widthRatio, heightRatio)  // Maintain aspect ratio
-    //
-    //        let newSize = CGSize(width: size.width * scaleFactor, height: size.height * scaleFactor)
-    //        let format = UIGraphicsImageRendererFormat()
-    //        format.scale = 1
-    //
-    //        return UIGraphicsImageRenderer(size: newSize, format: format).image { _ in
-    //            draw(in: CGRect(origin: .zero, size: newSize))
-    //        }
-    //    }
-    
-    func resizeImage(_ image: UIImage, targetSize: CGSize) -> UIImage {
+    /// Resizes an image to fit inside a 4:3 box without stretching
+    func resizeToAspectFit(targetSize: CGSize) -> UIImage {
+        let aspectWidth = targetSize.width / size.width
+        let aspectHeight = targetSize.height / size.height
+        let aspectRatio = min(aspectWidth, aspectHeight) // ✅ fit
+        
+        let newSize = CGSize(width: size.width * aspectRatio, height: size.height * aspectRatio)
         let renderer = UIGraphicsImageRenderer(size: targetSize)
+        
         return renderer.image { _ in
-            image.draw(in: CGRect(origin: .zero, size: targetSize))
+            // Center the image inside the 4:3 box
+            let x = (targetSize.width - newSize.width) / 2
+            let y = (targetSize.height - newSize.height) / 2
+            draw(in: CGRect(x: x, y: y, width: newSize.width, height: newSize.height))
         }
     }
-    
 }
+
 
 func dictionaryToJsonString(_ dict: [String: Any]) -> String? {
     guard let jsonData = try? JSONSerialization.data(withJSONObject: dict, options: []) else {

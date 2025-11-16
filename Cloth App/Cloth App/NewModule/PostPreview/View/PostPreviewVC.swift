@@ -220,7 +220,7 @@ extension PostPreviewVC:UICollectionViewDelegate,UICollectionViewDataSource{
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HomePageBrowserXIB", for: indexPath) as! HomePageBrowserXIB
             let objet = self.posts[indexPath.item]
             cell.imgProduct.setImageFast(with: objet.image?.first?.image ?? "")
-            cell.imgProduct.contentMode = .scaleToFill
+//            cell.imgProduct.contentMode = .scaleToFill
             
             cell.btnLike.tag = indexPath.row
             //            cell.btnLike.addTarget(self, action: #selector(btnWatch_Clicked(_:)), for: .touchUpInside)

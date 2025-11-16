@@ -147,7 +147,7 @@ class DiscoverVC: BaseViewController {
             if let address = placemark.name {
                 result.address = appDelegate.userLocation?.address == nil ? address : appDelegate.userLocation?.address
             }
-        
+            
             
             if let city = placemark.locality {
                 result.city = city
@@ -241,7 +241,7 @@ class DiscoverVC: BaseViewController {
             }
         }
     }
-
+    
     
     
     private func showLocationErrorAlert(error: Error) {
@@ -465,7 +465,7 @@ extension DiscoverVC{
         guard appDelegate.reachable.connection != .none else { return }
         let latitude = appDelegate.userLocation?.latitude.map { "\($0)" } ?? ""
         let longitude = appDelegate.userLocation?.longitude.map { "\($0)" } ?? ""
-
+        
         let gender: String
         switch appDelegate.selectGenderId {
         case "0":
@@ -475,19 +475,19 @@ extension DiscoverVC{
         default:
             gender = ""
         }
-
+        
         let sizes = FilterSingleton.share.filter.sizes ?? ""
-
+        
         let param: [String: String] = [
             "latitude": latitude,
             "longitude": longitude,
             "gender": gender,
             "sizes": sizes
         ]
-
+        
         APIManager().apiCall(
             of: HomeModel.self,
-            isShowHud: true,
+            isShowHud: self.homeListData.isEmpty,
             URL: BASE_URL,
             apiName: APINAME.HOME_PAGE.rawValue,
             method: .post,
@@ -495,7 +495,7 @@ extension DiscoverVC{
         ) { (response, error) in
             
             if let error = error {
-                UIAlertController().alertViewWithTitleAndMessage(self, message: error.domain ?? ErrorMessage)
+                UIAlertController().alertViewWithTitleAndMessage(self, message: error.domain)
                 return
             }
             
@@ -520,7 +520,6 @@ extension DiscoverVC{
             }else{
                 self.homeListData = data
             }
-            
             
             self.badgeView.isHidden = (data.first?.unread_notification ?? 0) == 0
             

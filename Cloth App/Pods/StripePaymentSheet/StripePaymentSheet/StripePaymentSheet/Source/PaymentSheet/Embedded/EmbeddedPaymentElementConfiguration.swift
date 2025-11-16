@@ -15,7 +15,7 @@ extension EmbeddedPaymentElement {
         /// - Seealso: https://stripe.com/docs/payments/payment-methods#payment-notification
         public var allowsDelayedPaymentMethods: Bool = false
 
-        /// If `true`, allows payment methods that require a shipping address, like Afterpay and Affirm. Defaults to `false`.
+        /// If `true`, allows payment methods that require a shipping address, like  Affirm. Defaults to `false`.
         /// Set this to `true` if you collect shipping addresses and set `Configuration.shippingDetails` or set `shipping` details directly on the PaymentIntent.
         /// - Note: PaymentSheet considers this property `true` and allows payment methods that require a shipping address if `shipping` details are present on the PaymentIntent when PaymentSheet loads.
         public var allowsPaymentMethodsRequiringShippingAddress: Bool = false
@@ -26,6 +26,9 @@ extension EmbeddedPaymentElement {
         /// Configuration related to Apple Pay
         /// If set, PaymentSheet displays Apple Pay as a payment option
         public var applePay: ApplePayConfiguration?
+
+        /// Configuration related to Link
+        public var link: LinkConfiguration = LinkConfiguration()
 
         /// The color of the Buy or Add button. Defaults to `.systemBlue` when `nil`.
         public var primaryButtonColor: UIColor? {
@@ -112,6 +115,9 @@ extension EmbeddedPaymentElement {
         /// Configuration for external payment methods.
         public var externalPaymentMethodConfiguration: ExternalPaymentMethodConfiguration?
 
+        /// Configuration for custom payment methods.
+        @_spi(CustomPaymentMethodsBeta) public var customPaymentMethodConfiguration: CustomPaymentMethodConfiguration?
+
         /// By default, PaymentSheet will use a dynamic ordering that optimizes payment method display for the customer.
         /// You can override the default order in which payment methods are displayed in PaymentSheet with a list of payment method types.
         /// See https://stripe.com/docs/api/payment_methods/object#payment_method_object-type for the list of valid types.  You may also pass external payment methods.
@@ -129,17 +135,25 @@ extension EmbeddedPaymentElement {
         /// Note: For Apple Pay, the list of supported card brands is determined by combining `StripeAPI.supportedPKPaymentNetworks()` with `StripeAPI.additionalEnabledApplePayNetworks` and then applying the `cardBrandAcceptance` filter. This filtered list is then assigned to `PKPaymentRequest.supportedNetworks`, ensuring that only the allowed card brands are available for Apple Pay transactions. Any `PKPaymentNetwork` that does not correspond to a `BrandCategory` will be blocked if you have specified an allow list, or will not be blocked if you have specified a disallow list.
         /// Note: This is only a client-side solution.
         /// Note: Card brand filtering is not currently supported by Link.
-        @_spi(CardBrandFilteringBeta) public var cardBrandAcceptance: PaymentSheet.CardBrandAcceptance = .all
+        public var cardBrandAcceptance: PaymentSheet.CardBrandAcceptance = .all
 
-        /// This is an experimental feature that may be removed at any time.
-        /// If true, users can set a payment method as default and sync their default payment method across web and mobile
-        /// If false (default), users cannot set default payment methods.
-        @_spi(AllowsSetAsDefaultPM) public var allowsSetAsDefaultPM = false
+        /// By default, the card form will provide a button to open the card scanner.
+        /// If true, the card form will instead initialize with the card scanner already open.
+        public var opensCardScannerAutomatically: Bool = false
+
+        /// If true, an invisible challenge will be performed for human verification
+        @_spi(STP) public var enablePassiveCaptcha: Bool = false
+
+        /// A map for specifying when legal agreements are displayed for each payment method type.
+        /// If the payment method is not specified in the list, the TermsDisplay value will default to `.automatic`.
+        /// Valid payment method types include:
+        /// .card
+        public var termsDisplay: [STPPaymentMethodType: PaymentSheet.TermsDisplay] = [:]
 
         /// The view can display payment methods like “Card” that, when tapped, open a form sheet where customers enter their payment method details. The sheet has a button at the bottom. `FormSheetAction` enumerates the actions the button can perform.
         public enum FormSheetAction {
             /// The button says “Pay” or “Setup”. When tapped, we confirm the payment or setup in the form sheet.
-            /// - Parameter completion: Called with the result of the payment or setup.
+            /// - Parameter completion: Called with the result of the payment or setup when the sheet is closed.
             case confirm(
                 completion: (EmbeddedPaymentElementResult) -> Void
             )
@@ -160,7 +174,34 @@ extension EmbeddedPaymentElement {
 
         internal var linkPaymentMethodsOnly: Bool = false
 
+        /// Describes how you handle row selections in EmbeddedPaymentElement
+        public enum RowSelectionBehavior {
+          /// When a payment option is selected, the customer taps a button to continue or confirm payment.
+          /// This is the default recommended integration.
+          case `default`
+
+          /// When a payment option is selected, `didSelectPaymentOption` is triggered.
+          /// You can implement this method to immediately perform an action e.g. go back to the checkout screen or confirm the payment.
+          /// Note that certain payment options like Apple Pay and saved payment methods are disabled in this mode if you set `formSheetAction` to `.confirm`.
+          case immediateAction(didSelectPaymentOption: () -> Void)
+        }
+
+        /// Determines the behavior when a row  is selected. Defaults to `.default`.
+        public var rowSelectionBehavior: RowSelectionBehavior = .default
+
         /// Initializes a Configuration with default values
-        public init() {}
+        public init() {
+            validateConfiguration()
+        }
+    }
+}
+
+extension EmbeddedPaymentElement.Configuration {
+    private func validateConfiguration() {
+        for (paymentMethodType, _) in termsDisplay {
+            if paymentMethodType != .card {
+                stpAssertionFailure("EmbeddedPaymentElement.Configuration termsDisplay contains unsupported payment method type: \(paymentMethodType)")
+            }
+        }
     }
 }

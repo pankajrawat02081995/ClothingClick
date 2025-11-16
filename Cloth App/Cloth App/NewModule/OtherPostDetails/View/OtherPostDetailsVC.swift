@@ -9,6 +9,7 @@ import UIKit
 import IBAnimatable
 import AVFoundation
 import AVKit
+
 class OtherPostDetailsVC: BaseViewController {
     
     @IBOutlet weak var sizeViewContainer: UIView!
@@ -51,6 +52,16 @@ class OtherPostDetailsVC: BaseViewController {
     @IBOutlet weak var pageControlle: UIPageControl!
     @IBOutlet weak var collectionView: UICollectionView!
     
+    @IBOutlet weak var storeSizeView: UIView!
+    @IBOutlet weak var storeColorView: UIView!
+    @IBOutlet weak var storeSizeCollection: UICollectionView!
+    @IBOutlet weak var storeColorCollection: UICollectionView!
+    @IBOutlet weak var storeColorCollectionHeight: NSLayoutConstraint!
+    @IBOutlet weak var storeSizeCollectionHeight: NSLayoutConstraint!
+    @IBOutlet weak var bottomLineDese: UIView!
+    @IBOutlet weak var bottomLineTop: NSLayoutConstraint!
+    
+    
     var postId = ""
     var chatAndBuyNow = ""
     var postDetails : PostDetailsModel?
@@ -63,12 +74,93 @@ class OtherPostDetailsVC: BaseViewController {
     var FavritIndx = 0
     var fromPushNotification:Bool = false
     
+    var sizeSelectionIndex : Int? = 0
+    var colorSelectionIndex : Int? = 0
+    var colorCount : Int? = 0
+    var sizeStore : [String]? = []
+    var colorStore : [String]? = []
+    var veriantImages : [VariantsImages]? = []
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         self.setupCollectionView()
         self.deeplinkClear()
         self.callPostDetails(postId: self.postId)
+    }
+    
+    // ✅ 1. Get colors for a specific size
+    func colors(for size: String, in variants: [Variants]) -> [String] {
+        return variants
+            .filter { $0.size == size }
+            .compactMap { $0.color }.sorted()
+    }
+
+    // ✅ 2. Get all unique sizes
+    func allSizes(in variants: [Variants]) -> [String] {
+        return Array(Set(variants.compactMap { $0.size })).sorted()
+    }
+    
+    func updateCollections(for variants: [Variants]) {
+        let sizes = allSizes(in: variants)
+        let colors = colors(for: sizes.first ?? "", in: variants)
+        
+        // ✅ Hide collections if arrays are empty
+        storeColorView.isHidden = sizes.isEmpty
+        storeSizeView.isHidden = colors.isEmpty
+        
+        // ✅ Reload collections safely
+        storeSizeCollection.reloadData()
+        storeColorCollection.reloadData()
+    }
+    
+    func images(for size: String, color: String, in variants: [Variants]) -> [VariantsImages] {
+        return variants
+            .filter { $0.size == size && $0.color == color }
+            .compactMap { $0.image } // [ [VariantsImages] ]
+            .flatMap { $0 }          // flatten to [VariantsImages]
+    }
+
+    // MARK: - Variants Helper
+    func getSizesWithColors(from variants: [Variants]) -> [String: [String]] {
+        // Group by size
+        let groupedBySize = Dictionary(grouping: variants, by: { $0.size ?? "" })
+        
+        // Map each size to unique colors
+        let sizeColorMap = groupedBySize.mapValues { variantsForSize in
+            Array(Set(variantsForSize.compactMap { $0.color }))
+        }
+        
+        return sizeColorMap
+    }
+    
+    func getPrice(for size: String, color: String, in variants: [Variants]) -> String? {
+        // Filter variants matching both size and color
+        guard let variant = variants.first(where: { $0.size == size && $0.color == color }) else {
+            return nil // No variant found
+        }
+        
+        return variant.price
+    }
+
+    
+    func updateHeight(for collectionView: UICollectionView, constraint: NSLayoutConstraint) {
+        guard let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout else { return }
+
+        let itemCount = collectionView.numberOfItems(inSection: 0)
+        let itemsPerRow: CGFloat = 6
+        let rows = ceil(CGFloat(itemCount) / itemsPerRow)
+
+        let spacing = layout.minimumLineSpacing
+        let itemWidth = (collectionView.bounds.width - (itemsPerRow - 1) * layout.minimumInteritemSpacing) / itemsPerRow
+        let totalHeight = rows * itemWidth + (rows - 1) * spacing
+
+        constraint.constant = totalHeight
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        updateHeight(for: storeSizeCollection, constraint: storeSizeCollectionHeight)
+        updateHeight(for: storeColorCollection, constraint: storeColorCollectionHeight)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -77,6 +169,7 @@ class OtherPostDetailsVC: BaseViewController {
     }
     
     func setupCollectionView(){
+
         self.collectionView.delegate = self
         self.collectionView.dataSource = self
         self.collectionView.registerCell(nib: UINib(nibName: "PostImageXIB", bundle: nil), identifier: "PostImageXIB")
@@ -92,6 +185,18 @@ class OtherPostDetailsVC: BaseViewController {
         self.recentViewCollection.contentInset = UIEdgeInsets(top: 10, left: 0, bottom: 10, right: 0)
         
         self.recentViewCollection.registerCell(nib: UINib(nibName: "HomePageBrowserXIB", bundle: nil), identifier: "HomePageBrowserXIB")
+        
+        self.storeSizeCollection.delegate = self
+        self.storeSizeCollection.dataSource = self
+        self.storeSizeCollection.contentInset = UIEdgeInsets(top: 10, left: 0, bottom: 10, right: 0)
+        
+        self.storeSizeCollection.registerCell(nib: UINib(nibName: "SizeXIB", bundle: nil), identifier: "SizeXIB")
+        
+        self.storeColorCollection.delegate = self
+        self.storeColorCollection.dataSource = self
+        self.storeColorCollection.contentInset = UIEdgeInsets(top: 10, left: 0, bottom: 10, right: 0)
+        
+        self.storeColorCollection.registerCell(nib: UINib(nibName: "SizeXIB", bundle: nil), identifier: "SizeXIB")
         
     }
     
@@ -224,11 +329,46 @@ class OtherPostDetailsVC: BaseViewController {
             self.showLogIn()
             return
         }
-        if self.postDetails?.type?.lowercased() == "store"{
+        if self.postDetails?.type?.lowercased() == "store" {
+
+            // 🧠 Ensure optional arrays are safely unwrapped
+            let sizeArray = self.sizeStore ?? []
+            let colorArray = self.colorStore ?? []
+            let variants = self.postDetails?.variants ?? []
+
+            // ✅ Create the destination VC
             let viewController = BuyNowVC.instantiate(fromStoryboard: .Store)
             viewController.postDetails = self.postDetails
             viewController.hidesBottomBarWhenPushed = true
-            self.pushViewController(vc: viewController)
+
+            // ✅ Safely handle size selection
+            if !sizeArray.isEmpty, let sizeIndex = self.sizeSelectionIndex, sizeIndex < sizeArray.count {
+                viewController.size = sizeArray[sizeIndex]
+            }
+
+            // ✅ Safely handle color selection
+            if !colorArray.isEmpty, let colorIndex = self.colorSelectionIndex, colorIndex < colorArray.count {
+                viewController.color = colorArray[colorIndex]
+            }
+
+            // ✅ Compute price and variant ID safely
+            let selectedSize = viewController.size ?? ""
+            let selectedColor = viewController.color ?? ""
+
+            viewController.price = self.getPrice(for: selectedSize, color: selectedColor, in: variants)
+
+            if let variant = variants.first(where: { ($0.size ?? "") == selectedSize && ($0.color ?? "") == selectedColor }) {
+                viewController.varientID = "\(variant.id ?? 0)"
+            }
+
+            // ✅ Logic for when to proceed
+            if colorArray.isEmpty || colorArray.indices.contains(self.colorSelectionIndex ?? -1) {
+                // 🛒 Proceed safely
+                self.pushViewController(vc: viewController)
+            } else {
+                // 🚫 Show warning if color required
+                UIAlertController().alertViewWithTitleAndMessage(self, message: "Please select a color to purchase.")
+            }
         }else{
             let isComplete =  appDelegate.userDetails?.phone?.trim().isEmpty ?? true
             if isComplete == true{
@@ -282,7 +422,7 @@ class OtherPostDetailsVC: BaseViewController {
 extension OtherPostDetailsVC {
     
     func callPostDelete(postId : String) {
-        if appDelegate.reachable.connection != .none {
+        if appDelegate.reachable.connection != .unavailable {
             
             let param = ["post_id" : postId]
             APIManager().apiCallWithMultipart(of: PostDetailsModel.self, isShowHud: true, URL: BASE_URL, apiName: APINAME.POST_DELETE.rawValue, parameters: param) { (response, error) in
@@ -305,6 +445,8 @@ extension OtherPostDetailsVC {
     }
     
     func setData () {
+        self.sizeSelectionIndex = 0
+        self.colorSelectionIndex = 0
         
         self.lblViewCount.text = (self.postDetails?.post_views ?? 0) == 0 ? "" : "\(String(self.postDetails?.post_views ?? 0))"
         
@@ -334,6 +476,11 @@ extension OtherPostDetailsVC {
         }
         if let dice = self.postDetails?.description {
             self.lblDese.text = dice
+            bottomLineTop.constant = 10
+            bottomLineDese.isHidden = false
+        }else{
+            bottomLineTop.constant = 0
+            bottomLineDese.isHidden = true
         }
         if let condiction = self.postDetails?.condition_name {
             self.lblCondition.text = condiction
@@ -404,21 +551,7 @@ extension OtherPostDetailsVC {
         //        }
         
         if let locations = self.postDetails?.locations{
-            //            if locations.count > 0 {
-            //                if let city = locations[0].city{
-            //                    if city == ""{
-            //                        if let area = locations[0].area{
-            //                            if area == ""{
-            //                                self.btnLocation.setTitle(area, for: .normal)
-            //                            }else{
-            //                                self.btnLocation.setTitle(area, for: .normal)
-            //                            }
-            //                        }
-            //                    }else{
-            //                        self.btnLocation.setTitle(city, for: .normal)
-            //                    }
-            //                }
-            //            }
+           
             self.lblAddress.text = locations.first?.city
             self.lblAddress.isUserInteractionEnabled = true
             
@@ -445,6 +578,70 @@ extension OtherPostDetailsVC {
             let date = self.convertWebStringToDate(strDate: strDate).toLocalTime()
             self.lblTime.text = Date().offset(from: date)
         }
+        
+        if self.postDetails?.type?.lowercased() == "store"{
+            sizeViewContainer.isHidden = true
+            storeSizeView.isHidden = false
+            storeColorView.isHidden = false
+            
+            viewDidLayoutSubviews()
+            // Make sure variants exist
+            setPrice()
+            storeColorCollection.reloadData()
+            storeSizeCollection.reloadData()
+        }else{
+            sizeViewContainer.isHidden = false
+            storeSizeView.isHidden = true
+            storeColorView.isHidden = true
+        }
+        
+        
+        updateCollections(for: self.postDetails?.variants ?? [])
+    }
+    
+    func setPrice(){
+        let variants = postDetails?.variants ?? []
+        let size = getSizesWithColors(from: variants)
+        sizeStore = Array(size.keys).sorted()
+        colorStore = size[Array(size.keys).sorted().first ?? ""]
+
+        // Get sorted sizes
+        let sortedSizes = Array(size.keys).sorted()
+
+        // Safely get selected size
+        if let sizeIndex = sizeSelectionIndex, sizeIndex < sortedSizes.count {
+            let selectedSize = sortedSizes[sizeIndex]
+            
+            // Safely get colors for that size
+            let colorsForSize = size[selectedSize] ?? []
+            
+            // Safely get selected color
+            if colorsForSize.isEmpty == false{
+                let color = colorsForSize[colorSelectionIndex ?? 0]  // You can replace this with actual selectedColor if available
+                lblPrice.text = "$ \(getPrice(for: selectedSize, color: color, in: variants) ?? "")"
+            }
+        } else {
+            lblPrice.text = ""
+        }
+        if let sizeIndex = self.sizeSelectionIndex,
+           let colorIndex = self.colorSelectionIndex,
+           sizeIndex < (self.sizeStore?.count ?? 0),
+           colorIndex < (self.colorStore?.count ?? 0),
+           let size = self.sizeStore?[sizeIndex],
+           let color = self.colorStore?[colorIndex] {
+
+            let result = images(for: size, color: color, in: self.postDetails?.variants ?? [])
+            debugPrint(result)
+            veriantImages = result
+            self.pageControlle.numberOfPages = self.veriantImages?.count ?? 0
+            self.pageControlle.currentPage = 0
+            self.pageControlle.hidesForSinglePage = true
+            collectionView.reloadData()
+
+        } else {
+            debugPrint("⚠️ Invalid index or no selection yet.")
+        }
+
     }
     
     @objc func labelTapped() {
@@ -478,7 +675,7 @@ extension OtherPostDetailsVC {
                     if let response = response {
                         if let data = response.dictData {
                             self.postDetails = data
-                            
+
                             if self.postDetails?.user_id == appDelegate.userDetails?.id {
                                 if self.postDetails?.is_sold == 1{
                                     self.btnMarkSold.isUserInteractionEnabled = false
@@ -678,33 +875,93 @@ extension OtherPostDetailsVC {
 extension OtherPostDetailsVC : UICollectionViewDataSource,UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView == self.collectionView {
-            return self.postImageVideo.count
+            if self.postDetails?.type?.lowercased() == "store"{
+                return self.veriantImages?.count ?? 0
+            }else{
+                return self.postImageVideo.count
+            }
         }
         else if collectionView == self.moreSallerCollection{
             return self.userPost.count
-        }
-        else  {
+        }else if collectionView == self.storeSizeCollection || collectionView == self.storeColorCollection {
+            let variants = postDetails?.variants ?? []
+            let allSizesArray = allSizes(in: variants)
+            
+            if collectionView == self.storeColorCollection {
+                guard
+                    let selectedIndex = sizeSelectionIndex,
+                    selectedIndex < allSizesArray.count
+                else {
+                    // Prevent crash if index is invalid
+                    debugPrint("⚠️ Invalid sizeSelectionIndex or no sizes found")
+                    return 0
+                }
+
+                let selectedSize = allSizesArray[selectedIndex]
+                let colorsArray = colors(for: selectedSize, in: variants)
+
+                debugPrint("Colors for size \(selectedSize): \(colorsArray)")
+                storeColorView.isHidden = colorsArray.isEmpty
+                colorCount = colorsArray.count
+                return colorStore?.count ?? 0
+            } else {
+                storeSizeView.isHidden = sizeStore?.isEmpty ?? false
+                return sizeStore?.count ?? 0
+            }
+        } else  {
             return self.relatedPost.count
         }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if collectionView == self.collectionView {
+            
             let objet = self.postImageVideo[indexPath.item]
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PostImageXIB", for: indexPath) as! PostImageXIB
-            //            cell.imgPlay.isHidden = true
-            if objet.type == "image"{
-                cell.imgPost.setImageFast(with: objet.image ?? "")
-            }
-            else {
-                if let url = objet.video {
-                    if let videourl = URL.init(string: url){
-                        self.getThumbnailImageFromVideoUrl(url:videourl) { (thumbImage) in
-                            cell.imgPost.image = thumbImage
-                            cell.imgPost.contentMode = .scaleToFill
-                            //                            cell.imgPlay.isHidden = false
+            if self.postDetails?.type?.lowercased() == "store"{
+                let data = self.veriantImages?[indexPath.row]
+                cell.imgPost.setImageFast(with: data?.image ?? "")
+            }else{
+                //            cell.imgPlay.isHidden = true
+                if objet.type == "image"{
+                    cell.imgPost.setImageFast(with: objet.image ?? "")
+                }
+                else {
+                    if let url = objet.video {
+                        if let videourl = URL.init(string: url){
+                            self.getThumbnailImageFromVideoUrl(url:videourl) { (thumbImage) in
+                                cell.imgPost.image = thumbImage
+                                //                            cell.imgPost.contentMode = .scaleToFill
+                                //                            cell.imgPlay.isHidden = false
+                            }
                         }
                     }
+                }
+            }
+            return cell
+        }else if collectionView == self.storeSizeCollection || collectionView == self.storeColorCollection {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SizeXIB", for: indexPath) as! SizeXIB
+            cell.lblTitle.layer.cornerRadius = 4
+            cell.lblTitle.clipsToBounds = true
+            if collectionView == self.storeSizeCollection{
+                let indexData = sizeStore?[indexPath.item]
+                cell.lblTitle.text = indexData
+                if indexPath.row == sizeSelectionIndex{
+                    cell.lblTitle.backgroundColor = UIColor.blackTheme
+                    cell.lblTitle.textColor = .appWhite
+                }else{
+                    cell.lblTitle.backgroundColor = UIColor.white
+                    cell.lblTitle.textColor = .blackTheme
+                }
+            }else{
+                let indexData = colorStore?[indexPath.item]
+                cell.lblTitle.text = indexData
+                if indexPath.row == colorSelectionIndex{
+                    cell.lblTitle.backgroundColor = UIColor.blackTheme
+                    cell.lblTitle.textColor = .appWhite
+                }else{
+                    cell.lblTitle.backgroundColor = UIColor.white
+                    cell.lblTitle.textColor = .blackTheme
                 }
             }
             return cell
@@ -795,14 +1052,41 @@ extension OtherPostDetailsVC : UICollectionViewDataSource,UICollectionViewDelega
             }
             else {
                 let viewController = PhotosViewController.instantiate(fromStoryboard: .Main)
-                var imag = [String]()
-                for i in 0..<self.postImageVideo.count{
-                    imag.append(postImageVideo[i].image ?? "")
+                if self.postDetails?.type?.lowercased() == "store"{
+                    var veriantData = [ImagesVideoModel]()
+                    for index in self.veriantImages ?? []{
+                        let data = ["image":index.image ?? ""]
+                        if let images = ImagesVideoModel(JSON: data){
+                            veriantData.append(images)
+                        }
+                    }
+                    viewController.imagesList = veriantData
+                }else{
+                    var imag = [String]()
+                    for i in 0..<self.postImageVideo.count{
+                        imag.append(postImageVideo[i].image ?? "")
+                    }
+                    viewController.imagesList = self.postImageVideo
                 }
-                viewController.imagesList = self.postImageVideo
                 viewController.visibleIndex = indexPath.item
                 self.navigationController?.present(viewController, animated: true, completion: nil)
             }
+        }else if collectionView == storeColorCollection{
+            colorSelectionIndex = indexPath.row
+            setPrice()
+            storeColorCollection.reloadData()
+        }else if collectionView == storeSizeCollection{
+            if indexPath.row == sizeSelectionIndex{
+                return
+            }
+            sizeSelectionIndex = indexPath.row
+            debugPrint(indexPath.row)
+            colorSelectionIndex = 0
+            let size = getSizesWithColors(from: postDetails?.variants ?? [])
+//            colorStore = size[Array(size.keys).sorted()[indexPath.row]]
+            setPrice()
+            storeColorCollection.reloadData()
+            storeSizeCollection.reloadData()
         }
         else if collectionView == self.moreSallerCollection {
             let postId = self.userPost[indexPath.item].id ?? 0
@@ -838,7 +1122,15 @@ extension OtherPostDetailsVC: UICollectionViewDelegateFlowLayout {
             let availableWidth = collectionView.bounds.width - sectionPadding - interitemPadding
             let widthPerItem = availableWidth
             return CGSize(width: widthPerItem, height: 300)
-        }else {
+        }else if collectionView == self.storeSizeCollection || collectionView == self.storeColorCollection{
+            let itemsPerRow: CGFloat = 5
+            let spacing: CGFloat = 8 // adjust based on your layout’s minimumInteritemSpacing
+            let totalSpacing = (itemsPerRow - 1) * spacing
+            
+            // subtract total spacing from collection width, then divide by items per row
+            let width = (collectionView.bounds.width - totalSpacing) / itemsPerRow
+            return CGSize(width: width, height: 33)
+        } else {
             return CGSize(width: self.recentViewCollection.frame.width / 2.3, height: 230)
         }
         
@@ -855,6 +1147,8 @@ extension OtherPostDetailsVC: UICollectionViewDelegateFlowLayout {
                         minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         if collectionView == self.collectionView{
             return interitemSpace
+        }else if collectionView == self.storeSizeCollection || collectionView == self.storeColorCollection {
+            return  8
         }else{
             return 10
         }
@@ -863,6 +1157,8 @@ extension OtherPostDetailsVC: UICollectionViewDelegateFlowLayout {
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         if collectionView == self.collectionView{
             return interitemSpace
+        }else if collectionView == self.storeSizeCollection || collectionView == self.storeColorCollection {
+            return  8
         }else{
             return 10
         }

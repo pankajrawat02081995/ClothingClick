@@ -207,8 +207,8 @@ class ClothPreferencesViewController: BaseViewController {
                 FilterSingleton.share.genderSelection = nil
                 appDelegate.selectGenderId = ""
             }else{
-                appDelegate.selectGenderId = "\(self.mysizeList[self.selectGengerIndex == -1 ? 1 : self.selectGengerIndex]?.gender_id ?? 0)"
-                FilterSingleton.share.genderSelection = self.mysizeList[self.selectGengerIndex == -1 ? 1 : self.selectGengerIndex]?.gender_id
+                appDelegate.selectGenderId = "\(self.mysizeList[self.selectGengerIndex == -1 ? 1 : self.selectGengerIndex]?.gender_id ?? 0)" == "1" ? "0" : "1"
+                FilterSingleton.share.genderSelection = self.mysizeList[self.selectGengerIndex == -1 ? 1 : self.selectGengerIndex]?.gender_id == 1 ? 0 : 1
             }
             
             if let genserId = self.mysizeList[self.selectGengerIndex == -1 ? 1 : self.selectGengerIndex]?.gender_id{

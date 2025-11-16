@@ -912,6 +912,7 @@ extension EditProfileViewController{
                         if let userDetails = response.dictData {
                             let vc = OtpViewVC.instantiate(fromStoryboard: .Auth)
                             vc.isProfileUpdate = true
+                            vc.phone = phone
                             vc.mobileNumberUpdated = { [weak self] status in
                                 compltion()
                             }

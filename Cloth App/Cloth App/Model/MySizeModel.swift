@@ -62,6 +62,7 @@ struct BrandeSearchModel : Mappable {
     var name : String?
     var photo : String?
     var image: String?
+    var posts_count : Int?
     init?(map: Map) {
 
     }
@@ -71,6 +72,7 @@ struct BrandeSearchModel : Mappable {
         brand_id <- map["brand_id"]
         name <- map["name"]
         photo <- map["photo"]
+        posts_count <- map["posts_count"]
         image <- map["image"]
     }
 

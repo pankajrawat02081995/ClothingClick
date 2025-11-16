@@ -24,9 +24,16 @@ final class CardSectionElement: ContainerElement {
 
     weak var delegate: ElementDelegate?
     lazy var view: UIView = {
-        #if !canImport(CompositorServices)
+        #if !os(visionOS)
         if #available(iOS 13.0, macCatalyst 14, *), STPCardScanner.cardScanningAvailable {
-            return CardSectionWithScannerView(cardSectionView: cardSection.view, delegate: self, theme: theme, analyticsHelper: analyticsHelper)
+            return CardSectionWithScannerView(
+                cardSectionView: cardSection.view,
+                opensCardScannerAutomatically: opensCardScannerAutomatically,
+                delegate: self,
+                theme: theme,
+                analyticsHelper: analyticsHelper,
+                linkAppearance: linkAppearance
+            )
         } else {
             return cardSection.view
         }
@@ -37,7 +44,10 @@ final class CardSectionElement: ContainerElement {
     let cardSection: SectionElement
     let analyticsHelper: PaymentSheetAnalyticsHelper?
     let cardBrandFilter: CardBrandFilter
-    
+    private let opensCardScannerAutomatically: Bool
+
+    private let linkAppearance: LinkAppearance?
+
     struct DefaultValues {
         internal init(name: String? = nil, pan: String? = nil, cvc: String? = nil, expiry: String? = nil) {
             self.name = name
@@ -70,12 +80,15 @@ final class CardSectionElement: ContainerElement {
         hostedSurface: HostedSurface,
         theme: ElementsAppearance = .default,
         analyticsHelper: PaymentSheetAnalyticsHelper?,
-        cardBrandFilter: CardBrandFilter = .default
+        cardBrandFilter: CardBrandFilter = .default,
+        opensCardScannerAutomatically: Bool = false,
+        linkAppearance: LinkAppearance? = nil
     ) {
         self.hostedSurface = hostedSurface
         self.theme = theme
         self.analyticsHelper = analyticsHelper
         self.cardBrandFilter = cardBrandFilter
+        self.opensCardScannerAutomatically = opensCardScannerAutomatically
         let nameElement = collectName
             ? PaymentMethodElementWrapper(
                 TextFieldElement.NameConfiguration(
@@ -92,7 +105,11 @@ final class CardSectionElement: ContainerElement {
         if cardBrandChoiceEligible {
             cardBrandDropDown = PaymentMethodElementWrapper(DropdownFieldElement.makeCardBrandDropdown(theme: theme)) { field, params in
                 let cardBrand = STPCard.brand(from: field.selectedItem.rawData)
-                cardParams(for: params).networks = STPPaymentMethodCardNetworksParams(preferred: cardBrand != .unknown ? STPCardBrandUtilities.apiValue(from: cardBrand) : nil)
+                // Only set preferred networks for the confirm params if we have more than 1 brand fetched
+                if (cardBrandDropDown?.element.nonPlacerholderItems.count ?? 1) > 1 {
+                    cardParams(for: params).networks = STPPaymentMethodCardNetworksParams(preferred: cardBrand != .unknown ? STPCardBrandUtilities.apiValue(from: cardBrand) : nil)
+                }
+                analyticsHelper?.logCardBrandSelected(hostedSurface: hostedSurface, cardBrand: cardBrand)
                 return params
             }
         }
@@ -145,23 +162,8 @@ final class CardSectionElement: ContainerElement {
         self.expiryElement = expiryElement.element
         self.preferredNetworks = preferredNetworks
         self.lastPanElementValidationState = panElement.validationState
+        self.linkAppearance = linkAppearance
         cardSection.delegate = self
-
-        // Hook up CBC analytics after self is initialized
-        self.cardBrandDropDown?.didPresent = { [weak self] in
-            guard let self = self, let cardBrandDropDown = self.cardBrandDropDown else { return }
-            let selectedCardBrand = cardBrandDropDown.selectedItem.rawData.toCardBrand ?? .unknown
-            let params = ["selected_card_brand": STPCardBrandUtilities.apiValue(from: selectedCardBrand), "cbc_event_source": "add"]
-            STPAnalyticsClient.sharedClient.logPaymentSheetEvent(event: self.hostedSurface.analyticEvent(for: .openCardBrandDropdown),
-                                                                 params: params)
-        }
-
-        self.cardBrandDropDown?.didTapClose = { [weak self] in
-            guard let self = self, let cardBrandDropDown = self.cardBrandDropDown else { return }
-            let selectedCardBrand = cardBrandDropDown.selectedItem.rawData.toCardBrand ?? .unknown
-            STPAnalyticsClient.sharedClient.logPaymentSheetEvent(event: self.hostedSurface.analyticEvent(for: .closeCardBrandDropDown),
-                                                                 params: ["selected_card_brand": STPCardBrandUtilities.apiValue(from: selectedCardBrand)])
-        }
     }
 
     // MARK: - ElementDelegate
@@ -178,6 +180,7 @@ final class CardSectionElement: ContainerElement {
     /// Tracks the last known validation state of the PAN element, so that we can know when it changes from invalid to valid
     var lastPanElementValidationState: ElementValidationState
     var lastDisallowedCardBrandLogged: STPCardBrand?
+    var hasLoggedExpectedExtraDigitsButUserEntered16: Bool = false
     func didUpdate(element: Element) {
         // Update the CVC field if the card brand changes
         let cardBrand = selectedBrand ?? STPCardValidator.brand(forNumber: panElement.text)
@@ -193,6 +196,20 @@ final class CardSectionElement: ContainerElement {
             lastPanElementValidationState = panElement.validationState
             if case .valid = panElement.validationState {
                 STPAnalyticsClient.sharedClient.logPaymentSheetEvent(event: .paymentSheetCardNumberCompleted)
+            }
+        }
+
+        // If the user entered 16 digits and exited the field, but our PAN length data
+        // indicates that we need more (maybe 19 digits?), then our data might be wrong.
+        // Send an alert so we can measure how often this happens.
+        if case .invalid(let error, _) = panElement.validationState,
+               let specificError = error as? TextFieldElement.PANConfiguration.Error,
+           case .incomplete = specificError,
+           !panElement.isEditing,
+           !hasLoggedExpectedExtraDigitsButUserEntered16 {
+            if panElement.text.count == 16 {
+                STPAnalyticsClient.sharedClient.logPaymentSheetEvent(event: .cardMetadataExpectedExtraDigitsButUserEntered16ThenSwitchedFields)
+                hasLoggedExpectedExtraDigitsButUserEntered16 = true
             }
         }
 
@@ -220,7 +237,7 @@ final class CardSectionElement: ContainerElement {
             // Clear any previously fetched card brands from the dropdown
             if !self.cardBrands.isEmpty {
                 self.cardBrands = Set<STPCardBrand>()
-                cardBrandDropDown?.update(items: DropdownFieldElement.items(from: self.cardBrands, theme: self.theme))
+                cardBrandDropDown?.update(items: DropdownFieldElement.items(from: self.cardBrands, disallowedCardBrands: Set<STPCardBrand>(), theme: self.theme))
                 self.panElement.setText(self.panElement.text) // Hack to get the accessory view to update
             }
             return
@@ -228,7 +245,7 @@ final class CardSectionElement: ContainerElement {
 
         var fetchedCardBrands = Set<STPCardBrand>()
         let hadBrands = !cardBrands.isEmpty
-        STPCardValidator.possibleBrands(forNumber: panElement.text, with: cardBrandFilter) { [weak self] result in
+        STPCardValidator.possibleBrands(forNumber: panElement.text) { [weak self] result in
             guard let self = self else { return }
             switch result {
             case .success(let brands):
@@ -245,30 +262,56 @@ final class CardSectionElement: ContainerElement {
 
             if self.cardBrands != fetchedCardBrands {
                 self.cardBrands = fetchedCardBrands
-                cardBrandDropDown.update(items: DropdownFieldElement.items(from: fetchedCardBrands, theme: self.theme))
+                let disallowedCardBrands = fetchedCardBrands.filter { !self.cardBrandFilter.isAccepted(cardBrand: $0) }
 
-                // If we didn't previously have brands but now have them select based on merchant preference
-                // Select the first brand in the fetched brands that appears earliest in the merchants preferred networks
-                if !hadBrands,
-                   let preferredNetworks = self.preferredNetworks,
-                   let brandToSelect = preferredNetworks.first(where: { fetchedCardBrands.contains($0) }),
-                   let indexToSelect = cardBrandDropDown.items.firstIndex(where: { $0.rawData == STPCardBrandUtilities.apiValue(from: brandToSelect) }) {
+                cardBrandDropDown.update(items: DropdownFieldElement.items(
+                    from: fetchedCardBrands,
+                    disallowedCardBrands: disallowedCardBrands,
+                    theme: self.theme
+                ))
+
+                // Prioritize merchant preference if we did not have brands prior to calling .possibleBrands, otherwise use default logic
+                if !hadBrands, let indexToSelect = hasPreferredBrandIndex(fetchedCardBrands: fetchedCardBrands, disallowedCardBrands: disallowedCardBrands, cardBrandDropDown: cardBrandDropDown) {
                     cardBrandDropDown.select(index: indexToSelect, shouldAutoAdvance: false)
-                } else if cardBrands.count == 1 && self.cardBrandFilter != .default {
-                    // If we only fetched one card brand auto select it, 1 index due to 0 index being the placeholder.
-                    // This case typically only occurs when card brand filtering is used with CBC and one of the fetched brands is filtered out.
-                    cardBrandDropDown.select(index: 1, shouldAutoAdvance: false)
+                } else if let indexToSelect = useDefaultSelectionLogic(disallowedCardBrands: disallowedCardBrands, cardBrandDropDown: cardBrandDropDown) {
+                    cardBrandDropDown.select(index: indexToSelect, shouldAutoAdvance: false)
                 }
 
                 self.panElement.setText(self.panElement.text) // Hack to get the accessory view to update
             }
         }
     }
+
+    // Select the first brand in the fetched brands that appears earliest in the merchants preferred networks
+    func hasPreferredBrandIndex(fetchedCardBrands: Set<STPCardBrand>, disallowedCardBrands: Set<STPCardBrand>, cardBrandDropDown: DropdownFieldElement) -> Int? {
+        guard let preferredNetworks = self.preferredNetworks,
+              let brandToSelect = preferredNetworks.first(where: { fetchedCardBrands.contains($0) && !disallowedCardBrands.contains($0) }),
+              let indexToSelect = cardBrandDropDown.items.firstIndex(where: { $0.rawData == STPCardBrandUtilities.apiValue(from: brandToSelect) }) else {
+            return nil
+        }
+
+        return indexToSelect
+
+    }
+
+    // If we only fetched one card brand that is not disallowed, auto select it.
+    // This case typically only occurs when card brand filtering is used with CBC and one of the fetched brands is filtered out.
+    func useDefaultSelectionLogic(disallowedCardBrands: Set<STPCardBrand>, cardBrandDropDown: DropdownFieldElement) -> Int? {
+        let validBrandSelections = cardBrandDropDown.items.filter { !$0.isPlaceholder && !$0.isDisabled }
+        guard validBrandSelections.count == 1,
+              !disallowedCardBrands.isEmpty,
+              let firstItem = validBrandSelections.first,
+              let indexToSelect = cardBrandDropDown.items.firstIndex(where: { $0.rawData == firstItem.rawData }) else {
+            return nil
+        }
+
+        return indexToSelect
+    }
 }
 
 // MARK: - Helpers
 /// A DRY helper to ensure `STPPaymentMethodCardParams` is present on `intentConfirmParams.paymentMethodParams`.
-private func cardParams(for intentParams: IntentConfirmParams) -> STPPaymentMethodCardParams {
+internal func cardParams(for intentParams: IntentConfirmParams) -> STPPaymentMethodCardParams {
     guard let cardParams = intentParams.paymentMethodParams.card else {
         let cardParams = STPPaymentMethodCardParams()
         intentParams.paymentMethodParams.card = cardParams
@@ -277,7 +320,7 @@ private func cardParams(for intentParams: IntentConfirmParams) -> STPPaymentMeth
     return cardParams
 }
 
-#if !canImport(CompositorServices)
+#if !os(visionOS)
 // MARK: - CardSectionWithScannerViewDelegate
 
 extension CardSectionElement: CardSectionWithScannerViewDelegate {

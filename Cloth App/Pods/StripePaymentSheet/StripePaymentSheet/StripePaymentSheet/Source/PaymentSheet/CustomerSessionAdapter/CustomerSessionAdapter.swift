@@ -93,6 +93,7 @@ class CustomerSessionAdapter {
                                                                                                   customerSessionClientSecret: customerSessionClientSecret)
         } else {
             return try await self.configuration.apiClient.retrieveDeferredElementsSessionForCustomerSheet(paymentMethodTypes: intentConfiguration.paymentMethodTypes,
+                                                                                                          onBehalfOf: intentConfiguration.onBehalfOf,
                                                                                                           clientDefaultPaymentMethod: clientDefaultPaymentMethod,
                                                                                                           customerSessionClientSecret: customerSessionClientSecret)
         }
@@ -100,22 +101,15 @@ class CustomerSessionAdapter {
 }
 extension CustomerSessionAdapter {
     func fetchClientDefaultPaymentMethod(for customerId: String) -> String? {
-        guard let defaultPaymentMethod = fetchSelectedPaymentOption(for: customerId),
+        guard let defaultPaymentMethod = CustomerPaymentOption.localDefaultPaymentMethod(for: customerId),
            case .stripeId(let stripePaymentMethodId) = defaultPaymentMethod else {
             return nil
         }
         return stripePaymentMethodId
     }
 
-    func fetchSelectedPaymentOption(for customerId: String, customer: ElementsCustomer? = nil) -> CustomerPaymentOption? {
-        // if opted in to the "set as default" feature, try to get default payment method from elements session
-        if configuration.allowsSetAsDefaultPM {
-            guard let customer = customer,
-                 let defaultPaymentMethod = customer.getDefaultOrFirstPaymentMethod() else { return nil }
-            return CustomerPaymentOption.stripeId(defaultPaymentMethod.stripeId)
-        }
-
-        return CustomerPaymentOption.defaultPaymentMethod(for: customerId)
+    func fetchSelectedPaymentOption(for customerId: String, elementsSession: STPElementsSession) -> CustomerPaymentOption? {
+        return CustomerPaymentOption.selectedPaymentMethod(for: customerId, elementsSession: elementsSession, surface: .customerSheet)
     }
 
     func detachPaymentMethod(paymentMethod: STPPaymentMethod) async throws {
@@ -154,5 +148,10 @@ extension CustomerSessionAdapter {
         return try await self.configuration.apiClient.updatePaymentMethod(with: paymentMethodId,
                                                                           paymentMethodUpdateParams: paymentMethodUpdateParams,
                                                                           ephemeralKeySecret: cachedCustomerSessionClientSecret.apiKey)
+    }
+
+    func setAsDefaultPaymentMethod(paymentMethodId: String) async throws -> STPCustomer {
+        let cachedCustomerSessionClientSecret = try await cachedCustomerSessionClientSecret()
+        return try await self.configuration.apiClient.setAsDefaultPaymentMethod(paymentMethodId, for: cachedCustomerSessionClientSecret.customerId, using: cachedCustomerSessionClientSecret.apiKey)
     }
 }

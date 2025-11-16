@@ -28,7 +28,7 @@ target 'Cloth App' do
   pod 'TagListView', '~> 1.0'
   pod 'TTRangeSlider'
   pod 'GrowingTextView'
-  pod 'StripePaymentSheet', '~> 24.3.0'
+  pod 'StripePaymentSheet', '~> 25.0.0'
   pod 'AlignedCollectionViewFlowLayout'
   #  pod 'GoogleMaps'#, :modular_headers => true
   #  pod 'GooglePlaces'#, :modular_headers => true
@@ -45,7 +45,7 @@ target 'Cloth App' do
   pod 'Cosmos'
   pod 'libPhoneNumber-iOS'
   pod 'SDWebImage'
-  pod 'TOCropViewController'
+  pod 'TOCropViewController', '~> 2.7.0'
 end
 post_install do |installer|
   installer.generated_projects.each do |project|

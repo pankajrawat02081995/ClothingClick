@@ -17,6 +17,8 @@
 		3232184B2E3A85B900303857 /* ScanningModules.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = ScanningModules.xcodeproj; sourceTree = "<group>"; };
 		324D86822E49CF4D0089DE2F /* ScanningModules.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = ScanningModules.xcodeproj; sourceTree = "<group>"; };
 		326ECF992E474BBF00055163 /* ScanningModules.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = ScanningModules.xcodeproj; sourceTree = "<group>"; };
+		32853B052E9F879900985DA9 /* ScanningModules.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = ScanningModules.xcodeproj; sourceTree = "<group>"; };
+		328545EC2EA006E700985DA9 /* ScanningModules.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = ScanningModules.xcodeproj; sourceTree = "<group>"; };
 		32B181042E43CDE2002AFE5E /* ScanningModules.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = ScanningModules.xcodeproj; sourceTree = "<group>"; };
 		32DA6C3A2E36A5F900300E64 /* ScanningModules.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = ScanningModules.xcodeproj; sourceTree = "<group>"; };
 		64B42800A1CC2FD215D32EA5 /* Pods-Cloth App.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Cloth App.release.xcconfig"; path = "Target Support Files/Pods-Cloth App/Pods-Cloth App.release.xcconfig"; sourceTree = "<group>"; };
@@ -119,6 +121,20 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		32853C662E9F879900985DA9 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		3285474F2EA006E700985DA9 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		32B182642E43CDE2002AFE5E /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -197,10 +213,6 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = 320E58612E2AD9F700BEAAF2 /* Products */;
-					ProjectRef = 320E56FB2E2AD9F700BEAAF2 /* ScanningModules.xcodeproj */;
-				},
-				{
 					ProductGroup = 32DA6D9A2E36A5F900300E64 /* Products */;
 					ProjectRef = 32DA6C3A2E36A5F900300E64 /* ScanningModules.xcodeproj */;
 				},
@@ -209,8 +221,20 @@
 					ProjectRef = 32B181042E43CDE2002AFE5E /* ScanningModules.xcodeproj */;
 				},
 				{
+					ProductGroup = 3285474F2EA006E700985DA9 /* Products */;
+					ProjectRef = 328545EC2EA006E700985DA9 /* ScanningModules.xcodeproj */;
+				},
+				{
 					ProductGroup = 320E54BD2E2AD87900BEAAF2 /* Products */;
 					ProjectRef = 320E53572E2AD87900BEAAF2 /* ScanningModules.xcodeproj */;
+				},
+				{
+					ProductGroup = 32853C662E9F879900985DA9 /* Products */;
+					ProjectRef = 32853B052E9F879900985DA9 /* ScanningModules.xcodeproj */;
+				},
+				{
+					ProductGroup = 320E58612E2AD9F700BEAAF2 /* Products */;
+					ProjectRef = 320E56FB2E2AD9F700BEAAF2 /* ScanningModules.xcodeproj */;
 				},
 				{
 					ProductGroup = 324D87E32E49CF4D0089DE2F /* Products */;
@@ -290,13 +314,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Cloth App/Pods-Cloth App-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Cloth App/Pods-Cloth App-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -311,13 +331,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Cloth App/Pods-Cloth App-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Cloth App/Pods-Cloth App-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -369,7 +385,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 7.0;
+				MARKETING_VERSION = 8.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.clothingclick.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -414,7 +430,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 7.0;
+				MARKETING_VERSION = 8.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.clothingclick.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";

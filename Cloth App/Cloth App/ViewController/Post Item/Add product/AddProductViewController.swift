@@ -15,7 +15,7 @@ import KRProgressHUD
 import ObjectMapper
 
 class AddProductViewController: BaseViewController {
-
+    
     @IBOutlet weak var lblTitle: UILabel!
     @IBOutlet weak var btnCancel: UIButton!
     @IBOutlet weak var txtBrandDesignerName: CustomTextField!
@@ -28,9 +28,9 @@ class AddProductViewController: BaseViewController {
     @IBOutlet weak var btnLocation: UIButton!
     @IBOutlet weak var btnPreview : CustomButton!
     @IBOutlet weak var btnPost: CustomButton!
-
+    
     @IBOutlet weak var CVAddProductImage: UICollectionView!
-
+    
     var savegenderId : CategoryModel?
     var selectSubcategory : ChildCategories?
     var selectCategory : Categorie?
@@ -45,8 +45,8 @@ class AddProductViewController: BaseViewController {
     var priceId = "1"
     var Producturl = ""
     var postImageVideo = [ImagesVideoModel]()
-
-
+    
+    
     var productImage = [[String:Any]]()
     var sendproductImage = [UIImage]()
     var productVideoThumnilImge = UIImage()
@@ -69,19 +69,19 @@ class AddProductViewController: BaseViewController {
             if appDelegate.userDetails?.role_id == 1 {
                 for j in 0..<self.selectAddress.count{
                     if let id = self.selectAddress[j]?.id {
-                            self.addressIdLIst.append(String(id))
-                        }
+                        self.addressIdLIst.append(String(id))
+                    }
                 }
             }else{
-            for i in 0..<(objectModel?.count ?? 0) {
-                for j in 0..<self.selectAddress.count{
-                    if objectModel?[i].id == self.selectAddress[j]?.id {
-                        if let id = objectModel?[i].id {
-                            self.addressIdLIst.append(String(id))
+                for i in 0..<(objectModel?.count ?? 0) {
+                    for j in 0..<self.selectAddress.count{
+                        if objectModel?[i].id == self.selectAddress[j]?.id {
+                            if let id = objectModel?[i].id {
+                                self.addressIdLIst.append(String(id))
+                            }
                         }
                     }
                 }
-            }
             }
             self.setDeta()
         }
@@ -92,7 +92,7 @@ class AddProductViewController: BaseViewController {
             let objectModel = appDelegate.userDetails?.locations
             for i in 0..<(objectModel?.count ?? 0) {
                 if objectModel?[i].isPayAddress() ?? false  || objectModel?[i].isSelectedAddress() ?? false {
-//                    print("is pay \(self.addresslist[i]?.isPayAddress())","id : \(self.addresslist[i]?.id)")
+                    //                    print("is pay \(self.addresslist[i]?.isPayAddress())","id : \(self.addresslist[i]?.id)")
                     self.addresslist.append(objectModel?[i])
                 }
             }
@@ -149,19 +149,19 @@ class AddProductViewController: BaseViewController {
         var productImageUrl = [[String:Any]]()
         for i in 0..<self.productImage.count {
             if let stringUrl = self.productImage[i]["image_url"] as? String{
-//                let url = URL.init(string: stringUrl )!
+                //                let url = URL.init(string: stringUrl )!
                 var dict = [String:Any]()
                 dict["image_url"] = stringUrl
                 productImageUrl.append(dict)
                 
             }
             else {
-//                self.sendproductImage.append(self.productImage[i]["image_url"] as! UIImage )
+                //                self.sendproductImage.append(self.productImage[i]["image_url"] as! UIImage )
                 var dict = [String:Any]()
                 dict["image_url"] = self.productImage[i]["image_url"]as! UIImage
                 productImageUrl.append(dict)
             }
-
+            
         }
         let ViewController = PostPreviewVC.instantiate(fromStoryboard: .Sell) //storyboard?.instantiateViewController(identifier: "AddProductPreviewViewController") as! AddProductPreviewViewController
         ViewController.brandSearchList = self.brandSearchList
@@ -173,7 +173,7 @@ class AddProductViewController: BaseViewController {
             ViewController.selectCategory = self.selectCategory
             ViewController.addresslist = self.addresslist
         }
-       // ViewController.addresslist = self.selectAddress
+        // ViewController.addresslist = self.selectAddress
         ViewController.savegenderId = self.savegenderId
         ViewController.selectSubcategory = self.selectSubcategory
         if txtCADPrice.text == ""  || txtCADPrice.text == "0"{
@@ -182,13 +182,13 @@ class AddProductViewController: BaseViewController {
         else {
             ViewController.price = self.txtCADPrice.text ?? "0.00"
         }
-//         = self.txtCADPrice.text ?? ""
+        //         = self.txtCADPrice.text ?? ""
         ViewController.priceType = self.txtFixedpricee.text ?? ""
         ViewController.selectColor = self.selectColor
         ViewController.selectSize = self.selectSize
         ViewController.discripction = self.txtDescription.text ?? ""
         ViewController.productModelItem = txtModelTitle.text ?? ""
-//        ViewController.productImage = self.sendproductImage
+        //        ViewController.productImage = self.sendproductImage
         ViewController.edit = self.edit
         ViewController.productImageUrl = productImageUrl
         ViewController.selectCondiction = self.selectCondiction
@@ -205,7 +205,7 @@ class AddProductViewController: BaseViewController {
     }
     
     @IBAction func btnPost_Clicked(_ button: UIButton) {
-       
+        
         if self.txtBrandDesignerName.text?.trim().count == 0 {
             UIAlertController().alertViewWithTitleAndMessage(self, message: "Please select brand name")
             return
@@ -265,12 +265,12 @@ class AddProductViewController: BaseViewController {
             for i in 0..<self.addresslist.count {
                 if self.addresslist[i]?.isPayAddress() ?? false  || self.addresslist[i]?.isSelectedAddress() ?? false {
                     print("is pay \(self.addresslist[i]?.isPayAddress() )","id : \(self.addresslist[i]?.id)")
-//                    self.addresslist[i]?.is_Selected = true
+                    //                    self.addresslist[i]?.is_Selected = true
                     payaddress.append(self.addresslist[i]!)
                 }
             }
         }
-    
+        
         
         if appDelegate.userDetails?.role_id == 1 {
             let viewController = self.storyboard?.instantiateViewController(identifier: "UserLocationViewController") as! UserLocationViewController
@@ -279,7 +279,7 @@ class AddProductViewController: BaseViewController {
                 if appDelegate.userDetails?.role_id == 1 {
                     viewController.addresslist = self.selectAddress
                 }else{
-                viewController.addresslist = self.addresslist
+                    viewController.addresslist = self.addresslist
                 }
             }
             else {
@@ -298,7 +298,7 @@ class AddProductViewController: BaseViewController {
             else {
                 viewController.addresslist = payaddress
             }
-               
+            
             viewController.storePostlocationdelegate = self
             viewController.selectedAddressList = self.selectAddress
             self.navigationController?.pushViewController(viewController, animated: true)
@@ -345,12 +345,12 @@ class AddProductViewController: BaseViewController {
     }
     func alertPromptToAllowCameraAccessViaSetting() {
         let alert = UIAlertController(title: AlertViewTitle, message: "Camera access required", preferredStyle: UIAlertController.Style.alert)
-
+        
         alert.addAction(UIAlertAction(title: "Cancel", style: .default))
         alert.addAction(UIAlertAction(title: "Settings", style: .cancel) { (alert) -> Void in
             UIApplication.shared.openURL(URL(string: UIApplication.openSettingsURLString)!)
         })
-
+        
         present(alert, animated: true)
     }
     func showActionSheet() {
@@ -454,7 +454,7 @@ class AddProductViewController: BaseViewController {
     }
     
     func setDeta () {
-        let id = Int(self.postDetails?.brand_id ?? 0) 
+        let id = Int(self.postDetails?.brand_id ?? 0)
         let dict = ["brand_id": id ?? 0,
                     "name": self.postDetails?.brand_name ?? ""] as [String : Any]
         let brandObjCat = BrandeSearchModel.init(JSON: dict)
@@ -492,15 +492,15 @@ class AddProductViewController: BaseViewController {
         if let brnsdName = self.brandSearchList?.name{
             self.txtBrandDesignerName.text = brnsdName
         }
-       // selectAddress
+        // selectAddress
         if appDelegate.userDetails?.role_id == 1 {
             if self.selectAddress.count != 0 {
                 self.txtLocation.text = "\(self.selectAddress[0]?.address ?? "")"
             }
         }else{
-        self.txtLocation.text = "\(self.selectAddress.count) select location"
+            self.txtLocation.text = "\(self.selectAddress.count) select location"
         }
-
+        
     }
 }
 
@@ -584,10 +584,10 @@ class AddProductImageCell : UICollectionViewCell {
 }
 
 extension AddProductViewController: UICollectionViewDragDelegate {
-
+    
     // Get dragItem from the indexpath
     func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
-       
+        
         if self.productImage.count >= 1{
             if indexPath.item < self.productImage.count{
                 if let urls = self.productImage[indexPath.item]["image_url"] as? String {
@@ -603,7 +603,7 @@ extension AddProductViewController: UICollectionViewDragDelegate {
                     return [dragItem]
                 }
                 return []
-               // let itemPrice = self.productImage[indexPath.item]["image_url"]
+                // let itemPrice = self.productImage[indexPath.item]["image_url"]
                 
             }else{
                 return []
@@ -616,11 +616,11 @@ extension AddProductViewController: UICollectionViewDragDelegate {
     
     
     func collectionView(_ collectionView: UICollectionView, dragPreviewParametersForItemAt indexPath: IndexPath) -> UIDragPreviewParameters? {
-      
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "AddProductImageCell", for: indexPath) as! AddProductImageCell
-            let previewParameters = UIDragPreviewParameters()
-            previewParameters.visiblePath = UIBezierPath(roundedRect: CGRect(x: cell.imgProduct.frame.minX, y: cell.imgProduct.frame.minY, width: cell.imgProduct.frame.width , height: cell.imgProduct.frame.height ), cornerRadius: 20)
-            return previewParameters
+        
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "AddProductImageCell", for: indexPath) as! AddProductImageCell
+        let previewParameters = UIDragPreviewParameters()
+        previewParameters.visiblePath = UIBezierPath(roundedRect: CGRect(x: cell.imgProduct.frame.minX, y: cell.imgProduct.frame.minY, width: cell.imgProduct.frame.width , height: cell.imgProduct.frame.height ), cornerRadius: 20)
+        return previewParameters
         
     }
 }
@@ -639,7 +639,7 @@ extension AddProductViewController: UICollectionViewDropDelegate {
         
         if coordinator.proposal.operation == .move{
             copyItems(coordinator: coordinator, destinationIndexPath: destinationIndexPath, collectionView: collectionView)
-                        
+            
         }
     }
     
@@ -648,10 +648,10 @@ extension AddProductViewController: UICollectionViewDropDelegate {
         if let indexPath = destinationIndexPath {
             
             print("current index\(indexPath)")
-           
-//            users.indices.forEach { users[$0].isHighlighted = false }
-//            users[indexPath.item].isHighlighted = true
-//            collectionView.reloadData()
+            
+            //            users.indices.forEach { users[$0].isHighlighted = false }
+            //            users[indexPath.item].isHighlighted = true
+            //            collectionView.reloadData()
         }
         return UICollectionViewDropProposal(operation: .move)
     }
@@ -678,23 +678,23 @@ extension AddProductViewController: UICollectionViewDropDelegate {
 
 extension AddProductViewController: UICollectionViewDelegateFlowLayout {
     fileprivate var sectionInsets: UIEdgeInsets {
-          return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-      }
-      
-      fileprivate var itemsPerRow: CGFloat {
+        return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+    }
+    
+    fileprivate var itemsPerRow: CGFloat {
         return 4
-      }
-      
-      fileprivate var interitemSpace: CGFloat {
-            return 0.0
-      }
-
+    }
+    
+    fileprivate var interitemSpace: CGFloat {
+        return 0.0
+    }
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-            let sectionPadding = sectionInsets.left * (itemsPerRow + 1)
-            let interitemPadding = max(0.0, itemsPerRow - 1) * interitemSpace
-            let availableWidth = collectionView.bounds.width - sectionPadding - interitemPadding
-            let widthPerItem = availableWidth / itemsPerRow
-            return CGSize(width: widthPerItem, height: 90)
+        let sectionPadding = sectionInsets.left * (itemsPerRow + 1)
+        let interitemPadding = max(0.0, itemsPerRow - 1) * interitemSpace
+        let availableWidth = collectionView.bounds.width - sectionPadding - interitemPadding
+        let widthPerItem = availableWidth / itemsPerRow
+        return CGSize(width: widthPerItem, height: 90)
     }
     
     func collectionView(_ collectionView: UICollectionView,
@@ -746,7 +746,7 @@ extension AddProductViewController : UITextFieldDelegate {
             let maxLength = 5
             let currentString: NSString = (textField.text ?? "") as NSString
             let newString: NSString =
-                currentString.replacingCharacters(in: range, with: string) as NSString
+            currentString.replacingCharacters(in: range, with: string) as NSString
             return newString.length <= maxLength
         }
         else {
@@ -935,18 +935,18 @@ extension AddProductViewController {
         
         if isShowHud {
             //        KRProgressHUD.show()
-        LoaderManager.shared.show()
+            LoaderManager.shared.show()
         }
         
         Alamofire.upload(multipartFormData: {
             multipartFormData in
             if images.count > 0{
                 for index in 0...images.count - 1 {
-
+                    
                     let imagedata = images[index].resize(images[index])
                     print("image size: \(imagedata?.count)")
                     multipartFormData.append(imagedata ?? Data(), withName: "\(imageParameterName)[\(index)]", fileName: "\(imageName)\(index).png", mimeType: "image/png")
-                          
+                    
                     
                 }
             }
@@ -966,7 +966,7 @@ extension AddProductViewController {
                     response in
                     if isShowHud {
                         //            KRProgressHUD.dismiss()
-            LoaderManager.shared.hide()
+                        LoaderManager.shared.hide()
                     }
                     switch response.result {
                     case .success:
@@ -998,9 +998,9 @@ extension AddProductViewController {
             case .failure(let encodingError):
                 if isShowHud {
                     //            KRProgressHUD.dismiss()
-            LoaderManager.shared.hide()
+                    LoaderManager.shared.hide()
                 }
-               print (encodingError)
+                print (encodingError)
                 completion(nil, NSError.init(domain: ErrorMessage, code: 0, userInfo: nil))
             }
         })
@@ -1072,12 +1072,12 @@ extension AddProductViewController {
                 longitude = self.selectAddress[i]?.longitude ?? ""
                 city = self.selectAddress[i]?.city ?? ""
                 area = self.selectAddress[i]?.area ?? ""
-               // address.append(dict)
-               // print(address)
+                // address.append(dict)
+                // print(address)
             }
-           // self.selectAddress
+            // self.selectAddress
             
-           // usersideproductlocation = self.json(from: address) ?? ""
+            // usersideproductlocation = self.json(from: address) ?? ""
         }
         
         
@@ -1108,12 +1108,12 @@ extension AddProductViewController {
                         if let response = response {
                             if let data = response.dictData {
                                 print(response)
-//                                let viewController = self.storyboard?.instantiateViewController(identifier: "PromoteViewController") as! PromoteViewController
-//                                viewController.postDetail = data
-//                                viewController.sendproductImage = self.sendproductImage
-//                                viewController.isGotoHome = true
-//                                self.navigationController?.pushViewController(viewController, animated: true)
-//
+                                //                                let viewController = self.storyboard?.instantiateViewController(identifier: "PromoteViewController") as! PromoteViewController
+                                //                                viewController.postDetail = data
+                                //                                viewController.sendproductImage = self.sendproductImage
+                                //                                viewController.isGotoHome = true
+                                //                                self.navigationController?.pushViewController(viewController, animated: true)
+                                //
                                 let viewController = self.storyboard?.instantiateViewController(identifier: "CongratulationsViewController") as! CongratulationsViewController
                                 viewController.sendproductImage = self.sendproductImage
                                 self.navigationController?.pushViewController(viewController, animated: true)
@@ -1131,10 +1131,10 @@ extension AddProductViewController {
                         if let response = response {
                             if let data = response.dictData {
                                 print(response)
-//                                let viewController = self.storyboard?.instantiateViewController(identifier: "PromoteViewController") as! PromoteViewController
-//                                viewController.postDetail = data
-//                                viewController.isGotoHome = true
-//                                self.navigationController?.pushViewController(viewController, animated: true)
+                                //                                let viewController = self.storyboard?.instantiateViewController(identifier: "PromoteViewController") as! PromoteViewController
+                                //                                viewController.postDetail = data
+                                //                                viewController.isGotoHome = true
+                                //                                self.navigationController?.pushViewController(viewController, animated: true)
                                 
                                 let viewController = self.storyboard?.instantiateViewController(identifier: "CongratulationsViewController") as! CongratulationsViewController
                                 viewController.sendproductImage = self.sendproductImage
@@ -1187,8 +1187,8 @@ extension AddProductViewController {
         var location  = self.addressIdLIst.joined(separator: ",")
         let deletedImage = self.deleteImageId.joined(separator: ",")
         let deletedVideo = self.deleteVideoId.joined(separator: ",")
-    
-       // var usersideproductlocation = ""
+        
+        // var usersideproductlocation = ""
         var address = ""
         var postalcode = ""
         var latitude = ""
@@ -1222,7 +1222,7 @@ extension AddProductViewController {
                 price = self.txtCADPrice.text ?? "0"
             }
         }
-           
+        
         if appDelegate.reachable.connection != .none{
             let param = ["post_id" : "\(self.postDetails?.id ?? 0)",
                          "brand_id" : "\(self.brandSearchList?.brand_id ?? 0)" ,
@@ -1281,5 +1281,5 @@ extension AddProductViewController {
             UIAlertController().alertViewWithNoInternet(self)
         }
     }
-
+    
 }

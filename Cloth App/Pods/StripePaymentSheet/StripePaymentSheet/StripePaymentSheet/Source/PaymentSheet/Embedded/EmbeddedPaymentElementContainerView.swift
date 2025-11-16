@@ -8,6 +8,14 @@ import UIKit
 
 /// The view that's vended to the merchant, containing the embedded view.  We use this to be able to swap out the embedded view with an animation when `update` is called.
 class EmbeddedPaymentElementContainerView: UIView {
+
+    /// Return the default size to let Auto Layout manage the height.
+    /// Overriding intrinsicContentSize values and setting `invalidIntrinsicContentSize` forces SwiftUI to update layout immediately,
+    /// resulting in abrupt, non-animated height changes.
+    override var intrinsicContentSize: CGSize {
+        return super.intrinsicContentSize
+    }
+
     var needsUpdateSuperviewHeight: () -> Void = {}
     private var contentView: EmbeddedPaymentMethodsView
     private var bottomAnchorConstraint: NSLayoutConstraint!
@@ -15,14 +23,15 @@ class EmbeddedPaymentElementContainerView: UIView {
     init(embeddedPaymentMethodsView: EmbeddedPaymentMethodsView) {
         self.contentView = embeddedPaymentMethodsView
         super.init(frame: .zero)
-        addInitialView(contentView)
+        directionalLayoutMargins = .zero
+        setContentView(contentView)
     }
 
     required init?(coder: NSCoder) {
         fatalError()
     }
 
-    private func addInitialView(_ view: UIView) {
+    private func setContentView(_ view: UIView) {
         view.translatesAutoresizingMaskIntoConstraints = false
         addSubview(view)
         bottomAnchorConstraint = view.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor)
@@ -39,7 +48,7 @@ class EmbeddedPaymentElementContainerView: UIView {
             // A zero frame means we haven't been laid out yet. Simply replace the old view to avoid laying out before the view is ready and breaking constraints.
             contentView.removeFromSuperview()
             contentView = embeddedPaymentMethodsView
-            addInitialView(embeddedPaymentMethodsView)
+            setContentView(embeddedPaymentMethodsView)
             return
         }
         let oldContentView = contentView

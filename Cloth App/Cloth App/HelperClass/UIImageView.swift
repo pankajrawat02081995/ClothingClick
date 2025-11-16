@@ -68,7 +68,10 @@ import SDWebImage
 
 extension UIImageView {
     func setProfileImage(from urlString: String?, placeholderName name: String) {
-        if let urlString = urlString, let url = URL(string: urlString), !urlString.isEmpty {
+        // Always set content mode to aspect fit
+        self.contentMode = .scaleAspectFit
+        
+        if let urlString = urlString, !urlString.isEmpty, let url = URL(string: urlString) {
             self.sd_setImage(with: url, placeholderImage: nil, options: [.retryFailed, .continueInBackground]) { image, error, _, _ in
                 if image == nil {
                     self.setInitialsPlaceholder(name: name)
@@ -78,6 +81,7 @@ extension UIImageView {
             self.setInitialsPlaceholder(name: name)
         }
     }
+
 
     private func setInitialsPlaceholder(name: String) {
         let initial = String(name.prefix(1)).uppercased()

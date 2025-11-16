@@ -8,7 +8,6 @@
 import UIKit
 import StripePaymentSheet
 import StripeApplePay
-//import PassKit
 import KRProgressHUD
 
 enum DeliveryType {
@@ -28,7 +27,6 @@ class BuyNowVC: UIViewController {
     @IBOutlet weak var imgPickup: UIImageView!
     @IBOutlet weak var imgShip: UIImageView!
     
-    
     @IBOutlet weak var lblCompleteAddress: UILabel!
     @IBOutlet weak var lblCity: UILabel!
     @IBOutlet weak var lblPrice: UILabel!
@@ -37,11 +35,15 @@ class BuyNowVC: UIViewController {
     @IBOutlet weak var lblPostName: UILabel!
     @IBOutlet weak var imgPost: CustomImageView!
     
-    
     var deliveryType : DeliveryType? = .Pickup
     var postDetails : PostDetailsModel?
     var paymentID:String?
     var client_secret : String?
+    
+    var price : String?
+    var size : String?
+    var color : String?
+    var varientID : String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,9 +55,10 @@ class BuyNowVC: UIViewController {
     
     func setupData(){
         
-        self.imgPost.setImageFast(with: self.postDetails?.images?.first?.image ?? "")
-        if let gender = self.postDetails?.gender_name,let size  = self.postDetails?.sizes?.first?.name {
-            self.lblSize.text = "\(gender == "Menswear" ? "Men" : "Women")'s \(size)"
+        let images = self.images(for: self.size ?? "", color: self.color ?? "", in: self.postDetails?.variants ?? [])
+        self.imgPost.setImageFast(with: images.first?.image ?? "")
+        if let gender = self.postDetails?.gender_name{
+            self.lblSize.text = "\(gender == "Menswear" ? "Men" : "Women")'s \(self.size ?? "")"
         }
         if let condiction = self.postDetails?.condition_name {
             self.lblCondition.text = condiction
@@ -65,13 +68,19 @@ class BuyNowVC: UIViewController {
             self.lblCompleteAddress.text = locations.first?.address ?? ""
         }
         
-        if let price = self.postDetails?.price {
-            self.lblPrice.text = "$ \(price.formatPrice())"
-            self.btnPay.setTitle("Pay $ \(price.formatPrice())", for: .normal)
-        }
+        self.lblPrice.text = "$ \(self.price?.formatPrice() ?? self.postDetails?.price ?? "")"
+        self.btnPay.setTitle("Pay $ \(self.price?.formatPrice() ?? self.postDetails?.price ?? "")", for: .normal)
+        
         if let title = self.postDetails?.title {
             self.lblPostName.text = title
         }
+    }
+    
+    func images(for size: String, color: String, in variants: [Variants]) -> [VariantsImages] {
+        return variants
+            .filter { $0.size == size && $0.color == color }
+            .compactMap { $0.image } // [ [VariantsImages] ]
+            .flatMap { $0 }          // flatten to [VariantsImages]
     }
     
     @IBAction func backOnPress(_ sender: UIButton) {
@@ -178,11 +187,18 @@ extension BuyNowVC {
                     DispatchQueue.main.async {
                         self.client_secret = clientSecret
                         self.paymentID = json["id"] as? String ?? ""
-                        
+                        // Stripe
+                        if let stripeKey = json["sk"] as? String {
+                            StripeAPI.defaultPublishableKey = stripeKey
+                        }else{
+                            StripeAPI.defaultPublishableKey = "pk_test_51HoxITH8pVCp4ycElWEGx500WjsGV6DtiOpWBxoparNkQdIzhkPtK2oT4zrUDaaqw0W8Ty7DiIuBh6nGzfDLwXFW00c9xiol5S"
+                        }
+
                         // Configure PaymentSheet
                         var configuration = PaymentSheet.Configuration()
                         configuration.merchantDisplayName = self.postDetails?.user_name ?? ""
-                        configuration.allowsDelayedPaymentMethods = true
+                        configuration.allowsDelayedPaymentMethods = false
+                        configuration.link.display = .never
                         
                         // Enable shipping details collection if applicable
                         if self.deliveryType == .Ship {
@@ -320,6 +336,7 @@ extension BuyNowVC {
         param["payment_mode"] = "stripe"
         param["status"] = "Purchased"
         param["transaction_id"] = self.paymentID
+        param["variant_id"] = self.varientID ?? ""
         
         if self.deliveryType == .Ship{
             param["type_of_order"] = "1"
