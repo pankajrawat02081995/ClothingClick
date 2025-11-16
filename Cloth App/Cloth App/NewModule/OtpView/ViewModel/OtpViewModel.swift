@@ -41,7 +41,7 @@ class OtpViewModel{
     func callResenfOTP() {
         if appDelegate.reachable.connection != .none {
             
-            let param = ["phone": appDelegate.userDetails?.phone,
+            let param = ["phone": view?.phone ?? "",
                          "country_prefix" : appDelegate.userDetails?.country_prefix ,
                          "country_code" : appDelegate.userDetails?.country_code,
                          "is_test" : "1"
@@ -49,10 +49,7 @@ class OtpViewModel{
             APIManager().apiCallWithMultipart(of: UserDetailsModel.self, isShowHud: true, URL: BASE_URL, apiName: APINAME.SIGNUP_STEP2.rawValue, parameters: param as [String : Any]  ) { (response, error) in
                 if error == nil {
                     if let response = response {
-                        if let userDetails = response.dictData {
-                            self.view?.saveUserDetails(userDetails: userDetails)
-                            self.view?.startWithAuth(userData: userDetails)
-                        }
+                        UIAlertController().alertViewWithTitleAndMessage(self.view ?? UIViewController(), message: "OTP sent successfully.")
                     }
                 }
                 else {

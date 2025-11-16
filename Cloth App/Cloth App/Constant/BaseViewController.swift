@@ -328,7 +328,7 @@ class BaseViewController: UIViewController, UINavigationBarDelegate {
         defaults.synchronize()
         
         if defaults.value(forKey: kDeviceToken) as? String != nil {
-            appDelegate.headerToken = defaults.value(forKey: kHeaderToken) as! String
+            appDelegate.headerToken = defaults.value(forKey: kHeaderToken) as? String ?? ""
         }
     }
     
@@ -429,14 +429,13 @@ class BaseViewController: UIViewController, UINavigationBarDelegate {
     
     func autoLogin() {
         if appDelegate.reachable.connection != .none {
-            
             APIManager().apiCall(of: UserDetailsModel.self, isShowHud: true, URL: BASE_URL, apiName: APINAME.AUTOLOGIN.rawValue, method: .get, parameters: [:]) { (response, error) in
                 if error == nil {
                     if let response = response {
                         if let userDetails = response.dictData {
                             let sizes = response.dictData?.user_size?.map { String($0) }.joined(separator: ",") ?? ""
                             debugPrint(sizes)
-                            FilterSingleton.share.filter.gender_id = "\(userDetails.user_selected_gender ?? 0)"
+                            FilterSingleton.share.filter.gender_id = "\(userDetails.user_selected_gender ?? 0)" 
                             debugPrint("\(userDetails.user_selected_gender ?? 0)")
                             FilterSingleton.share.filter.sizes = sizes
                             self.saveUserDetails(userDetails: userDetails)

@@ -31,6 +31,7 @@ struct PostDetailsModel : Mappable {
     var images : [ImagesVideoModel]?
     var videos : [ImagesVideoModel]?
     var is_sold : Int?
+    var variants : [Variants]?
     var created_at : String?
     var brand_name : String?
     var gender_name : String?
@@ -68,6 +69,7 @@ struct PostDetailsModel : Mappable {
     init?(map: Map) {
         
     }
+    
     func isFavourite() ->Bool {
         //        let isselect =  == 1
         return is_favourite ?? false
@@ -75,6 +77,7 @@ struct PostDetailsModel : Mappable {
     
     mutating func mapping(map: Map) {
         product_url <- map["product_url"]
+        variants <- map["variants"]
         recently_viewed <- map["recently_viewed"]
         sale_price <- map["sale_price"]
         type <- map["type"]
@@ -227,6 +230,46 @@ struct PostDetailsModel : Mappable {
             return iadate
         }
         return ""
+    }
+}
+
+struct Variants : Mappable {
+    var barcode : String?
+    var color : String?
+    var compare_at_price : String?
+    var id : Int?
+    var inventory_quantity : Int?
+    var price : String?
+    var title : String?
+    var size : String?
+    var image : [VariantsImages]?
+    init?(map: Map) {}
+    
+    mutating func mapping(map: Map) {
+        
+        barcode <- map["barcode"]
+        color <- map["color"]
+        image <- map["image"]
+        inventory_quantity <- map["inventory_quantity"]
+        compare_at_price <- map["compare_at_price"]
+        id <- map["id"]
+        price <- map["price"]
+        title <- map["title"]
+        size <- map["size"]
+        
+    }
+    
+}
+
+struct VariantsImages : Mappable {
+    var id : Int?
+    var image : String?
+    
+    init?(map: Map) {}
+    
+    mutating func mapping(map: Map) {
+        id <- map["id"]
+        image <- map["image"]
     }
 }
 

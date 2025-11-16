@@ -20,7 +20,7 @@ final class SavedPaymentMethodManager {
     let elementsSession: STPElementsSession
 
     private lazy var ephemeralKey: String? = {
-        guard let ephemeralKey = configuration.customer?.ephemeralKeySecretBasedOn(elementsSession: elementsSession) else {
+        guard let ephemeralKey = configuration.customer?.ephemeralKeySecret(basedOn: elementsSession) else {
             stpAssert(true, "Failed to read ephemeral key.")
             let errorAnalytic = ErrorAnalytic(event: .unexpectedPaymentSheetError,
                                               error: Error.missingEphemeralKey,
@@ -80,5 +80,15 @@ final class SavedPaymentMethodManager {
                 // no-op
             }
         }
+    }
+
+    func setAsDefaultPaymentMethod(defaultPaymentMethodId: String) async throws -> STPCustomer {
+        guard let ephemeralKey else {
+            throw PaymentSheetError.unknown(debugDescription: "Failed to read ephemeral key while setting a payment method as default.")
+        }
+        guard let customerId = configuration.customer?.id else {
+            throw PaymentSheetError.unknown(debugDescription: "Failed to read customerId while setting a payment method as default.")
+        }
+        return try await configuration.apiClient.setAsDefaultPaymentMethod(defaultPaymentMethodId, for: customerId, using: ephemeralKey)
     }
 }

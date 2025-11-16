@@ -24,7 +24,6 @@ import ObjectMapper
 import GooglePlaces
 import GoogleMaps
 import GoogleMobileAds
-import StripePaymentSheet
 import YPImagePicker
 
 @UIApplicationMain
@@ -78,9 +77,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         if window == nil {
             window = UIWindow(frame: UIScreen.main.bounds)
         }
-        
-        // Stripe
-        StripeAPI.defaultPublishableKey = "pk_test_51HoxITH8pVCp4ycElWEGx500WjsGV6DtiOpWBxoparNkQdIzhkPtK2oT4zrUDaaqw0W8Ty7DiIuBh6nGzfDLwXFW00c9xiol5S"
         
         // Firebase
         FirebaseApp.configure()

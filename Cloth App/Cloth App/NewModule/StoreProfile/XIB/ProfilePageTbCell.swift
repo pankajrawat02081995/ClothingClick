@@ -137,7 +137,7 @@ class ProfilePageTbCell: UITableViewCell {
             self.lblNameLater.isHidden = true
             self.imgStore.setImageFast(with: url)
         }else{
-            self.imgStore.backgroundColor = .black
+//            self.imgStore.backgroundColor = .black
             self.lblNameLater.isHidden = false
             self.lblNameLater.text = self.otherUserDetailsData?.name?.first?.description ?? ""
         }
@@ -217,7 +217,7 @@ extension ProfilePageTbCell: UICollectionViewDelegate, UICollectionViewDataSourc
         }
         
         cell.imgPost.setImageFast(with: self.otherUserDetailsData?.cover_image ?? "")
-        cell.imgPost.contentMode = .scaleToFill
+//        cell.imgPost.contentMode = .scaleToFill
         return cell
     }
     

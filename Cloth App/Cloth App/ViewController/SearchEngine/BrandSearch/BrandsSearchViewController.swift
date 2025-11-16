@@ -9,12 +9,12 @@
 import UIKit
 
 protocol BrandSearchDelegate {
-//    func BrandSearchAddd(name: BrandeSearchModel )
+    //    func BrandSearchAddd(name: BrandeSearchModel )
     func selctedBrandeName (name: BrandeSearchModel?, Selecte:Bool,index : Int,hearderTitel: String)
 }
 
 class BrandsSearchViewController: BaseViewController {
-
+    
     @IBOutlet weak var searchBarBrand: CustomTextField!
     
     @IBOutlet weak var viewItemsCount: CustomView!
@@ -44,7 +44,7 @@ class BrandsSearchViewController: BaseViewController {
         self.searchBarBrand.delegate = self
         self.searchBarBrand.returnKeyType = .search
         self.searchBarBrand.addTarget(self, action: #selector(self.textFieldDidChange(_:)), for: .editingDidEnd)
-
+        
         if self.isFilterProduct == true {
             self.btnViewItems.setTitle("Add", for: .normal)
         }else{
@@ -57,7 +57,7 @@ class BrandsSearchViewController: BaseViewController {
                 self.btnViewItems.isUserInteractionEnabled = self.viewCount != 0
             }
         }
-
+        
         self.callBrandSearchList(searchtext: "")
     }
     
@@ -84,12 +84,12 @@ class BrandsSearchViewController: BaseViewController {
     }
     
     @IBAction func btnClear_Clicked(_ button: Any) {
-//        if self.saveSearch {
-////            self.BrandSearchDeleget.selctedBrandeName(name: nil, Selecte: false, index: self.selectedIndex, hearderTitel: self.headerTitle)
-//            self.navigationController?.popViewController(animated: true)
-//        }else{
-//            
-//        }
+        //        if self.saveSearch {
+        ////            self.BrandSearchDeleget.selctedBrandeName(name: nil, Selecte: false, index: self.selectedIndex, hearderTitel: self.headerTitle)
+        //            self.navigationController?.popViewController(animated: true)
+        //        }else{
+        //
+        //        }
         FilterSingleton.share.filter.brand_id = ""
         FilterSingleton.share.selectedFilter.brand_id = ""
         self.navigationController?.popViewController(animated: true)
@@ -97,23 +97,23 @@ class BrandsSearchViewController: BaseViewController {
     
     @IBAction func btnViewCount_Clicked(_ button: UIButton) {
         if self.saveSearch  || self.isFilterProduct == true{
-//            if self.selectedIndex == 0 {
-//                if self.BrandSearchDeleget != nil {
-//
-//                }
-                self.navigationController?.popViewController(animated: true)
-//            }
-//            else
-//            {
-//                if self.BrandSearchDeleget != nil {
-//                    self.BrandSearchDeleget.selctedBrandeName(name: bsrnds!, Selecte: true, index: self.selectedIndex, hearderTitel: self.headerTitle)
-//                }
-//                self.navigationController?.popViewController(animated: true)
-//            }
+            //            if self.selectedIndex == 0 {
+            //                if self.BrandSearchDeleget != nil {
+            //
+            //                }
+            self.navigationController?.popViewController(animated: true)
+            //            }
+            //            else
+            //            {
+            //                if self.BrandSearchDeleget != nil {
+            //                    self.BrandSearchDeleget.selctedBrandeName(name: bsrnds!, Selecte: true, index: self.selectedIndex, hearderTitel: self.headerTitle)
+            //                }
+            //                self.navigationController?.popViewController(animated: true)
+            //            }
         }
         else {
             if self.viewCount != 0 {
-
+                
                 let viewController = self.storyboard?.instantiateViewController(identifier: "AllProductViewController") as! AllProductViewController
                 viewController.titleStr = "Search Results"
                 viewController.isMySize = self.isMySize
@@ -143,13 +143,13 @@ extension BrandsSearchViewController : UITableViewDelegate,UITableViewDataSource
         let cell = tableView.dequeueReusableCell(withIdentifier: "UserProfileListXIB", for: indexPath) as! UserProfileListXIB
         cell.lblName.text = objet?.name
         cell.imgUser.contentMode = .scaleAspectFit
-        cell.lblFollowerCount.text = "\(objet?.photo ?? "") Listings"
+        cell.lblFollowerCount.text = "\(objet?.posts_count ?? 0) Listings"
         cell.imgUser.setImageFast(with: objet?.image ?? "")
         
         return cell
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-       
+        
         let bsrnds = self.brandSearchList[indexPath.row]
         FilterSingleton.share.filter.brand_id = "\(bsrnds?.brand_id ?? 0)"
         FilterSingleton.share.selectedFilter.brand_id = "\(bsrnds?.name ?? "")"
@@ -158,23 +158,23 @@ extension BrandsSearchViewController : UITableViewDelegate,UITableViewDataSource
         }else{
             callViewCount()
         }
-//        self.navigationController?.popViewController(animated: true)
-//
+        //        self.navigationController?.popViewController(animated: true)
+        //
         
         
-//        if self.selectedIndex == 0 {
-//            if self.BrandSearchDeleget != nil {
-//            
-//            }
-//            self.navigationController?.popViewController(animated: true)
-//        }
-//        else
-//        {
-//            if self.BrandSearchDeleget != nil {
-//                self.BrandSearchDeleget.selctedBrandeName(name: bsrnds!, Selecte: true, index: self.selectedIndex, hearderTitel: self.headerTitle)
-//            }
-//            self.navigationController?.popViewController(animated: true)
-//        }
+        //        if self.selectedIndex == 0 {
+        //            if self.BrandSearchDeleget != nil {
+        //
+        //            }
+        //            self.navigationController?.popViewController(animated: true)
+        //        }
+        //        else
+        //        {
+        //            if self.BrandSearchDeleget != nil {
+        //                self.BrandSearchDeleget.selctedBrandeName(name: bsrnds!, Selecte: true, index: self.selectedIndex, hearderTitel: self.headerTitle)
+        //            }
+        //            self.navigationController?.popViewController(animated: true)
+        //        }
         
     }
     
@@ -207,7 +207,9 @@ extension BrandsSearchViewController {
     
     func callBrandSearchList(searchtext : String) {
         if appDelegate.reachable.connection != .none {
-            let param = ["name": searchtext]
+            var param = ["name": searchtext]
+            param["latitude"] = appDelegate.userLocation?.latitude ?? ""
+            param["longitude"] = appDelegate.userLocation?.longitude ?? ""
             APIManager().apiCall(of: BrandeSearchModel.self, isShowHud: true, URL: BASE_URL, apiName: APINAME.BRAND_SEARCH.rawValue, method: .post, parameters: param) { (response, error) in
                 if error == nil {
                     if let response = response {
@@ -231,28 +233,28 @@ extension BrandsSearchViewController {
     
     func callViewCount() {
         if appDelegate.reachable.connection != .none {
-           
-//            let param = ["is_mysize":  "0" ,
-//                         "gender_id" : appDelegate.selectGenderId,
-//                         "categories" : String(appDelegate.selectSubCategoryId.joined(separator: ",")),
-//                         "sizes" : appDelegate.selectSizeId,
-//                         "colors" : appDelegate.selectColorId,
-//                         "condition_id" :appDelegate.selectConditionId ,
-//                         "distance" : appDelegate.selectDistnce,
-//                         "seller" : appDelegate.selectSellerId,
-//                         "brand_id" : appDelegate.selectBrandId ,
-//                         "notification_item_counter" : "",
-//                         "name" :  "",
-//                         "price_type" : appDelegate.selectPriceId ,
-//                         "price_from" : appDelegate.priceFrom ,
-//                         "price_to" : appDelegate.priceTo,
-//                         "is_only_count" : "1" ,
-//                         "page" : "0"
-//                        ]
+            
+            //            let param = ["is_mysize":  "0" ,
+            //                         "gender_id" : appDelegate.selectGenderId,
+            //                         "categories" : String(appDelegate.selectSubCategoryId.joined(separator: ",")),
+            //                         "sizes" : appDelegate.selectSizeId,
+            //                         "colors" : appDelegate.selectColorId,
+            //                         "condition_id" :appDelegate.selectConditionId ,
+            //                         "distance" : appDelegate.selectDistnce,
+            //                         "seller" : appDelegate.selectSellerId,
+            //                         "brand_id" : appDelegate.selectBrandId ,
+            //                         "notification_item_counter" : "",
+            //                         "name" :  "",
+            //                         "price_type" : appDelegate.selectPriceId ,
+            //                         "price_from" : appDelegate.priceFrom ,
+            //                         "price_to" : appDelegate.priceTo,
+            //                         "is_only_count" : "1" ,
+            //                         "page" : "0"
+            //                        ]
             
             FilterSingleton.share.filter.is_only_count = "1"
             var dict = FilterSingleton.share.filter.toDictionary() ?? [:]
-//            dict.removeValue(forKey: "slectedCategories")
+            //            dict.removeValue(forKey: "slectedCategories")
             dict["latitude"] = appDelegate.userLocation?.latitude ?? ""
             dict["longitude"] = appDelegate.userLocation?.longitude ?? ""
             APIManager().apiCallWithMultipart(of: ViewCountModel.self, isShowHud: true, URL: BASE_URL, apiName: APINAME.FILTER_POST.rawValue, parameters: dict) { (response, error) in
@@ -269,11 +271,10 @@ extension BrandsSearchViewController {
                                 self.btnViewItems.isUserInteractionEnabled = self.viewCount != 0
                                 
                             }
-                            //                            self.btnViewItems.setTitle("View \(self.viewCount) Items", for: .normal)
-                            
+                            // self.btnViewItems.setTitle("View \(self.viewCount) Items", for: .normal)
                         }
                         self.view.endEditing(true)
-                        //                        self.navigateToHomeScreen()
+                        // self.navigateToHomeScreen()
                     }
                 }
                 else {

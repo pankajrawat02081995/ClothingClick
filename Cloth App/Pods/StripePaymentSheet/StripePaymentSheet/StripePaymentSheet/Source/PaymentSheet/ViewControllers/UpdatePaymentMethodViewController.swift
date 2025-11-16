@@ -15,9 +15,19 @@ import UIKit
 protocol UpdatePaymentMethodViewControllerDelegate: AnyObject {
     func didRemove(viewController: UpdatePaymentMethodViewController, paymentMethod: STPPaymentMethod)
     func didUpdate(viewController: UpdatePaymentMethodViewController,
-                   paymentMethod: STPPaymentMethod,
-                   updateParams: STPPaymentMethodUpdateParams) async throws
+                   paymentMethod: STPPaymentMethod) async -> UpdatePaymentMethodResult
     func shouldCloseSheet(_: UpdatePaymentMethodViewController)
+}
+
+enum UpdatePaymentMethodResult {
+    case success
+    case failure([Error])
+}
+
+enum SetAsDefaultCheckboxState {
+    case selected
+    case deselected
+    case hidden
 }
 
 /// For internal SDK use only
@@ -25,7 +35,12 @@ protocol UpdatePaymentMethodViewControllerDelegate: AnyObject {
 final class UpdatePaymentMethodViewController: UIViewController {
     private let removeSavedPaymentMethodMessage: String?
     private let isTestMode: Bool
-    private let viewModel: UpdatePaymentMethodViewModel
+
+    private var hasChangedDefaultPaymentMethodCheckbox: Bool = false
+
+    private var lastCardBrandLogSelectedEventSent: String?
+
+    private let configuration: UpdatePaymentMethodViewController.Configuration
 
     private var latestError: Error? {
         didSet {
@@ -34,12 +49,36 @@ final class UpdatePaymentMethodViewController: UIViewController {
         }
     }
 
+    private var setAsDefaultCheckboxState: SetAsDefaultCheckboxState {
+        guard hasChangedDefaultPaymentMethodCheckbox,
+              let checkbox = setAsDefaultCheckbox else {
+            return .hidden
+        }
+        return checkbox.isSelected ? .selected : .deselected
+    }
+
     weak var delegate: UpdatePaymentMethodViewControllerDelegate?
+
+    var updateParams: UpdatePaymentMethodOptions? {
+        let confirmParams = IntentConfirmParams(type: PaymentSheet.PaymentMethodType.stripe(configuration.paymentMethod.type))
+
+        if let params = paymentMethodForm.updateParams(params: confirmParams),
+           params.paymentMethodParams.type == .card,
+           let cardParams = params.paymentMethodParams.card,
+           hasChangedCard(originalPaymentMethod: configuration.paymentMethod, updatedPaymentMethodParams: params.paymentMethodParams) {
+            return .card(paymentMethodCardParams: cardParams, billingDetails: params.paymentMethodParams.billingDetails)
+        }
+        return nil
+    }
+
+    var shouldSetAsDefault: Bool {
+        return setAsDefaultCheckboxState == .selected
+    }
 
     // MARK: Navigation bar
     internal lazy var navigationBar: SheetNavigationBar = {
         let navBar = SheetNavigationBar(isTestMode: isTestMode,
-                                        appearance: viewModel.appearance)
+                                        appearance: configuration.appearance)
         navBar.delegate = self
         navBar.setStyle(navigationBarStyle())
         return navBar
@@ -47,114 +86,89 @@ final class UpdatePaymentMethodViewController: UIViewController {
 
     // MARK: Views
     lazy var formStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [headerLabel, paymentMethodForm, updateButton, removeButton, errorLabel])
+        let stackView = UIStackView(arrangedSubviews: [headerLabel, paymentMethodForm.view])
         stackView.isLayoutMarginsRelativeArrangement = true
         stackView.axis = .vertical
-        stackView.setCustomSpacing(16, after: headerLabel) // custom spacing from figma
+        stackView.spacing = 16 // custom spacing from figma
         if let footnoteLabel = footnoteLabel {
-            stackView.insertArrangedSubview(footnoteLabel, at: 2)
-            stackView.setCustomSpacing(8, after: paymentMethodForm) // custom spacing from figma
-            stackView.setCustomSpacing(32, after: footnoteLabel) // custom spacing from figma
+            stackView.addArrangedSubview(footnoteLabel)
+            stackView.setCustomSpacing(4, after: paymentMethodForm.view) // custom spacing from figma
         }
-        else {
-            stackView.setCustomSpacing(32, after: paymentMethodForm) // custom spacing from figma
+        if let setAsDefaultCheckbox = setAsDefaultCheckbox, let lastSubview = stackView.arrangedSubviews.last {
+            stackView.addArrangedSubview(setAsDefaultCheckbox.view)
+            stackView.setCustomSpacing(12, after: lastSubview) // custom spacing from figma
         }
-        stackView.setCustomSpacing(16, after: updateButton) // custom spacing from figma
+        if let lastSubview = stackView.arrangedSubviews.last {
+            stackView.setCustomSpacing(32, after: lastSubview) // custom spacing from figma
+        }
+        stackView.addArrangedSubview(updateButton)
+        stackView.addArrangedSubview(removeButton)
+        stackView.addArrangedSubview(errorLabel)
         return stackView
     }()
 
     private lazy var headerLabel: UILabel = {
-        let label = PaymentSheetUI.makeHeaderLabel(appearance: viewModel.appearance)
-        label.text = viewModel.header
+        let label = PaymentSheetUI.makeHeaderLabel(appearance: configuration.appearance)
+        label.text = configuration.header
         return label
     }()
 
     private lazy var updateButton: ConfirmButton = {
-        let button = ConfirmButton(state: .disabled, callToAction: .custom(title: .Localized.save), appearance: viewModel.appearance, didTap: {  [weak self] in
-            switch self?.viewModel.paymentMethod.type {
-            case .card:
+        let button = ConfirmButton(state: .disabled, callToAction: .custom(title: .Localized.save), appearance: configuration.appearance, didTap: {  [weak self] in
+            guard let self = self else { return }
+            let updatePaymentMethodOptions = updateParams
+            if updatePaymentMethodOptions != nil || hasChangedDefaultPaymentMethodCheckbox {
+                self.view.endEditing(true)
                 Task {
-                    await self?.updateCard()
+                    await self.update(updatePaymentMethodOptions: updatePaymentMethodOptions)
                 }
-            default:
-                fatalError("Updating payment method has not been implemented for \(self?.viewModel.paymentMethod.type ?? .unknown)")
             }
         })
-        button.isHidden = !viewModel.canEdit
+        button.isHidden = !configuration.shouldShowSaveButton
         return button
     }()
 
-    private lazy var removeButton: UIButton = {
-        let button = UIButton(type: .custom)
-        let font = viewModel.appearance.primaryButton.font ?? viewModel.appearance.scaledFont(for: viewModel.appearance.font.base.medium, style: .callout, maximumPointSize: 25)
-        if #available(iOS 15.0, *) {
-            var configuration = UIButton.Configuration.bordered()
-            configuration.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 16, bottom: 10, trailing: 16)
-            configuration.baseBackgroundColor = .clear
-            configuration.background.cornerRadius = viewModel.appearance.cornerRadius
-            configuration.background.strokeWidth = viewModel.appearance.selectedBorderWidth ?? viewModel.appearance.borderWidth * 1.5
-            configuration.background.strokeColor = viewModel.appearance.colors.danger
-            configuration.titleAlignment = .center
-            configuration.attributedTitle = AttributedString(.Localized.remove, attributes: AttributeContainer([.font: font, .foregroundColor: viewModel.appearance.colors.danger]))
-            button.configuration = configuration
-        } else {
-            button.contentEdgeInsets = UIEdgeInsets(top: 10, left: 16, bottom: 10, right: 16)
-            button.setTitleColor(viewModel.appearance.colors.danger, for: .normal)
-            button.setTitleColor(viewModel.appearance.colors.danger.disabledColor, for: .highlighted)
-            button.layer.borderColor = viewModel.appearance.colors.danger.cgColor
-            button.layer.borderWidth = viewModel.appearance.selectedBorderWidth ?? viewModel.appearance.borderWidth * 1.5
-            button.layer.cornerRadius = viewModel.appearance.cornerRadius
-            button.setTitle(.Localized.remove, for: .normal)
-            button.titleLabel?.textAlignment = .center
-            button.titleLabel?.font = font
-            button.titleLabel?.adjustsFontForContentSizeCategory = true
-        }
-        button.addTarget(self, action: #selector(buttonTouchDown(_:)), for: .touchDown)
-        button.addTarget(self, action: #selector(buttonTouchUp(_:)), for: [.touchUpInside, .touchUpOutside])
+    private lazy var removeButton: RemoveButton = {
+        let button = RemoveButton(title: .Localized.remove, appearance: configuration.appearance)
         button.addTarget(self, action: #selector(removePaymentMethod), for: .touchUpInside)
-        button.isHidden = !viewModel.canRemove
+        button.isHidden = !configuration.canRemove
         return button
     }()
 
-    @objc private func buttonTouchDown(_ button: UIButton) {
-        if #available(iOS 15.0, *)  {
-            button.configuration?.attributedTitle?.foregroundColor = viewModel.appearance.colors.danger.disabledColor
-            button.configuration?.background.strokeColor = viewModel.appearance.colors.danger.disabledColor
-        }
-        else {
-            button.setTitleColor(viewModel.appearance.colors.danger.disabledColor, for: .normal)
-            button.layer.borderColor = viewModel.appearance.colors.danger.disabledColor.cgColor
-        }
-    }
+    private lazy var formFactory: SavedPaymentMethodFormFactory = {
+        return SavedPaymentMethodFormFactory()
+    }()
 
-    @objc private func buttonTouchUp(_ button: UIButton) {
-        if #available(iOS 15.0, *)  {
-            button.configuration?.attributedTitle?.foregroundColor = viewModel.appearance.colors.danger
-            button.configuration?.background.strokeColor = viewModel.appearance.colors.danger
-        }
-        else {
-            button.setTitleColor(viewModel.appearance.colors.danger, for: .normal)
-            button.layer.borderColor = viewModel.appearance.colors.danger.cgColor
-        }
-    }
-
-    private lazy var paymentMethodForm: UIView = {
-        let form = SavedPaymentMethodFormFactory(viewModel: viewModel)
+    private lazy var paymentMethodForm: PaymentMethodElement = {
+        let form = formFactory.makePaymentMethodForm(configuration: configuration)
         form.delegate = self
-        return form.makePaymentMethodForm()
+        return form
+    }()
+
+    private lazy var setAsDefaultCheckbox: CheckboxElement? = {
+        guard configuration.shouldShowDefaultCheckbox else { return nil }
+        let label = configuration.isDefault ? String.Localized.default_payment_method : String.Localized.set_as_default_payment_method
+        let setAsDefaultCheckbox = CheckboxElement(theme: configuration.appearance.asElementsTheme, label: label, isSelectedByDefault: configuration.isDefault) { [weak self] isSelected in
+            self?.hasChangedDefaultPaymentMethodCheckbox = self?.configuration.isDefault != isSelected
+            self?.updateButtonState()
+        }
+        setAsDefaultCheckbox.checkboxButton.isEnabled = !configuration.isDefault
+        setAsDefaultCheckbox.delegate = self
+        return setAsDefaultCheckbox
     }()
 
     private lazy var footnoteLabel: UITextView? = {
-        if viewModel.errorState {
+        guard paymentMethodForm.validationState.isValid,
+              let footnoteText = configuration.footnote else {
             return nil
         }
-        let label = ElementsUI.makeSmallFootnote(theme: viewModel.appearance.asElementsTheme)
-        label.text = viewModel.footnote
+        let label = ElementsUI.makeSmallFootnote(theme: configuration.appearance.asElementsTheme)
+        label.text = footnoteText
         return label
     }()
 
     private lazy var errorLabel: UILabel = {
-        let label = ElementsUI.makeErrorLabel(theme: viewModel.appearance.asElementsTheme)
+        let label = ElementsUI.makeErrorLabel(theme: configuration.appearance.asElementsTheme)
         label.isHidden = true
         return label
     }()
@@ -162,10 +176,10 @@ final class UpdatePaymentMethodViewController: UIViewController {
     // MARK: Overrides
     init(removeSavedPaymentMethodMessage: String?,
          isTestMode: Bool,
-         viewModel: UpdatePaymentMethodViewModel) {
+         configuration: UpdatePaymentMethodViewController.Configuration) {
         self.removeSavedPaymentMethodMessage = removeSavedPaymentMethodMessage
         self.isTestMode = isTestMode
-        self.viewModel = viewModel
+        self.configuration = configuration
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -177,19 +191,19 @@ final class UpdatePaymentMethodViewController: UIViewController {
         super.viewDidLoad()
         // disable swipe to dismiss
         isModalInPresentation = true
-        self.view.backgroundColor = viewModel.appearance.colors.background
-        view.addAndPinSubview(formStackView, insets: PaymentSheetUI.defaultSheetMargins)
+        self.view.backgroundColor = configuration.appearance.colors.background
+        view.addAndPinSubview(formStackView, insets: configuration.appearance.formInsets)
     }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        STPAnalyticsClient.sharedClient.logPaymentSheetEvent(event: viewModel.hostedSurface.analyticEvent(for: .openCardBrandEditScreen))
+        STPAnalyticsClient.sharedClient.logPaymentSheetEvent(event: configuration.hostedSurface.analyticEvent(for: .openEditScreen), params: ["payment_method_type": configuration.paymentMethod.type.identifier])
     }
 
     // MARK: Private helpers
     private func dismiss() {
         guard let bottomVc = parent as? BottomSheetViewController else { return }
-        STPAnalyticsClient.sharedClient.logPaymentSheetEvent(event: viewModel.hostedSurface.analyticEvent(for: .closeEditScreen))
+        STPAnalyticsClient.sharedClient.logPaymentSheetEvent(event: configuration.hostedSurface.analyticEvent(for: .closeEditScreen))
         _ = bottomVc.popContentViewController()
         delegate?.shouldCloseSheet(_: self)
     }
@@ -204,41 +218,145 @@ final class UpdatePaymentMethodViewController: UIViewController {
     }
 
     @objc private func removePaymentMethod() {
-        let alertController = UIAlertController.makeRemoveAlertController(paymentMethod: viewModel.paymentMethod,
+        for element in self.paymentMethodForm.getAllUnwrappedSubElements() {
+            if let textElement = element as? TextFieldElement {
+                textElement.endEditing(true, continueToNextField: false)
+            }
+        }
+
+        let alertController = UIAlertController.makeRemoveAlertController(paymentMethod: configuration.paymentMethod,
                                                                           removeSavedPaymentMethodMessage: removeSavedPaymentMethodMessage) { [weak self] in
             guard let self = self else { return }
-            self.delegate?.didRemove(viewController: self, paymentMethod: self.viewModel.paymentMethod)
+            self.delegate?.didRemove(viewController: self, paymentMethod: self.configuration.paymentMethod)
         }
 
         present(alertController, animated: true, completion: nil)
     }
 
-    private func updateCard() async {
-        guard let selectedBrand = viewModel.selectedCardBrand, let delegate = delegate else { return }
-
+    private func update(updatePaymentMethodOptions: UpdatePaymentMethodOptions?) async {
+        guard let delegate else {
+            return
+        }
+        // Ensure endEditing(true) is called prior to setting isUserInteractionEnabled
+        view.endEditing(true)
         view.isUserInteractionEnabled = false
         updateButton.update(state: .spinnerWithInteractionDisabled)
 
-        // Create the update card params
-        let cardParams = STPPaymentMethodCardParams()
-        cardParams.networks = .init(preferred: STPCardBrandUtilities.apiValue(from: selectedBrand))
-        let updateParams = STPPaymentMethodUpdateParams(card: cardParams, billingDetails: nil)
-
-        // Make the API request to update the payment method
-        do {
-            try await delegate.didUpdate(viewController: self, paymentMethod: viewModel.paymentMethod, updateParams: updateParams)
-            STPAnalyticsClient.sharedClient.logPaymentSheetEvent(event: viewModel.hostedSurface.analyticEvent(for: .updateCardBrand),
-                                                                 params: ["selected_card_brand": STPCardBrandUtilities.apiValue(from: selectedBrand)])
-        } catch {
+        let updatePaymentMethodResult = await delegate.didUpdate(viewController: self, paymentMethod: configuration.paymentMethod)
+        switch updatePaymentMethodResult {
+        case .success:
+            if case .card(let paymentMethodCardParams, _) = updatePaymentMethodOptions {
+                var params: [String: Any] = [:]
+                if let selectedCardBrand = paymentMethodCardParams.networks?.preferred {
+                    params["selected_card_brand"] = selectedCardBrand
+                }
+                STPAnalyticsClient.sharedClient.logPaymentSheetEvent(event: configuration.hostedSurface.analyticEvent(for: .updateCard),
+                                                                     params: params)
+            }
+            if shouldSetAsDefault {
+                STPAnalyticsClient.sharedClient.logPaymentSheetEvent(event: configuration.hostedSurface.analyticEvent(for: .setDefaultPaymentMethod),
+                                                                     params: ["payment_method_type": configuration.paymentMethod.type.identifier])
+            }
+        case .failure(let errors):
             updateButton.update(state: .enabled)
-            latestError = error
-            STPAnalyticsClient.sharedClient.logPaymentSheetEvent(event: viewModel.hostedSurface.analyticEvent(for: .updateCardBrandFailed),
-                                                                 error: error,
-                                                                 params: ["selected_card_brand": STPCardBrandUtilities.apiValue(from: selectedBrand)])
+            latestError = errors.count == 1 ? errors[0] : NSError.stp_genericErrorOccurredError()
+            if errors.contains(where: { ($0 as NSError) == NSError.stp_cardBrandNotUpdatedError() }) {
+                if case .card(let paymentMethodCardParams, _) = updatePaymentMethodOptions {
+                    var params: [String: Any] = [:]
+                    if let selectedCardBrand = paymentMethodCardParams.networks?.preferred {
+                        params["selected_card_brand"] = selectedCardBrand
+                    }
+                    STPAnalyticsClient.sharedClient.logPaymentSheetEvent(event: configuration.hostedSurface.analyticEvent(for: .updateCardFailed),
+                                                                         error: latestError,
+                                                                         params: params)
+                }
+            }
+            if errors.contains(where: { ($0 as NSError) == NSError.stp_defaultPaymentMethodNotUpdatedError() }) {
+                STPAnalyticsClient.sharedClient.logPaymentSheetEvent(event: configuration.hostedSurface.analyticEvent(for: .setDefaultPaymentMethodFailed),
+                                                                     error: latestError,
+                                                                     params: ["payment_method_type": configuration.paymentMethod.type.identifier])
+            }
         }
         view.isUserInteractionEnabled = true
     }
 
+    private func updateButtonState() {
+        updateButton.update(state: updateParams != nil || hasChangedDefaultPaymentMethodCheckbox ? .enabled : .disabled)
+    }
+
+    func hasChangedCard(originalPaymentMethod: STPPaymentMethod, updatedPaymentMethodParams: STPPaymentMethodParams) -> Bool {
+        guard originalPaymentMethod.type == .card,
+              let updatedPaymentMethodCardParams = updatedPaymentMethodParams.card else {
+            stpAssertionFailure("Only payment method type 'card' is supported")
+            return false
+        }
+        return hasChangedCardBrand(originalPaymentMethod: originalPaymentMethod, updatedPaymentMethodCardParams: updatedPaymentMethodCardParams)
+        || hasChangedCardFields(originalPaymentMethod: originalPaymentMethod, updatedPaymentMethodCardParams: updatedPaymentMethodCardParams)
+        || hasChangedBillingFields(originalPaymentMethod: originalPaymentMethod, updatedBillingDetailsParams: updatedPaymentMethodParams.billingDetails)
+    }
+
+    func hasOnlyChangedCardBrand(originalPaymentMethod: STPPaymentMethod, updatedPaymentMethodCardParams: STPPaymentMethodCardParams?, updatedBillingDetailsParams: STPPaymentMethodBillingDetails?) -> Bool {
+        guard let updatedPaymentMethodCardParams = updatedPaymentMethodCardParams else {
+            return false
+        }
+        return hasChangedCardBrand(originalPaymentMethod: originalPaymentMethod, updatedPaymentMethodCardParams: updatedPaymentMethodCardParams)
+        && !hasChangedCardFields(originalPaymentMethod: originalPaymentMethod, updatedPaymentMethodCardParams: updatedPaymentMethodCardParams)
+        && !hasChangedBillingFields(originalPaymentMethod: originalPaymentMethod, updatedBillingDetailsParams: updatedBillingDetailsParams)
+    }
+
+    private func hasChangedCardBrand(originalPaymentMethod: STPPaymentMethod, updatedPaymentMethodCardParams: STPPaymentMethodCardParams) -> Bool {
+        guard originalPaymentMethod.type == .card,
+              let originalCardPaymentMethod = originalPaymentMethod.card else {
+            return false
+        }
+        return configuration.canUpdateCardBrand && originalCardPaymentMethod.preferredDisplayBrand != updatedPaymentMethodCardParams.networks?.preferred?.toCardBrand
+    }
+
+    private func hasChangedCardFields(originalPaymentMethod: STPPaymentMethod, updatedPaymentMethodCardParams: STPPaymentMethodCardParams) -> Bool {
+        guard originalPaymentMethod.type == .card else {
+            return false
+        }
+        return originalPaymentMethod.hasUpdatedCardParams(updatedPaymentMethodCardParams)
+    }
+
+    private func hasChangedBillingFields(originalPaymentMethod: STPPaymentMethod, updatedBillingDetailsParams: STPPaymentMethodBillingDetails?) -> Bool {
+        guard originalPaymentMethod.type == .card else {
+            return false
+        }
+        var billingParamsChanged: Bool = false
+        if configuration.canUpdate {
+            switch self.configuration.billingDetailsCollectionConfiguration.address {
+            case .automatic:
+                billingParamsChanged = originalPaymentMethod.hasUpdatedAutomaticBillingDetailsParams(updatedBillingDetailsParams)
+            case .full:
+                billingParamsChanged = originalPaymentMethod.hasUpdatedFullBillingDetailsParams(updatedBillingDetailsParams)
+            case .never:
+                billingParamsChanged = false
+            }
+        }
+        return billingParamsChanged
+    }
+
+    func logCardBrandChangedIfNeeded() {
+        let confirmParams = IntentConfirmParams(type: PaymentSheet.PaymentMethodType.stripe(.card))
+        guard let params = paymentMethodForm.updateParams(params: confirmParams),
+              let cardBrand = params.paymentMethodParams.card?.networks?.preferred?.toCardBrand else {
+            return
+        }
+        let preferredNetworkAPIValue = STPCardBrandUtilities.apiValue(from: cardBrand)
+        if self.lastCardBrandLogSelectedEventSent != preferredNetworkAPIValue {
+            STPAnalyticsClient.sharedClient.logPaymentSheetEvent(event: configuration.hostedSurface.analyticEvent(for: .cardBrandSelected),
+                                                                 params: ["selected_card_brand": preferredNetworkAPIValue,
+                                                                          "cbc_event_source": "edit", ])
+            self.lastCardBrandLogSelectedEventSent = preferredNetworkAPIValue
+        }
+    }
+}
+
+extension UpdatePaymentMethodViewController {
+    enum UpdatePaymentMethodOptions {
+        case card(paymentMethodCardParams: STPPaymentMethodCardParams, billingDetails: STPPaymentMethodBillingDetails?)
+    }
 }
 
 // MARK: BottomSheetContentViewController
@@ -266,21 +384,54 @@ extension UpdatePaymentMethodViewController: SheetNavigationBarDelegate {
 
     func sheetNavigationBarDidBack(_: SheetNavigationBar) {
         guard let bottomVc = parent as? BottomSheetViewController else { return }
-        STPAnalyticsClient.sharedClient.logPaymentSheetEvent(event: viewModel.hostedSurface.analyticEvent(for: .closeEditScreen))
+        STPAnalyticsClient.sharedClient.logPaymentSheetEvent(event: configuration.hostedSurface.analyticEvent(for: .closeEditScreen))
         _ = bottomVc.popContentViewController()
     }
 
 }
 
-// MARK: SavedPaymentMethodFormFactoryDelegate
-extension UpdatePaymentMethodViewController: SavedPaymentMethodFormFactoryDelegate {
-    func didUpdate(_: Element, shouldEnableSaveButton: Bool) {
+extension UpdatePaymentMethodViewController: ElementDelegate {
+    func continueToNextField(element: Element) {
+        // no-op
+    }
+
+    func didUpdate(element: Element) {
         latestError = nil // clear error on new input
-        switch viewModel.paymentMethod.type {
+        switch configuration.paymentMethod.type {
         case .card:
-            updateButton.update(state: shouldEnableSaveButton ? .enabled : .disabled)
+            updateButtonState()
+            logCardBrandChangedIfNeeded()
         default:
             break
         }
+    }
+}
+
+extension STPPaymentMethodCard {
+    var twoDigitYear: NSNumber? {
+        if let year = Int(String(expYear).suffix(2)) {
+            return NSNumber(value: year)
+        }
+        return nil
+    }
+}
+
+extension UpdatePaymentMethodViewController {
+    static func resolveRemoveMessage(removeSavedPaymentMethodMessage: String?,
+                                     paymentMethodRemoveIsPartial: Bool,
+                                     merchantName: String) -> String? {
+        if let removeSavedPaymentMethodMessage {
+            return removeSavedPaymentMethodMessage
+        }
+        if paymentMethodRemoveIsPartial {
+            return String(
+                format: STPLocalizedString(
+                    "This payment method will be removed but will remain available for %@ subscriptions.",
+                    "Content for alert popup prompting if they want to remove a payment method when using payment_method_remove == .partial. %@ is replaced by the merchant name"
+                ),
+                merchantName
+            )
+        }
+        return nil
     }
 }

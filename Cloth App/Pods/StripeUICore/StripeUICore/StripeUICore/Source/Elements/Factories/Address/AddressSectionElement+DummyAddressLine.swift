@@ -25,8 +25,9 @@ extension AddressSectionElement {
                 validationState: configuration.validate(text: text, isOptional: configuration.isOptional),
                 accessoryView: configuration.accessoryView(for: text, theme: theme),
                 shouldShowClearButton: configuration.shouldShowClearButton,
-                isEditable: configuration.isEditable,
-                theme: theme
+                editConfiguration: configuration.editConfiguration,
+                theme: theme,
+                displayEmptyFields: false
             )
             let textFieldView = TextFieldView(viewModel: viewModel, delegate: self)
             textFieldView.isUserInteractionEnabled = false
@@ -36,7 +37,7 @@ extension AddressSectionElement {
             return view
         }()
         public var validationState: ElementValidationState {
-            return .invalid(error: TextFieldElement.Error.empty, shouldDisplay: false)
+            return .invalid(error: TextFieldElement.Error.empty(localizedDescription: ""), shouldDisplay: false)
         }
         let didTap: () -> Void
         public let theme: ElementsAppearance
